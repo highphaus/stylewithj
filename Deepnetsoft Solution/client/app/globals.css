@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+@import "tailwindcss";
+
+:root {
+  --gold: #ad8b3a;
+  --gold-bg: #ad8b3a;
+  --blue-text: #00b4d8;
+  --red-bg: #bc2f32;
+  --bg-black: #000000;
+  --bg-dark: #050505;
+  --border-gray: rgba(255,255,255,0.1);
+}
+
+body {
+  background-color: var(--bg-black);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Background Layers */
+.menu-bg {
+  background-color: var(--bg-black);
+  position: relative;
+  min-height: 100vh;
+}
+
+.doodle-bg {
+  background-image: url("file:///C:/Users/Admin/.gemini/antigravity/brain/bd76e906-0d80-4e90-8771-c75e7254e7f6/menu_pattern_bg_1774340940343.png");
+  background-size: 400px;
+  background-repeat: repeat;
+  opacity: 0.04;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Red shadow for MENU title - exact offset */
+.menu-title-shadow {
+  text-shadow: 4px 4px 0px var(--red-bg);
+}
+
+/* Category header with TWO lines */
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 60px 0;
+}
+.dual-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.line-gold {
+  height: 1.5px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+/* Item Rows - Precise Dots */
+.item-row {
+  margin-bottom: 30px;
+}
+.item-flex {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+}
+.item-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.item-dots {
+  flex: 1;
+  border-bottom: 2.5px dotted rgba(255,255,255,0.25);
+  margin: 0 10px;
+  position: relative;
+  top: -4px;
+}
+.item-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+}
+.item-desc {
+  font-size: 0.9rem;
+  color: #808080;
+  margin-top: 5px;
+  font-weight: 300;
+}
+
+/* Special Red Badge Sub-Section */
+.special-box {
+  border: 1.5px dashed rgba(255,255,255,0.3);
+  padding: 40px;
+  position: relative;
+  margin: 60px 0;
+}
+.red-badge {
+  background: var(--red-bg);
+  color: white;
+  padding: 8px 30px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  display: inline-block;
+  box-shadow: 4px 4px 0 #000;
+  margin-bottom: 15px;
+}
+.serif-accent {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: #808080;
+  font-size: 1rem;
+}
+
+/* Tab Active State - Photo Match */
+.tab-btn {
+  padding: 12px 35px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: white;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  background: var(--gold);
+  color: black;
+  border-color: var(--gold);
+}
+
+/* Sections */
+.menu-section {
+  position: relative;
+  border: 1px solid rgba(173, 139, 58, 0.5);
+  padding: 60px 40px;
+  background: rgba(0,0,0,0.4);
+}
+
+/* Footer Units */
+.footer-card {
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  background: var(--bg-dark);
+}
+.footer-title {
+  color: var(--gold);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 15px;
+}
