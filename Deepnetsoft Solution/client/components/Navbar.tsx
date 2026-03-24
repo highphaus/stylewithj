@@ -33,33 +33,9 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
           position: 'relative',
         }}
       >
-        {/* Mobile Hamburger - Left */}
-        <div 
-          className="md:hidden" 
-          style={{ position: 'absolute', left: 24, zIndex: 50, cursor: 'pointer' }} 
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          <div style={{ width: 25, height: 2, background: '#fff', marginBottom: 5 }} />
-          <div style={{ width: 25, height: 2, background: '#fff', marginBottom: 5 }} />
-          <div style={{ width: 25, height: 2, background: '#fff' }} />
-        </div>
-
-        {/* Desktop Links - Left (Flex 1 for centering) */}
-        <div className="hidden md:flex" style={{ flex: 1, gap: 30, justifyContent: 'flex-start' }}>
-          <a href="#home" style={{ textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, color: 'var(--gold)', letterSpacing: '0.05em' }}>HOME</a>
-          <a href="#menu" style={{ textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, color: '#fff', letterSpacing: '0.05em' }}>MENU</a>
-        </div>
-
-        {/* Center Logo Area (Absolute centered on mobile, centered within flex on desktop) */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: 15, 
-          cursor: 'pointer',
-          position: 'static',
-          zIndex: 60
-        }} className="mobile-center-logo">
-          <div style={{ width: 50, height: 50 }}>
+        {/* Logo - Left */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 15, cursor: 'pointer' }}>
+          <div style={{ width: 45, height: 45 }}>
             <svg viewBox="0 0 100 100">
               <path d="M50 5 L95 50 L50 95 L5 50 Z" fill="var(--gold)" />
               <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="#000" />
@@ -67,45 +43,64 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
             </svg>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-            <span style={{ fontSize: '1.8rem', fontWeight: 800, letterSpacing: '0.05em' }}>
-              <span style={{ color: '#fff' }}>DEEP</span><span style={{ color: 'var(--gold)' }}>NET</span>
+            <span style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '0.05em' }}>
+              <span style={{ color: 'var(--blue-text)' }}>DEEP</span><span style={{ color: '#fff' }}>NET</span>
             </span>
-            <span style={{ color: '#858585', fontSize: '1.8rem', fontWeight: 800, letterSpacing: '0.05em' }}>SOFT</span>
+            <span style={{ color: '#858585', fontSize: '1.6rem', fontWeight: 800, letterSpacing: '0.05em' }}>SOFT</span>
           </div>
         </div>
 
-        {/* Desktop Links - Right (Flex 1 for centering) */}
-        <div className="hidden md:flex" style={{ flex: 1, gap: 30, justifyContent: 'flex-end' }}>
+        {/* Desktop Links - Right */}
+        <div className="hidden md:flex" style={{ marginLeft: 'auto', gap: 30, alignItems: 'center' }}>
+          <a href="#home" style={{ textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, color: 'var(--gold)', letterSpacing: '0.05em' }}>HOME</a>
+          <a href="#menu" style={{ textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, color: '#fff', letterSpacing: '0.05em' }}>MENU</a>
           <a href="#reser" style={{ textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, color: '#fff', letterSpacing: '0.05em' }}>MAKE A RESERVATION</a>
           <a href="#contact" style={{ textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, color: '#fff', letterSpacing: '0.05em' }}>CONTACT US</a>
         </div>
 
-        {/* Admin Links - Floating Right */}
-        <div style={{ position: 'absolute', right: 10, display: 'flex', gap: 10, opacity: 0.2 }}>
-           <button onClick={onAddMenu} style={{ fontSize: '10px' }}>+M</button>
-           <button onClick={onAddItem} style={{ fontSize: '10px' }}>+I</button>
+        {/* Mobile Hamburger - Right */}
+        <div 
+          className="md:hidden" 
+          style={{ marginLeft: 'auto', cursor: 'pointer', zIndex: 110 }} 
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          <div style={{ width: 25, height: 2, background: '#fff', marginBottom: 5 }} />
+          <div style={{ width: 25, height: 2, background: '#fff', marginBottom: 5 }} />
+          <div style={{ width: 25, height: 2, background: '#fff' }} />
+        </div>
+
+        {/* Admin Links - Hidden in corner */}
+        <div style={{ position: 'absolute', bottom: -20, right: 0, opacity: 0.1, display: 'flex', gap: 5 }}>
+           <button onClick={onAddMenu} style={{ fontSize: '8px' }}>+M</button>
+           <button onClick={onAddItem} style={{ fontSize: '8px' }}>+I</button>
         </div>
       </div>
 
       {/* Mobile Menu Overlay */}
       {mobileOpen && (
-        <div style={{ background: '#000', padding: '20px 40px', display: 'flex', flexDirection: 'column', gap: 20 }} className="md:hidden">
-            <a href="#home" style={{ color: 'var(--gold)' }}>HOME</a>
-            <a href="#menu" style={{ color: '#fff' }}>MENU</a>
-            <a href="#reser" style={{ color: '#fff' }}>MAKE A RESERVATION</a>
-            <a href="#contact" style={{ color: '#fff' }}>CONTACT US</a>
+        <div style={{ 
+          position: 'fixed',
+          top: 70,
+          left: 0,
+          right: 0,
+          background: 'rgba(5,5,5,0.98)', 
+          padding: '30px 40px', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: 25,
+          borderBottom: '1px solid var(--gold)',
+          zIndex: 120
+        }} className="md:hidden">
+            <a href="#home" style={{ color: 'var(--gold)', fontSize: '1.2rem', fontWeight: 600 }}>HOME</a>
+            <a href="#menu" style={{ color: '#fff', fontSize: '1.2rem', fontWeight: 600 }}>MENU</a>
+            <a href="#reser" style={{ color: '#fff', fontSize: '1.2rem', fontWeight: 600 }}>MAKE A RESERVATION</a>
+            <a href="#contact" style={{ color: '#fff', fontSize: '1.2rem', fontWeight: 600 }}>CONTACT US</a>
         </div>
       )}
 
       <style>{`
         @media (max-width: 768px) {
-          .desktop-nav { display: none !important; }
-          .hamburger-btn { display: block !important; }
-          .mobile-center-logo {
-            position: absolute !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-          }
+          .md-hidden { display: block !important; }
         }
       `}</style>
     </nav>
