@@ -45,7 +45,7 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
           position: 'absolute',
           top: 39,
           left: 150,
-          width: 205,
+          width: 250, // Slightly wider to accommodate Oswald at 35px
           height: 49,
           display: 'flex',
           alignItems: 'center',
@@ -53,14 +53,15 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
           transform: 'rotate(0deg)',
         }}>
           <span style={{ 
-            fontSize: '1.8rem', 
-            fontWeight: 800, 
-            letterSpacing: '0.02em', 
-            fontFamily: "'Inter', sans-serif",
+            fontSize: '35px', 
+            fontWeight: 400, 
+            letterSpacing: '0.03em', 
+            fontFamily: "'Oswald', sans-serif",
             whiteSpace: 'nowrap',
-            lineHeight: 1
+            lineHeight: '100%',
+            textTransform: 'uppercase'
           }}>
-            <span style={{ color: '#00b4d8' }}>DEEP</span><span style={{ color: '#fff' }}>NET</span><span style={{ color: '#fff' }}>SOFT</span>
+            <span style={{ color: '#0796ef' }}>DEEP</span><span style={{ color: '#fff' }}>NET</span><span style={{ color: '#fff' }}>SOFT</span>
           </span>
         </div>
 
