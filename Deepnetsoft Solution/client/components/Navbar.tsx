@@ -31,21 +31,37 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
           position: 'relative',
         }}
       >
-        {/* Logo - Left */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 15, cursor: 'pointer' }}>
-          <div style={{ width: 55, height: 55, position: 'relative' }}>
-            <svg viewBox="0 0 100 100">
-              <path d="M50 5 L95 50 L50 95 L5 50 Z" fill="var(--gold)" />
-              <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="#12161a" />
-              <text x="50" y="62" textAnchor="middle" fill="var(--gold)" style={{ fontSize: 40, fontWeight: 900, fontFamily: 'serif' }}>D</text>
-            </svg>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 0.9 }}>
-            <span style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '0.02em', fontFamily: "'Inter', sans-serif" }}>
-              <span style={{ color: '#00b4d8' }}>DEEP</span><span style={{ color: '#fff' }}>NET</span>
-            </span>
-            <span style={{ color: '#858585', fontSize: '2.2rem', fontWeight: 900, letterSpacing: '0.02em', fontFamily: "'Inter', sans-serif" }}>SOFT</span>
-          </div>
+        {/* Logo Icon - Adjusted to fit with the absolute text */}
+        <div style={{ position: 'absolute', left: 80, top: 22, width: 55, height: 55 }}>
+          <svg viewBox="0 0 100 100">
+            <path d="M50 5 L95 50 L50 95 L5 50 Z" fill="var(--gold)" />
+            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="#12161a" />
+            <text x="50" y="62" textAnchor="middle" fill="var(--gold)" style={{ fontSize: 40, fontWeight: 900, fontFamily: 'serif' }}>D</text>
+          </svg>
+        </div>
+
+        {/* Branding Text - Exact Figma Specs */}
+        <div style={{ 
+          position: 'absolute',
+          top: 39,
+          left: 150,
+          width: 205,
+          height: 49,
+          display: 'flex',
+          alignItems: 'center',
+          opacity: 1,
+          transform: 'rotate(0deg)',
+        }}>
+          <span style={{ 
+            fontSize: '1.8rem', 
+            fontWeight: 800, 
+            letterSpacing: '0.02em', 
+            fontFamily: "'Inter', sans-serif",
+            whiteSpace: 'nowrap',
+            lineHeight: 1
+          }}>
+            <span style={{ color: '#00b4d8' }}>DEEP</span><span style={{ color: '#fff' }}>NET</span><span style={{ color: '#fff' }}>SOFT</span>
+          </span>
         </div>
 
         {/* Desktop Links - Right */}
