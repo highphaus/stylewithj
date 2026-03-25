@@ -15,42 +15,42 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
         background: '#12161a',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         position: 'sticky',
-        top: 0,
+        top: -2,
         zIndex: 100,
-        height: 100
+        height: 98
       }}
     >
       <div
         style={{
-          maxWidth: 1600,
+          maxWidth: 1440,
           margin: '0 auto',
           padding: '0 60px',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
-          position: 'relative',
+           position: 'relative',
         }}
       >
-        {/* Logo Icon - Adjusted to fit with the absolute text */}
-        <div style={{ position: 'absolute', left: 80, top: 22, width: 55, height: 55 }}>
-          <svg viewBox="0 0 100 100">
-            <path d="M50 5 L95 50 L50 95 L5 50 Z" fill="var(--gold)" />
-            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="#12161a" />
-            <text x="50" y="62" textAnchor="middle" fill="var(--gold)" style={{ fontSize: 40, fontWeight: 900, fontFamily: 'serif' }}>D</text>
-          </svg>
+        {/* Logo Icon - Centered Centerpiece */}
+        <div style={{ 
+          position: 'absolute', 
+          left: '50%', 
+          top: '100%', 
+          transform: 'translate(-50%, -50%)', 
+          width: 85, 
+          height: 85,
+          zIndex: 10 
+        }}>
+          <img src="/logo.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="Center Logo" />
         </div>
 
-        {/* Branding Text - Exact Figma Specs */}
+
+        {/* Branding Text */}
         <div style={{ 
-          position: 'absolute',
-          top: 39,
-          left: 150,
-          width: 250, // Slightly wider to accommodate Oswald at 35px
-          height: 49,
           display: 'flex',
-          alignItems: 'center',
-          opacity: 1,
-          transform: 'rotate(0deg)',
+          alignItems: 'flex-end',
+          paddingBottom: '10px',
+          height: '100%'
         }}>
           <span style={{ 
             fontSize: '35px', 
@@ -61,16 +61,23 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
             lineHeight: '100%',
             textTransform: 'uppercase'
           }}>
-            <span style={{ color: '#0796ef' }}>DEEP</span><span style={{ color: '#fff' }}>NET</span><span style={{ color: '#fff' }}>SOFT</span>
+            <span style={{ color: '#ad8b3a' }}>DEEP</span><span style={{ color: '#fff' }}>NET</span><span style={{ color: '#fff' }}>SOFT</span>
           </span>
         </div>
 
-        {/* Desktop Links - Right */}
-        <div className="hidden md:flex" style={{ marginLeft: 'auto', gap: 40, alignItems: 'center' }}>
-          <a href="#home" style={{ textDecoration: 'none', fontSize: '1rem', fontWeight: 600, color: '#fff', letterSpacing: '0.05em' }}>HOME</a>
-          <a href="#menu" style={{ textDecoration: 'none', fontSize: '1rem', fontWeight: 600, color: 'var(--gold)', letterSpacing: '0.05em' }}>MENU</a>
-          <a href="#reser" style={{ textDecoration: 'none', fontSize: '1rem', fontWeight: 600, color: '#fff', letterSpacing: '0.05em' }}>MAKE A RESERVATION</a>
-          <a href="#contact" style={{ textDecoration: 'none', fontSize: '1rem', fontWeight: 600, color: '#fff', letterSpacing: '0.05em' }}>CONTACT US</a>
+        {/* Desktop Links */}
+        <div className="hidden md:flex" style={{ 
+          marginLeft: 'auto',
+          display: 'flex',
+          gap: 30,
+          alignItems: 'flex-end',
+          paddingBottom: '10px',
+          height: '100%'
+        }}>
+          <a href="#home" style={{ textDecoration: 'none', fontSize: '16px', fontWeight: 400, letterSpacing: '0.03em', fontFamily: "'Oswald', sans-serif", color: '#fff' }}>HOME</a>
+          <a href="#menu" style={{ textDecoration: 'none', fontSize: '16px', fontWeight: 400, letterSpacing: '0.03em', fontFamily: "'Oswald', sans-serif", color: 'var(--gold)' }}>MENU</a>
+          <a href="#reservation" style={{ textDecoration: 'none', fontSize: '16px', fontWeight: 400, letterSpacing: '0.03em', fontFamily: "'Oswald', sans-serif", color: '#fff' }}>MAKE A RESERVATION</a>
+          <a href="#contact" style={{ textDecoration: 'none', fontSize: '16px', fontWeight: 400, letterSpacing: '0.03em', fontFamily: "'Oswald', sans-serif", color: '#fff' }}>CONTACT US</a>
         </div>
 
         {/* Mobile Hamburger - Right */}
@@ -109,7 +116,7 @@ export default function Navbar({ onAddMenu, onAddItem }: Props) {
         }} className="md:hidden">
             <a href="#home" style={{ color: '#fff', fontSize: '1.4rem', fontWeight: 700 }}>HOME</a>
             <a href="#menu" style={{ color: 'var(--gold)', fontSize: '1.4rem', fontWeight: 700 }}>MENU</a>
-            <a href="#reser" style={{ color: '#fff', fontSize: '1.4rem', fontWeight: 700 }}>MAKE A RESERVATION</a>
+            <a href="#reservation" style={{ color: '#fff', fontSize: '1.4rem', fontWeight: 700 }}>MAKE A RESERVATION</a>
             <a href="#contact" style={{ color: '#fff', fontSize: '1.4rem', fontWeight: 700 }}>CONTACT US</a>
         </div>
       )}

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&family=Oswald:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&family=Oswald:wght@400&family=Kelly+Slab&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -11,26 +11,40 @@
   --border-gray: rgba(255,255,255,0.1);
 }
 
-body {
-  background-color: var(--bg-black);
+html, body {
+  background-color: var(--bg-black) !important;
+  background-image: none !important;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 /* Background Layers */
 .menu-bg {
-  background-color: var(--bg-black);
   position: relative;
   min-height: 100vh;
+  background: none !important;
+}
+
+.stone-bg {
+  background-image: linear-gradient(#000000CC, #000000CC), url("/stone_bg.png");
+  background-size: cover;
+  background-attachment: scroll;
+  position: relative;
 }
 
 .doodle-bg {
-  background-image: url("file:///C:/Users/Admin/.gemini/antigravity/brain/bd76e906-0d80-4e90-8771-c75e7254e7f6/menu_pattern_bg_1774340940343.png");
-  background-size: 400px;
+  background-image: url("/doodle.png");
+  background-size: contain;
   background-repeat: repeat;
-  opacity: 0.04;
+  background-color: transparent; /* Container handles the #000000CC */
+  opacity: 0.3; /* Increased for screenshot match */
+  width: 100%;
+  height: 100%;
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 0;
 }
@@ -40,6 +54,33 @@ body {
   text-shadow: 4px 4px 0px var(--red-bg);
 }
 
+/* Highly Responsive Media Queries */
+@media (max-width: 1200px) {
+  .menu-outer-border {
+    width: 90% !important;
+    height: auto !important;
+    padding: 30px !important;
+  }
+  .dashed-box {
+    width: 100% !important;
+    height: auto !important;
+    padding: 20px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-outer-border {
+    width: 95% !important;
+    padding: 15px !important;
+  }
+  .red-header {
+    font-size: 2.2rem !important;
+  }
+  /* Hide intrusive stickers on mobile for better readability */
+  .sticker-chicken, .sticker-kebab, .sticker-sandwich, .sticker-salad {
+    display: none !important;
+  }
+}
 /* Category header with TWO lines */
 .category-header {
   display: flex;
@@ -122,23 +163,31 @@ body {
   border: 1px solid var(--gold);
   background: transparent;
   color: white;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.1rem;
-  letter-spacing: 0.1em;
-  transition: all 0.2s;
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  cursor: pointer;
 }
-.tab-btn.active {
-  background: var(--gold);
-  color: black;
-  border-color: var(--gold);
+.tab-btn:hover {
+  /* Match default state exactly to prevent highlight */
+  background: black !important;
+  border: 0.5px solid #C5A059 !important;
+  color: white !important;
+}
+.tab-btn.active, .tab-btn.active:hover {
+  background: #C5A059 !important;
+  color: #FFFFFF !important;
+  border: 0.32px solid #C5A059 !important;
+  opacity: 1 !important;
 }
 
 /* Sections */
 .menu-section {
   position: relative;
   border: 1px solid rgba(173, 139, 58, 0.5);
-  padding: 60px 40px;
-  background: rgba(0,0,0,0.4);
+  padding: 20px 40px;
+  background: transparent;
 }
 
 /* Footer Units */
@@ -155,4 +204,91 @@ body {
   font-size: 1.2rem;
   letter-spacing: 0.1em;
   margin-bottom: 15px;
+}
+/* Screenshot-Based Layout Styles */
+.menu-outer-border {
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  padding: 60px;
+  position: relative;
+  background: transparent;
+  width: 1140px;
+  height: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.dashed-box {
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  position: relative;
+  margin: 30px 0 0;
+  width: 1020px;
+  height: 198px;
+  display: flex;
+  align-items: center;
+}
+.red-header {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3.5rem;
+  color: #FFFFFF;
+  text-shadow: 2px 2px 0px #8B0000;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.red-header-bg {
+  background: #C55D5D;
+  display: inline-block;
+  padding: 5px 25px;
+  color: white;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.2rem;
+  text-transform: uppercase;
+}
+.dots-divider {
+  flex-grow: 1;
+  border-bottom: 2.5px dotted rgba(255, 255, 255, 0.4);
+  margin: 0 10px;
+  align-self: flex-end;
+  margin-bottom: 8px; /* Alignment of dots */
+}
+.item-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: white;
+  line-height: 100%;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.item-price {
+  font-family: 'Oswald', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: white;
+  line-height: 100%;
+}
+.item-desc {
+  font-family: 'Kelly Slab', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: white;
+  opacity: 0.6;
+  line-height: 100%;
+  margin-top: 8px;
+}
+.opening-hours-box {
+    margin: 100px auto 0;
+    width: 1137px;
+    height: 173px;
+    border: 1px solid var(--gold);
+    border-radius: 15px;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

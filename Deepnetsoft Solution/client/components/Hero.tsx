@@ -3,10 +3,13 @@
 export default function Hero() {
   return (
     <section
+      id="home"
       style={{
         position: 'relative',
-        height: '350px',
+        height: '311px',
         width: '100%',
+        maxWidth: '1440px',
+        margin: '0 auto',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -21,38 +24,71 @@ export default function Hero() {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'url("https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2000")',
+          backgroundImage: 'url("/aefd7aa0f81b6208cb3da0f5ecc0f0d109ca4bd0.jpg")',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.4,
-          filter: 'grayscale(100%) brightness(0.7)',
+          backgroundPosition: 'center 1px',
+          opacity: 0.2, // Reduced to make the white text and title fully legible
+          zIndex: 0
         }}
       />
 
-      <div style={{ position: 'relative', zIndex: 10, padding: '0 24px' }}>
+      {/* Center Wrapper for MENU Title */}
+      <div 
+        style={{ 
+          position: 'absolute', 
+          width: '177px', 
+          height: '111px', 
+          top: '100px', // Adjusted for optimal spacing
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 15,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
         <h1
-          className="menu-title-shadow"
           style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: 'clamp(5rem, 15vw, 9rem)',
-            fontWeight: 900,
-            marginBottom: 0,
-            letterSpacing: '0.05em',
-            color: '#fff',
-            lineHeight: 1
+            fontFamily: "'Oswald', sans-serif",
+            fontWeight: 600,
+            fontSize: '75px',
+            lineHeight: '100%',
+            letterSpacing: '0.03em',
+            textTransform: 'uppercase',
+            color: '#FFFFFF',
+            textShadow: '4px 3px 0px #800020',
+            margin: 0
           }}
         >
           MENU
         </h1>
+      </div>
+
+      {/* Center Wrapper for Description Paragraph */}
+      <div 
+        style={{ 
+          position: 'absolute', 
+          width: '681px', 
+          height: '44px', 
+          top: '230px', // Brought near MENU title
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center'
+        }}
+      >
         <p
-          className="serif-accent"
           style={{
-            maxWidth: 750,
-            fontSize: '1.3rem',
-            lineHeight: 1.5,
-            margin: '20px auto 0',
-            color: 'rgba(255,255,255,0.6)',
-            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+            fontFamily: "'Kelly Slab', serif",
+            fontWeight: 400,
+            fontSize: '18px',
+            lineHeight: '100%',
+            letterSpacing: '0%',
+            color: '#BBBBBB',
+            margin: 0
           }}
         >
           Please take a look at our menu featuring food, drinks, and brunch. If you'd like to place an order, use the "Order Online" button located below the menu.

@@ -40,7 +40,6 @@ export default function Home() {
 
   useEffect(() => { loadData(); }, []);
 
-  // Get children and items for the selected menu
   const findNode = (nodes: MenuNode[], id: string): MenuNode | null => {
     for (const n of nodes) {
       if (n._id === id) return n;
@@ -50,19 +49,11 @@ export default function Home() {
     return null;
   };
 
-  const activeNode = selectedMenuId ? findNode(menus, selectedMenuId) : null;
-  
-  // Tab click: resets selection to the tab itself
   const handleTabSelect = (id: string) => {
     setActiveTabId(id);
     setSelectedMenuId(id);
     const node = findNode(menus, id);
     if (node) setSelectedMenuName(node.name);
-  };
-
-  const handleMenuSelect = (id: string, name: string) => {
-    setSelectedMenuId(id);
-    setSelectedMenuName(name);
   };
 
   const handleCreateMenu = async (payload: CreateMenuPayload) => {
@@ -77,185 +68,180 @@ export default function Home() {
     loadData();
   };
 
-  const activeTabNode = menus.find(m => m._id === activeTabId);
-
   return (
-    <main className="min-h-screen menu-bg relative overflow-hidden">
-      {/* Background Doodle Layer */}
-      <div className="doodle-bg" />
-
+    <main className="min-h-screen relative overflow-hidden menu-bg">
       <Navbar 
         onAddMenu={() => setShowMenuForm(true)} 
         onAddItem={() => setShowItemForm(true)} 
       />
-      
+
       <Hero />
 
-      <div style={{ position: 'relative', zIndex: 10 }}>
-        {/* Pattern Strip behind tabs */}
-        <div style={{ height: 100, background: 'rgba(255,255,255,0.02)', position: 'absolute', top: 0, left: 0, right: 0 }} />
-        
-        <section style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px 100px', position: 'relative' }}>
-          <MenuTabs 
-            menus={menus} 
-            activeMenuId={activeTabId} 
-            onSelect={handleTabSelect} 
-          />
+      {/* Doodle Section with Tabs */}
+      <section 
+        id="menu"
+        style={{ 
+          width: '100%', 
+          maxWidth: '1440px', 
+          height: '79px', 
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          marginTop: 0,
+          marginBottom: 0,
+          padding: 0,
+          position: 'relative',
+          background: 'transparent',
+          zIndex: 20
+        }}
+      >
+        <div className="doodle-bg" />
+        <MenuTabs 
+          menus={menus.length > 0 ? menus : [
+            { _id: 'food', name: 'FOOD', children: [] },
+            { _id: 'drink', name: 'DRINK', children: [] },
+            { _id: 'brunch', name: 'BRUNCH', children: [] }
+          ]} 
+          activeMenuId={activeTabId || 'food'} 
+          onSelect={handleTabSelect} 
+        />
+      </section>
 
-          <div 
-            style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'minmax(200px, 250px) 1fr', 
-              gap: 40, 
-              alignItems: 'start',
-              marginTop: 40 
-            }} 
-            className="mobile-stack"
-          >
-            {/* Sidebar */}
-            <aside 
+      <div className="stone-bg" style={{ position: 'relative', zIndex: 10, marginTop: -1, padding: '100px 0' }}>
+
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 60px', position: 'relative', zIndex: 10 }}>
+          
+          {/* Main Outer Border Box (1140x760) */}
+          <div className="menu-outer-border">
+            
+            {/* Corners Stickers - Tucked into Box Corners */}
+            <img src="/chicken_skewers.png" 
+              className="sticker-chicken"
+              style={{ position: 'absolute', top: 30, left: 30, width: 220, height: 220, zIndex: 10, objectFit: 'contain' }} alt="Chicken Skewers" />
+            <img src="/kebab_board.png" 
+              className="sticker-kebab"
               style={{ 
-                background: 'rgba(0,0,0,0.5)', 
-                borderRadius: 4, 
-                padding: 24, 
-                border: '1px solid rgba(255,255,255,0.05)',
-                position: 'sticky',
-                top: 100
-              }}
-            >
-              <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.1em', fontSize: '1.2rem', marginBottom: 20 }}>
-                MENU CATEGORIES
-              </h3>
-              {activeTabNode && (
-                <MenuTree 
-                  menu={activeTabNode} 
-                  selectedId={selectedMenuId} 
-                  onSelect={handleMenuSelect} 
-                />
-              )}
-            </aside>
+                position: 'absolute', top: 30, right: 30, width: 300, height: 220, zIndex: 10, 
+                objectFit: 'contain', transform: 'rotate(5deg)' 
+              }} alt="Kebab Board" />
+            
+            <img src="/sandwich.png" 
+              className="sticker-sandwich"
+              style={{ position: 'absolute', bottom: -50, left: -60, width: 220, height: 220, zIndex: 10, objectFit: 'contain' }} alt="Sandwich" />
+            
+            <img src="/salad_bowl.png" 
+              className="sticker-salad"
+              style={{ position: 'absolute', top: 520, right: -70, width: 250, height: 250, zIndex: 10, objectFit: 'contain' }} alt="Salad Bowl" />
 
-            {/* Menu Content */}
-            <div style={{ position: 'relative' }}>
-              {/* Floating food assets */}
-              <img 
-                src="file:///C:/Users/Admin/.gemini/antigravity/brain/bd76e906-0d80-4e90-8771-c75e7254e7f6/skewers_transparent_1774340961085.png" 
-                style={{ position: 'absolute', top: -100, left: -60, width: 250, zIndex: 20 }}
-                alt=""
-              />
+            {/* Appetizers Section */}
+            <div style={{ display: 'flex', marginTop: 80 }}>
+              <div style={{ flex: '0 0 272px', height: 94, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1.5px solid rgba(255,255,255,0.2)', padding: '10px' }}>
+                <h1 className="red-header" style={{ margin: 0 }}>APPETIZERS</h1>
+              </div>
+              <div style={{ flex: 1, paddingLeft: 40 }}>
+                <div style={{ height: 97, marginBottom: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', height: 38 }}>
+                    <span className="item-title">FIRE CRACKER SALMON</span>
+                    <div className="dots-divider" />
+                    <span className="item-price">$16</span>
+                  </div>
+                  <p className="item-desc" style={{ marginTop: 0, height: 44 }}>Broiled Cajun salmon bites - topped with bang bang sauce, red peppers and green chiles</p>
+                </div>
 
-              {/* Header with DUAL lines */}
-              <div className="category-header">
-                 <div className="dual-lines">
-                    <div className="line-gold" />
-                    <div className="line-gold" style={{ opacity: 0.5 }} />
-                 </div>
-                 <h2 
-                   style={{ 
-                     fontFamily: "'Cinzel', serif", 
-                     fontWeight: 900, 
-                     fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
-                     letterSpacing: '0.1em',
-                     color: '#fff',
-                     textAlign: 'center'
-                   }}
-                   className="menu-title-shadow"
-                 >
-                   {selectedMenuName.toUpperCase()}
-                 </h2>
-                 <div className="dual-lines">
-                    <div className="line-gold" />
-                    <div className="line-gold" style={{ opacity: 0.5 }} />
-                 </div>
+                <div style={{ height: 97, marginBottom: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', height: 38 }}>
+                    <span className="item-title">LAMB CHOPS</span>
+                    <div className="dots-divider" />
+                    <span className="item-price">$26</span>
+                  </div>
+                  <p className="item-desc" style={{ marginTop: 0, height: 44 }}>Garlic and rosemary marinated lamb chops topped with our signature ground mustard sauce.</p>
+                </div>
+
+                <div style={{ height: 97, marginBottom: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', height: 38 }}>
+                    <span className="item-title">FRIED RED SNAPPER BITES</span>
+                    <div className="dots-divider" />
+                    <span className="item-price">$18</span>
+                  </div>
+                  <p className="item-desc" style={{ marginTop: 0, height: 44 }}>Deep fried red snapper, served with a house made Cajun remoulade.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Salads Section with Dashed Box (947x198) */}
+            <div className="dashed-box" style={{ marginLeft: 0 }}>
+              <div style={{ flex: '0 0 300px', paddingRight: 40, borderRight: '1.5px solid rgba(255,255,255,0.2)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ background: '#8B0000', padding: '10px 30px', borderRadius: 4, marginBottom: 10 }}>
+                  <h1 className="red-header" style={{ margin: 0, fontSize: '32px', textShadow: 'none' }}>SALADS</h1>
+                </div>
+                <p style={{ color: 'rgba(255,255,255,0.4)', marginTop: 0, fontStyle: 'italic' }}>Option to add protein</p>
               </div>
 
-              {loading ? (
-                <div style={{ textAlign: 'center', padding: '100px 0', opacity: 0.5, fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.5rem' }}>Loading Menu...</div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '50px 120px', marginTop: 30 }}>
-                  {activeNode?.items && activeNode.items.length > 0 ? (
-                    activeNode.items.map(item => (
-                      <MenuItemRow key={item._id} item={item} />
-                    ))
-                  ) : (
-                    <p style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.3, fontFamily: "'Bebas Neue', sans-serif" }}>No items in this category.</p>
-                  )}
-                </div>
-              )}
-              
-              {/* Children categories - Special Boxes for Salads/Drinks */}
-              {activeNode?.children?.map(sub => {
-                const isSpecial = sub.name.toLowerCase().includes('salad') || sub.name.toLowerCase().includes('drink');
-                return (
-                  <div 
-                    key={sub._id} 
-                    className={isSpecial ? "special-box" : ""}
-                    style={{ marginTop: 100 }}
-                  >
-                    {isSpecial && sub.name.toLowerCase().includes('salad') && (
-                      <img 
-                        src="file:///C:/Users/Admin/.gemini/antigravity/brain/bd76e906-0d80-4e90-8771-c75e7254e7f6/salad_bowl_transparent_1774340976429.png" 
-                        style={{ position: 'absolute', top: -70, right: 30, width: 160 }}
-                        alt=""
-                      />
-                    )}
-
-                    <div style={{ marginBottom: 40, textAlign: isSpecial ? 'left' : 'center' }}>
-                      <div className={isSpecial ? "red-badge" : ""}>
-                        {sub.name.toUpperCase()}
-                      </div>
-                      <p className="serif-accent" style={{ marginTop: isSpecial ? 0 : 10, fontSize: '1.1rem' }}>
-                        {sub.description}
-                      </p>
-                    </div>
-                    
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '50px 120px' }}>
-                        {sub.items.map(item => <MenuItemRow key={item._id} item={item} />)}
-                    </div>
+              <div style={{ flex: 1, paddingLeft: 40, position: 'relative' }}>
+                <div style={{ marginBottom: 30 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', maxWidth: 380 }}>
+                    <span className="item-title" style={{ fontSize: 20, letterSpacing: '0.03em' }}>HOUSE SALAD WITH BEANS</span>
+                    <div className="dots-divider" />
+                    <span className="item-price" style={{ fontSize: 20 }}>$06</span>
                   </div>
-                );
-              })}
+                </div>
+                <div style={{ marginBottom: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', maxWidth: 380 }}>
+                    <span className="item-title" style={{ fontSize: 20, letterSpacing: '0.03em' }}>CAESAR SALAD</span>
+                    <div className="dots-divider" />
+                    <span className="item-price" style={{ fontSize: 20 }}>$08</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </section>
-      </div>
 
-      {/* Opening Hours Info Card before footer */}
-      <section style={{ maxWidth: 1200, margin: '0 auto 100px', padding: '0 24px' }}>
-         <div 
-           className="gold-card" 
-           style={{ 
-             background: 'rgba(5,5,5,0.9)', 
-             padding: '40px', 
-             display: 'flex', 
-             flexDirection: 'column',
-             alignItems: 'center',
-             gap: 40,
-             textAlign: 'center',
-             border: '1px solid rgba(255,255,255,0.1)'
-           }}
-         >
-            <div>
-              <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic', color: 'var(--gold)', marginBottom: 8, fontSize: '1.2rem' }}>Be there on time</p>
-              <h2 style={{ fontSize: '3.5rem', fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.05em', color: '#fff' }} className="menu-title-shadow">OPENING HOURS</h2>
+          {/* Opening Hours Section (1137x173) */}
+          <div id="reservation" className="opening-hours-box" style={{ 
+            marginTop: 160, 
+            width: '100%',
+            maxWidth: 1137, 
+            minHeight: 173, 
+            margin: '0 auto',
+            background: '#000', 
+            borderRadius: 15, 
+            border: '1px solid #C19A6B', 
+            display: 'flex', 
+            alignItems: 'center', 
+            padding: '20px 60px',
+            position: 'relative',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: 400, marginBottom: 20 }}>
+              <p style={{ fontStyle: 'italic', color: '#C19A6B', marginBottom: 2, fontSize: 13, fontFamily: "'Kelly Slab', cursive" }}>Be there on time</p>
+              <h1 className="red-header" style={{ 
+                fontSize: '32px', 
+                margin: 0, 
+                color: '#fff', 
+                textShadow: '2px 2px #ff0000',
+                letterSpacing: '1px'
+              }}>OPENING HOURS</h1>
             </div>
-            
-            <div style={{ display: 'flex', gap: 60, textAlign: 'center' }} className="mobile-stack">
-              <div>
-                <p style={{ fontWeight: 600, fontSize: '1rem', marginBottom: 10, letterSpacing: '0.1em' }}>MONDAY - THURSDAY</p>
-                <p style={{ color: 'var(--blue-accent)', fontWeight: 600, fontSize: '1.1rem' }}>12:00 PM - 12:00 AM</p>
+
+            <div style={{ display: 'flex', flex: 1, justifyContent: 'space-around', position: 'relative', zIndex: 1 }}>
+              {/* Mon-Thu */}
+              <div style={{ paddingLeft: 40, borderLeft: '1px solid #C19A6B' }}>
+                <p style={{ fontSize: '16px', color: '#fff', marginBottom: 8, fontWeight: 500 }}>MONDAY- THURSDAY</p>
+                <p style={{ color: '#0072BB', fontSize: '16px', fontWeight: 600 }}>12 PM–12 AM</p>
               </div>
-              <div>
-                <p style={{ fontWeight: 600, fontSize: '1rem', marginBottom: 10, letterSpacing: '0.1em' }}>FRIDAY - SATURDAY</p>
-                <p style={{ color: 'var(--blue-accent)', fontWeight: 600, fontSize: '1.1rem' }}>12:00 PM - 01:00 AM</p>
+              {/* Fri-Sat */}
+              <div style={{ paddingLeft: 40, borderLeft: '1px solid #C19A6B' }}>
+                <p style={{ fontSize: '16px', color: '#fff', marginBottom: 8, fontWeight: 500 }}>FRIDAY-SATURDAY</p>
+                <p style={{ color: '#0072BB', fontSize: '16px', fontWeight: 600 }}>12 PM–01 AM</p>
               </div>
-              <div>
-                <p style={{ fontWeight: 600, fontSize: '1rem', marginBottom: 10, letterSpacing: '0.1em' }}>SUNDAY</p>
-                <p style={{ color: 'var(--blue-accent)', fontWeight: 600, fontSize: '1.1rem' }}>12:00 PM - 11:00 PM</p>
+              {/* Sunday */}
+              <div style={{ paddingLeft: 40, borderLeft: '1px solid #C19A6B' }}>
+                <p style={{ fontSize: '16px', color: '#fff', marginBottom: 8, fontWeight: 500 }}>SUNDAY</p>
+                <p style={{ color: '#0072BB', fontSize: '16px', fontWeight: 600 }}>12 PM–11 PM</p>
               </div>
             </div>
-         </div>
-      </section>
+          </div>
+        </div>
+      </div>
 
       <Footer />
 
@@ -275,13 +261,7 @@ export default function Home() {
           onSubmit={handleCreateItem} 
         />
       )}
-
-      <style jsx global>{`
-        @media (max-width: 900px) {
-          .mobile-stack { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .hide-mobile { display: none; }
-        }
-      `}</style>
+      
     </main>
   );
 }
