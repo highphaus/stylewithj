@@ -1,4 +1,5 @@
 // jennifer/client/app/layout.tsx
+import type { Metadata } from 'next';
 import { Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import CustomCursor from "@/components/CustomCursor";
@@ -14,6 +15,11 @@ const plusJakarta = Plus_Jakarta_Sans({
   variable: '--font-sans',
   display: 'swap',
 });
+
+export const metadata: Metadata = {
+  title: "Jenny | Personal Stylist & Image Consultant",
+  description: "Helping professionals, entrepreneurs, creators, job seekers, and individuals seeking transformation build confidence and personal presence through styling, wardrobe strategy, grooming, and image consulting.",
+};
 
 export default function RootLayout({
   children,

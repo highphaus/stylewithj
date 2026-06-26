@@ -1,73 +1,76 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <>
-      {/* Main Footer */}
-      <footer className="bg-[#5D4037] text-[#FFFFFF] pt-20 pb-10 px-6 lg:px-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-          {/* Logo & Bio */}
-          <div className="md:col-span-1">
-            <span className="font-serif text-3xl tracking-wide font-medium block mb-2">STYLE WITH J</span>
-            <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#FFFFFF]/60 mb-6 block">
-              BY JENNIFER
+    <footer className="bg-charcoal text-cream pt-32 pb-10 px-6 lg:px-12 border-t border-cream/10">
+      <div className="max-w-[1400px] mx-auto">
+        
+        {/* Massive Logo */}
+        <div className="mb-24 text-center md:text-left">
+          <span className="font-serif text-[80px] md:text-[150px] lg:text-[200px] leading-none tracking-tighter block font-light text-cream/90 hover:text-white transition-colors duration-700">
+            JENNY
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-24 mb-32">
+          {/* Bio Column */}
+          <div className="md:col-span-4 lg:col-span-3">
+            <span className="font-sans text-[9px] tracking-[0.4em] uppercase font-light text-cream/50 mb-8 block leading-relaxed">
+              Personal Stylist<br/>Image Consultant<br/>Brand Strategist
             </span>
+            <p className="font-sans text-xs text-cream/70 leading-loose font-light pr-4">
+              Helping ambitious individuals transform their image, build confidence, and create lasting impressions globally.
+            </p>
           </div>
 
           {/* Quick Links */}
-          <div>
-            <span className="font-sans text-[10px] tracking-widest uppercase font-bold text-[#FFFFFF]/50 block mb-6">
-              QUICK LINKS
+          <div className="md:col-span-2 lg:col-span-2">
+            <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-light text-cream/40 block mb-8">
+              EXPLORE
             </span>
-            <ul className="space-y-4 font-sans text-[12px] text-[#FFFFFF]/80">
-              <li><a href="#" className="hover:text-white transition-colors">About Jenny</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Services</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Transformations</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Insights</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+            <ul className="space-y-4 font-sans text-xs text-cream/70 font-light">
+              <li><Link href="/about" className="hover:text-gold hover:pl-2 transition-all duration-300">The Vision</Link></li>
+              <li><Link href="/programs" className="hover:text-gold hover:pl-2 transition-all duration-300">Experiences</Link></li>
+              <li><Link href="/portfolio" className="hover:text-gold hover:pl-2 transition-all duration-300">Selected Works</Link></li>
+              <li><Link href="/transformations" className="hover:text-gold hover:pl-2 transition-all duration-300">The Journey</Link></li>
+              <li><Link href="/insights" className="hover:text-gold hover:pl-2 transition-all duration-300">Insights</Link></li>
             </ul>
           </div>
 
-          {/* Services */}
-          <div>
-            <span className="font-sans text-[10px] tracking-widest uppercase font-bold text-[#FFFFFF]/50 block mb-6">
-              SERVICES
+          {/* Newsletter Column */}
+          <div className="md:col-span-6 lg:col-span-5 lg:col-start-8">
+            <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-light text-cream/40 block mb-8">
+              JOIN THE INNER CIRCLE
             </span>
-            <ul className="space-y-4 font-sans text-[12px] text-[#FFFFFF]/80">
-              <li><a href="#" className="hover:text-white transition-colors">Personal Styling</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Wardrobe Strategy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Grooming & Style</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Image & Presence</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Personal Branding</a></li>
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <span className="font-sans text-[10px] tracking-widest uppercase font-bold text-[#FFFFFF]/50 block mb-6">
-              LET'S CONNECT
-            </span>
-            <div className="flex gap-4 mb-6 text-[#FFFFFF]/80">
-              <a href="#" className="hover:text-white transition-colors">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-              </a>
-              <a href="#" className="hover:text-white transition-colors">
-                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              </a>
-            </div>
-            <a href="mailto:hello@jenny.com" className="font-sans text-[12px] text-[#FFFFFF]/80 hover:text-white block mb-1">hello@jenny.com</a>
-            <span className="font-sans text-[12px] text-[#FFFFFF]/80 block">+1 (555) 000-0000</span>
+            <p className="font-sans text-xs text-cream/70 leading-loose font-light mb-8">
+              Subscribe to receive exclusive insights on style, personal branding, and access to private masterclasses.
+            </p>
+            <form className="relative flex items-center border-b border-cream/30 pb-2 group">
+              <input 
+                type="email" 
+                placeholder="EMAIL ADDRESS" 
+                className="bg-transparent w-full font-sans text-[10px] tracking-[0.2em] text-cream placeholder-cream/30 focus:outline-none focus:ring-0"
+              />
+              <button type="submit" className="font-sans text-[10px] tracking-[0.3em] uppercase text-cream group-hover:text-gold transition-colors duration-300">
+                SUBSCRIBE
+              </button>
+            </form>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center border-t border-[#FFFFFF]/20 pt-8 font-sans text-[9px] tracking-widest text-[#FFFFFF]/50 uppercase">
-          <span>&copy; 2026 STYLE WITH J BY JENNIFER. ALL RIGHTS RESERVED.</span>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-[#FFFFFF] transition-colors">PRIVACY POLICY</a>
-            <a href="#" className="hover:text-[#FFFFFF] transition-colors">TERMS & CONDITIONS</a>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-cream/10 flex flex-col md:flex-row justify-between items-center gap-6">
+          <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-cream/40 font-light">
+            &copy; {new Date().getFullYear()} JENNY. ALL RIGHTS RESERVED.
+          </span>
+          <div className="flex gap-8 font-sans text-[9px] tracking-[0.3em] uppercase text-cream/40 font-light">
+            <a href="#" className="hover:text-gold transition-colors duration-300">INSTAGRAM</a>
+            <a href="#" className="hover:text-gold transition-colors duration-300">LINKEDIN</a>
+            <a href="#" className="hover:text-gold transition-colors duration-300">PINTEREST</a>
           </div>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 }

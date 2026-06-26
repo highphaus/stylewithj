@@ -4,7 +4,6 @@
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
-import IntroSection from '@/components/IntroSection';
 import AudienceGrid from '@/components/AudienceGrid';
 import ServicesGrid from '@/components/ServicesGrid';
 import DiscoveryCall from '@/components/DiscoveryCall';
@@ -14,6 +13,8 @@ import AboutSection from '@/components/AboutSection';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
 import BookingModal from '@/components/BookingModal';
+import ProcessSection from '@/components/ProcessSection';
+import InsightsSection from '@/components/InsightsSection';
 
 export default function Home() {
   return (
@@ -23,14 +24,15 @@ export default function Home() {
       
       <main>
         <HeroSection />
-        <IntroSection />
         <AudienceGrid />
         <ServicesGrid />
+        <ProcessSection />
         <Transformations />
-        <DiscoveryCall />
         <Lookbook />
         <AboutSection />
         <Testimonials />
+        <InsightsSection />
+        <DiscoveryCall />
       </main>
 
       <Footer />
