@@ -29,7 +29,7 @@ const articles = [
   }
 ];
 
-export default function InsightsSection() {
+export default function InsightsSection({ hideButton = false }: { hideButton?: boolean }) {
   return (
     <section className="py-32 px-6 lg:px-12 bg-[#FFFFFF]">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-32">
@@ -41,10 +41,12 @@ export default function InsightsSection() {
           <h2 className="font-serif text-4xl md:text-5xl text-[#5D4037] font-medium leading-tight mb-10">
             Insights on Style, Confidence & Personal Branding
           </h2>
-          <Link href="#" className="border-b border-[#5D4037] text-[#5D4037] pb-1 text-[11px] font-bold tracking-widest uppercase hover:opacity-70 transition-opacity flex items-center gap-2">
-            View All Articles
-            <span className="text-lg leading-none">&rarr;</span>
-          </Link>
+          {!hideButton && (
+            <Link href="/insights" className="border-b border-[#5D4037] text-[#5D4037] pb-1 text-[11px] font-bold tracking-widest uppercase hover:opacity-70 transition-opacity flex items-center gap-2">
+              View All Articles
+              <span className="text-lg leading-none">&rarr;</span>
+            </Link>
+          )}
         </div>
 
         {/* Right Articles List */}
