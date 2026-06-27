@@ -1,43 +1,33 @@
-// jennifer/client/app/page.tsx
+// src/app/page.tsx
 'use client';
 
-import React from 'react';
-import Navigation from '@/components/Navigation';
-import HeroSection from '@/components/HeroSection';
-import IntroSection from '@/components/IntroSection';
-import AudienceGrid from '@/components/AudienceGrid';
-import ServicesGrid from '@/components/ServicesGrid';
-import DiscoveryCall from '@/components/DiscoveryCall';
-import Transformations from '@/components/Transformations';
-import Lookbook from '@/components/Lookbook';
-import AboutSection from '@/components/AboutSection';
-import Testimonials from '@/components/Testimonials';
-import Footer from '@/components/Footer';
-import BookingModal from '@/components/BookingModal';
-import ProcessSection from '@/components/ProcessSection';
-import InsightsSection from '@/components/InsightsSection';
+import HeroSection from '@/components/sections/HeroSection';
+import SplitScroll from '@/components/sections/SplitScroll';
+import AtelierStory from '@/components/sections/AtelierStory';
+import AtelierFooter from '@/components/sections/AtelierFooter';
+import CustomCursor from '@/components/ui/CustomCursor';
 
 export default function Home() {
   return (
-    <div className="bg-[#FFFFFF] min-h-screen text-[#5D4037] font-sans antialiased selection:bg-[#A1887F] selection:text-[#FFFFFF] scroll-smooth">
-      <BookingModal />
-      <Navigation />
+    <div className="bg-[#FAF9F6] text-[#1A1A1A] min-h-screen font-sans antialiased selection:bg-black selection:text-white">
       
-      <main>
-        <HeroSection />
-        <IntroSection />
-        <AudienceGrid />
-        <ServicesGrid />
-        <ProcessSection />
-        <Transformations />
-        <Lookbook />
-        <AboutSection />
-        <Testimonials />
-        <InsightsSection />
-        <DiscoveryCall />
+      {/* Global Interface Interactions */}
+      <CustomCursor />
+      
+      {/* 1. Full-Bleed Parallax Landing */}
+      <HeroSection />
+
+      <main className="relative z-20">
+        {/* 2. Pure YSL Split-Scrolling Mechanic */}
+        <SplitScroll />
+
+        {/* 3. Studio Brand Narrative */}
+        <AtelierStory />
       </main>
 
-      <Footer />
+      {/* 4. Minimal Closing Gateway */}
+      <AtelierFooter />
+      
     </div>
   );
 }

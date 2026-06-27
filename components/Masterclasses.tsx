@@ -5,21 +5,21 @@ export default function Masterclasses() {
       title: "Capsule Wardrobe Masterclass",
       desc: "Learn the mathematical rules to building a minimalist, high-versatility wardrobe for everyday elevation.",
       modules: ["The 3-Color Rule", "Textile Longevity Metrics", "Seasonal Rotations"],
-      price: "$149",
+      price: "₹9,999",
       img: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80"
     },
     {
       title: "Indian Wear Proportion Matrix",
       desc: "Master the art of draping, lehenga styling, and color blocking specifically formulated for South Asian events.",
       modules: ["Drape Architectures", "Jewelry Proportioning", "Textile Weights"],
-      price: "$199",
+      price: "₹14,999",
       img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80"
     },
     {
       title: "Corporate Executive Blueprint",
       desc: "Command authority in every room with tailoring frameworks designed explicitly for female founders and executives.",
       modules: ["Power Shoulder Alignment", "Monochromatic Confidence", "Zoom/Camera Colors"],
-      price: "$249",
+      price: "₹19,999",
       img: "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=500&q=80"
     }
   ];
