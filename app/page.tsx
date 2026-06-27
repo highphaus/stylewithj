@@ -5,6 +5,8 @@ import HeroSection from '@/components/sections/HeroSection';
 import NarrativeHeader from '@/components/sections/NarrativeHeader';
 import SplitScroll from '@/components/sections/SplitScroll';
 import AtelierStory from '@/components/sections/AtelierStory';
+import ClientShowcase from '@/components/sections/ClientShowcase';
+import InfiniteMarquee from '@/components/sections/InfiniteMarquee'; // ← IMPORT NEW COMPONENT
 import AtelierFooter from '@/components/sections/AtelierFooter';
 
 export default function Home() {
@@ -14,11 +16,14 @@ export default function Home() {
       <HeroSection />
 
       <main className="relative z-20">
-        {/* The Elevated Narrative Section Intro */}
         <NarrativeHeader />
-        
         <SplitScroll />
         <AtelierStory />
+        <ClientShowcase />
+        
+        {/* The Live High-Density Photo Flex */}
+        <InfiniteMarquee />
+        
       </main>
 
       <AtelierFooter />
