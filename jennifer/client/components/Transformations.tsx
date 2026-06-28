@@ -1,23 +1,24 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const transformations = [
   { 
-    before: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop", 
-    after: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
+    before: "/images/img09.jpeg", 
+    after: "/images/img10.jpeg",
     title: "Corporate Professional Transformation",
     desc: "From inconsistent wardrobe choices to a polished professional image that reflects leadership and confidence."
   },
   { 
-    before: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop", 
-    after: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop",
+    before: "/images/img11.jpeg", 
+    after: "/images/img12.jpeg",
     title: "Personal Reinvention",
     desc: "A complete style and grooming transformation designed to build confidence and self-expression."
   },
   { 
-    before: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=600&fit=crop", 
-    after: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=600&fit=crop",
+    before: "/images/img13.jpeg", 
+    after: "/images/img14.jpeg",
     title: "Creator Personal Branding",
     desc: "Developing a visual identity that supports content creation and audience growth."
   }
@@ -58,7 +59,7 @@ export default function Transformations({ hideButton = false }: { hideButton?: b
             >
               <div className="flex gap-[2px] overflow-hidden mb-8">
                 <div className="relative w-1/2 aspect-[3/5] overflow-hidden">
-                  <img src={item.before} alt="Before" className="w-full h-full object-cover grayscale transition-transform duration-[2000ms] group-hover:scale-105" />
+                  <img src={item.before} alt="Before" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105" />
                   <span className="absolute bottom-4 left-4 text-[8px] tracking-[0.3em] uppercase font-light bg-cream/90 text-charcoal px-3 py-1">BEFORE</span>
                 </div>
                 <div className="relative w-1/2 aspect-[3/5] overflow-hidden">

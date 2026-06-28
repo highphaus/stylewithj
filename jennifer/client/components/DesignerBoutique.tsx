@@ -4,25 +4,25 @@ export default function DesignerBoutique() {
     {
       name: "The 'J' Monogram Tote",
       category: "Leather Goods",
-      price: "$2,450",
+      price: "₹2,10,000",
       img: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=600&q=80"
     },
     {
       name: "Silk Organza Trench",
       category: "Ready to Wear",
-      price: "$4,200",
+      price: "₹3,60,000",
       img: "https://images.unsplash.com/photo-1550614000-4b95dd2475a9?auto=format&fit=crop&w=600&q=80"
     },
     {
       name: "Structural Cuff Bracelet",
       category: "Fine Jewelry",
-      price: "$1,850",
+      price: "₹1,50,000",
       img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=600&q=80"
     },
     {
       name: "Leather Architectural Boots",
       category: "Footwear",
-      price: "$1,450",
+      price: "₹1,25,000",
       img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=80"
     }
   ];
@@ -35,7 +35,7 @@ export default function DesignerBoutique() {
           <span className="text-[10px] font-bold tracking-[0.3em] text-[#6B5E56] uppercase block mb-3">La Boutique</span>
           <h2 className="text-3xl sm:text-4xl font-serif text-[#332922] font-light">Signature Pieces</h2>
           <p className="mt-4 text-sm text-[#6B5E56] max-w-lg">
-            A curated selection of our iconic silhouettes, available directly from our Parisian atelier.
+            A curated selection of our iconic silhouettes, available directly from our New Delhi atelier.
           </p>
         </div>
 

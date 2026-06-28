@@ -3,71 +3,108 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal text-cream pt-32 pb-10 px-6 lg:px-12 border-t border-cream/10">
+    <footer className="bg-thalina-bg text-thalina-text pt-24 pb-12 px-6 lg:px-12 border-t border-gray-300/40">
       <div className="max-w-[1400px] mx-auto">
         
-        {/* Massive Logo */}
-        <div className="mb-24 text-center md:text-left">
-          <span className="font-serif text-[80px] md:text-[150px] lg:text-[200px] leading-none tracking-tighter block font-light text-cream/90 hover:text-white transition-colors duration-700">
-            JENNY
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-24 mb-32">
-          {/* Bio Column */}
-          <div className="md:col-span-4 lg:col-span-3">
-            <span className="font-sans text-[9px] tracking-[0.4em] uppercase font-light text-cream/50 mb-8 block leading-relaxed">
-              Personal Stylist<br/>Image Consultant<br/>Brand Strategist
-            </span>
-            <p className="font-sans text-xs text-cream/70 leading-loose font-light pr-4">
-              Helping ambitious individuals transform their image, build confidence, and create lasting impressions globally.
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-8 mb-24">
+          
+          {/* Brand Left */}
+          <div className="md:col-span-4 lg:col-span-5 flex flex-col items-start leading-none group">
+            <span className="text-[10px] uppercase tracking-[0.25em] font-light text-thalina-text/60 mb-1">style with</span>
+            <span className="text-4xl font-bold tracking-tight leading-none font-serif">J</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] font-light text-thalina-text/70 mt-1">by jennifer</span>
           </div>
 
-          {/* Quick Links */}
+          {/* Center Links 1 */}
           <div className="md:col-span-2 lg:col-span-2">
-            <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-light text-cream/40 block mb-8">
-              EXPLORE
-            </span>
-            <ul className="space-y-4 font-sans text-xs text-cream/70 font-light">
-              <li><Link href="/about" className="hover:text-gold hover:pl-2 transition-all duration-300">The Vision</Link></li>
-              <li><Link href="/programs" className="hover:text-gold hover:pl-2 transition-all duration-300">Experiences</Link></li>
-              <li><Link href="/portfolio" className="hover:text-gold hover:pl-2 transition-all duration-300">Selected Works</Link></li>
-              <li><Link href="/transformations" className="hover:text-gold hover:pl-2 transition-all duration-300">The Journey</Link></li>
-              <li><Link href="/insights" className="hover:text-gold hover:pl-2 transition-all duration-300">Insights</Link></li>
+            <ul className="space-y-3 font-sans text-lg text-thalina-text font-light flex flex-col items-start">
+              <li><Link href="/services" className="relative group inline-block">
+                <span>Services</span>
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
+              </Link></li>
+              <li><Link href="/portfolio" className="relative group inline-block">
+                <span>Gallery</span>
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
+              </Link></li>
+              <li><Link href="/about" className="relative group inline-block">
+                <span>About</span>
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
+              </Link></li>
+              <li><Link href="/connect" className="relative group inline-block text-thalina-text/60">
+                <span>Contact</span>
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text/60 transition-all duration-300 group-hover:w-full"></span>
+              </Link></li>
+            </ul>
+          </div>
+
+          {/* Center Links 2 */}
+          <div className="md:col-span-2 lg:col-span-2">
+            <ul className="space-y-3 font-sans text-lg text-thalina-text font-light flex flex-col items-start">
+              <li><Link href="/faq" className="hover:opacity-70 transition-opacity">FAQ</Link></li>
+              <li><Link href="/terms" className="hover:opacity-70 transition-opacity">Terms & Conditions</Link></li>
+              <li><Link href="/privacy" className="hover:opacity-70 transition-opacity">Privacy Policy</Link></li>
+              <li><Link href="/refund" className="hover:opacity-70 transition-opacity">Refund Policy</Link></li>
             </ul>
           </div>
 
           {/* Newsletter Column */}
-          <div className="md:col-span-6 lg:col-span-5 lg:col-start-8">
-            <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-light text-cream/40 block mb-8">
-              JOIN THE INNER CIRCLE
+          <div className="md:col-span-4 lg:col-span-3">
+            <span className="font-sans text-lg font-light mb-6 block">
+              Don't Miss an Update
             </span>
-            <p className="font-sans text-xs text-cream/70 leading-loose font-light mb-8">
-              Subscribe to receive exclusive insights on style, personal branding, and access to private masterclasses.
-            </p>
-            <form className="relative flex items-center border-b border-cream/30 pb-2 group">
-              <input 
-                type="email" 
-                placeholder="EMAIL ADDRESS" 
-                className="bg-transparent w-full font-sans text-[10px] tracking-[0.2em] text-cream placeholder-cream/30 focus:outline-none focus:ring-0"
-              />
-              <button type="submit" className="font-sans text-[10px] tracking-[0.3em] uppercase text-cream group-hover:text-gold transition-colors duration-300">
-                SUBSCRIBE
+            <form className="flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="font-sans text-xs font-light">Email *</label>
+                <div className="relative flex items-center border-b border-thalina-text pb-2 group">
+                  <input 
+                    type="email" 
+                    className="bg-transparent w-full font-sans text-base text-thalina-text placeholder-thalina-text/30 focus:outline-none focus:ring-0 peer"
+                    required
+                  />
+                  <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-500 peer-focus:w-full"></div>
+                </div>
+              </div>
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className="relative flex items-center mt-1">
+                  <input type="checkbox" className="w-4 h-4 appearance-none border border-thalina-text checked:bg-thalina-text transition-colors cursor-pointer" required />
+                  <svg className="absolute w-3 h-3 text-thalina-bg pointer-events-none opacity-0 left-0.5 top-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <span className="font-sans text-sm text-thalina-text leading-relaxed">
+                  Yes, subscribe me to your newsletter.
+                </span>
+              </label>
+              <style dangerouslySetInnerHTML={{__html: `input[type="checkbox"]:checked + svg { opacity: 1; }`}} />
+              
+              <button type="submit" className="relative overflow-hidden group font-sans text-sm font-medium uppercase tracking-widest text-thalina-text border border-thalina-text py-3 transition-colors">
+                <span className="absolute inset-0 bg-thalina-text translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-300">Submit</span>
               </button>
             </form>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-cream/10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-cream/40 font-light">
-            &copy; {new Date().getFullYear()} JENNY. ALL RIGHTS RESERVED.
-          </span>
-          <div className="flex gap-8 font-sans text-[9px] tracking-[0.3em] uppercase text-cream/40 font-light">
-            <a href="#" className="hover:text-gold transition-colors duration-300">INSTAGRAM</a>
-            <a href="#" className="hover:text-gold transition-colors duration-300">LINKEDIN</a>
-            <a href="#" className="hover:text-gold transition-colors duration-300">PINTEREST</a>
+        <div className="flex flex-col md:flex-row justify-end items-end gap-16">
+          <div className="flex flex-col gap-2 font-sans text-lg font-light">
+            <span className="font-medium mb-2">Follow Us</span>
+            <a href="#" className="relative group inline-block w-fit">
+              <span>Instagram</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a href="#" className="relative group inline-block w-fit">
+              <span>Facebook</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a href="#" className="relative group inline-block w-fit">
+              <span>Pinterest</span>
+              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
+            </a>
+          </div>
+          <div className="flex flex-col text-sm font-sans text-thalina-text/80 font-light mt-12 md:mt-0">
+            <span>&copy; {new Date().getFullYear()} by Style with J by Jennifer.</span>
+            <span>Made with <a href="#" className="underline hover:opacity-70 transition-opacity">Antigravity</a></span>
           </div>
         </div>
       </div>

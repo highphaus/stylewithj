@@ -2,20 +2,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        charcoal: '#1A1A1A',
-        cream: '#FAFAFA',
-        beige: '#F4F1ED',
-        gold: '#C5A059',
+        thalina: {
+          bg: '#EBE8E3',
+          text: '#222222',
+        }
       },
       fontFamily: {
-        serif: ['var(--font-serif)', 'Georgia', 'serif'],
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-outfit)', 'sans-serif'],
+        serif: ['Didot', 'Bodoni MT', 'Georgia', 'serif'],
       },
       transitionTimingFunction: {
         'luxury': 'cubic-bezier(0.16, 1, 0.3, 1)', // Flawless editorial deceleration curve
