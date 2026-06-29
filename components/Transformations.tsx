@@ -79,10 +79,12 @@ export default function Transformations({ hideButton = false, isPage = false }: 
 
   return (
     <section className="bg-[#FAF9F6] text-[#1A1A1A] relative">
-      <div className="w-full min-h-screen grid grid-cols-1 lg:grid-cols-12 items-stretch">
+      
+      <div className="w-full min-h-screen grid grid-cols-12 items-stretch">
         
         {/* ── LEFT MATRIX TRACK: THE IMMOBILE ANTE LAB (STAY-STICKY STATIC STAGE) ── */}
-        <div className="lg:col-span-5 hidden lg:block sticky top-0 h-screen overflow-hidden bg-[#EAE8E3] border-r border-black/5">
+        {/* On all devices: Sticky left frame. */}
+        <div className="col-span-4 lg:col-span-5 sticky top-0 h-screen overflow-hidden bg-[#EAE8E3] border-r border-black/5 z-30">
           
           {/* THE CROSSFADING BASELINE ENGINE */}
           <div className="absolute inset-0 w-full h-full">
@@ -95,22 +97,22 @@ export default function Transformations({ hideButton = false, isPage = false }: 
                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                 src={transformationData[activeWorkspace].beforeImg}
                 alt="Baseline Laboratory Frame"
-                className="w-full h-full object-cover object-top grayscale-[30%]"
+                className="w-full h-full object-cover object-center lg:object-top grayscale-[30%]"
               />
             </AnimatePresence>
           </div>
 
           {/* SARTORIAL WATERMARKS */}
-          <div className="absolute top-12 left-12 z-20">
-            <span className="font-sans text-[9px] tracking-[0.6em] text-black/40 block mb-2">
-              LABORATORY METADATA RECORDING
+          <div className="absolute top-4 left-4 lg:top-12 lg:left-12 z-20">
+            <span className="font-sans text-[7px] lg:text-[9px] tracking-[0.2em] sm:tracking-[0.6em] text-black/40 block mb-2">
+              LABORATORY METADATA <span className="hidden sm:inline">RECORDING</span>
             </span>
-            <div className="font-sans text-xs font-semibold tracking-widest text-black">
+            <div className="font-sans text-[8px] lg:text-xs font-semibold tracking-wider sm:tracking-widest text-black break-words">
               SYS_ANTE_REF // 0{transformationData[activeWorkspace].id}
             </div>
           </div>
 
-          <div className="absolute bottom-12 left-12 z-20 right-12 flex justify-between items-end">
+          <div className="hidden sm:flex absolute bottom-12 left-12 z-20 right-12 justify-between items-end">
             <div>
               <span className="font-sans text-[8px] tracking-[0.3em] text-black/30 block mb-1">CURRENT RAW MATRIX</span>
               <span className="font-sans text-[10px] tracking-widest text-black/60 uppercase">
@@ -125,23 +127,23 @@ export default function Transformations({ hideButton = false, isPage = false }: 
         </div>
 
         {/* ── RIGHT MATRIX TRACK: THE INTERLOCKING FLUID POST RUNWAY ── */}
-        <div className="lg:col-span-7 px-6 md:px-16 lg:px-24 flex flex-col pt-32 pb-44">
+        <div className="col-span-8 lg:col-span-7 px-4 sm:px-6 md:px-16 lg:px-24 flex flex-col pt-16 lg:pt-32 pb-16 lg:pb-32 bg-[#FAF9F6] relative z-20">
           
           {/* RUNWAY OVERVIEW DESCRIPTOR */}
-          <div className="mb-48 border-b border-black/10 pb-16 text-left max-w-xl">
-            <span className="font-sans text-[10px] tracking-[0.6em] text-black/40 block mb-4 uppercase">
+          <div className="mb-24 lg:mb-40 border-b border-black/10 pb-8 lg:pb-12 text-left max-w-xl">
+            <span className="font-sans text-[8px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.6em] text-black/40 block mb-4 uppercase mt-4 lg:mt-0">
               EXHIBITION EDITION // VOL. V
             </span>
-            <h2 className="font-serif text-4xl md:text-6xl font-light tracking-tight leading-none text-[#1A1A1A] mb-6">
-              Sartorial <span className="italic text-black/30">Evolutions</span>
+            <h2 className="font-satoshi text-3xl sm:text-4xl md:text-6xl font-light tracking-tight leading-[1.1] text-[#1A1A1A] mb-4">
+              Sartorial <span className="italic text-black/30 lg:block">Evolutions</span>
             </h2>
-            <p className="font-serif text-sm italic text-black/50 leading-relaxed font-light">
+            <p className="font-sans text-[10px] sm:text-xs lg:text-sm text-black/50 leading-relaxed font-light">
               Scroll down naturally. As the right track scales through optimized designs, the sticky left frame alters its raw baseline state synchronously.
             </p>
           </div>
 
           {/* DYNAMIC SCROLL CONTAINER ROW */}
-          <div className="flex flex-col gap-64 w-full">
+          <div className="flex flex-col gap-24 lg:gap-40 w-full">
             {transformationData.map((item, index) => (
               <div
                 key={item.id}
@@ -155,18 +157,6 @@ export default function Transformations({ hideButton = false, isPage = false }: 
                   <span className="font-sans text-[9px] tracking-[0.2em] text-black/40 uppercase font-medium">
                     {item.demographic}
                   </span>
-                </div>
-
-                {/* MOBILE ONLY FALLBACK TRACK FOR THE BEFORE IMAGE */}
-                <div className="w-full aspect-[4/5] bg-[#EAE8E3] overflow-hidden mb-6 block lg:hidden">
-                  <img 
-                    src={item.beforeImg} 
-                    alt="Ante State Baseline" 
-                    className="w-full h-full object-cover object-top grayscale" 
-                  />
-                  <div className="p-3 bg-black/5 text-[8px] tracking-widest uppercase font-sans text-black/40">
-                    Ante State View
-                  </div>
                 </div>
 
                 {/* REFINED MONOLITHIC AFTER IMAGE */}

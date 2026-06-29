@@ -16,6 +16,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-manrope)', 'sans-serif'],
+        satoshi: ['Satoshi', 'sans-serif'],
         serif: ['Satoshi', 'sans-serif'],
         general: ['General Sans', 'sans-serif'],
       },

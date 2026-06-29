@@ -99,23 +99,23 @@ function ServiceCard({ item, index, total, scrollYProgress }: CardProps) {
         />
         
         {/* EDITORIAL REVENUE OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-8 md:p-16 lg:p-20 select-none text-white">
-          <div className="w-full max-w-2xl flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 lg:via-black/30 to-transparent flex flex-col justify-end p-4 sm:p-8 lg:p-20 select-none text-white">
+          <div className="w-full max-w-2xl flex flex-col lg:flex-row lg:items-end justify-between gap-2 lg:gap-6">
             
             <div className="max-w-md">
-              <h3 className="font-serif text-2xl sm:text-3xl font-light tracking-wide uppercase mb-2 text-white">
+              <h3 className="font-satoshi text-lg sm:text-2xl lg:text-3xl font-light tracking-wide uppercase mb-1 sm:mb-2 text-white leading-tight">
                 {item.name}
               </h3>
-              <p className="text-xs sm:text-sm text-white/80 font-light leading-relaxed tracking-wide">
+              <p className="text-[10px] sm:text-xs lg:text-sm text-white/80 font-light leading-relaxed tracking-wide">
                 {item.desc}
               </p>
             </div>
 
-            <div className="flex flex-col sm:items-end flex-shrink-0">
-              <span className="text-[9px] tracking-[0.25em] uppercase font-sans font-light text-white/60 mb-1">
+            <div className="flex flex-row lg:flex-col items-center lg:items-end gap-3 lg:gap-0 flex-shrink-0 mt-3 lg:mt-0">
+              <span className="text-[7px] sm:text-[9px] tracking-[0.25em] uppercase font-sans font-light text-white/60 lg:mb-1">
                 {item.category}
               </span>
-              <span className="font-serif text-lg italic font-light text-white/40">
+              <span className="font-satoshi text-sm sm:text-lg italic font-light text-white/40">
                 0{item.num}
               </span>
             </div>
@@ -138,29 +138,34 @@ export default function ServicesGrid() {
     <section ref={targetRef} className="relative h-[600vh] bg-[#FAF9F6]">
       
       {/* STICKY CONTAINER VIEWPORT */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden flex items-center">
         
-        {/* ── SOLID LEFT PANEL MASK ── */}
-        <div className="absolute left-0 top-0 bottom-0 z-50 bg-[#FAF9F6] flex flex-col justify-center pl-8 md:pl-16 lg:pl-24 pr-16 w-[340px] sm:w-[440px] lg:w-[540px] border-r border-black/5 pointer-events-auto">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="text-[10px] tracking-[0.5em] uppercase font-light text-black/40 font-sans">
+        {/* ── SOLID TEXT PANEL MASK (Top on Mobile, Left on Desktop) ── */}
+        <div className="
+          absolute top-0 left-0 right-0 z-50 bg-[#FAF9F6] flex flex-col justify-center
+          px-6 sm:px-12 h-[35vh] sm:h-[40vh] border-b border-black/5
+          lg:bottom-0 lg:right-auto lg:h-full lg:w-[540px] lg:pl-24 lg:pr-16 lg:border-r lg:border-b-0
+          pointer-events-auto
+        ">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2 sm:mb-4">
+            <span className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.5em] uppercase font-light text-black/40 font-sans mt-4 lg:mt-0">
               03 // REPERTOIRE
             </span>
-            <div className="w-12 h-[1px] bg-black/15" />
+            <div className="hidden sm:block w-12 h-[1px] bg-black/15" />
           </div>
           
-          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#1A1A1A] leading-[1.0] mb-6">
-            What <br />We Do
+          <h2 className="font-satoshi text-3xl sm:text-5xl lg:text-7xl font-light tracking-tight text-[#1A1A1A] leading-[1.1] mb-2 sm:mb-6">
+            What <span className="lg:block hidden"></span>We Do
           </h2>
           
-          <p className="text-xs font-sans font-light tracking-wide text-black/50 max-w-xs leading-relaxed border-l border-black/20 pl-4">
+          <p className="text-[10px] sm:text-xs font-sans font-light tracking-wide text-black/50 max-w-xs leading-relaxed border-l border-black/20 pl-3 sm:pl-4">
             Custom structural image design and strategic styling consultation built for the discerning modern profile.
           </p>
         </div>
 
-        {/* ── CARD PORTRAIT CANVAS FIELD ── */}
-        <div className="w-full h-full relative z-20 pl-[340px] sm:pl-[440px] lg:pl-[540px]">
-          {/* Changed container to bg-black so if a rendering seam ever tries to drop, it drops dark instead of white */}
+        {/* ── CARD PORTRAIT CANVAS FIELD (Bottom on Mobile, Right on Desktop) ── */}
+        <div className="w-full h-full relative z-20 pt-[35vh] sm:pt-[40vh] lg:pt-0 lg:pl-[540px]">
+          {/* Container bg-black prevents visual seams */}
           <div className="relative w-full h-full overflow-hidden bg-black">
             
             {allServices.map((item, i) => (

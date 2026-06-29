@@ -8,12 +8,12 @@ export default function MeetSection() {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-y-20 gap-x-12 items-start relative">
         
         {/* ── LEFT TRACK: ASYMMETRIC METADATA IDENTIFIER (COLUMNS 1-4) ── */}
-        <div className="lg:col-span-4 flex flex-col justify-between h-full pt-4">
-          <div className="sticky top-32">
+        <div className="lg:col-span-4 flex flex-col justify-center h-full">
+          <div className="lg:-mt-24">
             <span className="font-sans text-[10px] tracking-[0.7em] text-black/30 block mb-4 uppercase">
               THE DESIGNER PROFILE // IDENTIFICATION
             </span>
-            <h2 className="font-serif text-5xl md:text-7xl font-light tracking-tighter leading-none text-[#1A1A1A] mb-8">
+            <h2 className="font-satoshi text-5xl md:text-7xl font-light tracking-tighter leading-none text-[#1A1A1A] mb-8">
               Meet <br />
               <span className="italic text-black/30 font-light">Jennifer.</span>
             </h2>
@@ -50,18 +50,18 @@ export default function MeetSection() {
         </div>
 
         {/* ── RIGHT TRACK: DECONSTRUCTED SERIF QUOTE SYSTEM (COLUMNS 9-12) ── */}
-        <div className="lg:col-span-4 lg:pl-8 flex flex-col justify-end h-full lg:pt-32 z-10 text-left">
+        <div className="lg:col-span-4 lg:pl-8 flex flex-col justify-center h-full text-left">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
+            className="relative lg:mt-24"
           >
             {/* STYLISTIC TOP BORDER LINE CHANNELS */}
             <div className="w-6 h-px bg-black/40 mb-8" />
             
-            <p className="font-serif text-2xl md:text-3xl lg:text-[32px] font-light italic leading-[1.4] tracking-tight text-black/80 mb-12">
+            <p className="font-satoshi text-2xl md:text-3xl lg:text-[32px] font-light italic leading-[1.4] tracking-tight text-black/80 mb-12">
               "Style is a deeply personal expression of who you are, and every time you dress, you are asserting a part of yourself."
             </p>
 
@@ -70,7 +70,7 @@ export default function MeetSection() {
               <span className="font-sans text-[9px] tracking-[0.2em] uppercase text-black/50 font-medium">
                 PHILOSOPHY ACCENTUATION
               </span>
-              <p className="font-serif text-xs text-black/40 leading-relaxed font-light">
+              <p className="font-satoshi text-xs text-black/40 leading-relaxed font-light">
                 An exploration into the structural canvas lines that dictate physical posture, social presence, and clothing psychology.
               </p>
             </div>
