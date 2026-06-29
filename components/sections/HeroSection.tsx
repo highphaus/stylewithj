@@ -1,62 +1,105 @@
-// src/components/sections/HeroSection.tsx
 'use client';
-
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function HeroSection() {
-  const { scrollY } = useScroll();
-  const yImage = useTransform(scrollY, [0, 600], [0, 120]);
-  const opacityText = useTransform(scrollY, [0, 400], [1, 0]);
-
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Background Cinematic Parallax Layer */}
-      <motion.div style={{ y: yImage }} className="absolute inset-0 w-full h-[115%] origin-top">
+    <section className="relative w-full h-screen bg-[#111] text-white overflow-hidden flex items-center">
+      
+      {/* 1. BACKGROUND CINEMATIC LAYER */}
+      <div className="absolute inset-0 w-full h-full z-0">
         <Image
-          src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1920" 
+          src="/images/hero/heroimage1.jpeg" // Make sure your image file exists here!
           alt="Campaign Masterpiece"
           fill
           priority
-          className="object-cover brightness-[0.85]"
+          className="object-cover object-center opacity-85 brightness-[0.85]"
         />
-      </motion.div>
+        {/* Subtle dark vignette overlay to make text pop */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/30" />
+      </div>
 
-      {/* Navigation Layer */}
-      <header className="w-full fixed top-0 left-0 mix-blend-difference text-white z-50 flex justify-center border-b border-white/5 backdrop-blur-[2px]">
-        <div className="w-full max-w-7xl flex justify-between items-center px-6 md:px-12 py-5">
-          {/* Custom brand formatting stylewithj */}
-          <Link href="/" className="font-sans text-lg tracking-[0.15em] font-light lowercase">
-            stylewithj
-          </Link>
-          <nav className="hidden md:flex items-center gap-10 text-xs tracking-[0.2em] uppercase font-light">
-            <Link href="#collections" className="hover:opacity-60 transition-opacity">Collections</Link>
-            <Link href="#about" className="hover:opacity-60 transition-opacity">Philosophy</Link>
-          </nav>
-        </div>
-      </header>
+      {/* 2. LEFT SIDEBAR UTILITY (Vertical Typography Accent) */}
+      <div className="hidden lg:flex absolute left-8 bottom-24 z-10 flex-col items-center gap-4 text-[9px] tracking-[0.3em] uppercase font-light text-white/50 [writing-mode:vertical-lr] rotate-180 select-none">
+        <span>Bespoke Styling</span>
+        <span className="w-1 h-1 bg-white/30 rounded-full my-1" />
+        <span>Wardrobe Curation</span>
+        <span className="w-1 h-1 bg-white/30 rounded-full my-1" />
+        <span>Image Consulting</span>
+      </div>
 
-      {/* Main Typography Header Block */}
-      <motion.div style={{ opacity: opacityText }} className="absolute inset-0 z-10 flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-16 mix-blend-difference text-white">
-        <div className="max-w-7xl w-full mx-auto flex flex-col md:flex-row md:justify-between md:items-end gap-8">
-          <div className="overflow-hidden">
-            <motion.h2 
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-              className="font-serif text-4xl sm:text-6xl md:text-8xl font-light tracking-wide max-w-4xl leading-[1.05]"
-            >
-              Ethereal Structures.<br />Tailored Silhouettes.
-            </motion.h2>
-          </div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.6 }} className="flex flex-col items-start md:items-end gap-6">
-            <p className="text-[10px] tracking-[0.3em] text-neutral-300 font-light max-w-[260px] md:text-right leading-relaxed uppercase">
-              An exploration of fluid geometry and raw textile architecture.
-            </p>
-          </motion.div>
+      {/* 3. MAIN HERO CONTENT */}
+      <div className="w-full max-w-[1440px] mx-auto px-8 lg:px-24 flex justify-between items-center z-10 mt-12">
+        
+        {/* Left Side: Typography & CTA */}
+        <div className="max-w-xl flex flex-col items-start">
+          <motion.span 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-[10px] sm:text-xs tracking-[0.4em] uppercase text-white/60 mb-3 block font-light"
+          >
+            Personal Stylist
+          </motion.span>
+
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-4xl sm:text-5xl md:text-6xl font-serif font-light leading-[1.15] tracking-wide mb-6"
+          >
+            Style that <br />
+            reflects who <br />
+            <span className="italic font-normal">you are.</span>
+          </motion.h1>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="w-12 h-[1px] bg-white/30 mb-6"
+          />
+
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-sm sm:text-base font-light text-white/70 max-w-[280px] sm:max-w-xs leading-relaxed mb-10 tracking-wide"
+          >
+            Intentional wardrobes. <br />
+            Timeless confidence.
+          </motion.p>
+
+          <motion.a
+            href="/contact"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="group flex items-center gap-12 px-6 py-3 border border-white/30 hover:border-white text-[10px] tracking-[0.25em] uppercase font-light transition-all duration-300 backdrop-blur-[2px]"
+          >
+            Connect
+            <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-sm">→</span>
+          </motion.a>
         </div>
-      </motion.div>
+
+        {/* Right Side: Editorial Callout Line */}
+        <div className="hidden md:flex flex-col items-start border-l border-white/20 pl-6 py-2 max-w-[150px]">
+          <p className="text-[10px] tracking-[0.2em] uppercase font-light leading-relaxed text-white/80">
+            Editorial approach. Personal touch.
+          </p>
+        </div>
+
+      </div>
+
+      {/* 4. BOTTOM BOTTOM CENTERED SCROLL INDICATOR */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center gap-3">
+        <span className="text-[9px] tracking-[0.3em] uppercase font-light text-white/40">
+          Scroll
+        </span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-white/40 to-transparent animate-pulse" />
+      </div>
+
     </section>
   );
 }

@@ -62,6 +62,15 @@ export default function AtelierCanvas() {
     }
   }, [points]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      // Trigger canvas resize redraw
+      setPoints(prev => [...prev]);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleStart = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDrawing(true);
     const rect = e.currentTarget.getBoundingClientRect();

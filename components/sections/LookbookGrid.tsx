@@ -24,8 +24,8 @@ const collectionData: Look[] = [
     concept: 'Architectural Layering',
     fabric: '100% Hand-woven Silk Organza',
     description: 'An exploration of rigid geometry meeting fluid motion, constructed over an asymmetrical inner canvas bodice.',
-    primarySrc: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200',
-    detailSrc: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1200'
+    primarySrc: '/images/img25.jpeg',
+    detailSrc: '/images/img26.jpeg'
   },
   {
     id: 'look-2',
@@ -34,8 +34,8 @@ const collectionData: Look[] = [
     concept: 'Linear Silhouette',
     fabric: 'Raw Charcoal Flax Linen',
     description: 'A striking study in sharp horizontal canvas pleats and extended shoulder pads, mapping out structural dominance.',
-    primarySrc: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200',
-    detailSrc: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200'
+    primarySrc: '/images/img27.jpeg',
+    detailSrc: '/images/img28.jpeg'
   }
 ];
 

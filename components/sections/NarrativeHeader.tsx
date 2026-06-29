@@ -58,7 +58,7 @@ export default function NarrativeHeader() {
             style={{ scale: titleScale }}
             className="font-serif text-5xl sm:text-7xl md:text-8xl font-light tracking-tight text-[#1A1A1A] origin-center will-change-transform"
           >
-            The Narrative Stream
+            
           </motion.h3>
         </motion.div>
 
@@ -68,7 +68,7 @@ export default function NarrativeHeader() {
           className="absolute inset-0 w-full h-full bg-neutral-900 z-10 transition-all duration-150 ease-out"
         >
           <Image
-            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1920" // Replace with her key campaign art asset
+            src="/images/img24.jpeg"
             alt="Muted Avant-Garde Campaign Canvas"
             fill
             priority

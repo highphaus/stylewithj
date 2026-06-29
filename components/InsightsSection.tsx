@@ -50,7 +50,7 @@ export default function InsightsSection({ hideButton = false }: { hideButton?: b
             Insights on Style, Confidence & Personal Branding
           </h2>
           {!hideButton && (
-            <Link href="/insights" className="group relative overflow-hidden border-b border-charcoal/30 pb-2 text-[10px] font-light tracking-[0.3em] uppercase text-charcoal hover:border-gold hover:text-gold transition-colors duration-500 inline-flex items-center gap-4">
+            <Link href="/journal" className="group relative overflow-hidden border-b border-charcoal/30 pb-2 text-[10px] font-light tracking-[0.3em] uppercase text-charcoal hover:border-gold hover:text-gold transition-colors duration-500 inline-flex items-center gap-4">
               View All Articles
             </Link>
           )}

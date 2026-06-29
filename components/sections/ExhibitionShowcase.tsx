@@ -18,15 +18,15 @@ const exhibitionLooks: VideoLook[] = [
     id: 'moment-1',
     tag: '#GLVPS // THE GRAND ENTRANCE',
     title: 'Ethereal Illusion Bodice & Veil Scale',
-    thumbnail: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800',
-    conceptUrl: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1200'
+    thumbnail: '/images/img29.jpeg',
+    conceptUrl: '/images/img30.jpeg'
   },
   {
     id: 'moment-2',
     tag: '#GLVPS // THE ATELIER REVEAL',
     title: 'Sculpted Corsetry & Hand-Placed Applique',
-    thumbnail: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800',
-    conceptUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200'
+    thumbnail: '/images/img31.jpeg',
+    conceptUrl: '/images/img01.jpeg'
   }
 ];
 

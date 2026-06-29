@@ -5,9 +5,9 @@ import Link from 'next/link';
 
 export default function GallerySection() {
   const images = [
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80"
+    "/images/img18.jpeg",
+    "/images/img19.jpeg",
+    "/images/img20.jpeg"
   ];
 
   return (
@@ -42,7 +42,7 @@ export default function GallerySection() {
               <img 
                 src={src} 
                 alt={`Gallery image ${idx + 1}`} 
-                className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-700 ease-out"
               />
             </motion.div>
           ))}

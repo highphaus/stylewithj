@@ -20,14 +20,14 @@ export default function TransformationSlider() {
         <div className="lg:col-span-7 relative h-[450px] w-full select-none overflow-hidden rounded-2xl shadow-md border border-[#E0D9CE]">
           {/* Before Image Layer */}
           <div className="absolute inset-0 bg-[#E0D9CE]">
-            <img src="https://images.unsplash.com/photo-1509319117193-57bab727e09d?auto=format&fit=crop&w=800&q=80" alt="Before lookbook profile" className="w-full h-full object-cover filter grayscale" />
+            <img src="/images/img15.jpeg" alt="Before lookbook profile" className="w-full h-full object-cover" />
             <div className="absolute bottom-4 left-4 bg-[#332922] text-white font-bold text-[9px] tracking-widest uppercase px-3 py-1">Baseline Outline</div>
           </div>
           
           {/* After Image Layer (Controlled via width percentage) */}
           <div className="absolute inset-0 overflow-hidden" style={{ width: `${sliderPos}%` }}>
             <div className="w-full h-[450px] relative">
-              <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80" alt="After lookbook profile" className="absolute inset-0 w-full h-full object-cover max-w-none" style={{ width: '100%', maxWidth: 'none' }} />
+              <img src="/images/img16.jpeg" alt="After lookbook profile" className="absolute inset-0 w-full h-full object-cover max-w-none" style={{ width: '100%', maxWidth: 'none' }} />
               <div className="absolute bottom-4 left-4 bg-white text-[#332922] font-bold text-[9px] tracking-widest uppercase px-3 py-1 whitespace-nowrap">Bespoke Curation</div>
             </div>
           </div>

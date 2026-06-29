@@ -10,10 +10,10 @@ interface LookbookItem {
 }
 
 const yslLooks: LookbookItem[] = [
-  { id: '1', src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800', alt: 'Silhouette Editorial 01' },
-  { id: '2', src: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=800', alt: 'Silhouette Editorial 02' },
-  { id: '3', src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800', alt: 'Silhouette Editorial 03' },
-  { id: '4', src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800', alt: 'Silhouette Editorial 04' }
+  { id: '1', src: '/images/img01.jpeg', alt: 'Silhouette Editorial 01' },
+  { id: '2', src: '/images/img02.jpeg', alt: 'Silhouette Editorial 02' },
+  { id: '3', src: '/images/img03.jpeg', alt: 'Silhouette Editorial 03' },
+  { id: '4', src: '/images/img04.jpeg', alt: 'Silhouette Editorial 04' }
 ];
 
 export default function SplitScroll() {

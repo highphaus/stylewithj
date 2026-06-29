@@ -6,17 +6,17 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 const fullLooks = [
-  'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=600',
-  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=600',
-  'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600',
-  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600',
+  '/images/img17.jpeg',
+  '/images/img18.jpeg',
+  '/images/img19.jpeg',
+  '/images/img20.jpeg',
 ];
 
 const detailTextures = [
-  'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=600',
-  'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=600',
-  'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=600',
-  'https://images.unsplash.com/photo-152436991641-6745cdb1723f?q=80&w=600',
+  '/images/img21.jpeg',
+  '/images/img22.jpeg',
+  '/images/img23.jpeg',
+  '/images/img24.jpeg',
 ];
 
 export default function InfiniteMarquee() {

@@ -6,17 +6,17 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 const deepArchiveCollection = [
-  { src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=600', x: '10%', y: '15%', size: 'w-[180px] md:w-[240px]' },
-  { src: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=600', x: '35%', y: '5%', size: 'w-[150px] md:w-[200px]' },
-  { src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600', x: '60%', y: '12%', size: 'w-[200px] md:w-[260px]' },
-  { src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600', x: '80%', y: '8%', size: 'w-[140px] md:w-[180px]' },
-  { src: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=600', x: '5%', y: '45%', size: 'w-[220px] md:w-[280px]' },
-  { src: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=600', x: '28%', y: '38%', size: 'w-[190px] md:w-[250px]' },
-  { src: 'https://images.unsplash.com/photo-152436991641-6745cdb1723f?q=80&w=600', x: '52%', y: '52%', size: 'w-[160px] md:w-[220px]' },
-  { src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=600', x: '75%', y: '42%', size: 'w-[210px] md:w-[270px]' },
-  { src: 'https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?q=80&w=600', x: '18%', y: '70%', size: 'w-[150px] md:w-[210px]' },
-  { src: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=600', x: '42%', y: '75%', size: 'w-[220px] md:w-[290px]' },
-  { src: 'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?q=80&w=600', x: '65%', y: '72%', size: 'w-[170px] md:w-[230px]' },
+  { src: '/images/img06.jpeg', x: '10%', y: '15%', size: 'w-[100px] sm:w-[150px] md:w-[240px]' },
+  { src: '/images/img07.jpeg', x: '35%', y: '5%',  size: 'w-[90px] sm:w-[120px] md:w-[200px]' },
+  { src: '/images/img08.jpeg', x: '60%', y: '12%', size: 'w-[120px] sm:w-[160px] md:w-[260px]' },
+  { src: '/images/img09.jpeg', x: '80%', y: '8%',  size: 'w-[80px] sm:w-[110px] md:w-[180px]' },
+  { src: '/images/img10.jpeg', x: '5%',  y: '45%', size: 'w-[130px] sm:w-[170px] md:w-[280px]' },
+  { src: '/images/img11.jpeg', x: '28%', y: '38%', size: 'w-[110px] sm:w-[150px] md:w-[250px]' },
+  { src: '/images/img12.jpeg', x: '52%', y: '52%', size: 'w-[100px] sm:w-[130px] md:w-[220px]' },
+  { src: '/images/img13.jpeg', x: '75%', y: '42%', size: 'w-[120px] sm:w-[160px] md:w-[270px]' },
+  { src: '/images/img14.jpeg', x: '18%', y: '70%', size: 'w-[90px] sm:w-[130px] md:w-[210px]' },
+  { src: '/images/img15.jpeg', x: '42%', y: '75%', size: 'w-[130px] sm:w-[170px] md:w-[290px]' },
+  { src: '/images/img16.jpeg', x: '65%', y: '72%', size: 'w-[100px] sm:w-[140px] md:w-[230px]' },
 ];
 
 export default function LookbookHorizon() {

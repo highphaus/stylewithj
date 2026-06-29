@@ -1,93 +1,182 @@
 'use client';
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import Image from 'next/image';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
-const stylingServices = [
-  { name: "Personal Styling Session", price: "From ₹15,000" },
-  { name: "Wardrobe Strategy", price: "From ₹25,000" },
-  { name: "Special Event Styling", price: "From ₹20,000" }
+const allServices = [
+  { 
+    num: "01",
+    category: "Styling & Curation",
+    name: "Personal Styling Session", 
+    desc: "A bespoke evaluation of your lifestyle, mapping out an elevated aesthetic blueprint that completely streamlines how you get dressed.",
+    image: "/images/img07.jpeg"
+  },
+  { 
+    num: "02",
+    category: "Styling & Curation",
+    name: "Wardrobe Strategy", 
+    desc: "An intentional restructuring of your existing closet ecosystem. Sifting, organizing, and developing seasonal capsule looks.",
+    image: "/images/img06.jpeg"
+  },
+  { 
+    num: "03",
+    category: "Styling & Curation",
+    name: "Special Event Styling", 
+    desc: "Exclusive sartorial architectural building for public presentations, galas, red carpets, or high-profile milestone events.",
+    image: "/images/img05.jpeg"
+  },
+  { 
+    num: "04",
+    category: "Identity & Consulting",
+    name: "Personal Branding Audit", 
+    desc: "Aligning your outward professional appearance with executive prestige, company leadership value systems, and media optics.",
+    image: "/images/img04.jpeg"
+  },
+  { 
+    num: "05",
+    category: "Identity & Consulting",
+    name: "Color Analysis", 
+    desc: "A deep clinical tonal breakdown mapping skin, eye, and contrast points to pinpoint your absolute premium color palette spectrum.",
+    image: "/images/img08.jpeg"
+  },
+  { 
+    num: "06",
+    category: "Identity & Consulting",
+    name: "Complete Transformation", 
+    desc: "The ultimate signature identity overhaul. An immersive, custom lifestyle consulting package tailored for a complete life evolution.",
+    image: "/images/img09.jpeg"
+  }
 ];
 
-const imageServices = [
-  { name: "Personal Branding Audit", price: "From ₹30,000" },
-  { name: "Color Analysis", price: "From ₹12,000" },
-  { name: "Complete Transformation", price: "Custom" }
-];
+interface CardProps {
+  item: typeof allServices[0];
+  index: number;
+  total: number;
+  scrollYProgress: MotionValue<number>;
+}
+
+function ServiceCard({ item, index, total, scrollYProgress }: CardProps) {
+  const start = index / total;
+  const end = (index + 1) / total;
+
+  const exitStart = (index + 1) / total - 0.08;
+  const exitEnd = (index + 1) / total;
+
+  const x = useTransform(
+    scrollYProgress,
+    index === total - 1 
+      ? [0, 1] 
+      : [0, Math.max(0, exitStart), Math.min(1, exitEnd), 1],
+    index === total - 1
+      ? ["0%", "0%"]
+      : ["0%", "0%", "-105%", "-105%"]
+  );
+
+  const scale = useTransform(
+    scrollYProgress,
+    index === total - 1
+      ? [0, 1]
+      : [0, Math.max(0, exitStart), Math.min(1, exitEnd), 1],
+    index === total - 1
+      ? [1, 1]
+      : [1, 1, 0.96, 0.96]
+  );
+
+  return (
+    <motion.div 
+      style={{ x, scale, zIndex: total - index }}
+      className="absolute inset-0 w-full h-full bg-black will-change-transform"
+    >
+      {/* TRUE FULL-HEIGHT PORTRAIT FRAME */}
+      <div className="relative w-full h-full bg-black overflow-hidden">
+        <Image 
+          src={item.image} 
+          alt={item.name} 
+          fill
+          className="object-cover object-center scale-100 transition-transform duration-1000 ease-out"
+          priority={index === 0}
+          unoptimized
+        />
+        
+        {/* EDITORIAL REVENUE OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-8 md:p-16 lg:p-20 select-none text-white">
+          <div className="w-full max-w-2xl flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+            
+            <div className="max-w-md">
+              <h3 className="font-serif text-2xl sm:text-3xl font-light tracking-wide uppercase mb-2 text-white">
+                {item.name}
+              </h3>
+              <p className="text-xs sm:text-sm text-white/80 font-light leading-relaxed tracking-wide">
+                {item.desc}
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:items-end flex-shrink-0">
+              <span className="text-[9px] tracking-[0.25em] uppercase font-sans font-light text-white/60 mb-1">
+                {item.category}
+              </span>
+              <span className="font-serif text-lg italic font-light text-white/40">
+                0{item.num}
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function ServicesGrid() {
+  const targetRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+  });
+
   return (
-    <section id="services" className="flex flex-col lg:flex-row w-full min-h-screen bg-thalina-bg text-thalina-text">
+    <section ref={targetRef} className="relative h-[600vh] bg-[#FAF9F6]">
       
-      {/* Left Content Column */}
-      <div className="w-full lg:w-1/2 px-8 pt-32 pb-20 lg:pt-40 lg:pb-32 lg:px-24 flex flex-col justify-start">
-        <motion.h2 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="font-sans text-4xl md:text-5xl lg:text-[50px] font-light mb-20 tracking-tight"
-        >
-          Our Services
-        </motion.h2>
-
-        {/* Styling Services */}
-        <motion.div 
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-16"
-        >
-          <h3 className="font-sans text-2xl font-light mb-8">Styling & Grooming</h3>
-          <div className="flex flex-col gap-6">
-            {stylingServices.map((item, i) => (
-              <div key={i} className="group flex justify-between items-center py-4 border-b border-gray-300/40 cursor-pointer">
-                <span className="font-sans text-base font-medium group-hover:pl-2 transition-all duration-300">{item.name}</span>
-                <span className="font-sans text-sm font-light">{item.price}</span>
-              </div>
-            ))}
+      {/* STICKY CONTAINER VIEWPORT */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+        
+        {/* ── SOLID LEFT PANEL MASK ── */}
+        <div className="absolute left-0 top-0 bottom-0 z-50 bg-[#FAF9F6] flex flex-col justify-center pl-8 md:pl-16 lg:pl-24 pr-16 w-[340px] sm:w-[440px] lg:w-[540px] border-r border-black/5 pointer-events-auto">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-[10px] tracking-[0.5em] uppercase font-light text-black/40 font-sans">
+              03 // REPERTOIRE
+            </span>
+            <div className="w-12 h-[1px] bg-black/15" />
           </div>
-        </motion.div>
+          
+          <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#1A1A1A] leading-[1.0] mb-6">
+            What <br />We Do
+          </h2>
+          
+          <p className="text-xs font-sans font-light tracking-wide text-black/50 max-w-xs leading-relaxed border-l border-black/20 pl-4">
+            Custom structural image design and strategic styling consultation built for the discerning modern profile.
+          </p>
+        </div>
 
-        {/* Image Services */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <h3 className="font-sans text-2xl font-light mb-8">Image Consulting</h3>
-          <div className="flex flex-col gap-6">
-            {imageServices.map((item, i) => (
-              <div key={i} className="group flex justify-between items-center py-4 border-b border-gray-300/40 cursor-pointer">
-                <span className="font-sans text-base font-medium group-hover:pl-2 transition-all duration-300">{item.name}</span>
-                <span className="font-sans text-sm font-light">{item.price}</span>
-              </div>
+        {/* ── CARD PORTRAIT CANVAS FIELD ── */}
+        <div className="w-full h-full relative z-20 pl-[340px] sm:pl-[440px] lg:pl-[540px]">
+          {/* Changed container to bg-black so if a rendering seam ever tries to drop, it drops dark instead of white */}
+          <div className="relative w-full h-full overflow-hidden bg-black">
+            
+            {allServices.map((item, i) => (
+              <ServiceCard 
+                key={i} 
+                item={item} 
+                index={i} 
+                total={allServices.length} 
+                scrollYProgress={scrollYProgress}
+              />
             ))}
+
           </div>
-        </motion.div>
+        </div>
 
       </div>
-
-      {/* Right Image Column */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.2 }}
-        className="w-full lg:w-1/2 h-[50vh] lg:h-auto relative overflow-hidden"
-      >
-        <motion.img 
-          initial={{ scale: 1.1 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80" 
-          alt="Fashion Styling Services" 
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      </motion.div>
-
     </section>
   );
 }

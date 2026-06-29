@@ -14,7 +14,7 @@ export default function TransformationsPage() {
             Transformations
           </h1>
         </div>
-        <Transformations hideButton={true} />
+        <Transformations hideButton={true} isPage={true} />
       </main>
 
       <Footer />

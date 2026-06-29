@@ -15,8 +15,9 @@ module.exports = {
         }
       },
       fontFamily: {
-        sans: ['var(--font-outfit)', 'sans-serif'],
-        serif: ['Didot', 'Bodoni MT', 'Georgia', 'serif'],
+        sans: ['var(--font-manrope)', 'sans-serif'],
+        serif: ['Satoshi', 'sans-serif'],
+        general: ['General Sans', 'sans-serif'],
       },
       transitionTimingFunction: {
         'luxury': 'cubic-bezier(0.16, 1, 0.3, 1)', // Flawless editorial deceleration curve

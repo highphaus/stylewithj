@@ -58,9 +58,9 @@ export default function AboutSection() {
           whileInView={{ scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1200&q=80" 
+          src="/images/img22.jpeg" 
           alt="Style with J by Jennifer" 
-          className="absolute inset-0 w-full h-full object-cover grayscale"
+          className="absolute inset-0 w-full h-full object-cover"
         />
       </motion.div>
       

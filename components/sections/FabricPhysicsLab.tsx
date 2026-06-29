@@ -22,7 +22,7 @@ const fabricPresets: FabricPreset[] = [
     composition: '100% Silk Gazar Filament',
     weight: '42 gsm // Heavy Structural Hold',
     description: 'Engineered with extreme tensile memory to retain geometric shapes and sharp, volumetric silhouettes away from the physical silhouette frame.',
-    imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800',
+    imageUrl: '/images/img02.jpeg',
     blurStyle: 'contrast-[1.15] brightness-[1.05]'
   },
   {
@@ -31,7 +31,7 @@ const fabricPresets: FabricPreset[] = [
     composition: 'Rayon Viscose Matte Twill',
     weight: '280 gsm // Kinetic Low-Bias Drop',
     description: 'A heavy, bias-cut structural drape that cascades down coordinates like water, tracing physical posture with high-velocity kinetic drop paths.',
-    imageUrl: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=800',
+    imageUrl: '/images/img03.jpeg',
     blurStyle: 'brightness-[0.85] contrast-[0.95]'
   },
   {
@@ -40,7 +40,7 @@ const fabricPresets: FabricPreset[] = [
     composition: 'Unbleached Flax Flax-Hemp Matrix',
     weight: '410 gsm // Architectural Sculpt',
     description: 'The raw foundation of pattern engineering. Rigid, tactile structural weave showing industrial cross-hatching, perfect for structural baselines.',
-    imageUrl: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=800',
+    imageUrl: '/images/img04.jpeg',
     blurStyle: 'contrast-[1.05] saturate-[0.8]'
   }
 ];

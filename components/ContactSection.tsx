@@ -48,9 +48,9 @@ export default function ContactSection() {
           >
             {/* For a true map, you'd use an iframe or map component. Using a sleek image as placeholder for now. */}
             <img 
-              src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" 
+              src="/images/img21.jpeg" 
               alt="Studio Location" 
-              className="absolute inset-0 w-full h-full object-cover grayscale"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </motion.div>
 

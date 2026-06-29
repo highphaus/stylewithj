@@ -106,10 +106,10 @@ export default function AtelierStory() {
                 className="absolute left-4 top-0 w-[45%] h-full overflow-hidden bg-neutral-100 shadow-md border border-white"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800"
+                  src="/images/img06.jpeg"
                   alt="Pattern Cut Left Profile"
                   fill
-                  className="object-cover grayscale origin-center scale-110"
+                  className="object-cover origin-center scale-110"
                   sizes="30vw"
                 />
                 <div className="absolute top-2 left-2 font-mono text-[7px] bg-black text-white px-1 tracking-widest">A_LEFT</div>
@@ -125,10 +125,10 @@ export default function AtelierStory() {
                 className="absolute right-4 top-0 w-[45%] h-[45%] overflow-hidden bg-neutral-200 shadow-sm border border-white"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800"
+                  src="/images/img07.jpeg"
                   alt="Pattern Cut Right Shoulder"
                   fill
-                  className="object-cover grayscale brightness-95"
+                  className="object-cover brightness-95"
                   sizes="25vw"
                 />
                 <div className="absolute bottom-2 right-2 font-mono text-[7px] text-neutral-400">B_SHOULDER</div>
@@ -145,7 +145,7 @@ export default function AtelierStory() {
                 className="absolute right-0 bottom-4 w-[50%] h-[45%] overflow-hidden bg-neutral-300 shadow-xl border-4 border-[#FAF9F6] z-10"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=800"
+                  src="/images/img08.jpeg"
                   alt="Macro Fabric Draping View"
                   fill
                   className="object-cover"

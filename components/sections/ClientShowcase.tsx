@@ -22,8 +22,8 @@ const portfolioData: Project[] = [
     scope: 'Sculpted Architectural Bodice & Silk Veil',
     year: '2025',
     images: [
-      'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800',
-      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'
+      '/images/img08.jpeg',
+      '/images/img09.jpeg'
     ]
   },
   {
@@ -33,8 +33,8 @@ const portfolioData: Project[] = [
     scope: 'Asymmetric Pleated Organza & Tailored Outerwear',
     year: '2025',
     images: [
-      'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=800',
-      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600'
+      '/images/img10.jpeg',
+      '/images/img11.jpeg'
     ]
   },
   {
@@ -44,8 +44,8 @@ const portfolioData: Project[] = [
     scope: 'Minimalist Ready-To-Wear Structural Framework',
     year: '2026',
     images: [
-      'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=800',
-      'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=600'
+      '/images/img12.jpeg',
+      '/images/img13.jpeg'
     ]
   }
 ];
@@ -92,6 +92,7 @@ export default function ClientShowcase() {
                 key={project.id}
                 onMouseEnter={() => setActiveProject(project.id)}
                 onMouseLeave={() => setActiveProject(null)}
+                onClick={() => setActiveProject(activeProject === project.id ? null : project.id)}
                 className="group relative flex flex-col md:flex-row items-start md:items-center justify-between py-10 border-b border-neutral-200 cursor-pointer transition-colors duration-500 hover:bg-neutral-100/50 px-4 -mx-4"
               >
                 <div className="flex items-baseline gap-6">
@@ -143,7 +144,7 @@ export default function ClientShowcase() {
                     src={activeData.images[0]}
                     alt="Primary Archive Fragment"
                     fill
-                    className="object-cover grayscale brightness-95"
+                    className="object-cover brightness-[0.95]"
                     sizes="30vw"
                   />
                 </motion.div>
