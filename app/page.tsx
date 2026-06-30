@@ -77,24 +77,23 @@ export default function Home() {
 
         {/* 8. Insights */}
         <div id="insights" />
-        <InsightsSection />
+       012
 
         {/* 9. Book Consultation */}
         <div id="book" />
-        <AtelierConsultation />
+       
 
         {/* --- All remaining sections --- */}
-        <NarrativeHeader />
+       
         <SplitScroll />
-        <AtelierStory />
-        <ClientShowcase />
-        <AtelierCanvas />
-        <LookbookHorizon />
+        
+       
+       <LookbookHorizon />
         <ExhibitionShowcase/>
-        <ConstructionLedger/>
-        <FabricPhysicsLab/>
+        
+     
         <LookbookGrid/>
-        <AtelierToile />
+        
         <AvantGardeShowcase />
         
       </main>
