@@ -80,11 +80,11 @@ export default function Transformations({ hideButton = false, isPage = false }: 
   return (
     <section className="bg-[#FAF9F6] text-[#1A1A1A] relative">
       
-      <div className="w-full min-h-screen grid grid-cols-12 items-stretch">
+      <div className="w-full min-h-screen grid grid-cols-1 lg:grid-cols-12 items-stretch">
         
         {/* ── LEFT MATRIX TRACK: THE IMMOBILE ANTE LAB (STAY-STICKY STATIC STAGE) ── */}
-        {/* On all devices: Sticky left frame. */}
-        <div className="col-span-4 lg:col-span-5 sticky top-0 h-screen overflow-hidden bg-[#EAE8E3] border-r border-black/5 z-30">
+        {/* On mobile: Floating sticky PiP. On desktop: Sticky left frame. */}
+        <div className="col-start-1 col-end-2 row-start-1 lg:col-start-1 lg:col-end-6 sticky top-6 lg:top-0 h-40 w-28 sm:h-48 sm:w-32 lg:h-screen lg:w-full overflow-hidden bg-[#EAE8E3] lg:border-r border-black/5 z-40 lg:z-30 shadow-[0_10px_40px_rgba(0,0,0,0.15)] lg:shadow-none ml-4 mt-4 lg:ml-0 lg:mt-0 rounded-lg lg:rounded-none">
           
           {/* THE CROSSFADING BASELINE ENGINE */}
           <div className="absolute inset-0 w-full h-full">
@@ -103,13 +103,18 @@ export default function Transformations({ hideButton = false, isPage = false }: 
           </div>
 
           {/* SARTORIAL WATERMARKS */}
-          <div className="absolute top-4 left-4 lg:top-12 lg:left-12 z-20">
+          <div className="hidden lg:block absolute top-4 left-4 lg:top-12 lg:left-12 z-20">
             <span className="font-sans text-[7px] lg:text-[9px] tracking-[0.2em] sm:tracking-[0.6em] text-black/40 block mb-2">
               LABORATORY METADATA <span className="hidden sm:inline">RECORDING</span>
             </span>
             <div className="font-sans text-[8px] lg:text-xs font-semibold tracking-wider sm:tracking-widest text-black break-words">
               SYS_ANTE_REF // 0{transformationData[activeWorkspace].id}
             </div>
+          </div>
+          
+          {/* MOBILE ONLY PiP BADGE */}
+          <div className="block lg:hidden absolute bottom-2 left-2 right-2 text-center bg-white/90 backdrop-blur-sm text-black font-sans text-[8px] tracking-widest font-semibold py-1 rounded-[4px] shadow-sm">
+            BEFORE
           </div>
 
           <div className="hidden sm:flex absolute bottom-12 left-12 z-20 right-12 justify-between items-end">
@@ -127,7 +132,7 @@ export default function Transformations({ hideButton = false, isPage = false }: 
         </div>
 
         {/* ── RIGHT MATRIX TRACK: THE INTERLOCKING FLUID POST RUNWAY ── */}
-        <div className="col-span-8 lg:col-span-7 px-4 sm:px-6 md:px-16 lg:px-24 flex flex-col pt-16 lg:pt-32 pb-16 lg:pb-32 bg-[#FAF9F6] relative z-20">
+        <div className="col-start-1 col-end-2 row-start-1 lg:col-start-6 lg:col-end-13 px-4 sm:px-6 md:px-16 lg:px-24 flex flex-col pt-24 lg:pt-32 pb-16 lg:pb-32 bg-[#FAF9F6] relative z-20">
           
           {/* RUNWAY OVERVIEW DESCRIPTOR */}
           <div className="mb-24 lg:mb-40 border-b border-black/10 pb-8 lg:pb-12 text-left max-w-xl">

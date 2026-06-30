@@ -9,7 +9,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'Atelier | Extraordinary Haute Couture',
+  title: 'Style with J',
   description: 'A curated digital exhibition of high-end fashion silhouettes.',
 };
 
