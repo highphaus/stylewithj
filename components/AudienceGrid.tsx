@@ -9,42 +9,42 @@ const audiences = [
     title: "Creators & Influencers", 
     keyword: "Distinction",
     desc: "Develop a distinctive image that supports your personal brand and audience growth.",
-    image: "/images/img08.jpeg",
+    image: "/images/img24.jpeg",
     slug: "creators"
   },
   { 
     title: "Founders & Entrepreneurs", 
     keyword: "Identity",
     desc: "Create a memorable personal brand that aligns with your vision and leadership.",
-    image: "/images/img05.jpeg",
+    image: "/images/img25.jpeg",
     slug: "founders"
   },
   { 
     title: "Executives & Leaders", 
     keyword: "Influence",
     desc: "Command respect, authority, and influence through a refined personal image.",
-    image: "/images/img06.jpeg",
+    image: "/images/img26.jpeg",
     slug: "executives"
   },
   { 
     title: "Working Professionals", 
     keyword: "Presence",
     desc: "Build confidence and executive presence in your everyday professional life.",
-    image: "/images/img04.jpeg",
+    image: "/images/img27.jpeg",
     slug: "professionals"
   },
   { 
     title: "Individuals Seeking Transformation", 
     keyword: "Genesis",
     desc: "Reinvent your style, confidence, and self-image with expert guidance.",
-    image: "/images/img09.jpeg",
+    image: "/images/img28.jpeg",
     slug: "individuals"
   },
   { 
     title: "Students & Job Seekers", 
     keyword: "Impression",
     desc: "Make stronger first impressions and stand out in competitive environments.",
-    image: "/images/img07.jpeg",
+    image: "/images/img29.jpeg",
     slug: "students"
   },
 ];

@@ -10,10 +10,10 @@ interface LookbookItem {
 }
 
 const yslLooks: LookbookItem[] = [
-  { id: '1', src: '/images/img01.jpeg', alt: 'Silhouette Editorial 01' },
-  { id: '2', src: '/images/img02.jpeg', alt: 'Silhouette Editorial 02' },
-  { id: '3', src: '/images/img03.jpeg', alt: 'Silhouette Editorial 03' },
-  { id: '4', src: '/images/img04.jpeg', alt: 'Silhouette Editorial 04' }
+  { id: '1', src: '/images/img15.jpeg', alt: 'Silhouette Editorial 01' },
+  { id: '2', src: '/images/img16.jpeg', alt: 'Silhouette Editorial 02' },
+  { id: '3', src: '/images/img30.jpeg', alt: 'Silhouette Editorial 03' },
+  { id: '4', src: '/images/img31.jpeg', alt: 'Silhouette Editorial 04' }
 ];
 
 export default function SplitScroll() {

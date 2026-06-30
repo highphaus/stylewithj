@@ -9,42 +9,42 @@ const allServices = [
     category: "Styling & Curation",
     name: "Personal Styling Session", 
     desc: "A bespoke evaluation of your lifestyle, mapping out an elevated aesthetic blueprint that completely streamlines how you get dressed.",
-    image: "/images/img07.jpeg"
+    image: "/images/img18.jpeg"
   },
   { 
     num: "02",
     category: "Styling & Curation",
     name: "Wardrobe Strategy", 
     desc: "An intentional restructuring of your existing closet ecosystem. Sifting, organizing, and developing seasonal capsule looks.",
-    image: "/images/img06.jpeg"
+    image: "/images/img19.jpeg"
   },
   { 
     num: "03",
     category: "Styling & Curation",
     name: "Special Event Styling", 
     desc: "Exclusive sartorial architectural building for public presentations, galas, red carpets, or high-profile milestone events.",
-    image: "/images/img05.jpeg"
+    image: "/images/img20.jpeg"
   },
   { 
     num: "04",
     category: "Identity & Consulting",
     name: "Personal Branding Audit", 
     desc: "Aligning your outward professional appearance with executive prestige, company leadership value systems, and media optics.",
-    image: "/images/img04.jpeg"
+    image: "/images/img21.jpeg"
   },
   { 
     num: "05",
     category: "Identity & Consulting",
     name: "Color Analysis", 
     desc: "A deep clinical tonal breakdown mapping skin, eye, and contrast points to pinpoint your absolute premium color palette spectrum.",
-    image: "/images/img08.jpeg"
+    image: "/images/img22.jpeg"
   },
   { 
     num: "06",
     category: "Identity & Consulting",
     name: "Complete Transformation", 
     desc: "The ultimate signature identity overhaul. An immersive, custom lifestyle consulting package tailored for a complete life evolution.",
-    image: "/images/img09.jpeg"
+    image: "/images/img23.jpeg"
   }
 ];
 
