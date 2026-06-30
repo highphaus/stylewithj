@@ -39,7 +39,7 @@ export default function MeetSection() {
             className="w-full relative aspect-[3/4] bg-[#EAE8E3] overflow-hidden shadow-[40px_40px_90px_rgba(0,0,0,0.012)] border border-black/[0.01] z-10"
           >
             <img
-              src="/images/img17.jpeg"
+              src="/images/img31.jpeg"
               alt="Style with J by Jennifer"
               className="w-full h-full object-cover object-top transition-transform duration-[4000ms] ease-out hover:scale-[1.03]"
             />
