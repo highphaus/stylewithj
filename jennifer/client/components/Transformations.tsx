@@ -307,12 +307,12 @@ export default function Transformations({ hideButton = false, isStatic = false }
   });
 
   return (
-    <div className="relative w-full bg-[#FAF9F6] overflow-hidden">
+    <div className="relative w-full bg-[#FAF9F6] overflow-clip">
       
       {/* ── STICKY HORIZONTAL FLIGHT SCROLL PORTFOLIO (Unified for all screens) ── */}
       {!isStatic ? (
-        <div ref={sectionRef} className="relative w-full h-[200vh] lg:h-[300vh] bg-[#FAF9F6] overflow-x-hidden" style={{ touchAction: 'pan-y' }}>
-          <div className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-[#FAF9F6]" style={{ touchAction: 'pan-y' }}>
+        <div ref={sectionRef} className="relative w-full h-[200vh] lg:h-[300vh] bg-[#FAF9F6] overflow-x-clip" style={{ touchAction: 'pan-y' }}>
+          <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]" style={{ touchAction: 'pan-y' }}>
             
             {transformationData.map((item, idx) => (
               <ScrollingCaseStudyRow

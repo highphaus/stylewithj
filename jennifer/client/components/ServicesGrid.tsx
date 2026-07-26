@@ -149,7 +149,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
     <section ref={targetRef} className="relative h-[300vh] bg-[#FAF9F6]">
       
       {/* STICKY CONTAINER VIEWPORT */}
-      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden flex items-center">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
         
         {/* ── SOLID TEXT PANEL MASK (Top on Mobile, Left on Desktop) ── */}
         <div className="

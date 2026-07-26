@@ -18,7 +18,7 @@ const yslLooks: LookbookItem[] = [
 
 export default function SplitScroll() {
   return (
-    <section className="w-full bg-[#FAF9F6] border-t border-neutral-200 overflow-hidden">
+    <section className="w-full bg-[#FAF9F6] overflow-clip">
       <div className="flex flex-col-reverse md:flex-row w-full min-h-screen">
         
         {/* LEFT CANVAS: The Continuous Vertical Scroll Feed (Images) */}
@@ -40,7 +40,7 @@ export default function SplitScroll() {
         </div>
 
         {/* RIGHT CANVAS: Stationary / Sticky (Locks on Desktop, Stacks on Mobile - Writing) */}
-        <div className="w-full md:w-1/2 md:h-screen md:sticky md:top-0 bg-[#EAE9E4] flex flex-col justify-between p-8 md:p-16 border-b md:border-b-0 md:border-l border-neutral-200 relative">
+        <div className="w-full md:w-1/2 md:h-screen md:sticky md:top-0 bg-[#FAF9F6] flex flex-col justify-between p-8 md:p-16 border-b md:border-b-0 md:border-l border-black/5 relative">
           <div>
             <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-neutral-400 block mb-3">
               Winter Collection
