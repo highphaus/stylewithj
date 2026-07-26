@@ -19,7 +19,18 @@ export default function Navigation() {
 
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -32,6 +43,7 @@ export default function Navigation() {
         setVisible(true);
       } else {
         setVisible(false);
+        setMobileMenuOpen(false); // Auto close mobile dropdown on scroll
       }
       lastScrollY.current = y;
     };
@@ -46,9 +58,26 @@ export default function Navigation() {
     if (window.scrollY > 100) {
       setVisible(false);
     }
+    setMobileMenuOpen(false);
   }, [pathname]);
 
-  const isLight = scrolled || !isHome;
+  const isLight = scrolled || !isHome || (isMobile && mobileMenuOpen);
+
+  const handleToggle = () => {
+    if (isMobile) {
+      setMobileMenuOpen(prev => {
+        const next = !prev;
+        if (next) {
+          setVisible(true); // make sure parent nav is visible
+        }
+        return next;
+      });
+    } else {
+      setVisible(prev => !prev);
+    }
+  };
+
+  const isButtonActive = isMobile ? mobileMenuOpen : visible;
 
   return (
     <>
@@ -58,7 +87,7 @@ export default function Navigation() {
           'fixed top-0 left-0 right-0 z-40',
           'transition-all duration-500 ease-in-out',
           visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none',
-          scrolled
+          scrolled || (isMobile && mobileMenuOpen)
             ? 'bg-[#FAF9F6]/95 backdrop-blur-md border-b border-black/[0.04]'
             : 'bg-transparent',
           isLight ? 'text-[#1A1A1A]' : 'text-white/90',
@@ -102,32 +131,37 @@ export default function Navigation() {
         </div>
 
         {/* Mobile Dropdown Panel (Shown when navigation bar is active and visible on mobile) */}
-        <div className="md:hidden w-full bg-[#FAF9F6] border-t border-black/[0.04] flex flex-col px-6 py-6 gap-3 shadow-lg">
-          {NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setVisible(false)}
-              className="text-[#1A1A1A] text-[13px] font-sans font-light tracking-[0.2em] uppercase py-2.5 border-b border-black/[0.02] last:border-b-0"
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
+        {isMobile && mobileMenuOpen && (
+          <div className="md:hidden w-full bg-[#FAF9F6] border-t border-black/[0.04] flex flex-col px-6 py-6 gap-3 shadow-lg">
+            {NAV_LINKS.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setVisible(false);
+                }}
+                className="text-[#1A1A1A] text-[13px] font-sans font-light tracking-[0.2em] uppercase py-2.5 border-b border-black/[0.02] last:border-b-0"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        )}
       </nav>
 
       {/* ── DYNAMIC SINGLE BUTTON CONTROLLER (Menu Badge / Hide Trigger) ── */}
       <div className="fixed right-4 sm:right-6 top-[18px] z-50 flex items-center h-[52px]">
         <button
-          onClick={() => setVisible(prev => !prev)}
+          onClick={handleToggle}
           className={[
             'group flex items-center justify-center gap-3 px-5 py-3 rounded-full border transition-all duration-500 ease-out shadow-sm',
-            visible 
+            isButtonActive 
               ? `bg-[#FAF9F6]/90 border-black/10 text-[#1A1A1A] hover:border-black/30` 
               : 'bg-black/90 hover:bg-black border-white/10 text-white shadow-2xl hover:scale-105'
           ].join(' ')}
         >
-          {visible ? (
+          {isButtonActive ? (
             /* "Hide" morph structure when navigation bar is visible */
             <div className="flex items-center gap-2">
               <span className="font-sans text-[9px] tracking-[0.35em] uppercase font-light text-[#1A1A1A]/70 group-hover:text-black">

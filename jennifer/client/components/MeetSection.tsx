@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function MeetSection() {
   return (
-    <section className="w-full bg-[#FAF9F6] text-[#1A1A1A] py-32 lg:py-48 px-6 md:px-16 lg:px-28 border-b border-black/[0.04] overflow-hidden">
+    <section className="w-full bg-[#FAF9F6] text-[#1A1A1A] pt-12 pb-32 lg:pt-16 lg:pb-48 px-6 md:px-16 lg:px-28 border-b border-black/[0.04] overflow-hidden">
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-y-20 gap-x-12 items-start relative">
         
         {/* ── LEFT TRACK: ASYMMETRIC METADATA IDENTIFIER (COLUMNS 1-4) ── */}

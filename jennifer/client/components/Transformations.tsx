@@ -55,36 +55,33 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   const isFirst = idx === 0;
   const isLast = idx === totalItems - 1;
 
-  // Compute boundaries for middle items
-  const p0 = idx * segment;
-  const p1 = p0 + segment * 0.25;
-  const p2 = p0 + segment * 0.75;
-  const p3 = (idx + 1) * segment;
+  const pStart = idx * segment;
+  const pEnd = (idx + 1) * segment;
 
   // Strictly non-decreasing ranges in [0, 1] to prevent Web Animations API errors
   const inputRange = isFirst
-    ? [0.0, p2, p3]
+    ? [0.0, pEnd, pEnd + segment * 0.25]
     : isLast
-    ? [p0, p1, 1.0]
-    : [p0, p1, p2, p3];
+    ? [pStart, pStart + segment * 0.25, 1.0]
+    : [pStart, pStart + segment * 0.25, pEnd, pEnd + segment * 0.25];
 
   const opacityRange = isFirst
-    ? [1, 1, 0]
+    ? [1.0, 1.0, 0.0]
     : isLast
-    ? [0, 1, 1]
-    : [0, 1, 1, 0];
+    ? [0.0, 1.0, 1.0]
+    : [0.0, 1.0, 1.0, 0.0];
 
   const beforeRange = isFirst
-    ? ["0vw", "0vw", "-60vw"]
+    ? ["0vw", "0vw", "-100vw"]
     : isLast
-    ? ["-60vw", "0vw", "0vw"]
-    : ["-60vw", "0vw", "0vw", "-60vw"];
+    ? ["-100vw", "0vw", "0vw"]
+    : ["-100vw", "0vw", "0vw", "-100vw"];
 
   const afterRange = isFirst
-    ? ["0vw", "0vw", "60vw"]
+    ? ["0vw", "0vw", "100vw"]
     : isLast
-    ? ["60vw", "0vw", "0vw"]
-    : ["60vw", "0vw", "0vw", "60vw"];
+    ? ["100vw", "0vw", "0vw"]
+    : ["100vw", "0vw", "0vw", "100vw"];
 
   const textYRange = isFirst
     ? [0, 0, -30]
@@ -343,7 +340,7 @@ export default function Transformations({ hideButton = false, isStatic = false }
 
       {/* Ledger Footer Call to Action */}
       {!hideButton && (
-        <div className="w-full pt-16 mt-16 border-t border-black/10 flex flex-col items-center text-center">
+        <div className="w-full pt-8 pb-12 border-t border-black/10 flex flex-col items-center text-center">
           <span className="font-sans text-[8px] tracking-[0.4em] text-black/30 block mb-2 uppercase">
             ARCHIVE CONCLUSION CONTINUUM
           </span>

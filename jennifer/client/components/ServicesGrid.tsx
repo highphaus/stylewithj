@@ -56,27 +56,30 @@ interface CardProps {
 }
 
 function ServiceCard({ item, index, total, scrollYProgress }: CardProps) {
-  const start = index / total;
-  const end = (index + 1) / total;
+  const activeTotal = total - 1;
+  const isLastCard = index === total - 1;
+  
+  const start = index / activeTotal;
+  const end = (index + 1) / activeTotal;
 
   const x = useTransform(
     scrollYProgress,
-    index === total - 1 
+    isLastCard 
       ? [0, 1] 
-      : [0, Math.max(0, start), Math.min(1, end), 1],
-    index === total - 1
+      : [0, start, end],
+    isLastCard
       ? ["0%", "0%"]
-      : ["0%", "0%", "-105%", "-105%"]
+      : ["0%", "0%", "-105%"]
   );
 
   const scale = useTransform(
     scrollYProgress,
-    index === total - 1
+    isLastCard
       ? [0, 1]
-      : [0, Math.max(0, start), Math.min(1, end), 1],
-    index === total - 1
+      : [0, start, end],
+    isLastCard
       ? [1, 1]
-      : [1, 1, 0.96, 0.96]
+      : [1, 1, 0.96]
   );
 
   return (
@@ -143,7 +146,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   });
 
   return (
-    <section ref={targetRef} className="relative h-[400vh] bg-[#FAF9F6]">
+    <section ref={targetRef} className="relative h-[300vh] bg-[#FAF9F6]">
       
       {/* STICKY CONTAINER VIEWPORT */}
       <div className="sticky top-0 h-[100dvh] w-full overflow-hidden flex items-center">
