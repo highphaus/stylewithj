@@ -114,7 +114,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
       <div className="relative w-full h-full grid grid-cols-12 items-stretch overflow-hidden" style={{ touchAction: 'pan-y' }}>
         
         {/* Left Column: Before Image (Translating from Left) */}
-        <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3] border-r border-black/5">
+        <div className="col-span-12 lg:col-span-6 h-1/2 lg:h-full overflow-hidden relative bg-[#EAE8E3] border-b lg:border-b-0 lg:border-r border-black/5">
           <motion.div style={{ x: beforeX }} className="w-full h-full relative">
             <motion.img 
               style={{ scale }}
@@ -130,7 +130,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
         </div>
 
         {/* Right Column: After Image (Translating from Right) */}
-        <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3]">
+        <div className="col-span-12 lg:col-span-6 h-1/2 lg:h-full overflow-hidden relative bg-[#EAE8E3]">
           <motion.div style={{ x: afterX }} className="w-full h-full relative">
             <motion.img 
               style={{ scale }}

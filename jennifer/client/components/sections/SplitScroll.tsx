@@ -19,7 +19,7 @@ const yslLooks: LookbookItem[] = [
 export default function SplitScroll() {
   return (
     <section className="w-full bg-[#FAF9F6] border-t border-neutral-200">
-      <div className="flex flex-col md:flex-row w-full min-h-screen">
+      <div className="flex flex-col-reverse md:flex-row w-full min-h-screen">
         
         {/* LEFT CANVAS: The Continuous Vertical Scroll Feed (Images) */}
         <div className="w-full md:w-1/2 flex flex-col">
