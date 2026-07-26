@@ -150,7 +150,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
       {/* Floating Center Seam Card (Interactive details) */}
       <motion.div 
         style={{ y: textY, opacity: textOpacity }}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-[90vw] sm:max-w-md p-5 sm:p-8 bg-white/95 border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.12)] rounded-[2px] text-center pointer-events-auto"
+        className="absolute left-1/2 -translate-x-1/2 bottom-4 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 z-20 w-[92vw] lg:max-w-md p-4 sm:p-5 lg:p-8 bg-white/95 border border-black/10 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
       >
         <span className="font-mono text-[7px] sm:text-[8px] text-black/35 block mb-1 sm:mb-2 tracking-[0.2em] font-semibold">
           {`REF_0${item.id} // CASE STUDY`}
@@ -310,11 +310,11 @@ export default function Transformations({ hideButton = false, isStatic = false }
   });
 
   return (
-    <div className="relative w-full bg-[#FAF9F6]">
+    <div className="relative w-full bg-[#FAF9F6] overflow-hidden">
       
       {/* ── STICKY HORIZONTAL FLIGHT SCROLL PORTFOLIO (Unified for all screens) ── */}
       {!isStatic ? (
-        <div ref={sectionRef} className="relative w-full h-[200vh] lg:h-[300vh] bg-[#FAF9F6]" style={{ touchAction: 'pan-y' }}>
+        <div ref={sectionRef} className="relative w-full h-[200vh] lg:h-[300vh] bg-[#FAF9F6] overflow-x-hidden" style={{ touchAction: 'pan-y' }}>
           <div className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-[#FAF9F6]" style={{ touchAction: 'pan-y' }}>
             
             {transformationData.map((item, idx) => (
