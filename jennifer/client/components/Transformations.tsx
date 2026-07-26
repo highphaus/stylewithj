@@ -42,6 +42,147 @@ const transformationData = [
   }
 ];
 
+// Single Case Study Row that handles horizontal entry sliding and opacity fades based on parent scroll progress
+function ScrollingCaseStudyRow({ 
+  item, 
+  idx, 
+  scrollYProgress, 
+  totalItems,
+  hideButton
+}: { 
+  item: typeof transformationData[0]; 
+  idx: number; 
+  scrollYProgress: any; 
+  totalItems: number;
+  hideButton: boolean;
+}) {
+  const segment = 1 / totalItems;
+  let p0 = idx * segment;
+  let p1 = p0 + segment * 0.25;
+  let p2 = p0 + segment * 0.75;
+  let p3 = (idx + 1) * segment;
+
+  // Boundary override for first and last rows to ensure smooth start/end experience
+  if (idx === 0) {
+    p0 = -0.1;
+    p1 = 0.0;
+  }
+  if (idx === totalItems - 1) {
+    p2 = 1.0;
+    p3 = 1.1;
+  }
+
+  // Map scroll progress to Opacity (fades in and out)
+  const opacity = useTransform(scrollYProgress, [p0, p1, p2, p3], [0, 1, 1, 0]);
+
+  // Before image slides in from the Left (-60vw to 0vw)
+  const beforeX = useTransform(scrollYProgress, [p0, p1, p2, p3], ["-60vw", "0vw", "0vw", "-60vw"]);
+
+  // After image slides in from the Right (60vw to 0vw)
+  const afterX = useTransform(scrollYProgress, [p0, p1, p2, p3], ["60vw", "0vw", "0vw", "60vw"]);
+
+  // Center Text overlay slides vertically and fades
+  const textY = useTransform(scrollYProgress, [p0, p1, p2, p3], [30, 0, 0, -30]);
+  const textOpacity = useTransform(scrollYProgress, [p0, p1, p2, p3], [0, 1, 1, 0]);
+
+  return (
+    <motion.div 
+      style={{ opacity }}
+      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none z-10"
+    >
+      <div className="relative w-full h-full grid grid-cols-12 items-stretch overflow-hidden">
+        
+        {/* Left Column: Before Image (Translating from Left) */}
+        <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3] border-r border-black/5">
+          <motion.div style={{ x: beforeX }} className="w-full h-full relative">
+            <img 
+              src={item.beforeImg} 
+              alt="Initial Silhouette" 
+              className="w-full h-full object-cover object-top grayscale-[20%]" 
+              draggable="false" 
+            />
+            <div className="absolute top-8 left-8 bg-[#FAF9F6]/95 border border-black/5 px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm">
+              {"ANTE // INITIAL SHAPE"}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right Column: After Image (Translating from Right) */}
+        <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3]">
+          <motion.div style={{ x: afterX }} className="w-full h-full relative">
+            <img 
+              src={item.afterImg} 
+              alt="Realized Design Target" 
+              className="w-full h-full object-cover object-top" 
+              draggable="false" 
+            />
+            <div className="absolute top-8 right-8 bg-black text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm">
+              {"POST // REALIZED SILHOUETTE"}
+            </div>
+          </motion.div>
+        </div>
+
+      </div>
+
+      {/* Floating Center Seam Card (Interactive details) */}
+      <motion.div 
+        style={{ y: textY, opacity: textOpacity }}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm sm:max-w-md p-8 bg-white/95 border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.12)] rounded-[2px] text-center pointer-events-auto"
+      >
+        <span className="font-mono text-[8px] text-black/35 block mb-2 tracking-[0.2em] font-semibold">
+          {`REF_0${item.id} // CASE STUDY`}
+        </span>
+        
+        <span className="font-sans text-[8px] tracking-[0.25em] uppercase font-bold text-black/55 mb-2">
+          {item.demographic}
+        </span>
+
+        <h3 className="font-serif text-xl sm:text-2xl font-light tracking-wide text-black mb-3 uppercase">
+          {item.client}
+        </h3>
+
+        <p className="font-serif text-xs sm:text-sm italic text-black/65 leading-relaxed font-light mb-5 border-t border-b border-black/10 py-3.5 w-full">
+          {`"${item.concept}"`}
+        </p>
+
+        <div className="flex flex-col gap-1.5 items-center w-full">
+          <span className="font-sans text-[8px] tracking-[0.3em] uppercase text-black/35 block mb-1 font-semibold">
+            STRUCTURAL LEDGER:
+          </span>
+          {item.specs.map((spec, sIdx) => (
+            <div key={sIdx} className="flex items-center gap-2">
+              <div className="w-1.5 h-[1px] bg-black/30" />
+              <span className="font-sans text-[8px] tracking-wider text-black/60 uppercase font-light">
+                {spec}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Floating skip actions */}
+        {!hideButton && (
+          <div className="mt-6 pt-4 border-t border-black/5 flex justify-between items-center w-full">
+            <button
+              onClick={() => {
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[8px] tracking-[0.2em] uppercase font-semibold rounded-full shadow-sm hover:bg-black/80 transition-all"
+            >
+              Skip Section ↓
+            </button>
+            <Link
+              href="/transformations"
+              className="font-sans text-[8px] tracking-[0.3em] uppercase text-black/50 hover:text-black transition-colors font-semibold border-b border-black/10 pb-0.5"
+            >
+              Full Archive →
+            </Link>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // High-fashion Case Study Card with individual click-to-fade before/after toggle pills
 function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
   const [activeState, setActiveState] = useState<'before' | 'after'>('after');
@@ -155,121 +296,24 @@ export default function Transformations({ hideButton = false, isStatic = false }
     setActiveIdx(idx);
   });
 
-  // Desktop opposing column translations: Left scrolls down (0vh to -300vh), Right scrolls up (-300vh to 0vh)
-  const leftY = useTransform(scrollYProgress, [0, 1], ["0vh", "-300vh"]);
-  const rightY = useTransform(scrollYProgress, [0, 1], ["-300vh", "0vh"]);
-  const smoothLeftY = useSpring(leftY, { stiffness: 65, damping: 20 });
-  const smoothRightY = useSpring(rightY, { stiffness: 65, damping: 20 });
-
   return (
     <div className="relative w-full bg-[#FAF9F6]">
       
-      {/* ── DESKTOP ONLY: 2-COLUMN OPPOSING SCROLL PORTFOLIO (1024px+) ── */}
+      {/* ── DESKTOP ONLY: HORIZONTAL FLIGHT SCROLL PORTFOLIO (1024px+) ── */}
       {!isStatic && (
         <div ref={sectionRef} className="hidden lg:block relative w-full h-[400vh] bg-[#FAF9F6]">
-          <div className="sticky top-0 h-screen w-full overflow-hidden grid grid-cols-12 items-stretch select-none relative">
+          <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]">
             
-            {/* Column 1 (Left 6 cols): Before/Ante Image Track (Scrolls Down) */}
-            <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3]">
-              <motion.div style={{ y: smoothLeftY }} className="w-full flex flex-col">
-                {transformationData.map((item) => (
-                  <div key={item.id} className="w-full h-screen relative overflow-hidden">
-                    <img 
-                      src={item.beforeImg} 
-                      alt="Initial Silhouette" 
-                      className="w-full h-full object-cover object-top grayscale-[20%]" 
-                      draggable="false" 
-                    />
-                    <div className="absolute top-8 left-8 bg-[#FAF9F6]/95 border border-black/5 px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm">
-                      {"ANTE // INITIAL SHAPE"}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Absolute Floating Center Card Panel overlaying the split */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm sm:max-w-md p-8 bg-white/95 border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.12)] rounded-[2px] text-center">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIdx}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex flex-col items-center text-center"
-                >
-                  <span className="font-mono text-[8px] text-black/35 block mb-2 tracking-[0.2em] font-semibold">
-                    {`REF_0${transformationData[activeIdx].id} // CASE STUDY`}
-                  </span>
-                  
-                  <span className="font-sans text-[8px] tracking-[0.25em] uppercase font-bold text-black/55 mb-2">
-                    {transformationData[activeIdx].demographic}
-                  </span>
-
-                  <h3 className="font-serif text-xl sm:text-2xl font-light tracking-wide text-black mb-3 uppercase">
-                    {transformationData[activeIdx].client}
-                  </h3>
-
-                  <p className="font-serif text-xs sm:text-sm italic text-black/65 leading-relaxed font-light mb-5 border-t border-b border-black/10 py-3.5 w-full">
-                    {`"${transformationData[activeIdx].concept}"`}
-                  </p>
-
-                  <div className="flex flex-col gap-1.5 items-center w-full">
-                    <span className="font-sans text-[8px] tracking-[0.3em] uppercase text-black/35 block mb-1 font-semibold">
-                      STRUCTURAL LEDGER:
-                    </span>
-                    {transformationData[activeIdx].specs.map((spec, sIdx) => (
-                      <div key={sIdx} className="flex items-center gap-2">
-                        <div className="w-1.5 h-[1px] bg-black/30" />
-                        <span className="font-sans text-[8px] tracking-wider text-black/60 uppercase font-light">
-                          {spec}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Floating skip button inside the center panel */}
-              {!hideButton && (
-                <div className="mt-8 pt-5 border-t border-black/5 flex justify-between items-center w-full">
-                  <button
-                    onClick={() => {
-                      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[8px] tracking-[0.2em] uppercase font-semibold rounded-full shadow-sm hover:bg-black/80 transition-all"
-                  >
-                    Skip Section ↓
-                  </button>
-                  <Link
-                    href="/transformations"
-                    className="font-sans text-[8px] tracking-[0.3em] uppercase text-black/50 hover:text-black transition-colors font-semibold border-b border-black/10 pb-0.5"
-                  >
-                    Full Archive →
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* Column 2 (Right 6 cols): After/Post Image Track (Scrolls Up in Reverse DOM Order) */}
-            <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3]">
-              <motion.div style={{ y: smoothRightY }} className="w-full flex flex-col">
-                {[...transformationData].reverse().map((item) => (
-                  <div key={item.id} className="w-full h-screen relative overflow-hidden">
-                    <img 
-                      src={item.afterImg} 
-                      alt="Realized Design Target" 
-                      className="w-full h-full object-cover object-top" 
-                      draggable="false" 
-                    />
-                    <div className="absolute top-8 right-8 bg-black text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm">
-                      {"POST // REALIZED SILHOUETTE"}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
+            {transformationData.map((item, idx) => (
+              <ScrollingCaseStudyRow
+                key={item.id}
+                item={item}
+                idx={idx}
+                scrollYProgress={scrollYProgress}
+                totalItems={transformationData.length}
+                hideButton={hideButton}
+              />
+            ))}
 
           </div>
         </div>
