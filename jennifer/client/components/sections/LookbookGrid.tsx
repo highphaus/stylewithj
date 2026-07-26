@@ -1,155 +1,188 @@
-// src/components/sections/LookbookGrid.tsx
 'use client';
-
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface Look {
-  id: string;
-  num: string;
-  title: string;
-  concept: string;
-  fabric: string;
-  description: string;
-  primarySrc: string;
-  detailSrc: string;
-}
-
-const collectionData: Look[] = [
+const looks = [
   {
-    id: 'look-1',
     num: '01',
-    title: 'The Structured Silk Organza Gown',
-    concept: 'Architectural Layering',
-    fabric: '100% Hand-woven Silk Organza',
-    description: 'An exploration of rigid geometry meeting fluid motion, constructed over an asymmetrical inner canvas bodice.',
-    primarySrc: '/images/img25.jpeg',
-    detailSrc: '/images/img26.jpeg'
+    title: 'The Structured Trench Curation',
+    category: 'SARTORIAL',
+    concept: 'Transitional Layering',
+    fabric: 'Bonded Cotton Gabardine',
+    desc: 'An understated outerwear piece structured for modern urban environments, designed to layer effortlessly over fine silks.',
+    image: '/images/img11.jpeg',
   },
   {
-    id: 'look-2',
     num: '02',
-    title: 'Asymmetric Pleated Tailoring Suit',
-    concept: 'Linear Silhouette',
-    fabric: 'Raw Charcoal Flax Linen',
-    description: 'A striking study in sharp horizontal canvas pleats and extended shoulder pads, mapping out structural dominance.',
-    primarySrc: '/images/img27.jpeg',
-    detailSrc: '/images/img28.jpeg'
-  }
+    title: 'Asymmetric Tailored Pleat Suit',
+    category: 'SARTORIAL',
+    concept: 'Linear Silhouettes',
+    fabric: 'Raw Flax Linen & Wool Blend',
+    desc: 'A study in relaxed drape tailoring, offering sharp modern posture with comfortable fabrics.',
+    image: '/images/img12.jpeg',
+  },
+  {
+    num: '03',
+    title: 'Silk Slip & Oversized Cashmere Knit',
+    category: 'MINIMALIST CASUAL',
+    concept: 'Texture Play',
+    fabric: 'Mulberry Silk & Cashmere',
+    desc: 'A delicate fluid silk slip balanced with an oversized textured knit for elevated casual luxury.',
+    image: '/images/img13.jpeg',
+  },
+  {
+    num: '04',
+    title: 'Modern Monochromatic Executive Set',
+    category: 'SARTORIAL',
+    concept: 'Sartorial Authority',
+    fabric: 'Fine Tropical Wool',
+    desc: 'Sharp tonal dressing designed for senior corporate leadership roles, commanding attention with ease.',
+    image: '/images/img14.jpeg',
+  },
+  {
+    num: '05',
+    title: 'The Occasion Resort Suit',
+    category: 'RESORT & LIFE',
+    concept: 'Relaxed Sartorialism',
+    fabric: 'Organic Crumpled Cotton Linen',
+    desc: 'An effortless resort-inspired silhouette suited for summer destination weddings or high-end travels.',
+    image: '/images/img15.jpeg',
+  },
+  {
+    num: '06',
+    title: 'Understated Silk Lounge Set',
+    category: 'MINIMALIST CASUAL',
+    concept: 'Intentional Comfort',
+    fabric: 'Sand-washed Silk Charmeuse',
+    desc: 'Fluid, flowing tailoring constructed to transition seamlessly from day comfort to evening celebrations.',
+    image: '/images/img16.jpeg',
+  },
 ];
 
 export default function LookbookGrid() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
 
   return (
-    <section id="collections" className="px-6 md:px-16 py-36 max-w-7xl mx-auto bg-[#FAF9F6]">
+    <section className="bg-[#FAF9F6] text-[#1A1A1A] py-16 sm:py-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
       
-      {/* 1. Classical Exhibition Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-32 border-b border-neutral-200 pb-12">
+      {/* ── HEADER ── */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 pb-8 border-b border-black/15">
         <div>
-          <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-neutral-400 block mb-3">
-            Active Portfolios
+          <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/40 block mb-3">
+            STYLE EDITORIALS
           </span>
-          <h3 className="font-serif text-5xl md:text-7xl font-light tracking-wide">
-            The Exhibition
-          </h3>
+          <h2 className="font-serif text-4xl sm:text-6xl font-light tracking-tight">
+            The Lookbook
+          </h2>
         </div>
-        <p className="font-sans text-[11px] tracking-[0.2em] text-neutral-400 uppercase mt-4 md:mt-0 font-light max-w-[240px] leading-relaxed text-left md:text-right">
-          Click an editorial fragment to unfold the technical blueprint.
+        <p className="font-sans text-xs tracking-wider text-black/55 uppercase mt-4 md:mt-0 font-light max-w-[280px] leading-relaxed">
+          A showcase of curated silhouettes, styling lines, and textile selections built for intentional living.
         </p>
       </div>
 
-      {/* 2. Full-Width Structural Accordion Matrix */}
-      <div className="flex flex-col gap-6">
-        {collectionData.map((look) => {
-          const isExpanded = expandedId === look.id;
+      {/* ── INTERACTIVE 2-COLUMN VIEWPORT (PICTURE LEFT, ACCORDION BUTTONS RIGHT) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+        
+        {/* LEFT COLUMN: Large Active Image Display */}
+        <div className="col-span-12 lg:col-span-7 relative aspect-[3/4] lg:h-[75vh] lg:aspect-auto w-full bg-[#EAE8E3] border border-black/5 shadow-md overflow-hidden select-none">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={activeIdx}
+              initial={{ opacity: 0, scale: 0.99 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              src={looks[activeIdx].image}
+              alt={looks[activeIdx].title}
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              draggable="false"
+            />
+          </AnimatePresence>
 
-          return (
-            <motion.div
-              key={look.id}
-              layout="position"
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full border-b border-neutral-200 pb-6 overflow-hidden"
-            >
-              {/* Trigger Bar: Interactive Heading Strip */}
-              <div
-                onClick={() => setExpandedId(isExpanded ? null : look.id)}
-                className="flex justify-between items-center py-6 cursor-pointer group select-none"
+          {/* Top Tag */}
+          <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 text-[8px] tracking-[0.3em] uppercase text-white font-sans z-10">
+            LOOK {looks[activeIdx].num}
+          </div>
+
+          {/* Fabric Tag Overlay */}
+          <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm p-3 border border-black/5 z-10 max-w-xs shadow-sm">
+            <span className="text-[6px] tracking-[0.25em] uppercase block text-black/50 font-sans font-semibold">FABRIC DETAIL</span>
+            <span className="font-serif text-[10px] text-black italic leading-none">{looks[activeIdx].fabric}</span>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Highly Visible Interactive Selector Buttons List */}
+        <div className="col-span-12 lg:col-span-5 flex flex-col border border-black/10 divide-y divide-black/10 bg-[#FAF9F6] shadow-[0_12px_40px_rgba(0,0,0,0.03)] rounded-sm">
+          {looks.map((look, idx) => {
+            const isActive = activeIdx === idx;
+            return (
+              <button
+                key={look.num}
+                onClick={() => setActiveIdx(idx)}
+                className={`text-left p-6 transition-all duration-300 flex flex-col w-full outline-none focus:outline-none relative group rounded-sm ${
+                  isActive 
+                    ? 'bg-black text-white border-l-4 border-l-white pl-8 shadow-lg' 
+                    : 'hover:bg-black/[0.01] text-black/65'
+                }`}
               >
-                <div className="flex items-center gap-8 md:gap-16">
-                  <span className="font-mono text-xs tracking-widest text-neutral-400">{look.num}</span>
-                  <h4 className="font-serif text-2xl md:text-4xl font-light tracking-wide text-[#1A1A1A] group-hover:translate-x-2 transition-transform duration-500">
-                    {look.title}
-                  </h4>
+                {/* Horizontal Header of the Button */}
+                <div className="flex justify-between items-center w-full">
+                  <div className="flex items-baseline gap-4">
+                    <span className={`font-mono text-xs font-medium transition-colors ${isActive ? 'text-white/50 font-bold' : 'text-black/35 group-hover:text-black'}`}>
+                      /{look.num}
+                    </span>
+                    <h3 className={`font-serif text-lg transition-all leading-tight ${isActive ? 'text-white font-medium italic' : 'text-black/60 group-hover:text-black'}`}>
+                      {look.title}
+                    </h3>
+                  </div>
+
+                  {/* Visual Accordion State Indicator (Plus/Minus Icon) */}
+                  <div className="flex-shrink-0 ml-4">
+                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                      isActive 
+                        ? 'bg-white text-black border-white scale-110' 
+                        : 'bg-transparent text-black/40 border-black/10 group-hover:border-black/30 group-hover:text-black'
+                    }`}>
+                      <span className="text-xs leading-none font-light">
+                        {isActive ? '−' : '+'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <motion.span 
-                  animate={{ rotate: isExpanded ? 45 : 0 }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-light text-2xl md:text-4xl text-neutral-300 group-hover:text-black transition-colors"
-                >
-                  +
-                </motion.span>
-              </div>
 
-              {/* 3. Smooth Expanding Exhibition Window */}
-              <AnimatePresence initial={false}>
-                {isExpanded && (
+                {/* Smooth Expandable Description Block */}
+                {isActive && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="overflow-hidden"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    transition={{ duration: 0.35, ease: 'easeOut' }}
+                    className="text-xs leading-relaxed font-sans font-light mt-4 overflow-hidden w-full text-white/80"
                   >
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pt-6 pb-8 items-start">
-                      
-                      {/* Left Side: Asymmetric Dynamic Media Frame */}
-                      <div className="lg:col-span-7 grid grid-cols-2 gap-4">
-                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100">
-                          <Image
-                            src={look.primarySrc}
-                            alt="Front Silhouette View"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 50vw, 35vw"
-                          />
-                        </div>
-                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 mt-8">
-                          <Image
-                            src={look.detailSrc}
-                            alt="Textile Blueprint Zoom"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 50vw, 35vw"
-                          />
-                        </div>
+                    <p className="mb-4 text-white/75 border-l border-white/10 pl-3">
+                      {look.desc}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-x-4 gap-y-1.5 pt-3 border-t border-white/10 text-[8px] tracking-[0.2em] uppercase font-medium text-white/50">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-white/30">concept:</span>
+                        <span className="text-white/90">{look.concept}</span>
                       </div>
-
-                      {/* Right Side: Editorial Blueprint Data */}
-                      <motion.div 
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="lg:col-span-5 flex flex-col justify-center pt-8 lg:pt-20 lg:pl-12 text-[#1A1A1A]"
-                      >
-                        <div className="flex flex-col gap-1 border-b border-neutral-200 pb-6 mb-6 font-mono text-[10px] tracking-[0.25em] uppercase text-neutral-400">
-                          <span>Concept // {look.concept}</span>
-                          <span>Textile // {look.fabric}</span>
-                        </div>
-                        <p className="font-serif text-lg leading-relaxed text-neutral-600 font-light mb-4">
-                          {look.description}
-                        </p>
-                      </motion.div>
-
+                      <span className="text-white/20">•</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-white/30">fabric:</span>
+                        <span className="text-white/90">{look.fabric}</span>
+                      </div>
                     </div>
                   </motion.div>
                 )}
-              </AnimatePresence>
-            </motion.div>
-          );
-        })}
+              </button>
+            );
+          })}
+        </div>
+
       </div>
+
     </section>
   );
 }

@@ -10,24 +10,9 @@ const articles = [
     date: "MAR 12"
   },
   {
-    title: "Building Executive Presence Through Style",
-    category: "STYLE & PRESENCE",
-    date: "MAR 05"
-  },
-  {
     title: "The Psychology of Personal Appearance",
     category: "CONFIDENCE",
     date: "FEB 28"
-  },
-  {
-    title: "Wardrobe Essentials Every Professional Should Own",
-    category: "WARDROBE STRATEGY",
-    date: "FEB 15"
-  },
-  {
-    title: "How Personal Branding Starts With You",
-    category: "PERSONAL BRANDING",
-    date: "FEB 02"
   }
 ];
 
@@ -50,7 +35,7 @@ export default function InsightsSection({ hideButton = false }: { hideButton?: b
             Insights on Style, Confidence & Personal Branding
           </h2>
           {!hideButton && (
-            <Link href="/insights" className="group relative overflow-hidden border-b border-charcoal/30 pb-2 text-[10px] font-light tracking-[0.3em] uppercase text-charcoal hover:border-gold hover:text-gold transition-colors duration-500 inline-flex items-center gap-4">
+            <Link href="/journal" className="group relative overflow-hidden border-b border-charcoal/30 pb-2 text-[10px] font-light tracking-[0.3em] uppercase text-charcoal hover:border-gold hover:text-gold transition-colors duration-500 inline-flex items-center gap-4">
               View All Articles
             </Link>
           )}

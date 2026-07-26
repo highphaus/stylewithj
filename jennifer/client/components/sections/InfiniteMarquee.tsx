@@ -55,7 +55,7 @@ export default function InfiniteMarquee() {
             Dual-axis matrix displaying structural compositions and micro textile alignments simultaneously.
           </p>
           <a 
-            href="/gallery" 
+            href="/lookbook" 
             className="font-mono text-[9px] tracking-[0.25em] text-black hover:text-neutral-500 uppercase border-b border-black pb-1 transition-colors"
           >
             Access Full Archive (84+) →

@@ -5,30 +5,33 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 const NAV_LINKS = [
-  { label: 'Services',   href: '/services'  },
-  { label: 'Gallery',    href: '/portfolio'  },
-  { label: 'About',      href: '/about'      },
+  { label: 'About Me',           href: '/about'     },
+  { label: 'What We Do',         href: '/services'  },
+  { label: 'Lookbook',           href: '/lookbook'  },
+  { label: 'Transformations',    href: '/transformations' },
+  { label: 'Journal',            href: '/journal'         },
+  { label: 'Connect',            href: '/connect'         },
 ];
 
 export default function Navigation() {
-  const pathname  = usePathname();
-  const isHome    = pathname === '/';
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
-  const [scrolled,        setScrolled]        = useState(false);
-  const [visible,         setVisible]         = useState(true);
-  const [mobileMenuOpen,  setMobileMenuOpen]  = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 60);
-      if (y <= 60) {
+      setScrolled(y > 100);
+      
+      // Scrolling up or down always hides the navigation bar
+      // except when we are at the absolute top of the page.
+      if (y <= 100) {
         setVisible(true);
-      } else if (y > lastScrollY.current) {
-        setVisible(false);   // scrolling down -> hide
       } else {
-        setVisible(true);    // scrolling up -> reveal
+        setVisible(false);
       }
       lastScrollY.current = y;
     };
@@ -38,108 +41,116 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Force close/hide nav bar on route change
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    if (window.scrollY > 100) {
+      setVisible(false);
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [mobileMenuOpen]);
+  }, [pathname]);
 
-  // --- colour tokens ---
   const isLight = scrolled || !isHome;
 
   return (
     <>
-      {/* --- MAIN BAR --- */}
+      {/* ── MAIN TOP BAR / HEADER NAVIGATION ── */}
       <nav
         className={[
-          'fixed top-0 left-0 right-0 z-50',
+          'fixed top-0 left-0 right-0 z-40',
           'transition-all duration-500 ease-in-out',
-          visible ? 'translate-y-0' : '-translate-y-full',
+          visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none',
           scrolled
-            ? 'bg-[#FAF9F6]/95 backdrop-blur-md border-b border-black/[0.06]'
+            ? 'bg-[#FAF9F6]/95 backdrop-blur-md border-b border-black/[0.04]'
             : 'bg-transparent',
-          isLight ? 'text-[#1A1A1A]' : 'text-white',
+          isLight ? 'text-[#1A1A1A]' : 'text-white/90',
         ].join(' ')}
       >
-        <div className="w-full px-8 lg:px-16 flex items-center justify-between h-[72px]">
+        {/* Main Flex Bar */}
+        <div className="w-full px-6 sm:px-8 lg:px-16 flex items-center justify-between h-[88px]">
 
-          {/* --- LEFT: logo --- */}
+          {/* Logo */}
           <Link
             href="/"
-            className="flex-shrink-0 flex items-center hover:opacity-70 transition-opacity duration-300"
+            className="flex-shrink-0 flex items-center hover:opacity-75 transition-opacity duration-300"
           >
             <Image
               src="/images/style with j.png"
               alt="Style With J"
-              // Removed 'fill' and gave it explicit larger pixel dimensions
-              width={260}
-              height={80}
-              // Tailwind classes control display scale responsiveness smoothly here
-              className={`w-[180px] h-auto md:w-[260px] mt-8 transition-all duration-300 ${isLight ? '' : 'invert'}`}
+              width={240}
+              height={70}
+              className={`w-[140px] md:w-[190px] h-auto object-contain transition-all duration-300 ${isLight ? '' : 'invert'}`}
               priority
               unoptimized
             />
           </Link>
 
-          {/* --- RIGHT: desktop links --- */}
-          <ul className="hidden md:flex items-center gap-10 list-none m-0 p-0">
-            {NAV_LINKS.map(({ label, href }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={[
-                    'relative text-[10px] tracking-[0.22em] uppercase font-light',
-                    'after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0',
-                    'after:transition-all after:duration-300',
-                    isLight
-                      ? 'after:bg-[#1A1A1A] hover:opacity-60'
-                      : 'after:bg-white   hover:opacity-60',
-                    'hover:after:w-full transition-opacity duration-200',
-                  ].join(' ')}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Desktop Links (Hidden on mobile) */}
+          <div className="hidden md:flex items-center gap-12 pr-24">
+            <ul className="flex items-center gap-10 list-none m-0 p-0">
+              {NAV_LINKS.map(({ label, href }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-[10px] tracking-[0.28em] uppercase font-light relative py-2 transition-opacity duration-300 hover:opacity-50"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {/* --- RIGHT (mobile): hamburger --- */}
-          <button
-            onClick={() => setMobileMenuOpen(o => !o)}
-            aria-label="Toggle menu"
-            className="md:hidden flex flex-col gap-[5px] p-2 group"
-          >
-            <span className={`block w-6 h-[1px] bg-current transition-all duration-300 origin-center ${mobileMenuOpen ? 'rotate-45 translate-y-[6px]' : ''}`} />
-            <span className={`block w-6 h-[1px] bg-current transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
-            <span className={`block w-6 h-[1px] bg-current transition-all duration-300 origin-center ${mobileMenuOpen ? '-rotate-45 -translate-y-[6px]' : ''}`} />
-          </button>
+        </div>
 
+        {/* Mobile Dropdown Panel (Shown when navigation bar is active and visible on mobile) */}
+        <div className="md:hidden w-full bg-[#FAF9F6] border-t border-black/[0.04] flex flex-col px-6 py-6 gap-3 shadow-lg">
+          {NAV_LINKS.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setVisible(false)}
+              className="text-[#1A1A1A] text-[13px] font-sans font-light tracking-[0.2em] uppercase py-2.5 border-b border-black/[0.02] last:border-b-0"
+            >
+              {label}
+            </Link>
+          ))}
         </div>
       </nav>
 
-      {/* --- MOBILE FULL-SCREEN OVERLAY --- */}
-      <div
-        className={[
-          'fixed inset-0 z-40 bg-[#FAF9F6] flex flex-col items-center justify-center gap-10',
-          'transition-all duration-500 ease-in-out',
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
-        ].join(' ')}
-      >
-        {NAV_LINKS.map(({ label, href }) => (
-          <Link
-            key={href}
-            href={href}
-            onClick={() => setMobileMenuOpen(false)}
-            className="text-[#1A1A1A] text-2xl font-serif font-light tracking-widest uppercase hover:opacity-40 transition-opacity duration-200"
-          >
-            {label}
-          </Link>
-        ))}
+      {/* ── DYNAMIC SINGLE BUTTON CONTROLLER (Menu Badge / Hide Trigger) ── */}
+      <div className="fixed right-4 sm:right-6 top-[18px] z-50 flex items-center h-[52px]">
+        <button
+          onClick={() => setVisible(prev => !prev)}
+          className={[
+            'group flex items-center justify-center gap-3 px-5 py-3 rounded-full border transition-all duration-500 ease-out shadow-sm',
+            visible 
+              ? `bg-[#FAF9F6]/90 border-black/10 text-[#1A1A1A] hover:border-black/30` 
+              : 'bg-black/90 hover:bg-black border-white/10 text-white shadow-2xl hover:scale-105'
+          ].join(' ')}
+        >
+          {visible ? (
+            /* "Hide" morph structure when navigation bar is visible */
+            <div className="flex items-center gap-2">
+              <span className="font-sans text-[9px] tracking-[0.35em] uppercase font-light text-[#1A1A1A]/70 group-hover:text-black">
+                Hide
+              </span>
+              <span className="font-sans text-xs font-light text-[#1A1A1A]/70 group-hover:text-black transition-transform duration-500 group-hover:rotate-90 inline-block">
+                ✕
+              </span>
+            </div>
+          ) : (
+            /* "Menu" morph structure when navigation bar is hidden */
+            <div className="flex items-center gap-2.5">
+              <div className="flex flex-col gap-[4px] w-4">
+                <span className="w-full h-[1px] bg-white transition-transform duration-300 group-hover:scale-x-75 group-hover:-translate-x-0.5" />
+                <span className="w-full h-[1px] bg-white transition-transform duration-300 group-hover:translate-x-0.5" />
+                <span className="w-full h-[1px] bg-white transition-transform duration-300 group-hover:scale-x-50 group-hover:-translate-x-1" />
+              </div>
+              <span className="font-sans text-[9px] tracking-[0.35em] uppercase font-light pl-0.5">
+                Menu
+              </span>
+            </div>
+          )}
+        </button>
       </div>
     </>
   );

@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AtelierFooter() {
   return (
@@ -12,7 +13,13 @@ export default function AtelierFooter() {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 pb-20 border-b border-white/10">
           <div>
             <span className="text-[9px] uppercase tracking-[0.4em] text-white/30 block mb-4 font-mono">EST. 2016 · STUDIO PRIVÉ</span>
-            <h2 className="text-4xl font-sans tracking-[0.15em] lowercase text-white">stylewithj</h2>
+            <Image
+              src="/images/style with j.png"
+              alt="Style With J"
+              width={180}
+              height={60}
+              className="object-contain brightness-0 invert"
+            />
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-12">
             <p className="text-xs text-white/40 leading-relaxed font-light max-w-xs">

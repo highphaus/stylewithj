@@ -88,6 +88,26 @@ export default function AtelierCanvas() {
     setPoints((prev) => [...prev, { x: currentX, y: currentY }]);
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    setIsDrawing(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const touch = e.touches[0];
+    setPoints([{ x: touch.clientX - rect.left, y: touch.clientY - rect.top }]);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const touch = e.touches[0];
+    const currentX = touch.clientX - rect.left;
+    const currentY = touch.clientY - rect.top;
+    
+    setCoords({ x: Math.round(currentX), y: Math.round(currentY) });
+
+    if (!isDrawing) return;
+    if (e.cancelable) e.preventDefault();
+    setPoints((prev) => [...prev, { x: currentX, y: currentY }]);
+  };
+
   const handleClear = () => {
     setPoints([]);
   };
@@ -141,6 +161,9 @@ export default function AtelierCanvas() {
               onMouseMove={handleMove}
               onMouseUp={() => setIsDrawing(false)}
               onMouseLeave={() => setIsDrawing(false)}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={() => setIsDrawing(false)}
               className="absolute inset-0 w-full h-full z-20"
             />
 

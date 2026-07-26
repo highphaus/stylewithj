@@ -22,8 +22,8 @@ export default function Footer() {
                 <span>Services</span>
                 <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
               </Link></li>
-              <li><Link href="/portfolio" className="relative group inline-block">
-                <span>Gallery</span>
+              <li><Link href="/lookbook" className="relative group inline-block">
+                <span>Lookbook</span>
                 <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
               </Link></li>
               <li><Link href="/about" className="relative group inline-block">

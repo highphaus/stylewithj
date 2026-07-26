@@ -18,7 +18,7 @@ const prototypeData: GarmentPrototype[] = [
     id: 'toile-1',
     name: 'Asymmetric Pleated Blouson',
     blueprintCode: 'TL_REF_084_VOL2',
-    imageSrc: '/images/img03.jpeg',
+    imageSrc: '/images/img13.jpeg',
     technicalDetails: [
       'Bias cut structural vector deviation: 45°',
       'Dart integration: Dual-radial symmetry fold',
@@ -29,7 +29,7 @@ const prototypeData: GarmentPrototype[] = [
     id: 'toile-2',
     name: 'Deconstructed Sculpted Dress',
     blueprintCode: 'TL_REF_091_VOL2',
-    imageSrc: '/images/img04.jpeg',
+    imageSrc: '/images/img14.jpeg',
     technicalDetails: [
       'Fabric memory suspension factor: 82%',
       'Panel intersection seam configurations: 18 count',

@@ -23,7 +23,7 @@ export default function GallerySection() {
           <h2 className="font-sans text-4xl md:text-5xl lg:text-[50px] font-light tracking-tight">
             Our Work
           </h2>
-          <Link href="/portfolio" className="relative group inline-block text-lg font-sans font-light">
+          <Link href="/lookbook" className="relative group inline-block text-lg font-sans font-light">
             <span>View Full Gallery</span>
             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
           </Link>

@@ -58,7 +58,7 @@ export default function NarrativeHeader() {
             style={{ scale: titleScale }}
             className="font-serif text-5xl sm:text-7xl md:text-8xl font-light tracking-tight text-[#1A1A1A] origin-center will-change-transform"
           >
-            The Narrative Stream
+            
           </motion.h3>
         </motion.div>
 

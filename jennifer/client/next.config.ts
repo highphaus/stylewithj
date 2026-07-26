@@ -1,3 +1,4 @@
+// Force dev server compilation cache reload after route folder modifications
 import type { NextConfig } from "next";
 import path from "path";
 
