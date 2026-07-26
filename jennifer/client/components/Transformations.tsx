@@ -57,33 +57,52 @@ function ScrollingCaseStudyRow({
   hideButton: boolean;
 }) {
   const segment = 1 / totalItems;
-  let p0 = idx * segment;
-  let p1 = p0 + segment * 0.25;
-  let p2 = p0 + segment * 0.75;
-  let p3 = (idx + 1) * segment;
+  const isFirst = idx === 0;
+  const isLast = idx === totalItems - 1;
 
-  // Boundary override for first and last rows to ensure smooth start/end experience
-  if (idx === 0) {
-    p0 = -0.1;
-    p1 = 0.0;
-  }
-  if (idx === totalItems - 1) {
-    p2 = 1.0;
-    p3 = 1.1;
-  }
+  // Compute boundaries for middle items
+  const p0 = idx * segment;
+  const p1 = p0 + segment * 0.25;
+  const p2 = p0 + segment * 0.75;
+  const p3 = (idx + 1) * segment;
 
-  // Map scroll progress to Opacity (fades in and out)
-  const opacity = useTransform(scrollYProgress, [p0, p1, p2, p3], [0, 1, 1, 0]);
+  // Strictly non-decreasing ranges in [0, 1] to prevent Web Animations API errors
+  const inputRange = isFirst
+    ? [0.0, p2, p3]
+    : isLast
+    ? [p0, p1, 1.0]
+    : [p0, p1, p2, p3];
 
-  // Before image slides in from the Left (-60vw to 0vw)
-  const beforeX = useTransform(scrollYProgress, [p0, p1, p2, p3], ["-60vw", "0vw", "0vw", "-60vw"]);
+  const opacityRange = isFirst
+    ? [1, 1, 0]
+    : isLast
+    ? [0, 1, 1]
+    : [0, 1, 1, 0];
 
-  // After image slides in from the Right (60vw to 0vw)
-  const afterX = useTransform(scrollYProgress, [p0, p1, p2, p3], ["60vw", "0vw", "0vw", "60vw"]);
+  const beforeRange = isFirst
+    ? ["0vw", "0vw", "-60vw"]
+    : isLast
+    ? ["-60vw", "0vw", "0vw"]
+    : ["-60vw", "0vw", "0vw", "-60vw"];
 
-  // Center Text overlay slides vertically and fades
-  const textY = useTransform(scrollYProgress, [p0, p1, p2, p3], [30, 0, 0, -30]);
-  const textOpacity = useTransform(scrollYProgress, [p0, p1, p2, p3], [0, 1, 1, 0]);
+  const afterRange = isFirst
+    ? ["0vw", "0vw", "60vw"]
+    : isLast
+    ? ["60vw", "0vw", "0vw"]
+    : ["60vw", "0vw", "0vw", "60vw"];
+
+  const textYRange = isFirst
+    ? [0, 0, -30]
+    : isLast
+    ? [30, 0, 0]
+    : [30, 0, 0, -30];
+
+  // Map scroll progress cleanly
+  const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
+  const beforeX = useTransform(scrollYProgress, inputRange, beforeRange);
+  const afterX = useTransform(scrollYProgress, inputRange, afterRange);
+  const textY = useTransform(scrollYProgress, inputRange, textYRange);
+  const textOpacity = useTransform(scrollYProgress, inputRange, opacityRange);
 
   return (
     <motion.div 
