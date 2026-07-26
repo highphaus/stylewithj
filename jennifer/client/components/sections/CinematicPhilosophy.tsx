@@ -39,7 +39,7 @@ export default function CinematicPhilosophy() {
         className="absolute inset-0 w-full h-full opacity-100 origin-center"
       >
         <Image
-          src="/images/img28.jpeg" 
+          src="/images/philosophy_bg.png" 
           alt="Style with J Philosophy background"
           fill
           className="object-cover object-center"
