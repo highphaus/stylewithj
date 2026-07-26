@@ -56,44 +56,31 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   const isLast = idx === totalItems - 1;
 
   const pStart = idx * segment;
-  const pEnd = (idx + 1) * segment;
 
   // Strictly non-decreasing ranges in [0, 1] to prevent Web Animations API errors
   const inputRange = isFirst
-    ? [0.0, pEnd, pEnd + segment * 0.25]
-    : isLast
-    ? [pStart, pStart + segment * 0.25, 1.0]
-    : [pStart, pStart + segment * 0.25, pEnd, pEnd + segment * 0.25];
+    ? [0.0, 1.0]
+    : [pStart, pStart + segment * 0.25, 1.0];
 
   const opacityRange = isFirst
-    ? [1.0, 1.0, 0.0]
-    : isLast
-    ? [0.0, 1.0, 1.0]
-    : [0.0, 1.0, 1.0, 0.0];
+    ? [1.0, 1.0]
+    : [0.0, 1.0, 1.0];
 
   const beforeRange = isFirst
-    ? ["0vw", "0vw", "-100vw"]
-    : isLast
-    ? ["-100vw", "0vw", "0vw"]
-    : ["-100vw", "0vw", "0vw", "-100vw"];
+    ? ["0vw", "0vw"]
+    : ["-100vw", "0vw", "0vw"];
 
   const afterRange = isFirst
-    ? ["0vw", "0vw", "100vw"]
-    : isLast
-    ? ["100vw", "0vw", "0vw"]
-    : ["100vw", "0vw", "0vw", "100vw"];
+    ? ["0vw", "0vw"]
+    : ["100vw", "0vw", "0vw"];
 
   const textYRange = isFirst
-    ? [0, 0, -30]
-    : isLast
-    ? [30, 0, 0]
-    : [30, 0, 0, -30];
+    ? [0, 0]
+    : [30, 0, 0];
 
   const scaleRange = isFirst
-    ? [1.0, 1.0, 1.05]
-    : isLast
-    ? [1.05, 1.0, 1.0]
-    : [1.05, 1.0, 1.0, 1.05];
+    ? [1.0, 1.0]
+    : [1.05, 1.0, 1.0];
 
   // Map scroll progress cleanly using spring values passed down from parent
   const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
@@ -105,8 +92,8 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
 
   return (
     <motion.div 
-      style={{ opacity, touchAction: 'pan-y' }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none z-10"
+      style={{ opacity, zIndex: (idx + 1) * 10, touchAction: 'pan-y' }}
+      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none"
     >
       <div className="relative w-full h-full grid grid-cols-12 items-stretch overflow-hidden" style={{ touchAction: 'pan-y' }}>
         
