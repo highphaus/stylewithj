@@ -42,7 +42,7 @@ const transformationData = [
   }
 ];
 
-// Single Case Study Row that handles horizontal entry sliding and opacity fades based on parent scroll progress
+// Single Case Study Row that handles horizontal entry sliding, scales, and opacity fades based on parent spring progress
 function ScrollingCaseStudyRow({ 
   item, 
   idx, 
@@ -97,12 +97,19 @@ function ScrollingCaseStudyRow({
     ? [30, 0, 0]
     : [30, 0, 0, -30];
 
-  // Map scroll progress cleanly
+  const scaleRange = isFirst
+    ? [1.0, 1.0, 1.05]
+    : isLast
+    ? [1.05, 1.0, 1.0]
+    : [1.05, 1.0, 1.0, 1.05];
+
+  // Map scroll progress cleanly using spring values passed down from parent
   const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
   const beforeX = useTransform(scrollYProgress, inputRange, beforeRange);
   const afterX = useTransform(scrollYProgress, inputRange, afterRange);
   const textY = useTransform(scrollYProgress, inputRange, textYRange);
   const textOpacity = useTransform(scrollYProgress, inputRange, opacityRange);
+  const scale = useTransform(scrollYProgress, inputRange, scaleRange);
 
   return (
     <motion.div 
@@ -114,7 +121,8 @@ function ScrollingCaseStudyRow({
         {/* Left Column: Before Image (Translating from Left) */}
         <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3] border-r border-black/5">
           <motion.div style={{ x: beforeX }} className="w-full h-full relative">
-            <img 
+            <motion.img 
+              style={{ scale }}
               src={item.beforeImg} 
               alt="Initial Silhouette" 
               className="w-full h-full object-cover object-top grayscale-[20%]" 
@@ -129,7 +137,8 @@ function ScrollingCaseStudyRow({
         {/* Right Column: After Image (Translating from Right) */}
         <div className="col-span-6 h-full overflow-hidden relative bg-[#EAE8E3]">
           <motion.div style={{ x: afterX }} className="w-full h-full relative">
-            <img 
+            <motion.img 
+              style={{ scale }}
               src={item.afterImg} 
               alt="Realized Design Target" 
               className="w-full h-full object-cover object-top" 
@@ -310,7 +319,14 @@ export default function Transformations({ hideButton = false, isStatic = false }
     offset: ["start start", "end end"]
   });
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  // Smooth scrollbar ticks/jitters using spring physics (expensive high-fashion glide)
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 55,
+    damping: 24,
+    mass: 0.35
+  });
+
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
     const idx = Math.min(transformationData.length - 1, Math.floor(latest * transformationData.length));
     setActiveIdx(idx);
   });
@@ -328,7 +344,7 @@ export default function Transformations({ hideButton = false, isStatic = false }
                 key={item.id}
                 item={item}
                 idx={idx}
-                scrollYProgress={scrollYProgress}
+                scrollYProgress={smoothProgress}
                 totalItems={transformationData.length}
                 hideButton={hideButton}
               />
