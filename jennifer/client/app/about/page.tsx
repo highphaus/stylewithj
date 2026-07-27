@@ -18,9 +18,9 @@ export function AboutContent() {
             </span>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[1.1] text-[#1A1A1A] max-w-4xl mt-2">
-            Clothes caught my eye.<br />
-            <span className="italic font-normal text-black/60">Style caught my heart.</span>
+          <h1 className="font-serif text-[22px] min-[360px]:text-[25px] sm:text-6xl md:text-7xl font-light tracking-tight leading-snug sm:leading-[1.1] text-[#1A1A1A] max-w-4xl mt-2">
+            <span className="block font-light">Clothes caught my eye.</span>
+            <span className="block italic font-normal text-black/60 mt-1 sm:mt-2">Style caught my heart.</span>
           </h1>
 
         </div>
