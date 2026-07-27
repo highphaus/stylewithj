@@ -14,7 +14,7 @@ export function AboutContent() {
           
           <div className="flex items-center gap-3">
             <span className="text-[10px] sm:text-xs tracking-[0.4em] uppercase font-semibold text-black/60 font-sans">
-              About Us
+              About Me
             </span>
           </div>
 
