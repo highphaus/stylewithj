@@ -41,19 +41,13 @@ export default function InfiniteMarquee() {
     >
       
       {/* 1. EDITORIAL TEXT ARCHITECTURE */}
-      <div className="max-w-7xl mx-auto px-6 md:px-16 mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-16 mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
-          <span className="font-mono text-[9px] tracking-[0.6em] text-neutral-400 uppercase block mb-3">
-            Atelier Feed // Vol_026
-          </span>
           <h3 className="font-serif text-4xl md:text-5xl font-light tracking-wide text-[#1A1A1A] leading-none">
             The Lookbook Stream
           </h3>
         </div>
         <div className="flex flex-col items-start md:items-end gap-3">
-          <p className="font-sans text-[11px] tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed text-left md:text-right">
-            Dual-axis matrix displaying structural compositions and micro textile alignments simultaneously.
-          </p>
           <a 
             href="/lookbook" 
             className="font-mono text-[9px] tracking-[0.25em] text-black hover:text-neutral-500 uppercase border-b border-black pb-1 transition-colors"
@@ -127,23 +121,6 @@ export default function InfiniteMarquee() {
         </div>
 
       </div>
-
-      {/* 3. TECHNICAL SPEC CAD CURSOR */}
-      <div 
-        style={{ left: mousePos.x, top: mousePos.y }}
-        className="absolute pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center hidden md:flex"
-      >
-        {/* Studio Alignment Reticle Crosshairs */}
-        <div className="absolute w-12 h-px bg-neutral-400/40" />
-        <div className="absolute h-12 w-px bg-neutral-400/40" />
-        <div className="w-1 h-1 bg-black rounded-full" />
-        
-        {/* Dynamic Parameter Display readout tag */}
-        <div className="absolute top-4 left-4 font-mono text-[7px] text-neutral-400 bg-[#FAF9F6] border border-neutral-200 px-1.5 py-0.5 whitespace-nowrap tracking-widest uppercase">
-          {hoveredIdx ? `TRACK_LOCK // ${hoveredIdx.toUpperCase()}` : `CAD_MATRIX // X:${mousePos.x} Y:${mousePos.y}`}
-        </div>
-      </div>
-
     </section>
   );
 }
