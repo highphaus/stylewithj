@@ -1,88 +1,157 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function AboutSection() {
-  return (
-    <section className="w-full bg-[#FAF9F6] text-[#1A1A1A] overflow-hidden">
-      {/* Always 3 columns across all screen sizes (horizontal layout) */}
-      <div className="grid grid-cols-3 w-full min-h-[420px] sm:min-h-[400px] lg:h-[80vh]">
+const slides = [
+  { src: '/images/img01.jpeg', alt: 'J. Personal Stylist Portrait' },
+  { src: '/images/img05.jpeg', alt: 'Editorial Style Session' },
+  { src: '/images/img07.jpeg', alt: 'Fashion Consultation' },
+  { src: '/images/img14.jpeg', alt: 'Wardrobe Styling' },
+  { src: '/images/img15.jpeg', alt: 'Style Story' },
+];
 
-        {/* ── PANEL 1: CENTER SPLIT PORTRAIT (FIRST/LEFT) ── */}
-        <div className="relative w-full h-full min-h-[420px] sm:min-h-[400px] bg-[#EFECE6]">
+const INTERVAL = 3500;
+
+export default function AboutSection() {
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const next = useCallback(() => {
+    setCurrent((prev) => (prev + 1) % slides.length);
+  }, []);
+
+  const goTo = (idx: number) => {
+    setCurrent(idx);
+    // Reset auto-scroll timer on manual nav
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(next, INTERVAL);
+  };
+
+  useEffect(() => {
+    if (paused) return;
+    timerRef.current = setInterval(next, INTERVAL);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [next, paused]);
+
+  return (
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ height: 'clamp(420px, 85vh, 900px)' }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* ── SLIDES ── */}
+      {slides.map((slide, idx) => (
+        <div
+          key={slide.src}
+          className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+          style={{ opacity: idx === current ? 1 : 0, zIndex: idx === current ? 1 : 0 }}
+          aria-hidden={idx !== current}
+        >
           <Image
-            src="/images/img01.jpeg"
-            alt="J. Personal Stylist Portrait"
+            src={slide.src}
+            alt={slide.alt}
             fill
-            className="object-cover object-center hover:scale-[1.02] transition-transform duration-700 ease-out"
-            sizes="(max-width: 640px) 33vw, (max-width: 1024px) 33vw, 33vw"
+            priority={idx === 0}
+            className="object-cover object-center"
+            sizes="100vw"
           />
         </div>
+      ))}
 
-        {/* ── PANEL 2: MOOD-BOARD QUOTE LAYER (SECOND/CENTER - PICTURE) ── */}
-        <div className="relative w-full h-full min-h-[420px] sm:min-h-[400px] bg-[#1A1A1A] flex items-center justify-center text-white p-3 sm:p-8 xl:p-16">
-          {/* Background Moodboard */}
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/images/img02.jpeg"
-              alt="Editorial Aesthetic Flatlay"
-              fill
-              className="object-cover object-center opacity-45"
-            />
-          </div>
+      {/* ── DARK GRADIENT OVERLAY ── */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/75 via-black/35 to-black/10 pointer-events-none" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
-          {/* Foreground Quote */}
-          <div className="relative z-10 flex flex-col items-start gap-1 sm:gap-3 max-w-sm">
-            <span className="font-serif text-xl sm:text-4xl text-white/40 leading-none h-2 sm:h-4">"</span>
+      {/* ── TEXT CONTENT ── */}
+      <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 sm:px-12 lg:px-20 xl:px-28 max-w-2xl">
 
-            <p className="text-[9px] sm:text-lg lg:text-xl xl:text-2xl font-serif font-light italic leading-relaxed text-white/90 tracking-wide pl-1 sm:pl-2">
-              My goal is simple:<br />
-              to make getting dressed the easiest decision of your day.
-            </p>
-
-            <span className="font-serif text-xl sm:text-4xl text-white/40 leading-none h-2 sm:h-4 self-end mr-1 sm:mr-4">"</span>
-          </div>
+        {/* Label */}
+        <div className="flex items-center gap-3 mb-5 sm:mb-8">
+          <div className="w-6 sm:w-10 h-[1px] bg-white/50" />
+          <span className="text-[9px] sm:text-[10px] tracking-[0.4em] uppercase font-light text-white/60">
+            About Me
+          </span>
         </div>
 
-        {/* ── PANEL 3: THE TEXT INTRO BLOCK (THIRD/RIGHT - WRITING) ── */}
-        <div className="flex flex-col justify-center px-3 sm:px-8 xl:px-20 py-6 sm:py-12 lg:py-0 bg-[#EFECE6]">
-          <div className="flex flex-col items-start">
+        {/* Heading */}
+        <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light leading-[1.15] tracking-wide text-white mb-4 sm:mb-6">
+          Hi, I'm J.<br />
+          <span className="italic font-normal text-white/80">I style stories.</span>
+        </h2>
 
-            {/* Minimal Header Accent */}
-            <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-8 lg:mb-12">
-              <span className="text-[6px] sm:text-[9px] lg:text-[10px] tracking-[0.2em] sm:tracking-[0.35em] uppercase font-light text-[#1A1A1A]/60">
-                About Me
-              </span>
-              <div className="w-4 sm:w-8 h-[1px] bg-[#1A1A1A]/30" />
-            </div>
+        {/* Body */}
+        <p className="font-sans text-xs sm:text-sm font-light text-white/70 leading-relaxed mb-2 sm:mb-4 max-w-sm sm:max-w-md">
+          With over 8 years of experience in fashion and image consulting, I help women
+          discover their signature style and build wardrobes that are chic, functional and
+          uniquely theirs.
+        </p>
 
-            {/* Editorial Heading */}
-            <h2 className="text-xs sm:text-3xl md:text-4xl lg:text-5xl font-serif font-light leading-[1.2] tracking-wide mb-3 sm:mb-6 lg:mb-8">
-              Hi, I'm J. <br />
-              <span className="italic font-normal">I style stories.</span>
-            </h2>
+        {/* Quote */}
+        <p className="font-serif text-sm sm:text-base italic text-white/55 leading-snug mb-7 sm:mb-10 max-w-xs sm:max-w-sm">
+          "My goal is simple: to make getting dressed the easiest decision of your day."
+        </p>
 
-            {/* Paragraph Text */}
-            <p className="hidden sm:block text-[10px] sm:text-xs lg:text-sm font-light text-[#1A1A1A]/80 leading-relaxed tracking-wide mb-4 sm:mb-8 lg:mb-10 max-w-[340px]">
-              With over 8 years of experience in fashion and image consulting, I help women
-              discover their signature style and build wardrobes that are chic, functional and
-              uniquely theirs.
-            </p>
-
-            {/* CTA Link */}
-            <Link
-              href="/about"
-              className="group flex items-center gap-3 sm:gap-8 lg:gap-16 pb-1 sm:pb-2 border-b border-[#1A1A1A]/30 hover:border-[#1A1A1A] text-[6px] sm:text-[9px] lg:text-[10px] tracking-[0.15em] sm:tracking-[0.25em] uppercase font-light transition-colors duration-300"
-            >
-              Read My Story
-              <span className="transform group-hover:translate-x-1 sm:group-hover:translate-x-2 transition-transform duration-300 text-xs sm:text-sm">→</span>
-            </Link>
-
-          </div>
-        </div>
-
+        {/* CTA */}
+        <Link
+          href="/about"
+          className="group self-start flex items-center gap-4 sm:gap-6 pb-1.5 border-b border-white/40 hover:border-white text-[9px] sm:text-[10px] tracking-[0.3em] uppercase font-light text-white/80 hover:text-white transition-all duration-300"
+        >
+          Read My Story
+          <span className="transform group-hover:translate-x-1.5 transition-transform duration-300 text-sm">→</span>
+        </Link>
       </div>
+
+      {/* ── SLIDE COUNTER ── */}
+      <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-10 z-20 flex items-center gap-2">
+        <span className="font-mono text-[10px] text-white/40">
+          {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+        </span>
+      </div>
+
+      {/* ── DOT NAVIGATION ── */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-2.5">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goTo(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+            className="group flex items-center justify-center w-5 h-5"
+          >
+            <span
+              className="block rounded-full transition-all duration-500"
+              style={{
+                width: idx === current ? '20px' : '6px',
+                height: '6px',
+                background: idx === current ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.35)',
+                borderRadius: idx === current ? '3px' : '50%',
+              }}
+            />
+          </button>
+        ))}
+      </div>
+
+      {/* ── PROGRESS BAR ── */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 h-[2px] bg-white/10">
+        <div
+          key={`${current}-${paused}`}
+          className="h-full bg-white/60"
+          style={{
+            animation: paused ? 'none' : `progressBar ${INTERVAL}ms linear forwards`,
+          }}
+        />
+      </div>
+
+      <style jsx>{`
+        @keyframes progressBar {
+          from { width: 0%; }
+          to   { width: 100%; }
+        }
+      `}</style>
     </section>
   );
 }
