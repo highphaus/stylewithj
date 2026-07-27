@@ -64,9 +64,9 @@ export default function GalleryGrid() {
         </div>
       </header>
 
-      {/* ── RESPONSIVE GRID CONTAINER ── */}
-      <main className="px-6 md:px-12 lg:px-20 max-w-7xl mx-auto py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {/* ── RESPONSIVE 2-COLUMN MOBILE & 3-COLUMN DESKTOP GRID CONTAINER ── */}
+      <main className="px-3 sm:px-8 lg:px-20 max-w-7xl mx-auto py-8 sm:py-16">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-8">
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
               <motion.div
@@ -83,15 +83,15 @@ export default function GalleryGrid() {
                   alt={item.title}
                   fill
                   className="object-cover object-center transition-transform duration-[2500ms] ease-out group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
                 />
 
                 {/* EDITORIAL GLIDE-UP HOVER OVERLAY */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 select-none text-white">
-                  <h3 className="font-serif text-lg tracking-wide uppercase mb-1 font-light">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-6 select-none text-white">
+                  <h3 className="font-serif text-sm sm:text-lg tracking-wide uppercase mb-0.5 sm:mb-1 font-light">
                     {item.title}
                   </h3>
-                  <p className="text-[11px] text-white/80 leading-relaxed font-light max-w-xs">
+                  <p className="text-[9px] sm:text-[11px] text-white/80 leading-relaxed font-light max-w-xs line-clamp-2">
                     {item.desc}
                   </p>
                 </div>
