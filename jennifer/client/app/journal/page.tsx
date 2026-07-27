@@ -216,42 +216,6 @@ export default function JournalPage() {
           ))}
         </section>
 
-        {/* ── 4. WHAT CAN I STYLE FOR YOU? DIRECTORY ── */}
-        <section className="border-t border-black/15 pt-16 pb-12">
-          <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
-            <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-3 font-semibold">
-              STYLING LEDGER
-            </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight text-black">
-              What Can I <span className="italic text-black/40">Style</span> For You?
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-            {styleCategories.map((category, idx) => (
-              <div 
-                key={idx}
-                className="bg-[#EFECE6] p-5 sm:p-8 border border-black/5 flex flex-col gap-4 shadow-xs rounded-xs"
-              >
-                <h4 className="font-sans text-[10px] sm:text-xs tracking-[0.25em] font-bold text-black uppercase border-b border-black/10 pb-3">
-                  {category.title}
-                </h4>
-                <ul className="flex flex-col gap-2.5">
-                  {category.items.map((sub, subIdx) => (
-                    <li 
-                      key={subIdx}
-                      className="text-[11px] sm:text-xs font-sans font-light text-black/75 flex items-center gap-2"
-                    >
-                      <div className="w-1.5 h-1.5 rounded-full bg-black/25 flex-shrink-0" />
-                      {sub}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
       </main>
 
       <AtelierFooter />

@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 const NAV_LINKS = [
   { label: 'About Me',           href: '/about'     },
   { label: 'What We Do',         href: '/services'  },
+  { label: 'Categories',         href: '/categories'},
   { label: 'Lookbook',           href: '/lookbook'  },
   { label: 'Transformations',    href: '/transformations' },
   { label: 'Journal',            href: '/journal'         },
