@@ -50,20 +50,20 @@ const servicesList = [
       'Identifying what works and what doesn\'t',
       'Styling existing pieces in new ways',
       'Creating multiple looks from the same wardrobe',
-      'Identifying key wardrobe gaps & building an intentional closet',
+      'Building an intentional, versatile closet',
     ],
     image: '/images/img19.jpeg',
   },
   {
     num: '03',
-    title: 'Personal Shopping / Curated Shopping',
+    title: 'Personal Shopping',
     summary: 'Shop with intention through curated recommendations that fit your personal style, lifestyle, needs, and budget, so you spend less time searching and more time finding pieces that truly work for you.',
     points: [
       'Personalised shopping recommendations',
       'Curated pieces based on individual style',
       'Shopping according to budget',
-      'Helping clients avoid unnecessary purchases',
-      'Finding pieces that work with what you already own',
+      'Avoiding unnecessary impulse purchases',
+      'Finding pieces that complement your wardrobe',
     ],
     image: '/images/img20.jpeg',
   },
@@ -72,40 +72,27 @@ const servicesList = [
     title: 'Occasion Styling',
     summary: 'Tell us where you\'re going, and we\'ll help you figure out what to wear. From celebrations to casual outings, we curate the perfect look for every event.',
     points: [
-      'Weddings: Bridesmaids, bridal & ethnic styling',
-      'Parties & evening events',
-      'Date nights & romantic dinners',
-      'Vacations & getaway wardrobes',
-      'Birthdays & milestone celebrations',
-      'Special events & casual occasion styling',
+      'Weddings: Bridesmaids & ethnic styling',
+      'Parties',
+      'Date nights',
+      'Vacations',
+      'Birthdays',
+      'Special events',
+      'Casual styling',
     ],
     image: '/images/img21.jpeg',
   },
   {
     num: '05',
-    title: 'Work & Professional Styling',
+    title: 'Workwear Styling',
     summary: 'Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important meetings and first impressions, we\'ll help you dress for the way you want to show up.',
     points: [
       'Office wardrobe & everyday executive dressing',
       'Business casual & elevated professional looks',
       'Corporate dressing & key presentations',
-      'Important meetings & first-impression styling',
-      'Transitioning into a new job or senior leadership role',
+      'Important meetings & first impressions',
     ],
     image: '/images/img22.jpeg',
-  },
-  {
-    num: '06',
-    title: 'Styling for Comfort',
-    tagline: 'HEART OF WHAT WE DO',
-    summary: 'We don\'t believe you need to sacrifice comfort to look stylish. We help you find clothes and looks that make you feel confident, comfortable, and completely yourself.',
-    points: [
-      'Zero-sacrifice comfort styling',
-      'Fits and fabrics tailored to your physical ease',
-      'Effortless dressing for daily confidence',
-      'Style that feels like you, only better',
-    ],
-    image: '/images/img23.jpeg',
   },
 ];
 
@@ -136,7 +123,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
       {!isEmbedded && <Navigation />}
 
       {/* ── TOP HERO HEADER (MINIMALIST TYPOGRAPHY) ── */}
-      <section className="pt-36 sm:pt-44 pb-20 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
+      <section className="pt-36 sm:pt-44 pb-16 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
         <div className="flex flex-col gap-6 max-w-4xl">
           <div className="flex items-center gap-3">
             <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
@@ -146,42 +133,23 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           </div>
 
           <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[1.08] text-[#1A1A1A]">
-            Shop Smarter.<br />
-            <span className="italic font-normal text-black/60">Style Better.</span>
+            Style that feels like you.
           </h1>
 
           <div className="mt-4 space-y-4 text-base sm:text-lg font-sans font-light text-black/75 leading-relaxed">
             <p>
-              We believe that great style isn't about constantly buying more. It's about shopping smarter—investing in pieces that work for you, complement what you already own, and make your wardrobe more versatile.
+              We believe personal style isn't about following every trend or constantly buying something new. It's about understanding what makes you feel confident, comfortable, and completely yourself.
             </p>
-            <p>
-              Whether you're refreshing your wardrobe or simply looking for new ways to style what you already have, our approach is all about making thoughtful choices that feel good, look good, and work for your real life.
-            </p>
-            <p className="font-serif text-xl sm:text-2xl font-light italic text-[#1A1A1A] pt-2">
-              “Because looking your best isn't about having more clothes. It's about knowing what to do with the right ones.”
+            <p className="font-medium text-black">
+              At Style with J, we help you discover your personal style, create looks that work for your real life, and build a wardrobe that works for you.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── OUR FOUNDATION ── */}
-      <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto bg-[#EFECE6] my-12 border border-black/5">
-        <div className="max-w-3xl flex flex-col gap-4">
-          <span className="text-[9px] tracking-[0.4em] uppercase font-sans font-light text-black/40">
-            OUR FOUNDATION
-          </span>
-          <h2 className="font-serif text-2xl sm:text-4xl font-light text-black">
-            Style that feels like you.
-          </h2>
-          <p className="font-sans text-sm sm:text-base font-light text-black/75 leading-relaxed">
-            We believe personal style isn't about following every trend or constantly buying something new. It's about understanding what makes you feel confident, comfortable, and completely yourself. At Style with J, we help you discover your personal style, create looks that work for your real life, and build a wardrobe that works for you.
-          </p>
-        </div>
-      </section>
-
       {/* ── 3 PILLARS ── */}
-      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-12">
-        <div className="mb-10">
+      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16">
+        <div className="mb-12">
           <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2">
             OUR APPROACH
           </span>
@@ -190,16 +158,16 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E5E2DC]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {pillars.map((p) => (
-            <div key={p.num} className="bg-[#FAF9F6] p-8 lg:p-10 flex flex-col justify-between gap-6 border border-black/5 hover:border-black/20 transition-colors">
+            <div key={p.num} className="bg-[#FAF8F3] p-8 lg:p-10 flex flex-col justify-between gap-6 border border-black/10 hover:border-black/30 transition-all rounded-xs shadow-xs">
               <div>
                 <div className="flex items-center gap-4 mb-6">
-                  <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/40">{p.num}</span>
+                  <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/50">{p.num}</span>
                   <div className="flex-1 h-[1px] bg-[#1A1A1A]/10" />
                 </div>
                 
-                <h3 className="font-sans text-xs tracking-[0.3em] uppercase text-[#1A1A1A]/60 font-medium mb-3">
+                <h3 className="font-sans text-xs tracking-[0.3em] uppercase text-[#1A1A1A]/70 font-semibold mb-3">
                   {p.title}
                 </h3>
                 
@@ -207,7 +175,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                   {p.headline}
                 </p>
                 
-                <p className="font-sans text-xs sm:text-sm font-light text-[#1A1A1A]/75 leading-relaxed">
+                <p className="font-sans text-xs sm:text-sm font-light text-[#1A1A1A]/80 leading-relaxed">
                   {p.body}
                 </p>
               </div>
@@ -244,26 +212,21 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                   <h3 className="font-serif text-2xl sm:text-3xl font-light tracking-wide text-[#1A1A1A]">
                     {svc.title}
                   </h3>
-                  {svc.tagline && (
-                    <span className="bg-[#1A1A1A] text-white text-[7px] tracking-[0.25em] uppercase px-2 py-0.5 font-sans">
-                      {svc.tagline}
-                    </span>
-                  )}
                 </div>
 
-                <p className="text-sm font-sans font-light text-[#1A1A1A]/75 leading-relaxed max-w-xl">
+                <p className="text-sm font-sans font-light text-[#1A1A1A]/80 leading-relaxed max-w-xl">
                   {svc.summary}
                 </p>
 
                 {/* Bullets */}
                 <div className="pt-2">
-                  <span className="text-[9px] tracking-[0.3em] uppercase font-sans text-black/40 block mb-3">
-                    Key Focus Areas:
+                  <span className="text-[9px] tracking-[0.3em] uppercase font-sans text-black/50 block mb-3 font-semibold">
+                    Key Highlights:
                   </span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {svc.points.map((pt, i) => (
-                      <li key={i} className="flex items-center gap-2.5 text-xs font-sans text-black/75 font-light bg-white/60 p-2.5 border border-black/5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-black/50 flex-shrink-0" />
+                      <li key={i} className="flex items-center gap-2.5 text-xs font-sans text-black/80 font-light bg-white/70 p-2.5 border border-black/5 rounded-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
                         {pt}
                       </li>
                     ))}
@@ -273,14 +236,14 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
 
               {/* Service Image Card */}
               <div className="lg:col-span-4 flex items-center justify-center lg:justify-end mt-4 lg:mt-0">
-                <div className="relative w-full max-w-[280px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-md group-hover:scale-[1.02] transition-transform duration-500">
+                <div className="relative w-full max-w-[280px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs">
                   <Image
                     src={svc.image}
                     alt={svc.title}
                     fill
                     className="object-cover object-center"
                   />
-                  <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 text-[7px] tracking-[0.3em] uppercase font-sans text-black">
+                  <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 text-[7px] tracking-[0.3em] uppercase font-sans text-black rounded-xs">
                     SERVICE // {svc.num}
                   </div>
                 </div>
@@ -294,7 +257,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
       {/* ── CATEGORIES (WHAT CAN I STYLE FOR YOU?) ── */}
       <section id="categories" className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-24 border-t border-black/10">
         <div className="mb-12 text-center max-w-2xl mx-auto">
-          <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-3">
+          <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-3 font-semibold">
             CATEGORIES
           </span>
           <h2 className="font-serif text-3xl sm:text-5xl font-light text-[#1A1A1A]">
@@ -328,9 +291,9 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
 
       {/* ── READY TO FIND YOUR STYLE CTA ── */}
       <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16">
-        <div className="border-t border-[#1A1A1A]/10 pt-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 bg-[#EFECE6] p-10 sm:p-14 border border-black/5">
+        <div className="border-t border-[#1A1A1A]/10 pt-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 bg-[#EFECE6] p-10 sm:p-14 border border-black/5 rounded-xs">
           <div>
-            <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2">
+            <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-2 font-semibold">
               READY TO FIND YOUR STYLE?
             </span>
             <h3 className="font-serif text-2xl sm:text-4xl font-light tracking-wide text-black">
@@ -339,7 +302,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           </div>
           <Link
             href="/connect"
-            className="group flex items-center gap-6 px-8 py-4 bg-[#1A1A1A] text-white text-[10px] tracking-[0.3em] uppercase font-light hover:bg-black transition-all shadow-lg flex-shrink-0"
+            className="group flex items-center gap-6 px-8 py-4 bg-[#1A1A1A] text-white text-[10px] tracking-[0.3em] uppercase font-light hover:bg-black transition-all shadow-lg flex-shrink-0 rounded-xs"
           >
             Start Your Style Journey
             <span className="transform group-hover:translate-x-2 transition-transform text-sm">→</span>
