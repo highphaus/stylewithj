@@ -9,14 +9,14 @@ export default function TransformationsPage() {
       <Navigation />
       
       <main>
-        <header className="pt-32 pb-16 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10 text-center">
-          <span className="font-sans text-[10px] tracking-[0.5em] uppercase text-black/40 block mb-4 font-semibold">
-            ✦ PORTFOLIO // EVOLUTIONS
+        <header className="pt-32 sm:pt-40 pb-10 sm:pb-16 px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10 text-center">
+          <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-3 font-semibold">
+            PORTFOLIO // EVOLUTIONS
           </span>
-          <h1 className="font-serif text-5xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-none text-black">
+          <h1 className="font-serif text-3xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-none text-black">
             Transformations
           </h1>
-          <p className="font-serif text-lg sm:text-xl text-black/55 font-light italic leading-relaxed mt-6 max-w-2xl mx-auto">
+          <p className="font-serif text-sm sm:text-xl text-black/60 font-light italic leading-relaxed mt-4 sm:mt-6 max-w-2xl mx-auto">
             A visual ledger of shape balancing, outline corrections, and tailored posture alterations.
           </p>
         </header>

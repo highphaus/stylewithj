@@ -229,10 +229,10 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
         )}
 
         {/* View Mode Switcher Pill */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md border border-black/10 rounded-full p-1 flex gap-1 shadow-md z-20">
+        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md border border-black/10 rounded-full p-0.5 sm:p-1 flex gap-0.5 sm:gap-1 shadow-md z-20">
           <button
             onClick={() => setActiveMode('both')}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
+            className={`px-2.5 sm:px-3 py-0.5 sm:py-1 text-[7px] sm:text-[8px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
               activeMode === 'both'
                 ? 'bg-black text-white'
                 : 'bg-transparent text-black/50 hover:text-black'
@@ -242,7 +242,7 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
           </button>
           <button
             onClick={() => setActiveMode('before')}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
+            className={`px-2.5 sm:px-3 py-0.5 sm:py-1 text-[7px] sm:text-[8px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
               activeMode === 'before'
                 ? 'bg-black text-white'
                 : 'bg-transparent text-black/50 hover:text-black'
@@ -252,7 +252,7 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
           </button>
           <button
             onClick={() => setActiveMode('after')}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
+            className={`px-2.5 sm:px-3 py-0.5 sm:py-1 text-[7px] sm:text-[8px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
               activeMode === 'after'
                 ? 'bg-black text-white'
                 : 'bg-transparent text-black/50 hover:text-black'
