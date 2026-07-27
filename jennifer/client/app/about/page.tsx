@@ -35,7 +35,7 @@ export function AboutContent() {
             <div className="relative aspect-[3/4] w-full bg-[#EAE8E3] overflow-hidden shadow-2xl border border-black/5">
               <Image
                 src="/images/img01.jpeg"
-                alt="Jennifer — Founder of Style with J"
+                alt="Jennifer, Founder of Style with J"
                 fill
                 priority
                 className="object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
@@ -49,7 +49,7 @@ export function AboutContent() {
             <div className="mt-6 p-6 bg-[#EFECE6] border border-black/5 flex flex-col gap-2">
               <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-sans">OUR PHILOSOPHY</span>
               <p className="font-serif text-sm italic text-black/80">
-                “Style is personal. It should fit you — your personality, your lifestyle, your comfort, and the way you want to show up in the world.”
+                “Style is personal. It should fit you, your personality, your lifestyle, your comfort, and the way you want to show up in the world.”
               </p>
             </div>
           </div>
@@ -58,11 +58,11 @@ export function AboutContent() {
           <div className="lg:col-span-7 flex flex-col gap-8 text-base sm:text-lg font-sans font-light text-black/80 leading-relaxed">
             
             <p className="text-xl sm:text-2xl font-serif font-light text-black leading-snug">
-              I've always believed that getting dressed should feel good—not like a rulebook you have to follow.
+              I've always believed that getting dressed should feel good, not like a rulebook you have to follow.
             </p>
 
             <p>
-              My journey with styling started through modelling, where I found myself more fascinated by what happened behind the scenes—the outfits, the details, and the way the right look could change how someone carried themselves.
+              My journey with styling started through modelling, where I found myself more fascinated by what happened behind the scenes: the outfits, the details, and the way the right look could change how someone carried themselves.
             </p>
 
             <p>
@@ -76,7 +76,7 @@ export function AboutContent() {
             </div>
 
             <p>
-              I don't believe in dressing people according to trends or forcing them into a version of themselves that doesn't feel natural. Style is personal. It should fit you—your personality, your lifestyle, your comfort, and the way you want to show up in the world.
+              I don't believe in dressing people according to trends or forcing them into a version of themselves that doesn't feel natural. Style is personal. It should fit you, your personality, your lifestyle, your comfort, and the way you want to show up in the world.
             </p>
 
             {/* HIGHLIGHTED GOAL CARD (MATCHES OUR PHILOSOPHY STYLE) */}
