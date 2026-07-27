@@ -38,14 +38,14 @@ export default function TransformationSlider() {
   };
 
   return (
-    <section className="hidden lg:block py-24 bg-[#FAF9F6] border-t border-black/[0.04]">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-16 lg:px-28 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+    <section className="py-12 sm:py-24 bg-[#FAF9F6] border-t border-black/[0.04]">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-16 lg:px-28 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20 items-center">
         
         <div className="lg:col-span-5 space-y-4 text-left">
           <span className="text-[10px] tracking-[0.5em] font-light text-black/40 uppercase block mb-4">
             04 // STRUCTURAL CASE STUDIES
           </span>
-          <h2 className="font-satoshi text-4xl sm:text-5xl font-light tracking-tight text-[#1A1A1A] leading-[1.1] mb-4">
+          <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight text-[#1A1A1A] leading-[1.1] mb-4">
             Visual Structural <span className="italic text-black/30">Changes</span>
           </h2>
           <p className="text-xs sm:text-sm font-sans font-light tracking-wide text-black/50 leading-relaxed border-l border-black/20 pl-4 mt-6">
@@ -57,7 +57,7 @@ export default function TransformationSlider() {
           ref={containerRef}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
-          className="lg:col-span-7 relative h-[400px] sm:h-[500px] lg:h-[650px] w-full select-none overflow-hidden bg-[#EAE8E3] cursor-ew-resize touch-pan-y"
+          className="lg:col-span-7 relative h-[320px] sm:h-[500px] lg:h-[650px] w-full select-none overflow-hidden bg-[#EAE8E3] cursor-ew-resize touch-pan-y shadow-sm"
         >
           {/* Before Image Layer */}
           <div className="absolute inset-0">

@@ -93,73 +93,78 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   return (
     <motion.div 
       style={{ opacity, zIndex: (idx + 1) * 10, touchAction: 'pan-y' }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none"
+      className="absolute inset-0 w-full h-full flex flex-col lg:flex-row items-center justify-center pointer-events-none"
     >
-      <div className="relative w-full h-full grid grid-cols-12 items-stretch overflow-hidden" style={{ touchAction: 'pan-y' }}>
+      <div className="relative w-full h-full flex flex-col lg:grid lg:grid-cols-12 items-stretch overflow-hidden pointer-events-auto" style={{ touchAction: 'pan-y' }}>
         
-        {/* Left Column: Before Image (Translating from Left) */}
-        <div className="col-span-12 lg:col-span-6 h-1/2 lg:h-full overflow-hidden relative bg-[#EAE8E3] border-b lg:border-b-0 lg:border-r border-black/5">
-          <motion.div style={{ x: beforeX }} className="w-full h-full relative">
-            <motion.img 
-              style={{ scale }}
-              src={item.beforeImg} 
-              alt="Initial Silhouette" 
-              className="w-full h-full object-cover object-top grayscale-[20%]" 
-              draggable="false" 
-            />
-            <div className="absolute top-4 left-4 sm:top-8 sm:left-8 bg-[#FAF9F6]/95 border border-black/5 px-2 py-1 sm:px-3 sm:py-1.5 text-[6px] sm:text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm">
-              {"ANTE // INITIAL"}
-            </div>
-          </motion.div>
-        </div>
+        {/* Images Dual Frame: Side-by-side on mobile (grid-cols-2) and desktop (lg:grid-cols-12) */}
+        <div className="w-full h-[48vh] sm:h-[54vh] lg:h-full col-span-12 lg:col-span-12 grid grid-cols-2 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3]">
+          
+          {/* Left Column: Before Image */}
+          <div className="col-span-1 lg:col-span-6 h-full overflow-hidden relative border-r border-black/10">
+            <motion.div style={{ x: beforeX }} className="w-full h-full relative">
+              <motion.img 
+                style={{ scale }}
+                src={item.beforeImg} 
+                alt="Initial Silhouette" 
+                className="w-full h-full object-cover object-top grayscale-[15%]" 
+                draggable="false" 
+              />
+              <div className="absolute top-2.5 left-2.5 sm:top-6 sm:left-6 bg-[#FAF9F6]/95 border border-black/10 px-2 py-1 sm:px-3 sm:py-1.5 text-[6px] sm:text-[8px] tracking-[0.18em] sm:tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm z-10">
+                {"ANTE // INITIAL"}
+              </div>
+            </motion.div>
+          </div>
 
-        {/* Right Column: After Image (Translating from Right) */}
-        <div className="col-span-12 lg:col-span-6 h-1/2 lg:h-full overflow-hidden relative bg-[#EAE8E3]">
-          <motion.div style={{ x: afterX }} className="w-full h-full relative">
-            <motion.img 
-              style={{ scale }}
-              src={item.afterImg} 
-              alt="Realized Design Target" 
-              className="w-full h-full object-cover object-top" 
-              draggable="false" 
-            />
-            <div className="absolute top-4 right-4 sm:top-8 sm:right-8 bg-black text-white px-2 py-1 sm:px-3 sm:py-1.5 text-[6px] sm:text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm">
-              {"POST // REALIZED"}
-            </div>
-          </motion.div>
+          {/* Right Column: After Image */}
+          <div className="col-span-1 lg:col-span-6 h-full overflow-hidden relative">
+            <motion.div style={{ x: afterX }} className="w-full h-full relative">
+              <motion.img 
+                style={{ scale }}
+                src={item.afterImg} 
+                alt="Realized Design Target" 
+                className="w-full h-full object-cover object-top" 
+                draggable="false" 
+              />
+              <div className="absolute top-2.5 right-2.5 sm:top-6 sm:right-6 bg-black text-white px-2 py-1 sm:px-3 sm:py-1.5 text-[6px] sm:text-[8px] tracking-[0.18em] sm:tracking-[0.25em] font-sans uppercase font-bold shadow-sm z-10">
+                {"POST // REALIZED"}
+              </div>
+            </motion.div>
+          </div>
+
         </div>
 
       </div>
 
-      {/* Floating Center Seam Card (Interactive details) */}
+      {/* Floating Seam Card: Positioned at bottom on mobile to leave images 100% visible, centered on desktop */}
       <motion.div 
         style={{ y: textY, opacity: textOpacity }}
-        className="absolute left-1/2 -translate-x-1/2 bottom-4 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 z-20 w-[92vw] lg:max-w-md p-4 sm:p-5 lg:p-8 bg-white/95 border border-black/10 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
+        className="absolute left-1/2 -translate-x-1/2 bottom-2 sm:bottom-6 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 z-20 w-[93vw] max-w-[93vw] sm:w-[90vw] lg:max-w-md p-3 sm:p-5 lg:p-8 bg-white/95 backdrop-blur-md border border-black/10 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
       >
-        <span className="font-mono text-[7px] sm:text-[8px] text-black/35 block mb-1 sm:mb-2 tracking-[0.2em] font-semibold">
+        <span className="font-mono text-[7px] sm:text-[8px] text-black/35 block mb-0.5 sm:mb-2 tracking-[0.2em] font-semibold">
           {`REF_0${item.id} // CASE STUDY`}
         </span>
         
-        <span className="font-sans text-[7px] sm:text-[8px] tracking-[0.25em] uppercase font-bold text-black/55 mb-1 sm:mb-2 block">
+        <span className="font-sans text-[7px] sm:text-[8px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-bold text-black/55 mb-0.5 sm:mb-2 block">
           {item.demographic}
         </span>
 
-        <h3 className="font-serif text-base sm:text-2xl font-light tracking-wide text-black mb-2 sm:mb-3 uppercase">
+        <h3 className="font-serif text-sm sm:text-2xl font-light tracking-wide text-black mb-1 sm:mb-3 uppercase">
           {item.client}
         </h3>
 
-        <p className="font-serif text-[10px] sm:text-sm italic text-black/65 leading-relaxed font-light mb-3 sm:mb-5 border-t border-b border-black/10 py-2 sm:py-3.5 w-full">
+        <p className="font-serif text-[9px] sm:text-sm italic text-black/65 leading-relaxed font-light mb-2 sm:mb-5 border-t border-b border-black/10 py-1 sm:py-3.5 w-full line-clamp-2 sm:line-clamp-none">
           {`"${item.concept}"`}
         </p>
 
-        <div className="flex flex-col gap-1 sm:gap-1.5 items-center w-full">
-          <span className="font-sans text-[7px] sm:text-[8px] tracking-[0.3em] uppercase text-black/35 block mb-1 font-semibold">
+        <div className="flex flex-col gap-0.5 sm:gap-1.5 items-center w-full">
+          <span className="font-sans text-[6.5px] sm:text-[8px] tracking-[0.3em] uppercase text-black/35 block mb-0.5 font-semibold">
             STRUCTURAL LEDGER:
           </span>
           {item.specs.map((spec, sIdx) => (
             <div key={sIdx} className="flex items-center gap-1.5">
               <div className="w-1 sm:w-1.5 h-[1px] bg-black/30" />
-              <span className="font-sans text-[7px] sm:text-[8px] tracking-wider text-black/60 uppercase font-light">
+              <span className="font-sans text-[6.5px] sm:text-[8px] tracking-wider text-black/60 uppercase font-light">
                 {spec}
               </span>
             </div>
@@ -168,18 +173,18 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
 
         {/* Floating skip actions */}
         {!hideButton && (
-          <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-black/5 flex justify-between items-center w-full">
+          <div className="mt-2.5 sm:mt-6 pt-2 sm:pt-4 border-t border-black/5 flex justify-between items-center w-full">
             <button
               onClick={() => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[7px] sm:text-[8px] tracking-[0.2em] uppercase font-semibold rounded-full shadow-sm hover:bg-black/80 transition-all"
+              className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-black text-white text-[6.5px] sm:text-[8px] tracking-[0.2em] uppercase font-semibold rounded-full shadow-sm hover:bg-black/80 transition-all"
             >
               Skip Section ↓
             </button>
             <Link
               href="/transformations"
-              className="font-sans text-[7px] sm:text-[8px] tracking-[0.3em] uppercase text-black/50 hover:text-black transition-colors font-semibold border-b border-black/10 pb-0.5"
+              className="font-sans text-[6.5px] sm:text-[8px] tracking-[0.3em] uppercase text-black/50 hover:text-black transition-colors font-semibold border-b border-black/10 pb-0.5"
             >
               Full Archive →
             </Link>
@@ -190,42 +195,76 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   );
 }
 
-// High-fashion Case Study Card with individual click-to-fade before/after toggle pills (For static pages only)
+// High-fashion Case Study Card with dual side-by-side comparison and focus pills
 function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
-  const [activeState, setActiveState] = useState<'before' | 'after'>('after');
+  const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
 
   return (
-    <div className="flex flex-col gap-6 bg-[#FAF8F3] border border-black/5 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.015)] rounded-sm">
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#EAE8E3] border border-black/5 shadow-sm rounded-[1px] group">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={activeState}
-            src={activeState === 'before' ? item.beforeImg : item.afterImg}
-            alt={activeState}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className={`w-full h-full object-cover object-top transition-all duration-700 ${
-              activeState === 'before' ? 'grayscale-[30%]' : ''
-            }`}
-            draggable="false"
-          />
-        </AnimatePresence>
+    <div className="flex flex-col gap-5 bg-[#FAF8F3] border border-black/5 p-4 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.015)] rounded-sm">
+      <div className="relative aspect-[4/3] sm:aspect-[3/4] w-full overflow-hidden bg-[#EAE8E3] border border-black/5 shadow-sm rounded-[1px]">
+        {activeMode === 'both' ? (
+          <div className="grid grid-cols-2 w-full h-full divide-x divide-black/10">
+            <div className="relative h-full overflow-hidden">
+              <img
+                src={item.beforeImg}
+                alt="Initial Silhouette"
+                className="w-full h-full object-cover object-top grayscale-[15%]"
+                draggable="false"
+              />
+              <div className="absolute top-2 left-2 bg-[#FAF9F6]/95 px-2 py-0.5 text-[6px] sm:text-[7px] tracking-[0.2em] font-sans text-black uppercase font-bold">
+                ANTE
+              </div>
+            </div>
+            <div className="relative h-full overflow-hidden">
+              <img
+                src={item.afterImg}
+                alt="Realized Design Target"
+                className="w-full h-full object-cover object-top"
+                draggable="false"
+              />
+              <div className="absolute top-2 right-2 bg-black text-white px-2 py-0.5 text-[6px] sm:text-[7px] tracking-[0.2em] font-sans uppercase font-bold">
+                POST
+              </div>
+            </div>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div key={activeMode} className="relative w-full h-full">
+              <motion.img
+                src={activeMode === 'before' ? item.beforeImg : item.afterImg}
+                alt={activeMode}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className={`w-full h-full object-cover object-top ${
+                  activeMode === 'before' ? 'grayscale-[20%]' : ''
+                }`}
+                draggable="false"
+              />
+              <div className="absolute top-3 left-3 bg-[#FAF9F6]/95 px-2.5 py-1 text-[7px] tracking-[0.25em] font-sans text-black uppercase font-bold">
+                {activeMode === 'before' ? 'ANTE // INITIAL' : 'POST // REALIZED'}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        )}
 
-        <div className="absolute top-3 left-3 bg-[#FAF9F6]/95 px-2.5 py-1 text-[7px] tracking-[0.25em] font-sans text-black uppercase font-bold pointer-events-none z-20 shadow-[0_1px_5px_rgba(0,0,0,0.02)]">
-          {activeState === 'before' ? 'ANTE // INITIAL' : 'POST // REALIZED'}
-        </div>
-
-        <div className="absolute top-3 right-3 bg-black text-white px-2.5 py-1 text-[7px] tracking-[0.25em] font-sans uppercase font-bold pointer-events-none z-20">
-          {activeState.toUpperCase()}
-        </div>
-
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-black/5 rounded-full p-0.5 flex gap-0.5 shadow-md z-20">
+        {/* Floating View Mode Switcher Pill */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-black/10 rounded-full p-0.5 flex gap-0.5 shadow-md z-20">
           <button
-            onClick={() => setActiveState('before')}
-            className={`px-3.5 py-1.5 text-[7px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
-              activeState === 'before'
+            onClick={() => setActiveMode('both')}
+            className={`px-2.5 py-1 text-[6.5px] sm:text-[7px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
+              activeMode === 'both'
+                ? 'bg-black text-white'
+                : 'bg-transparent text-black/50 hover:text-black'
+            }`}
+          >
+            Both
+          </button>
+          <button
+            onClick={() => setActiveMode('before')}
+            className={`px-2.5 py-1 text-[6.5px] sm:text-[7px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
+              activeMode === 'before'
                 ? 'bg-black text-white'
                 : 'bg-transparent text-black/50 hover:text-black'
             }`}
@@ -233,9 +272,9 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
             Before
           </button>
           <button
-            onClick={() => setActiveState('after')}
-            className={`px-3.5 py-1.5 text-[7px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
-              activeState === 'after'
+            onClick={() => setActiveMode('after')}
+            className={`px-2.5 py-1 text-[6.5px] sm:text-[7px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
+              activeMode === 'after'
                 ? 'bg-black text-white'
                 : 'bg-transparent text-black/50 hover:text-black'
             }`}
