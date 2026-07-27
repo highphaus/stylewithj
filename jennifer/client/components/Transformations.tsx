@@ -326,7 +326,7 @@ interface TransformationsProps {
 export default function Transformations({ hideButton = false, isStatic = false }: TransformationsProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Track scroll progress of the desktop/mobile sticky container track
+  // Track scroll progress of the desktop sticky container track
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"]
@@ -342,11 +342,35 @@ export default function Transformations({ hideButton = false, isStatic = false }
   return (
     <div className="relative w-full bg-[#FAF9F6] overflow-clip">
       
-      {/* ── STICKY HORIZONTAL FLIGHT SCROLL PORTFOLIO (Unified for all screens) ── */}
+      {/* ── MOBILE EXCLUSIVE VIEW (block lg:hidden): Clean Editorial Layout with Zero-Gap Cards ── */}
+      {!isStatic && (
+        <div className="block lg:hidden w-full py-12 px-4 sm:px-8 bg-[#FAF9F6]">
+          {/* Mobile Section Header */}
+          <div className="text-center max-w-md mx-auto mb-10">
+            <span className="font-sans text-[10px] tracking-[0.4em] text-black/45 block mb-2 uppercase font-semibold">
+              ✦ 04 // CASE STUDIES
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-3">
+              Transformations
+            </h2>
+            <p className="font-serif text-xs sm:text-sm text-black/60 font-light italic leading-relaxed max-w-xs mx-auto">
+              A visual ledger of shape balancing, outline corrections, and tailored posture alterations.
+            </p>
+          </div>
+
+          {/* Stack of Luxury Integrated Mobile Cards */}
+          <div className="flex flex-col gap-10 max-w-md mx-auto">
+            {transformationData.map((item) => (
+              <CaseStudyCard key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── DESKTOP EXCLUSIVE VIEW (hidden lg:block): Sticky Flight Scroll Portfolio ── */}
       {!isStatic ? (
-        <div ref={sectionRef} className="relative w-full h-[200vh] lg:h-[300vh] bg-[#FAF9F6] overflow-x-clip" style={{ touchAction: 'pan-y' }}>
-          <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]" style={{ touchAction: 'pan-y' }}>
-            
+        <div ref={sectionRef} className="hidden lg:block relative w-full h-[300vh] bg-[#FAF9F6] overflow-x-clip">
+          <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]">
             {transformationData.map((item, idx) => (
               <ScrollingCaseStudyRow
                 key={item.id}
@@ -357,13 +381,12 @@ export default function Transformations({ hideButton = false, isStatic = false }
                 hideButton={hideButton}
               />
             ))}
-
           </div>
         </div>
       ) : (
-        /* ── STATIC SUBPAGE VIEW (2-COLUMN FADING TOGGLE GRID) ── */
-        <div className="w-full max-w-6xl mx-auto px-6 sm:px-12 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+        /* ── STATIC SUBPAGE VIEW (2-COLUMN GRID) ── */
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-12 py-12 sm:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 sm:gap-y-20">
             {transformationData.map((item) => (
               <CaseStudyCard key={item.id} item={item} />
             ))}
@@ -373,16 +396,16 @@ export default function Transformations({ hideButton = false, isStatic = false }
 
       {/* Ledger Footer Call to Action */}
       {!hideButton && (
-        <div className="w-full pt-8 pb-12 border-t border-black/10 flex flex-col items-center text-center">
-          <span className="font-sans text-[8px] tracking-[0.4em] text-black/30 block mb-2 uppercase">
+        <div className="w-full pt-10 pb-16 border-t border-black/10 flex flex-col items-center text-center px-6">
+          <span className="font-sans text-[8px] tracking-[0.4em] text-black/35 block mb-2 uppercase font-semibold">
             ARCHIVE CONCLUSION CONTINUUM
           </span>
-          <h4 className="font-serif text-xl font-light text-[#1A1A1A] mb-6 leading-tight max-w-xs">
+          <h4 className="font-serif text-xl sm:text-2xl font-light text-[#1A1A1A] mb-6 leading-tight max-w-xs">
             Unlock the entire visual identity ledger.
           </h4>
           <Link
             href="/transformations"
-            className="tracking-[0.4em] text-[8px] uppercase font-light text-black/60 hover:text-black transition-all duration-500 py-3.5 px-8 border border-black/20 hover:border-black rounded-none bg-transparent hover:bg-black hover:text-white"
+            className="tracking-[0.4em] text-[9px] uppercase font-light text-black/60 hover:text-black transition-all duration-500 py-3.5 px-8 border border-black/20 hover:border-black rounded-none bg-transparent hover:bg-black hover:text-white"
           >
             Access Full Ledger
           </Link>
