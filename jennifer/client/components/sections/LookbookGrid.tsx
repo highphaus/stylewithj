@@ -61,123 +61,111 @@ const looks = [
 ];
 
 export default function LookbookGrid() {
-  const [activeIdx, setActiveIdx] = useState(0);
+  const [openIdx, setOpenIdx] = useState<number | null>(0); // First look open by default
+
+  const toggleItem = (idx: number) => {
+    setOpenIdx(openIdx === idx ? null : idx);
+  };
 
   return (
-    <section className="bg-[#FAF9F6] text-[#1A1A1A] py-12 sm:py-20 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+    <section className="bg-[#FAF9F6] text-[#1A1A1A] py-12 sm:py-20 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto">
       
       {/* ── HEADER ── */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 pb-8 border-b border-black/15">
-        <div>
-          <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight">
-            Curated Collections
-          </h2>
-        </div>
-        <p className="font-sans text-xs tracking-wider text-black/55 uppercase mt-3 md:mt-0 font-light max-w-[280px] leading-relaxed">
-          A showcase of curated silhouettes, styling lines, and textile selections built for intentional living.
-        </p>
+      <div className="mb-12 pb-6 border-b border-black/15">
+        <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight">
+          Curated Collections
+        </h2>
       </div>
 
-      {/* ── INTERACTIVE 2-COLUMN VIEWPORT (PICTURE LEFT, ACCORDION BUTTONS RIGHT) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-        
-        {/* LEFT COLUMN: Large Active Image Display */}
-        <div className="col-span-12 lg:col-span-7 relative aspect-[4/5] sm:aspect-[3/4] lg:h-[70vh] lg:aspect-auto w-full bg-[#EAE8E3] border border-black/5 shadow-md overflow-hidden select-none rounded-sm">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={activeIdx}
-              initial={{ opacity: 0, scale: 0.99 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              src={looks[activeIdx].image}
-              alt={looks[activeIdx].title}
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              draggable="false"
-            />
-          </AnimatePresence>
+      {/* ── INTERACTIVE ACCORDION LIST (IMAGE & DETAILS TOGGLE INSIDE EACH NAME) ── */}
+      <div className="flex flex-col border border-black/10 divide-y divide-black/10 bg-[#FAF9F6] shadow-[0_12px_40px_rgba(0,0,0,0.03)] rounded-sm overflow-hidden">
+        {looks.map((look, idx) => {
+          const isOpen = openIdx === idx;
 
-          {/* Top Tag */}
-          <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 text-[8px] tracking-[0.3em] uppercase text-white font-sans z-10 rounded-xs">
-            LOOK 0{activeIdx + 1}
-          </div>
-
-          {/* Fabric Tag Overlay */}
-          <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm p-3 border border-black/5 z-10 max-w-xs shadow-sm rounded-xs">
-            <span className="text-[6px] tracking-[0.25em] uppercase block text-black/50 font-sans font-semibold">FABRIC DETAIL</span>
-            <span className="font-serif text-[11px] text-black italic leading-none">{looks[activeIdx].fabric}</span>
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: Highly Visible Interactive Selector Buttons List */}
-        <div className="col-span-12 lg:col-span-5 flex flex-col border border-black/10 divide-y divide-black/10 bg-[#FAF9F6] shadow-[0_12px_40px_rgba(0,0,0,0.03)] rounded-sm">
-          {looks.map((look, idx) => {
-            const isActive = activeIdx === idx;
-            return (
+          return (
+            <div 
+              key={look.num}
+              className={`transition-all duration-300 w-full ${
+                isOpen ? 'bg-black text-white' : 'bg-transparent text-black/80 hover:bg-black/[0.015]'
+              }`}
+            >
+              {/* TOGGLE HEADER BUTTON */}
               <button
-                key={look.num}
-                onClick={() => setActiveIdx(idx)}
-                className={`text-left p-5 sm:p-6 transition-all duration-300 flex flex-col w-full outline-none focus:outline-none relative group rounded-sm ${
-                  isActive 
-                    ? 'bg-black text-white border-l-4 border-l-white pl-7 sm:pl-8 shadow-lg' 
-                    : 'hover:bg-black/[0.01] text-black/65'
-                }`}
+                onClick={() => toggleItem(idx)}
+                className="w-full p-5 sm:p-7 text-left flex justify-between items-center outline-none focus:outline-none cursor-pointer select-none group"
               >
-                {/* Horizontal Header of the Button */}
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex items-baseline gap-3.5">
-                    <span className={`font-mono text-xs font-medium transition-colors ${isActive ? 'text-white/50 font-bold' : 'text-black/35 group-hover:text-black'}`}>
-                      /{look.num}
-                    </span>
-                    <h3 className={`font-serif text-base sm:text-lg transition-all leading-tight ${isActive ? 'text-white font-medium italic' : 'text-black/60 group-hover:text-black'}`}>
-                      {look.title}
-                    </h3>
-                  </div>
-
-                  {/* Visual Accordion State Indicator (Plus/Minus Icon) */}
-                  <div className="flex-shrink-0 ml-3">
-                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-white text-black border-white scale-110' 
-                        : 'bg-transparent text-black/40 border-black/10 group-hover:border-black/30 group-hover:text-black'
-                    }`}>
-                      <span className="text-xs leading-none font-light">
-                        {isActive ? '−' : '+'}
-                      </span>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <span className={`font-mono text-xs sm:text-sm transition-colors ${isOpen ? 'text-white/50 font-bold' : 'text-black/35 group-hover:text-black font-medium'}`}>
+                    /{look.num}
+                  </span>
+                  <h3 className={`font-serif text-lg sm:text-2xl transition-all leading-tight ${isOpen ? 'text-white font-medium italic' : 'text-black/80 group-hover:text-black'}`}>
+                    {look.title}
+                  </h3>
                 </div>
 
-                {/* Smooth Expandable Description Block */}
-                {isActive && (
+                {/* Plus / Minus Indicator */}
+                <div className="flex-shrink-0 ml-4">
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                    isOpen 
+                      ? 'bg-white text-black border-white scale-105' 
+                      : 'bg-transparent text-black/40 border-black/15 group-hover:border-black/40 group-hover:text-black'
+                  }`}>
+                    <span className="text-sm sm:text-base leading-none font-light">
+                      {isOpen ? '−' : '+'}
+                    </span>
+                  </div>
+                </div>
+              </button>
+
+              {/* EXPANDABLE CONTENT (IMAGE & DETAILS INSIDE EACH ITEM CARD) */}
+              <AnimatePresence initial={false}>
+                {isOpen && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    transition={{ duration: 0.35, ease: 'easeOut' }}
-                    className="text-xs leading-relaxed font-sans font-light mt-4 overflow-hidden w-full text-white/80"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
                   >
-                    <p className="mb-4 text-white/80 border-l border-white/15 pl-3">
-                      {look.desc}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-x-4 gap-y-1.5 pt-3 border-t border-white/10 text-[8px] tracking-[0.2em] uppercase font-medium text-white/50">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-white/30">concept:</span>
-                        <span className="text-white/90">{look.concept}</span>
+                    <div className="px-5 sm:px-8 pb-7 sm:pb-9 pt-2 flex flex-col gap-6 border-t border-white/10">
+                      
+                      {/* Photo Frame Inside the Item Card */}
+                      <div className="relative aspect-[3/4] sm:aspect-[16/10] w-full max-h-[520px] overflow-hidden bg-[#1A1A1A] border border-white/10 rounded-sm shadow-md">
+                        <Image
+                          src={look.image}
+                          alt={look.title}
+                          fill
+                          className="object-cover object-center"
+                          unoptimized
+                        />
                       </div>
-                      <span className="text-white/20">•</span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-white/30">fabric:</span>
-                        <span className="text-white/90">{look.fabric}</span>
+
+                      {/* Description & Metadata */}
+                      <div className="flex flex-col gap-3">
+                        <p className="font-sans text-xs sm:text-sm text-white/85 leading-relaxed font-light max-w-2xl border-l-2 border-white/20 pl-4 py-0.5">
+                          {look.desc}
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-3 border-t border-white/10 text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-medium text-white/60">
+                          <div className="flex items-center gap-2">
+                            <span className="text-white/40">Concept:</span>
+                            <span className="text-white/90">{look.concept}</span>
+                          </div>
+                          <span className="text-white/20">•</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-white/40">Fabric:</span>
+                            <span className="text-white/90">{look.fabric}</span>
+                          </div>
+                        </div>
                       </div>
+
                     </div>
                   </motion.div>
                 )}
-              </button>
-            );
-          })}
-        </div>
-
+              </AnimatePresence>
+            </div>
+          );
+        })}
       </div>
 
     </section>
