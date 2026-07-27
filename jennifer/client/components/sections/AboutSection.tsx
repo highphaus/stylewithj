@@ -7,10 +7,10 @@ export default function AboutSection() {
   return (
     <section className="w-full bg-[#FAF9F6] text-[#1A1A1A] overflow-hidden">
       {/* Always 3 columns across all screen sizes (horizontal layout) */}
-      <div className="grid grid-cols-3 w-full min-h-[180px] sm:min-h-[340px] lg:h-[80vh]">
+      <div className="grid grid-cols-3 w-full min-h-[300px] sm:min-h-[400px] lg:h-[80vh]">
 
         {/* ── PANEL 1: CENTER SPLIT PORTRAIT (FIRST/LEFT) ── */}
-        <div className="relative w-full h-full min-h-[180px] sm:min-h-[340px] bg-[#EFECE6]">
+        <div className="relative w-full h-full min-h-[300px] sm:min-h-[400px] bg-[#EFECE6]">
           <Image
             src="/images/img01.jpeg"
             alt="J. Personal Stylist Portrait"
@@ -21,7 +21,7 @@ export default function AboutSection() {
         </div>
 
         {/* ── PANEL 2: MOOD-BOARD QUOTE LAYER (SECOND/CENTER - PICTURE) ── */}
-        <div className="relative w-full h-full min-h-[180px] sm:min-h-[340px] bg-[#1A1A1A] flex items-center justify-center text-white p-3 sm:p-8 xl:p-16">
+        <div className="relative w-full h-full min-h-[300px] sm:min-h-[400px] bg-[#1A1A1A] flex items-center justify-center text-white p-3 sm:p-8 xl:p-16">
           {/* Background Moodboard */}
           <div className="absolute inset-0 z-0">
             <Image
@@ -36,7 +36,7 @@ export default function AboutSection() {
           <div className="relative z-10 flex flex-col items-start gap-1 sm:gap-3 max-w-sm">
             <span className="font-serif text-xl sm:text-4xl text-white/40 leading-none h-2 sm:h-4">"</span>
 
-            <p className="text-[9px] sm:text-lg lg:text-xl xl:text-2xl font-serif font-light italic leading-relaxed text-white/90 tracking-wide pl-1 sm:pl-2">
+            <p className="text-[8px] xs:text-[9px] sm:text-base lg:text-xl xl:text-2xl font-serif font-light italic leading-snug text-white/90 tracking-wide pl-1 sm:pl-2">
               My goal is simple:<br />
               to make getting dressed the easiest decision of your day.
             </p>
@@ -58,13 +58,13 @@ export default function AboutSection() {
             </div>
 
             {/* Editorial Heading */}
-            <h2 className="text-xs sm:text-3xl md:text-4xl lg:text-5xl font-serif font-light leading-[1.2] tracking-wide mb-3 sm:mb-6 lg:mb-8">
+            <h2 className="text-sm sm:text-3xl md:text-4xl lg:text-5xl font-serif font-light leading-[1.2] tracking-wide mb-3 sm:mb-6 lg:mb-8">
               Hi, I'm J. <br />
               <span className="italic font-normal">I style stories.</span>
             </h2>
 
             {/* Paragraph Text */}
-            <p className="hidden sm:block text-[10px] sm:text-xs lg:text-sm font-light text-[#1A1A1A]/80 leading-relaxed tracking-wide mb-4 sm:mb-8 lg:mb-10 max-w-[340px]">
+            <p className="hidden xs:block text-[9px] sm:text-xs lg:text-sm font-light text-[#1A1A1A]/80 leading-relaxed tracking-wide mb-4 sm:mb-8 lg:mb-10 max-w-[340px]">
               With over 8 years of experience in fashion and image consulting, I help women
               discover their signature style and build wardrobes that are chic, functional and
               uniquely theirs.
