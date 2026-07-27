@@ -9,7 +9,7 @@ export function AboutContent() {
   return (
     <>
       {/* ── EDITORIAL HEADER ── */}
-      <section className="pt-32 sm:pt-40 pb-16 sm:pb-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
+      <section className="pt-32 sm:pt-40 pb-12 sm:pb-16 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="flex flex-col items-start gap-4">
           
           <div className="flex items-center gap-3">
@@ -27,7 +27,7 @@ export function AboutContent() {
       </section>
 
       {/* ── MAIN STORY SECTION ── */}
-      <section className="py-20 sm:py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+      <section className="pb-20 sm:pb-28 pt-4 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
           
           {/* Left Column: Portrait & Archival Details */}
@@ -69,7 +69,7 @@ export function AboutContent() {
               As I explored my own style, I learned what made me feel comfortable, confident, and like the best version of myself. That journey led me to start styling friends and people around me, helping them discover what truly suited them. The incredibly positive feedback and seeing how confident and comfortable they felt in their looks gave me the confidence to take this passion further.
             </p>
 
-            <div className="py-4 border-y border-black/10 my-2">
+            <div className="py-2 my-2">
               <span className="font-serif text-xl sm:text-2xl font-light italic text-[#1A1A1A]">
                 And that's where Style with J was born.
               </span>
@@ -79,21 +79,25 @@ export function AboutContent() {
               I don't believe in dressing people according to trends or forcing them into a version of themselves that doesn't feel natural. Style is personal. It should fit you—your personality, your lifestyle, your comfort, and the way you want to show up in the world.
             </p>
 
-            <p className="font-medium text-black">
-              My goal is simple: to help you find a style that feels like you, only better.
-            </p>
+            {/* HIGHLIGHTED GOAL CARD (MATCHES OUR PHILOSOPHY STYLE) */}
+            <div className="p-6 bg-[#EFECE6] border border-black/5 flex flex-col gap-2 my-2 shadow-xs rounded-xs">
+              <span className="text-[8px] tracking-[0.3em] uppercase text-black/50 font-sans font-semibold">MY GOAL</span>
+              <p className="font-serif text-lg sm:text-xl italic text-black font-normal leading-relaxed">
+                “My goal is simple: to help you find a style that feels like you, only better.”
+              </p>
+            </div>
 
             <p>
               Because when you're comfortable in what you wear, confidence follows naturally.
             </p>
 
-            <div className="pt-4">
+            <div className="pt-2">
               <span className="font-serif text-xl text-black/70 italic">
                 Welcome to Style with J.
               </span>
             </div>
 
-            <div className="pt-6 border-t border-black/10">
+            <div className="pt-4">
               <Link
                 href="/services"
                 className="group inline-flex items-center gap-6 px-8 py-4 bg-[#1A1A1A] text-white text-[10px] tracking-[0.3em] uppercase font-light hover:bg-black transition-all shadow-md"
