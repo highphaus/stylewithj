@@ -56,30 +56,31 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   const isLast = idx === totalItems - 1;
 
   const pStart = idx * segment;
+  const pMid = pStart + segment * 0.2;
 
-  // Strictly non-decreasing ranges in [0, 1] to prevent Web Animations API errors
+  // Dedicated scroll hold window so cards stay pinned for reading
   const inputRange = isFirst
-    ? [0.0, 1.0]
-    : [pStart, pStart + segment * 0.25, 1.0];
+    ? [0.0, 0.8, 1.0]
+    : [pStart, pMid, 1.0];
 
   const opacityRange = isFirst
-    ? [1.0, 1.0]
+    ? [1.0, 1.0, 1.0]
     : [0.0, 1.0, 1.0];
 
   const beforeRange = isFirst
-    ? ["0vw", "0vw"]
+    ? ["0vw", "0vw", "0vw"]
     : ["-100vw", "0vw", "0vw"];
 
   const afterRange = isFirst
-    ? ["0vw", "0vw"]
+    ? ["0vw", "0vw", "0vw"]
     : ["100vw", "0vw", "0vw"];
 
   const textYRange = isFirst
-    ? [0, 0]
-    : [20, 0, 0];
+    ? [0, 0, 0]
+    : [25, 0, 0];
 
   const scaleRange = isFirst
-    ? [1.0, 1.0]
+    ? [1.0, 1.0, 1.0]
     : [1.03, 1.0, 1.0];
 
   // Map scroll progress cleanly using transform values
@@ -141,9 +142,14 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
         style={{ y: textY, opacity: textOpacity }}
         className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 w-[90vw] max-w-md p-6 lg:p-9 bg-white/95 backdrop-blur-md border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
       >
-        <span className="font-mono text-[10px] text-black/40 block mb-1.5 tracking-[0.25em] font-medium">
-          {`REF_0${item.id} // CASE STUDY`}
-        </span>
+        <div className="flex justify-between items-center mb-2 pb-2 border-b border-black/5">
+          <span className="font-mono text-[10px] text-black/40 tracking-[0.25em] font-medium">
+            {`REF_0${item.id} // CASE STUDY`}
+          </span>
+          <span className="font-mono text-[9px] tracking-widest text-black/50 font-bold bg-black/5 px-2 py-0.5 rounded-full">
+            {idx + 1} / {totalItems}
+          </span>
+        </div>
         
         <span className="font-sans text-[10px] tracking-[0.25em] uppercase font-bold text-black/60 mb-3 block">
           {item.demographic}
@@ -328,8 +334,8 @@ export default function Transformations({ hideButton = false, isStatic = false }
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 28,
+    stiffness: 70,
+    damping: 26,
     restDelta: 0.001
   });
 
@@ -348,10 +354,31 @@ export default function Transformations({ hideButton = false, isStatic = false }
         </div>
       )}
 
-      {/* ── DESKTOP EXCLUSIVE VIEW (hidden lg:block): Buttery-Smooth Flight Scroll ── */}
+      {/* ── DESKTOP EXCLUSIVE VIEW (hidden lg:block): Extended Smooth Flight Scroll ── */}
       {!isStatic ? (
-        <div ref={sectionRef} className="hidden lg:block relative w-full h-[220vh] bg-[#FAF9F6] overflow-x-clip">
+        <div ref={sectionRef} className="hidden lg:block relative w-full h-[380vh] bg-[#FAF9F6] overflow-x-clip">
           <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]">
+            {/* Interactive Stepper Navigation Pills for Desktop */}
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-black/10 shadow-sm flex items-center gap-2">
+              <span className="font-mono text-[9px] tracking-widest text-black/40 uppercase mr-1 font-semibold">
+                CASE STUDIES:
+              </span>
+              {transformationData.map((cs, idx) => (
+                <button
+                  key={cs.id}
+                  onClick={() => {
+                    if (!sectionRef.current) return;
+                    const rect = sectionRef.current.getBoundingClientRect();
+                    const targetY = window.scrollY + rect.top + (idx / (transformationData.length - 1)) * (rect.height - window.innerHeight);
+                    window.scrollTo({ top: targetY, behavior: 'smooth' });
+                  }}
+                  className="font-mono text-[9px] px-2.5 py-1 bg-black/5 hover:bg-black hover:text-white text-black/70 rounded-full transition-all border border-black/10 font-medium"
+                >
+                  0{cs.id}
+                </button>
+              ))}
+            </div>
+
             {transformationData.map((item, idx) => (
               <ScrollingCaseStudyRow
                 key={item.id}
