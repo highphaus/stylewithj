@@ -95,10 +95,17 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
       style={{ opacity, zIndex: (idx + 1) * 10, touchAction: 'pan-y' }}
       className="absolute inset-0 w-full h-full flex flex-col lg:flex-row items-center justify-center pointer-events-none"
     >
+      {/* Mobile-only Section Heading */}
+      <div className="block lg:hidden absolute top-2 sm:top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none text-center">
+        <span className="font-sans text-[9px] sm:text-[10px] tracking-[0.35em] uppercase font-bold text-black bg-[#FAF9F6]/95 backdrop-blur-md px-4 py-1 border border-black/10 shadow-sm rounded-full">
+          ✦ Transformations
+        </span>
+      </div>
+
       <div className="relative w-full h-full flex flex-col lg:grid lg:grid-cols-12 items-stretch overflow-hidden pointer-events-auto" style={{ touchAction: 'pan-y' }}>
         
         {/* Images Dual Frame: Side-by-side on mobile (grid-cols-2) and desktop (lg:grid-cols-12) */}
-        <div className="w-full h-[48vh] sm:h-[54vh] lg:h-full col-span-12 lg:col-span-12 grid grid-cols-2 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3]">
+        <div className="w-full h-[48vh] sm:h-[54vh] lg:h-full col-span-12 lg:col-span-12 grid grid-cols-2 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3] mt-9 lg:mt-0">
           
           {/* Left Column: Before Image */}
           <div className="col-span-1 lg:col-span-6 h-full overflow-hidden relative border-r border-black/10">
@@ -136,10 +143,10 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
 
       </div>
 
-      {/* Floating Seam Card: Positioned at bottom on mobile to leave images 100% visible, centered on desktop */}
+      {/* Floating Seam Card: Positioned directly near photos on mobile (top-[calc(48vh+44px)]) to eliminate blank gap */}
       <motion.div 
         style={{ y: textY, opacity: textOpacity }}
-        className="absolute left-1/2 -translate-x-1/2 bottom-2 sm:bottom-6 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 z-20 w-[93vw] max-w-[93vw] sm:w-[90vw] lg:max-w-md p-3 sm:p-5 lg:p-8 bg-white/95 backdrop-blur-md border border-black/10 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
+        className="absolute left-1/2 -translate-x-1/2 top-[calc(48vh+44px)] sm:top-[calc(54vh+24px)] lg:top-1/2 lg:-translate-y-1/2 z-20 w-[93vw] max-w-[93vw] sm:w-[90vw] lg:max-w-md p-3 sm:p-5 lg:p-8 bg-white/95 backdrop-blur-md border border-black/10 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
       >
         <span className="font-mono text-[7px] sm:text-[8px] text-black/35 block mb-0.5 sm:mb-2 tracking-[0.2em] font-semibold">
           {`REF_0${item.id} // CASE STUDY`}
