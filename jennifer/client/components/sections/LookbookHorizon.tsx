@@ -67,10 +67,6 @@ function TactileCard({
           className="object-cover pointer-events-none"
           sizes="(max-width: 768px) 150px, 300px"
         />
-        <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-3 pt-8 flex justify-between items-center transition-opacity duration-200 ${isHovered || isDragging ? 'opacity-100' : 'opacity-0'} pointer-events-none`}>
-          <span className="font-mono text-[8px] tracking-widest text-white/90 font-semibold">INDEX // REF_0{index + 1}</span>
-          <span className="font-mono text-[7px] text-white bg-white/20 px-1 py-0.5 rounded-xs">2026_C</span>
-        </div>
       </div>
     </motion.div>
   );
@@ -81,12 +77,12 @@ export default function LookbookHorizon() {
   const [resetKey, setResetKey] = useState(0);
 
   return (
-    <section className="bg-[#FAF9F6] border-t border-neutral-200 py-24 sm:py-36 relative select-none overflow-hidden">
+    <section className="bg-[#FAF9F6] border-t border-neutral-200 py-20 sm:py-32 relative select-none overflow-hidden">
       {/* SECTION LABELS & CONTROLS */}
-      <div className="max-w-7xl mx-auto px-6 md:px-16 mb-8 sm:mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 relative z-30 pointer-events-auto">
+      <div className="max-w-7xl mx-auto px-6 md:px-16 mb-6 sm:mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 relative z-30 pointer-events-auto">
         <div>
-          <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.5em] text-neutral-400 uppercase block mb-3 font-semibold">
-            ✦ Atelier Interactive Moodboard // Vol_01
+          <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.5em] text-neutral-400 uppercase block mb-2 font-semibold">
+            ✦ Atelier Interactive Moodboard
           </span>
           <h3 className="font-serif text-3xl sm:text-5xl font-light tracking-wide text-[#1A1A1A]">
             The Tactile Wall
@@ -95,7 +91,7 @@ export default function LookbookHorizon() {
 
         <div className="flex flex-col sm:items-end gap-3">
           <p className="font-mono text-[8px] sm:text-[9px] text-neutral-700 uppercase tracking-widest sm:text-right font-semibold bg-black/5 px-3 py-1.5 rounded-full border border-black/10">
-            🖐️ Click or Touch to Drag and Rearrange Pictures
+            🖐️ Click or Touch Photos to Drag & Rearrange
           </p>
           <button
             onClick={() => setResetKey((k) => k + 1)}
@@ -106,11 +102,11 @@ export default function LookbookHorizon() {
         </div>
       </div>
 
-      {/* THE PILING MATRIX CANVAS */}
+      {/* THE PILING MATRIX CANVAS (touch-auto / touch-pan-y allows normal page scrolling on empty space) */}
       <div 
         key={resetKey}
         ref={boardRef} 
-        className="relative w-full h-[90vh] sm:h-[110vh] min-h-[600px] sm:min-h-[750px] px-4 md:px-12 z-10 touch-none overflow-hidden"
+        className="relative w-full h-[85vh] sm:h-[100vh] min-h-[550px] sm:min-h-[700px] px-4 md:px-12 z-10 touch-pan-y overflow-hidden"
       >
         {/* Architectural Grid Underlay Pattern */}
         <div className="absolute inset-0 opacity-[0.035] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />

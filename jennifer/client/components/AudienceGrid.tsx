@@ -139,9 +139,6 @@ export default function AudienceGrid() {
 
           {/* Floating Quote Accent */}
           <div className="absolute inset-x-0 bottom-0 p-12 lg:p-16 bg-gradient-to-t from-[#111] via-[#111]/30 to-transparent flex flex-col items-start z-10">
-            <span className="text-[9px] tracking-[0.4em] text-white/40 uppercase mb-2 font-mono">
-              [ COLLECTION MATRIX FRAME 0{activeIndex + 1} ]
-            </span>
             <h4 className="font-sans text-xl sm:text-2xl lg:text-3xl font-light italic tracking-wide text-white/90 max-w-lg leading-relaxed">
               “{audiences[activeIndex].desc}”
             </h4>
@@ -155,9 +152,6 @@ export default function AudienceGrid() {
         >
           {/* Header */}
           <div>
-            <span className="text-[9px] tracking-[0.4em] uppercase font-light text-white/40 block mb-2">
-              METIER / CLIENTELE
-            </span>
             <h2 className="font-sans text-3xl lg:text-4xl font-light tracking-tight text-[#FAF9F6]">
               Who We Accompany
             </h2>
@@ -173,15 +167,9 @@ export default function AudienceGrid() {
                   key={i}
                   href={`/services?for=${item.slug}`}
                   onMouseEnter={() => handleMouseEnter(i)}
-                  className="w-full text-left flex items-center justify-between group py-3 relative outline-none border-b border-white/[0.03] last:border-b-0"
+                  className="w-full text-left flex items-center justify-between group py-3.5 relative outline-none border-b border-white/[0.03] last:border-b-0"
                 >
                   <div className="flex items-center gap-4 sm:gap-6 w-full">
-                    <span className={`font-mono text-[10px] tracking-wider transition-colors duration-300 ${
-                      isActive ? 'text-white' : 'text-white/30 group-hover:text-white/60'
-                    }`}>
-                      0{i + 1}
-                    </span>
-
                     <div className="flex flex-col items-start flex-1 min-w-0">
                       <h3 className={`text-xs sm:text-sm tracking-[0.2em] uppercase font-light transition-all duration-300 truncate w-full ${
                         isActive ? 'text-white translate-x-2 font-normal' : 'text-white/50 group-hover:text-white/85'
@@ -208,12 +196,6 @@ export default function AudienceGrid() {
               );
             })}
           </div>
-
-          {/* Footer */}
-          <div className="flex justify-between items-center text-[9px] tracking-[0.2em] uppercase text-white/30 font-mono pt-4 border-t border-white/5">
-            <span>STYLE ARCHIVE v1.2</span>
-            <span>[ TAP TO EXPLORE ]</span>
-          </div>
         </div>
       </div>
 
@@ -226,9 +208,6 @@ export default function AudienceGrid() {
       >
         {/* Step A: Header block at the top */}
         <div className="p-6 sm:p-12 border-b border-white/10">
-          <span className="text-[8px] tracking-[0.4em] uppercase font-light text-white/40 block mb-1">
-            METIER / CLIENTELE
-          </span>
           <h2 className="font-sans text-2xl sm:text-3xl font-light tracking-tight text-[#FAF9F6]">
             Who We Accompany
           </h2>
@@ -258,9 +237,6 @@ export default function AudienceGrid() {
 
           {/* Floating Quote overlay inside the image */}
           <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-[#111] via-[#111]/45 to-transparent flex flex-col items-start z-10">
-            <span className="text-[7px] tracking-[0.3em] text-white/35 uppercase mb-1 font-mono">
-              [ FRAME 0{activeIndex + 1} ]
-            </span>
             <p className="font-sans text-xs sm:text-sm font-light italic leading-relaxed text-white/90 max-w-xl">
               “{audiences[activeIndex].desc}”
             </p>
@@ -276,15 +252,9 @@ export default function AudienceGrid() {
               <button
                 key={i}
                 onClick={() => handleMouseEnter(i)}
-                className="w-full text-left flex items-center justify-between py-3 outline-none border-b border-white/[0.03] last:border-b-0"
+                className="w-full text-left flex items-center justify-between py-3.5 outline-none border-b border-white/[0.03] last:border-b-0"
               >
                 <div className="flex items-center gap-4 w-full">
-                  <span className={`font-mono text-[9px] tracking-wider transition-colors duration-300 ${
-                    isActive ? 'text-white' : 'text-white/30'
-                  }`}>
-                    0{i + 1}
-                  </span>
-
                   <div className="flex flex-col items-start flex-1 min-w-0">
                     <h3 className={`text-xs tracking-[0.15em] uppercase font-light transition-all duration-300 truncate w-full ${
                       isActive ? 'text-white font-normal translate-x-1' : 'text-white/50'
@@ -310,12 +280,6 @@ export default function AudienceGrid() {
               </button>
             );
           })}
-        </div>
-
-        {/* Step D: Mobile instructions footer */}
-        <div className="flex justify-between items-center text-[8px] tracking-[0.2em] uppercase text-white/25 font-mono px-6 sm:px-12 pb-8 pt-4 border-t border-white/5">
-          <span>STYLE ARCHIVE v1.2</span>
-          <span>[ TAP INDEX TO NAVIGATE ]</span>
         </div>
       </div>
 

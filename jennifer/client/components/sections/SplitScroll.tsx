@@ -42,21 +42,15 @@ export default function SplitScroll() {
         {/* RIGHT CANVAS: Stationary / Sticky (Locks on Desktop, Stacks on Mobile - Writing) */}
         <div className="w-full md:w-1/2 md:h-screen md:sticky md:top-0 bg-[#FAF9F6] flex flex-col justify-between p-8 md:p-16 border-b md:border-b-0 md:border-l border-black/5 relative">
           <div>
-            <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-neutral-400 block mb-3">
-              Winter Collection
-            </span>
             <h3 className="font-serif text-4xl md:text-6xl font-light tracking-tight text-[#1A1A1A]">
               The Horizon <br /> Silhouettes.
             </h3>
           </div>
           
           <div className="mt-12 md:mt-0">
-            <p className="font-sans text-xs tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed mb-6">
+            <p className="font-sans text-xs tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed">
               A study in continuous motion and fixed structural form.
             </p>
-            <span className="font-mono text-[10px] tracking-widest text-neutral-400">
-              01 // Scroll to explore
-            </span>
           </div>
 
           {/* Unified Floating Skip Button (Tucked neatly to the bottom right side of the screen) */}

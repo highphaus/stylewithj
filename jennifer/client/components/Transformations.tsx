@@ -112,7 +112,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
                 draggable="false" 
               />
               <div className="absolute top-6 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm z-10">
-                {"ANTE // INITIAL"}
+                {"BEFORE"}
               </div>
             </motion.div>
           </div>
@@ -128,7 +128,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
                 draggable="false" 
               />
               <div className="absolute top-6 right-6 bg-black text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm z-10">
-                {"POST // REALIZED"}
+                {"AFTER"}
               </div>
             </motion.div>
           </div>
@@ -137,48 +137,21 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
 
       </div>
 
-      {/* Spacious, Decongested Seam Details Card */}
+      {/* Spacious Clean Details Card */}
       <motion.div 
         style={{ y: textY, opacity: textOpacity }}
         className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 w-[90vw] max-w-md p-6 lg:p-9 bg-white/95 backdrop-blur-md border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
       >
-        <div className="flex justify-between items-center mb-2 pb-2 border-b border-black/5">
-          <span className="font-mono text-[10px] text-black/40 tracking-[0.25em] font-medium">
-            {`REF_0${item.id} // CASE STUDY`}
-          </span>
-          <span className="font-mono text-[9px] tracking-widest text-black/50 font-bold bg-black/5 px-2 py-0.5 rounded-full">
-            {idx + 1} / {totalItems}
-          </span>
-        </div>
-        
-        <span className="font-sans text-[10px] tracking-[0.25em] uppercase font-bold text-black/60 mb-3 block">
-          {item.demographic}
-        </span>
-
         <h3 className="font-serif text-xl lg:text-2xl font-light tracking-wide text-black mb-3 uppercase leading-snug">
           {item.client}
         </h3>
 
-        <p className="font-serif text-sm lg:text-base italic text-black/75 leading-relaxed font-light mb-5 border-t border-b border-black/10 py-3.5 px-2 w-full">
+        <p className="font-serif text-sm lg:text-base italic text-black/75 leading-relaxed font-light mb-6 border-t border-b border-black/10 py-4 px-2 w-full">
           {`"${item.concept}"`}
         </p>
 
-        <div className="flex flex-col gap-2 items-center w-full">
-          <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-black/40 block mb-1 font-semibold">
-            STRUCTURAL LEDGER:
-          </span>
-          {item.specs.map((spec, sIdx) => (
-            <div key={sIdx} className="flex items-center gap-2">
-              <div className="w-1.5 h-[1px] bg-black/30" />
-              <span className="font-sans text-[11px] tracking-wider text-black/70 uppercase font-light">
-                {spec}
-              </span>
-            </div>
-          ))}
-        </div>
-
         {!hideButton && (
-          <div className="mt-6 pt-4 border-t border-black/5 flex justify-between items-center w-full">
+          <div className="pt-2 flex justify-between items-center w-full">
             <button
               onClick={() => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
@@ -200,7 +173,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   );
 }
 
-// Spacious, High-fashion Case Study Card for mobile and subpages
+// Clean Case Study Card for mobile and subpages
 function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
   const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
 
@@ -213,23 +186,23 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
             <div className="relative h-full overflow-hidden">
               <img
                 src={item.beforeImg}
-                alt="Initial Silhouette"
+                alt="Before"
                 className="w-full h-full object-cover object-top grayscale-[15%]"
                 draggable="false"
               />
               <div className="absolute top-2.5 left-2.5 bg-[#FAF9F6]/95 px-2 py-1 text-[7px] tracking-[0.2em] font-sans text-black uppercase font-bold shadow-xs">
-                ANTE
+                BEFORE
               </div>
             </div>
             <div className="relative h-full overflow-hidden">
               <img
                 src={item.afterImg}
-                alt="Realized Design Target"
+                alt="After"
                 className="w-full h-full object-cover object-top"
                 draggable="false"
               />
               <div className="absolute top-2.5 right-2.5 bg-black text-white px-2 py-1 text-[7px] tracking-[0.2em] font-sans uppercase font-bold shadow-xs">
-                POST
+                AFTER
               </div>
             </div>
           </div>
@@ -249,7 +222,7 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
                 draggable="false"
               />
               <div className="absolute top-3 left-3 bg-[#FAF9F6]/95 px-2.5 py-1 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs">
-                {activeMode === 'before' ? 'ANTE // INITIAL' : 'POST // REALIZED'}
+                {activeMode === 'before' ? 'BEFORE' : 'AFTER'}
               </div>
             </motion.div>
           </AnimatePresence>
@@ -290,30 +263,14 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
         </div>
       </div>
 
-      {/* Spacious, Un-congested Details Section */}
-      <div className="flex flex-col text-left mt-6 px-1">
-        <span className="font-mono text-[10px] tracking-[0.25em] font-medium text-black/45 block mb-1">
-          {`REF_${item.id} // ${item.demographic}`}
-        </span>
-        <h3 className="font-serif text-lg sm:text-xl tracking-wide font-normal text-[#1A1A1A] uppercase mb-3 leading-snug">
+      {/* Spacious Clean Details Section */}
+      <div className="flex flex-col text-left mt-5 px-1">
+        <h3 className="font-serif text-lg sm:text-xl tracking-wide font-normal text-[#1A1A1A] uppercase mb-2 leading-snug">
           {item.client}
         </h3>
-        <p className="font-serif text-sm italic text-black/75 leading-relaxed font-light mb-5 border-l-2 border-black/15 pl-4 py-0.5">
+        <p className="font-serif text-sm italic text-black/75 leading-relaxed font-light border-l-2 border-black/15 pl-4 py-0.5">
           {`"${item.concept}"`}
         </p>
-        <div className="flex flex-col gap-2 pt-4 border-t border-black/10">
-          <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-black/40 font-semibold mb-1">
-            STRUCTURAL LEDGER:
-          </span>
-          {item.specs.map((spec, sIdx) => (
-            <div key={sIdx} className="flex items-center gap-2">
-              <div className="w-1.5 h-[1px] bg-black/30" />
-              <span className="font-sans text-[11px] tracking-wider text-black/70 uppercase font-light">
-                {spec}
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -342,11 +299,11 @@ export default function Transformations({ hideButton = false, isStatic = false }
   return (
     <div className="relative w-full bg-[#FAF9F6] overflow-clip">
       
-      {/* ── MOBILE EXCLUSIVE VIEW (block lg:hidden): Clean Editorial Flow without extra heading ── */}
+      {/* ── MOBILE EXCLUSIVE VIEW (block lg:hidden): Clean Editorial Flow ── */}
       {!isStatic && (
         <div className="block lg:hidden w-full py-10 px-4 sm:px-8 bg-[#FAF9F6]">
-          {/* Stack of Spacious Integrated Mobile Cards */}
-          <div className="flex flex-col gap-12 max-w-md mx-auto">
+          {/* Stack of Clean Integrated Mobile Cards */}
+          <div className="flex flex-col gap-10 max-w-md mx-auto">
             {transformationData.map((item) => (
               <CaseStudyCard key={item.id} item={item} />
             ))}
@@ -358,27 +315,6 @@ export default function Transformations({ hideButton = false, isStatic = false }
       {!isStatic ? (
         <div ref={sectionRef} className="hidden lg:block relative w-full h-[380vh] bg-[#FAF9F6] overflow-x-clip">
           <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]">
-            {/* Interactive Stepper Navigation Pills for Desktop */}
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-black/10 shadow-sm flex items-center gap-2">
-              <span className="font-mono text-[9px] tracking-widest text-black/40 uppercase mr-1 font-semibold">
-                CASE STUDIES:
-              </span>
-              {transformationData.map((cs, idx) => (
-                <button
-                  key={cs.id}
-                  onClick={() => {
-                    if (!sectionRef.current) return;
-                    const rect = sectionRef.current.getBoundingClientRect();
-                    const targetY = window.scrollY + rect.top + (idx / (transformationData.length - 1)) * (rect.height - window.innerHeight);
-                    window.scrollTo({ top: targetY, behavior: 'smooth' });
-                  }}
-                  className="font-mono text-[9px] px-2.5 py-1 bg-black/5 hover:bg-black hover:text-white text-black/70 rounded-full transition-all border border-black/10 font-medium"
-                >
-                  0{cs.id}
-                </button>
-              ))}
-            </div>
-
             {transformationData.map((item, idx) => (
               <ScrollingCaseStudyRow
                 key={item.id}
@@ -405,9 +341,6 @@ export default function Transformations({ hideButton = false, isStatic = false }
       {/* Ledger Footer Call to Action */}
       {!hideButton && (
         <div className="w-full pt-10 pb-16 border-t border-black/10 flex flex-col items-center text-center px-6">
-          <span className="font-sans text-[9px] tracking-[0.4em] text-black/40 block mb-2 uppercase font-semibold">
-            ARCHIVE CONCLUSION CONTINUUM
-          </span>
           <h4 className="font-serif text-xl sm:text-2xl font-light text-[#1A1A1A] mb-6 leading-tight max-w-xs">
             Unlock the entire visual identity ledger.
           </h4>
