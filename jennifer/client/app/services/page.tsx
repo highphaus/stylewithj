@@ -140,9 +140,27 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
             <p>
               We believe personal style isn't about following every trend or constantly buying something new. It's about understanding what makes you feel confident, comfortable, and completely yourself.
             </p>
-            <p className="font-medium text-black">
-              At Style with J, we help you discover your personal style, create looks that work for your real life, and build a wardrobe that works for you.
-            </p>
+            
+            {/* Highlighted Core Commitment Card */}
+            <div className="mt-6 p-6 sm:p-8 bg-[#EFECE6] border-l-4 border-[#1A1A1A] rounded-xs shadow-xs">
+              <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-black/50 block mb-2 font-bold">
+                OUR CORE COMMITMENT
+              </span>
+              <p className="font-serif text-lg sm:text-2xl font-light italic text-[#1A1A1A] leading-snug">
+                "At Style with J, we help you discover your personal style, create looks that work for your real life, and build a wardrobe that works for you."
+              </p>
+            </div>
+
+            {/* Categories Page Link Button */}
+            <div className="pt-4 flex flex-wrap items-center gap-4">
+              <Link
+                href="/categories"
+                className="inline-flex items-center gap-3 px-6 py-3 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-light hover:bg-black transition-all shadow-md rounded-xs"
+              >
+                Explore Styling Categories
+                <span className="text-xs">→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
