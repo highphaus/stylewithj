@@ -64,19 +64,16 @@ export default function LookbookGrid() {
   const [activeIdx, setActiveIdx] = useState(0);
 
   return (
-    <section className="bg-[#FAF9F6] text-[#1A1A1A] py-16 sm:py-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+    <section className="bg-[#FAF9F6] text-[#1A1A1A] py-12 sm:py-20 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
       
       {/* ── HEADER ── */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 pb-8 border-b border-black/15">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 pb-8 border-b border-black/15">
         <div>
-          <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/40 block mb-3">
-            STYLE EDITORIALS
-          </span>
-          <h2 className="font-serif text-4xl sm:text-6xl font-light tracking-tight">
-            The Lookbook
+          <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight">
+            Curated Collections
           </h2>
         </div>
-        <p className="font-sans text-xs tracking-wider text-black/55 uppercase mt-4 md:mt-0 font-light max-w-[280px] leading-relaxed">
+        <p className="font-sans text-xs tracking-wider text-black/55 uppercase mt-3 md:mt-0 font-light max-w-[280px] leading-relaxed">
           A showcase of curated silhouettes, styling lines, and textile selections built for intentional living.
         </p>
       </div>
@@ -85,7 +82,7 @@ export default function LookbookGrid() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
         
         {/* LEFT COLUMN: Large Active Image Display */}
-        <div className="col-span-12 lg:col-span-7 relative aspect-[3/4] lg:h-[75vh] lg:aspect-auto w-full bg-[#EAE8E3] border border-black/5 shadow-md overflow-hidden select-none">
+        <div className="col-span-12 lg:col-span-7 relative aspect-[4/5] sm:aspect-[3/4] lg:h-[70vh] lg:aspect-auto w-full bg-[#EAE8E3] border border-black/5 shadow-md overflow-hidden select-none rounded-sm">
           <AnimatePresence mode="wait">
             <motion.img
               key={activeIdx}
@@ -101,14 +98,14 @@ export default function LookbookGrid() {
           </AnimatePresence>
 
           {/* Top Tag */}
-          <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 text-[8px] tracking-[0.3em] uppercase text-white font-sans z-10">
-            LOOK {looks[activeIdx].num}
+          <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 text-[8px] tracking-[0.3em] uppercase text-white font-sans z-10 rounded-xs">
+            LOOK 0{activeIdx + 1}
           </div>
 
           {/* Fabric Tag Overlay */}
-          <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm p-3 border border-black/5 z-10 max-w-xs shadow-sm">
+          <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm p-3 border border-black/5 z-10 max-w-xs shadow-sm rounded-xs">
             <span className="text-[6px] tracking-[0.25em] uppercase block text-black/50 font-sans font-semibold">FABRIC DETAIL</span>
-            <span className="font-serif text-[10px] text-black italic leading-none">{looks[activeIdx].fabric}</span>
+            <span className="font-serif text-[11px] text-black italic leading-none">{looks[activeIdx].fabric}</span>
           </div>
         </div>
 
@@ -120,25 +117,25 @@ export default function LookbookGrid() {
               <button
                 key={look.num}
                 onClick={() => setActiveIdx(idx)}
-                className={`text-left p-6 transition-all duration-300 flex flex-col w-full outline-none focus:outline-none relative group rounded-sm ${
+                className={`text-left p-5 sm:p-6 transition-all duration-300 flex flex-col w-full outline-none focus:outline-none relative group rounded-sm ${
                   isActive 
-                    ? 'bg-black text-white border-l-4 border-l-white pl-8 shadow-lg' 
+                    ? 'bg-black text-white border-l-4 border-l-white pl-7 sm:pl-8 shadow-lg' 
                     : 'hover:bg-black/[0.01] text-black/65'
                 }`}
               >
                 {/* Horizontal Header of the Button */}
                 <div className="flex justify-between items-center w-full">
-                  <div className="flex items-baseline gap-4">
+                  <div className="flex items-baseline gap-3.5">
                     <span className={`font-mono text-xs font-medium transition-colors ${isActive ? 'text-white/50 font-bold' : 'text-black/35 group-hover:text-black'}`}>
                       /{look.num}
                     </span>
-                    <h3 className={`font-serif text-lg transition-all leading-tight ${isActive ? 'text-white font-medium italic' : 'text-black/60 group-hover:text-black'}`}>
+                    <h3 className={`font-serif text-base sm:text-lg transition-all leading-tight ${isActive ? 'text-white font-medium italic' : 'text-black/60 group-hover:text-black'}`}>
                       {look.title}
                     </h3>
                   </div>
 
                   {/* Visual Accordion State Indicator (Plus/Minus Icon) */}
-                  <div className="flex-shrink-0 ml-4">
+                  <div className="flex-shrink-0 ml-3">
                     <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-all duration-300 ${
                       isActive 
                         ? 'bg-white text-black border-white scale-110' 
@@ -159,7 +156,7 @@ export default function LookbookGrid() {
                     transition={{ duration: 0.35, ease: 'easeOut' }}
                     className="text-xs leading-relaxed font-sans font-light mt-4 overflow-hidden w-full text-white/80"
                   >
-                    <p className="mb-4 text-white/75 border-l border-white/10 pl-3">
+                    <p className="mb-4 text-white/80 border-l border-white/15 pl-3">
                       {look.desc}
                     </p>
                     
