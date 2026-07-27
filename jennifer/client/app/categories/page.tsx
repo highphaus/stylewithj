@@ -81,6 +81,16 @@ export default function CategoriesPage() {
         <p className="font-serif text-sm sm:text-xl lg:text-2xl text-black/60 font-light italic leading-relaxed mt-4 sm:mt-6 max-w-3xl">
           Discover curated styling categories tailored to your personality, lifestyle, body proportions, and special occasions.
         </p>
+
+        {/* Highlighted Philosophy Statement */}
+        <div className="mt-8 p-6 sm:p-8 bg-[#EFECE6] border-l-4 border-[#1A1A1A] rounded-xs shadow-xs max-w-4xl">
+          <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-black/50 block mb-2 font-bold">
+            OUR PHILOSOPHY
+          </span>
+          <p className="font-serif text-lg sm:text-2xl font-light italic text-[#1A1A1A] leading-snug">
+            "At Style with J, we help you discover your personal style, create looks that work for your real life, and build a wardrobe that works for you."
+          </p>
+        </div>
       </header>
 
       {/* ── CATEGORIES GRID ── */}
