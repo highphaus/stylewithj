@@ -278,7 +278,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-3 font-semibold">
             CATEGORIES
           </span>
-          <h2 className="font-serif text-3xl sm:text-5xl font-light text-[#1A1A1A]">
+          <h2 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light text-[#1A1A1A]">
             What Can I <span className="italic text-black/50">Style</span> For You?
           </h2>
         </div>
