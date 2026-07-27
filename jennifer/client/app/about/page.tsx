@@ -13,12 +13,8 @@ export function AboutContent() {
         <div className="flex flex-col items-start gap-4">
           
           <div className="flex items-center gap-3">
-            <span className="text-[10px] sm:text-xs tracking-[0.4em] uppercase font-light text-black/50 font-sans">
-              Visual Storytelling
-            </span>
-            <div className="w-12 h-[1px] bg-black/20" />
-            <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase font-light text-black/40 font-sans">
-              About Me
+            <span className="text-[10px] sm:text-xs tracking-[0.4em] uppercase font-semibold text-black/60 font-sans">
+              About Us
             </span>
           </div>
 
