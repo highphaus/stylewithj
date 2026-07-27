@@ -291,29 +291,32 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
         </div>
       </section>
 
-      {/* ── CATEGORIES GRID ── */}
-      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16 border-t border-black/10">
-        <div className="mb-12">
-          <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2">
+      {/* ── CATEGORIES (WHAT CAN I STYLE FOR YOU?) ── */}
+      <section id="categories" className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-24 border-t border-black/10">
+        <div className="mb-12 text-center max-w-2xl mx-auto">
+          <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-3">
             CATEGORIES
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A1A]">
-            What Can I Style For You?
+          <h2 className="font-serif text-3xl sm:text-5xl font-light text-[#1A1A1A]">
+            What Can I <span className="italic text-black/50">Style</span> For You?
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#E5E2DC]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {categories.map((cat) => (
-            <div key={cat.label} className="bg-[#FAF9F6] p-8 border border-black/5 flex flex-col gap-4 hover:bg-[#F0EDE7] transition-colors">
+            <div 
+              key={cat.label} 
+              className="bg-[#EFECE6] p-5 sm:p-8 border border-black/5 flex flex-col gap-4 shadow-xs rounded-xs hover:border-black/20 transition-all"
+            >
               <div className="border-b border-black/10 pb-3">
-                <h3 className="font-sans text-xs tracking-[0.25em] uppercase font-medium text-[#1A1A1A]">
+                <h3 className="font-sans text-xs tracking-[0.25em] uppercase font-bold text-[#1A1A1A]">
                   {cat.label}
                 </h3>
               </div>
               <div className="flex flex-col gap-2.5">
                 {cat.items.map((item) => (
-                  <span key={item} className="font-sans text-xs tracking-wide text-[#1A1A1A]/75 font-light flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-black/40 flex-shrink-0" />
+                  <span key={item} className="font-sans text-[11px] sm:text-xs tracking-wide text-[#1A1A1A]/80 font-light flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-black/30 flex-shrink-0" />
                     {item}
                   </span>
                 ))}
