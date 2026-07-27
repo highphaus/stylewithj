@@ -70,7 +70,7 @@ export default function AtelierStory() {
               The label operates on the fine boundary separating architectural form from fluid textiles. We believe true presence is an intentional statement, structured carefully through elite pattern tailoring and geometric construction.
             </p>
             <p className="text-neutral-400">
-              Operating from a private studio environment, we consult with collectors and curators globally—blending striking contemporary silhouettes with timeless, high-tier textile execution.
+              Operating from a private studio environment, we consult with collectors and curators globally, blending striking contemporary silhouettes with timeless, high-tier textile execution.
             </p>
           </div>
         </motion.div>

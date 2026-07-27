@@ -72,7 +72,7 @@ export default function CinematicPhilosophy() {
             We don't believe in dressing you according to fleeting trends or forcing you into a version of yourself that doesn't feel natural.
           </p>
           <p>
-            We believe style is personal. It should fit you—your personality, your lifestyle, your comfort, and the way you want to show up in the world.
+            We believe style is personal. It should fit you, your personality, your lifestyle, your comfort, and the way you want to show up in the world.
           </p>
         </div>
 

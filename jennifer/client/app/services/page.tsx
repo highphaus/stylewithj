@@ -12,7 +12,7 @@ const pillars = [
     num: '01',
     title: 'DISCOVER YOUR STYLE',
     headline: 'Find what makes you feel confident and comfortable.',
-    body: 'Your style should feel personal. We help you understand what works for you—from silhouettes and fits to colours, proportions, and outfit combinations—so you can feel confident in what you wear without feeling like you\'re trying to be someone else. It\'s about discovering what makes you feel like the best version of yourself and turning that into a style that feels natural to you.',
+    body: 'Your style should feel personal. We help you understand what works for you, from silhouettes and fits to colours, proportions, and outfit combinations, so you can feel confident in what you wear without feeling like you\'re trying to be someone else. It\'s about discovering what makes you feel like the best version of yourself and turning that into a style that feels natural to you.',
   },
   {
     num: '02',
@@ -57,7 +57,7 @@ const servicesList = [
   {
     num: '03',
     title: 'Personal Shopping / Curated Shopping',
-    summary: 'Shop with intention through curated recommendations that fit your personal style, lifestyle, needs, and budget—so you spend less time searching and more time finding pieces that truly work for you.',
+    summary: 'Shop with intention through curated recommendations that fit your personal style, lifestyle, needs, and budget, so you spend less time searching and more time finding pieces that truly work for you.',
     points: [
       'Personalised shopping recommendations',
       'Curated pieces based on individual style',
@@ -72,7 +72,7 @@ const servicesList = [
     title: 'Occasion Styling',
     summary: 'Tell us where you\'re going, and we\'ll help you figure out what to wear. From celebrations to casual outings, we curate the perfect look for every event.',
     points: [
-      'Weddings — Bridesmaids, bridal & ethnic styling',
+      'Weddings: Bridesmaids, bridal & ethnic styling',
       'Parties & evening events',
       'Date nights & romantic dinners',
       'Vacations & getaway wardrobes',

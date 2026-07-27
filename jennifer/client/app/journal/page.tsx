@@ -114,37 +114,37 @@ export default function JournalPage() {
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
       <Navigation />
 
-      {/* ── 1. TYPOGRAPHIC PURE HEADER (NO PICTURE) ── */}
-      <header className="pt-32 pb-16 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
-        <span className="font-sans text-[10px] tracking-[0.6em] uppercase text-black/40 block mb-4 font-semibold">
-          ✦ JOURNAL
+      {/* ── 1. TYPOGRAPHIC PURE HEADER ── */}
+      <header className="pt-32 sm:pt-40 pb-12 sm:pb-16 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
+        <span className="font-sans text-[10px] tracking-[0.5em] uppercase text-black/50 block mb-3 font-semibold">
+          JOURNAL
         </span>
-        <h1 className="font-serif text-5xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-none text-black">
+        <h1 className="font-serif text-4xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-none text-black">
           Style, decoded.
         </h1>
-        <p className="font-serif text-lg sm:text-xl lg:text-2xl text-black/55 font-light italic leading-relaxed mt-6 max-w-3xl">
+        <p className="font-serif text-base sm:text-xl lg:text-2xl text-black/60 font-light italic leading-relaxed mt-4 sm:mt-6 max-w-3xl">
           A space for styling advice, wardrobe inspiration, smart shopping, and everything in between.
         </p>
       </header>
 
-      <main className="px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto py-16">
+      <main className="px-5 sm:px-12 lg:px-20 max-w-7xl mx-auto py-12 sm:py-20">
 
-        {/* ── 2. EDITORIAL SUB-SECTIONS LEDGER ── */}
-        <section className="mb-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        {/* ── 2. EDITORIAL SUB-SECTIONS LEDGER (2-COL MOBILE / 5-COL DESKTOP) ── */}
+        <section className="mb-16 sm:mb-24">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-6">
             {edits.map((item, idx) => (
               <div 
                 key={idx}
-                className="p-6 border border-black/10 hover:border-black bg-[#FAF9F6] transition-all duration-300 flex flex-col justify-between min-h-[140px]"
+                className="p-4 sm:p-6 border border-black/10 hover:border-black bg-[#FAF8F3] transition-all duration-300 flex flex-col justify-between min-h-[130px] sm:min-h-[150px] rounded-xs shadow-xs"
               >
-                <span className="font-mono text-[9px] text-black/30 font-bold block mb-4">
+                <span className="font-mono text-[9px] text-black/35 font-bold block mb-3">
                   0{idx + 1}
                 </span>
                 <div>
-                  <h4 className="font-sans text-xs tracking-widest font-semibold text-black uppercase mb-2">
+                  <h4 className="font-sans text-[11px] sm:text-xs tracking-wider font-semibold text-black uppercase mb-1.5 leading-snug">
                     {item.label}
                   </h4>
-                  <p className="text-[10px] text-black/55 leading-relaxed font-light">
+                  <p className="text-[10px] text-black/60 leading-relaxed font-light line-clamp-2">
                     {item.desc}
                   </p>
                 </div>
@@ -154,26 +154,26 @@ export default function JournalPage() {
         </section>
 
         {/* ── 3. DETAILED TOPICS & FEATURED ARTICLES ── */}
-        <section className="space-y-24 mb-32">
-          <div>
-            <span className="font-sans text-[10px] tracking-[0.5em] uppercase text-black/45 block mb-10 font-semibold">
-              ✦ EDITORIAL DIRECTORY
+        <section className="space-y-16 sm:space-y-24 mb-24 sm:mb-32">
+          <div className="pb-4 border-b border-black/10">
+            <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block font-semibold">
+              EDITORIAL DIRECTORY
             </span>
           </div>
 
-          {topics.map((topic, index) => (
+          {topics.map((topic) => (
             <div 
               key={topic.num}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start border-t border-black/10 pt-12 first:border-0 first:pt-0"
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start border-t border-black/10 pt-10 sm:pt-14 first:border-0 first:pt-0"
             >
               {/* Left Column: Featured Article teaser with Image */}
-              <div className="col-span-12 lg:col-span-5 flex flex-col items-start gap-5">
-                <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-black/40 font-semibold">
-                  {topic.num} — {topic.category}
+              <div className="col-span-12 lg:col-span-5 flex flex-col items-start gap-4 sm:gap-5">
+                <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-black/50 font-semibold">
+                  {topic.num} / {topic.category}
                 </span>
 
                 {/* Category Cover Image */}
-                <div className="relative w-full aspect-[4/5] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-sm">
+                <div className="relative w-full aspect-[4/3] sm:aspect-[4/5] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-md rounded-xs">
                   <img
                     src={topic.image}
                     alt={topic.category}
@@ -182,14 +182,14 @@ export default function JournalPage() {
                   />
                 </div>
                 
-                <div className="bg-[#EFECE6] p-8 border border-black/5 shadow-[0_8px_30px_rgba(0,0,0,0.015)] w-full">
-                  <span className="font-mono text-[8px] tracking-[0.35em] uppercase text-black/40 block mb-4 font-bold">
-                    [ FEATURED TOPIC READ ]
+                <div className="bg-[#EFECE6] p-6 sm:p-8 border border-black/5 shadow-xs w-full rounded-xs">
+                  <span className="font-mono text-[8px] tracking-[0.3em] uppercase text-black/45 block mb-3 font-bold">
+                    [ FEATURED READ ]
                   </span>
-                  <h3 className="font-serif text-xl sm:text-2xl font-light italic leading-snug text-black mb-6">
+                  <h3 className="font-serif text-lg sm:text-2xl font-light italic leading-snug text-black mb-4">
                     "{topic.featuredTitle}"
                   </h3>
-                  <span className="font-sans text-[8px] tracking-[0.25em] text-black/45 uppercase border-b border-black/25 pb-0.5 font-medium">
+                  <span className="font-sans text-[8px] tracking-[0.25em] text-black/50 uppercase border-b border-black/25 pb-0.5 font-medium inline-block">
                     Topic Active
                   </span>
                 </div>
@@ -197,16 +197,16 @@ export default function JournalPage() {
 
               {/* Right Column: Bullets list of sample topics */}
               <div className="col-span-12 lg:col-span-7">
-                <span className="font-mono text-[9px] tracking-[0.3em] text-black/35 uppercase block mb-6 font-semibold">
-                  DECODED INSIGHTS // SAMPLES
+                <span className="font-mono text-[9px] tracking-[0.3em] text-black/40 uppercase block mb-6 font-semibold">
+                  DECODED INSIGHTS / SAMPLES
                 </span>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5">
                   {topic.items.map((item, bulletIdx) => (
                     <li 
                       key={bulletIdx}
-                      className="flex items-start gap-3 text-xs text-black/75 font-sans font-light leading-relaxed group cursor-default"
+                      className="flex items-start gap-2.5 text-xs sm:text-sm text-black/80 font-sans font-light leading-relaxed group cursor-default bg-[#FAF8F3] p-3 border border-black/5 rounded-xs"
                     >
-                      <span className="text-black/30 mt-0.5 select-none font-mono">•</span>
+                      <span className="text-black/40 mt-0.5 select-none font-mono text-xs">•</span>
                       <span className="group-hover:text-black transition-colors duration-200">{item}</span>
                     </li>
                   ))}
@@ -217,32 +217,32 @@ export default function JournalPage() {
         </section>
 
         {/* ── 4. WHAT CAN I STYLE FOR YOU? DIRECTORY ── */}
-        <section className="border-t border-black/15 pt-20 pb-16">
-          <div className="text-center max-w-xl mx-auto mb-16">
-            <span className="font-sans text-[10px] tracking-[0.5em] uppercase text-black/40 block mb-4 font-semibold">
-              ✦ STYLING LEDGER
+        <section className="border-t border-black/15 pt-16 pb-12">
+          <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
+            <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-3 font-semibold">
+              STYLING LEDGER
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-black">
+            <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight text-black">
               What Can I <span className="italic text-black/40">Style</span> For You?
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {styleCategories.map((category, idx) => (
               <div 
                 key={idx}
-                className="bg-[#EFECE6] p-8 border border-black/5 flex flex-col gap-6"
+                className="bg-[#EFECE6] p-5 sm:p-8 border border-black/5 flex flex-col gap-4 shadow-xs rounded-xs"
               >
-                <h4 className="font-sans text-[10px] tracking-[0.3em] font-bold text-black uppercase border-b border-black/10 pb-3">
+                <h4 className="font-sans text-[10px] sm:text-xs tracking-[0.25em] font-bold text-black uppercase border-b border-black/10 pb-3">
                   {category.title}
                 </h4>
-                <ul className="flex flex-col gap-3">
+                <ul className="flex flex-col gap-2.5">
                   {category.items.map((sub, subIdx) => (
                     <li 
                       key={subIdx}
-                      className="text-xs font-sans font-light text-black/70 flex items-center gap-2"
+                      className="text-[11px] sm:text-xs font-sans font-light text-black/75 flex items-center gap-2"
                     >
-                      <div className="w-1.5 h-1.5 rounded-full bg-black/15 flex-shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-black/25 flex-shrink-0" />
                       {sub}
                     </li>
                   ))}

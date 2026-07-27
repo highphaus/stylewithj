@@ -37,7 +37,7 @@ export default function AboutSection() {
             <span className="font-serif text-xl sm:text-4xl text-white/40 leading-none h-2 sm:h-4">"</span>
 
             <p className="text-[9px] sm:text-lg lg:text-xl xl:text-2xl font-serif font-light italic leading-relaxed text-white/90 tracking-wide pl-1 sm:pl-2">
-              My goal is simple—<br />
+              My goal is simple:<br />
               to make getting dressed the easiest decision of your day.
             </p>
 

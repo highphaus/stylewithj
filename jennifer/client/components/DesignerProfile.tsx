@@ -24,7 +24,7 @@ export default function DesignerProfile() {
             With over a decade navigating the weaving clusters of Banaras and Kanchipuram, Jennifer founded the Atelier around a single rule: Indian fashion should be a modern architectural revival of ancient textiles.
           </p>
           <p className="text-sm text-[#6B5E56] leading-relaxed font-normal">
-            By merging the structural discipline of modern silhouettes with the intricate decadence of Zardosi and Chikankari, her brides don’t just look polished—they enter spaces with an anchored, unshakeable royal aura.
+            By merging the structural discipline of modern silhouettes with the intricate decadence of Zardosi and Chikankari, her brides don’t just look polished, they enter spaces with an anchored, unshakeable royal aura.
           </p>
           
           <div className="pt-4 grid grid-cols-2 gap-6 text-[#332922]">
