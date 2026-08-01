@@ -1,0 +1,6 @@
+.vercel
+.env*
+*.CR2
+*.pptx
+*.pdf
+*.HEIC

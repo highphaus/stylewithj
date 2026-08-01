@@ -7,33 +7,26 @@ export default function HeroSection() {
   return (
     <section className="relative w-full h-screen bg-[#111] text-white overflow-hidden flex items-center">
       
-      {/* 1. BACKGROUND CINEMATIC LAYER */}
-      <div className="absolute inset-0 w-full h-full z-0">
+      {/* 1. BACKGROUND FULL COVER CINEMATIC LAYER */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-[#0c0c0c]">
+        {/* Crystal clear image shifted down with top alignment */}
         <Image
-          src="/images/hero/heroimage1.jpeg" // Make sure your image file exists here!
-          alt="Campaign Masterpiece"
+          src="/images/hero/hero image.png"
+          alt="Style with J — Hero"
           fill
           priority
-          className="object-cover object-center opacity-85 brightness-[0.85]"
+          style={{ objectPosition: 'center 0%' }}
+          className="object-cover opacity-100 transition-all duration-700"
         />
-        {/* Subtle dark vignette overlay to make text pop */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/30" />
+        {/* Minimal subtle text contrast overlay - zero cloudy haze */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent pointer-events-none" />
       </div>
 
-      {/* 2. LEFT SIDEBAR UTILITY (Vertical Typography Accent) */}
-      <div className="hidden lg:flex absolute left-8 bottom-24 z-10 flex-col items-center gap-4 text-[9px] tracking-[0.3em] uppercase font-light text-white/50 [writing-mode:vertical-lr] rotate-180 select-none">
-        <span>Bespoke Styling</span>
-        <span className="w-1 h-1 bg-white/30 rounded-full my-1" />
-        <span>Wardrobe Curation</span>
-        <span className="w-1 h-1 bg-white/30 rounded-full my-1" />
-        <span>Image Consulting</span>
-      </div>
-
-      {/* 3. MAIN HERO CONTENT */}
+      {/* 2. MAIN HERO CONTENT */}
       <div className="w-full max-w-[1440px] mx-auto px-8 lg:px-24 flex justify-between items-center z-10 mt-12">
         
         {/* Left Side: Typography & CTA */}
-        <div className="max-w-xl flex flex-col items-start">
+        <div className="max-w-xl flex flex-col items-start text-left">
           <motion.span 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -72,7 +65,7 @@ export default function HeroSection() {
           </motion.p>
 
           <motion.a
-            href="/contact"
+            href="/connect"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}

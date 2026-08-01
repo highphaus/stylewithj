@@ -4,25 +4,25 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const galleryItems = [
-  { id: 1, category: "editorial", src: "/images/img01.jpeg", aspect: "aspect-[3/4]", title: "Draped Fluidity", desc: "Experimentation with asymmetric satin structures." },
-  { id: 2, category: "silhouettes", src: "/images/img02.jpeg", aspect: "aspect-[4/5]", title: "Tailored Architecture", desc: "Double-breasted sharp shoulders in premium felted wool." },
-  { id: 3, category: "minimalist", src: "/images/img03.jpeg", aspect: "aspect-[3/2]", title: "Archival Monolith", desc: "Clean linear geometry against neutral concrete." },
-  { id: 4, category: "editorial", src: "/images/img04.jpeg", aspect: "aspect-[3/4]", title: "Contrast Composition", desc: "Bone and charcoal layered fabrics." },
-  { id: 5, category: "silhouettes", src: "/images/img05.jpeg", aspect: "aspect-[4/5]", title: "Spun Silk Flow", desc: "Fluid bias-cut silk organza movements." },
-  { id: 6, category: "minimalist", src: "/images/img06.jpeg", aspect: "aspect-[3/2]", title: "Shadow Play", desc: "Heavy texture contrasts in raw linen." },
-  { id: 7, category: "editorial", src: "/images/img07.jpeg", aspect: "aspect-[3/4]", title: "Sculpted Outline", desc: "High-contrast geometric edge detail." },
-  { id: 8, category: "silhouettes", src: "/images/img08.jpeg", aspect: "aspect-[4/5]", title: "Liquid Crepe Drop", desc: "Relaxed volume tailoring." },
-  { id: 9, category: "minimalist", src: "/images/img09.jpeg", aspect: "aspect-[3/2]", title: "Asymmetric Hem", desc: "Deconstructed canvas wool layers." },
-  { id: 10, category: "editorial", src: "/images/img10.jpeg", aspect: "aspect-[3/4]", title: "Executive Stance", desc: "Structured wool canvas coat styling." },
-  { id: 11, category: "silhouettes", src: "/images/img11.jpeg", aspect: "aspect-[4/5]", title: "Tonal Realignment", desc: "Slate graphite draping lines." },
-  { id: 12, category: "minimalist", src: "/images/img12.jpeg", aspect: "aspect-[3/2]", title: "Linen Matrix", desc: "Fine weave macro details." },
-  { id: 13, category: "editorial", src: "/images/img13.jpeg", aspect: "aspect-[3/4]", title: "Avant-Garde Frame", desc: "Dramatically styled profile silhouette." },
-  { id: 14, category: "silhouettes", src: "/images/img14.jpeg", aspect: "aspect-[4/5]", title: "Obsidian Drape", desc: "Deep dark textural contrasts." },
-  { id: 15, category: "minimalist", src: "/images/img15.jpeg", aspect: "aspect-[3/2]", title: "Bone Structure", desc: "Minimal cream fabric folds." },
+  { id: 1, category: "western", src: "/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg", aspect: "aspect-[3/4]", title: "Satin Polka Dot Slip", desc: "Fluid bias-cut polka dot slip dress styled with ankle strap heels on a grand wooden staircase." },
+  { id: 2, category: "editorial", src: "/images/includes/IMG_8709.JPG.jpeg", aspect: "aspect-[4/5]", title: "Sculpted Peplum Gown", desc: "Structured black strapless peplum column silhouette set against resort waters." },
+  { id: 3, category: "western", src: "/images/includes/IMG_9051.JPG.jpeg", aspect: "aspect-[3/2]", title: "Meadow Halter Midi", desc: "Earthy chic white halter dress accessorized with statement leather disc belt." },
+  { id: 4, category: "resort", src: "/images/includes/IMG_3112.JPG.jpeg", aspect: "aspect-[3/4]", title: "Ocean Halter Backless Gown", desc: "Minimalist black backless maxi dress styled for sunset ocean coastal breeze." },
+  { id: 5, category: "casual", src: "/images/includes/IMG_9135.JPG.jpeg", aspect: "aspect-[4/5]", title: "Boho Floral Midi", desc: "Relaxed white floral bohemian dress paired with rustic leather boots." },
+  { id: 6, category: "editorial", src: "/images/includes/IMG_8826.JPG.jpeg", aspect: "aspect-[3/2]", title: "Midnight Off-Shoulder Gown", desc: "Sophisticated off-shoulder gathered dress with gold wrist cuffs and sleek sunglasses." },
+  { id: 7, category: "western", src: "/images/includes/IMG_0263.JPG.jpeg", aspect: "aspect-[3/4]", title: "Golden Hour Sunset Dress", desc: "Vibrant blush rose pleated midi dress catching warm golden hour sunlight." },
+  { id: 8, category: "casual", src: "/images/includes/IMG_8236.JPG.jpeg", aspect: "aspect-[4/5]", title: "Puff-Sleeve Floral Sundress", desc: "Smocked corset bodice mini dress with delicate blue floral sprigs on green lawn." },
+  { id: 9, category: "editorial", src: "/images/includes/IMG_8694.JPG.jpeg", aspect: "aspect-[3/2]", title: "Structured Poolside Stance", desc: "Sharp strapless corset peplum gown styled with gold choker necklace." },
+  { id: 10, category: "resort", src: "/images/includes/IMG_8846.JPG.jpeg", aspect: "aspect-[3/4]", title: "Cliffside Ocean Silhouette", desc: "Full-length profile of the midnight navy off-shoulder evening drape." },
+  { id: 11, category: "casual", src: "/images/includes/IMG_9140.JPG.jpeg", aspect: "aspect-[4/5]", title: "Rustic Lakeside Curation", desc: "Bohemian floral dress paired with leather boots in coastal field." },
+  { id: 12, category: "western", src: "/images/includes/IMG_9060.JPG.jpeg", aspect: "aspect-[3/2]", title: "Sunlit Field Stance", desc: "White halter dress accentuating natural waistlines." },
+  { id: 13, category: "casual", src: "/images/includes/IMG_0270.JPG.jpeg", aspect: "aspect-[3/4]", title: "Golden Meadow Horizon", desc: "Romantic blush pink midi dress in open sunset landscape." },
+  { id: 14, category: "resort", src: "/images/includes/IMG_8863.JPG.jpeg", aspect: "aspect-[4/5]", title: "Tropical Resort Elegance", desc: "High-end resort wear curated for summer getaway destinations." },
+  { id: 15, category: "editorial", src: "/images/includes/IMG_4485.JPG.jpeg", aspect: "aspect-[3/2]", title: "Architectural Motion Drape", desc: "Contemporary polka dot midi dress in natural motion." }
 ];
 
 export default function GalleryGrid() {
-  const [filter, setFilter] = useState<'all' | 'editorial' | 'silhouettes' | 'minimalist'>('all');
+  const [filter, setFilter] = useState<'all' | 'western' | 'editorial' | 'resort' | 'casual'>('all');
 
   const filteredItems = filter === 'all'
     ? galleryItems
@@ -41,14 +41,14 @@ export default function GalleryGrid() {
           </div>
           <div className="max-w-xs text-left md:text-right">
             <p className="font-serif text-xs italic text-black/60 leading-relaxed font-light">
-              A visual archive cataloging structural forms, raw textile textures, and custom campaigns.
+              A visual archive cataloging Western wear, resort silhouettes, and curated editorial looks styled by Jennifer.
             </p>
           </div>
         </div>
 
         {/* ── FILTER TABS ── */}
         <div className="flex flex-wrap gap-2.5 sm:gap-3 mt-8 text-[9px] tracking-[0.25em] uppercase font-light">
-          {(['all', 'editorial', 'silhouettes', 'minimalist'] as const).map((cat) => (
+          {(['all', 'western', 'editorial', 'resort', 'casual'] as const).map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}

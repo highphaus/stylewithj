@@ -11,7 +11,7 @@ const categoryData = [
     title: 'EVERYDAY',
     headline: 'Everyday Style & Professional Dressing',
     desc: 'Effortless outfits designed for real life — daily confidence, corporate meetings, and workwear that feels authentically you.',
-    image: '/images/img14.jpeg',
+    image: '/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg',
     color: '#F5F2ED',
     items: ['Everyday Style', 'Casual & Weekend', 'Corporate & Workwear', 'Business & Formal']
   },
@@ -20,7 +20,7 @@ const categoryData = [
     title: 'CELEBRATIONS',
     headline: 'Weddings & Milestone Occasions',
     desc: 'Statement occasion silhouettes, bridal party curations, and traditional heritage drapes built for unforgettable memories.',
-    image: '/images/img07.jpeg',
+    image: '/images/CIT09345.jpg',
     color: '#EDE8E0',
     items: ['Weddings', 'Bridesmaid', 'Bridal', 'Engagement', 'Indian Festive', 'Ethnic & Traditional', 'Parties']
   },
@@ -29,7 +29,7 @@ const categoryData = [
     title: 'LIFE & TRAVEL',
     headline: 'Destination & Resort Wardrobes',
     desc: 'Relaxed luxury collections, romantic date night looks, and travel wardrobes crafted for intentional, beautiful living.',
-    image: '/images/img15.jpeg',
+    image: '/images/includes/IMG_3112.JPG.jpeg',
     color: '#F0EBE4',
     items: ['Vacation', 'Resort', 'Travel', 'Date Night', 'Special Occasions']
   },
@@ -38,7 +38,7 @@ const categoryData = [
     title: 'YOUR STYLE',
     headline: 'Personal Fit & Custom Consultations',
     desc: 'Bespoke personal consultations tailored around your body proportions, comfort, maternity needs, and unique identity.',
-    image: '/images/img05.jpeg',
+    image: '/images/includes/IMG_9051.JPG.jpeg',
     color: '#EAE6DE',
     items: ['Wardrobe Refresh', 'Personal Shopping', 'Petite & Tall', 'Plus-Size', 'Maternity']
   }
@@ -148,7 +148,7 @@ export default function CategoriesPage() {
         </div>
 
         {/* Three smaller cards below */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 mb-16">
           {categoryData.slice(1).map((cat) => (
             <div
               key={cat.num}
@@ -158,7 +158,7 @@ export default function CategoriesPage() {
               {/* Image */}
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Image
-                  src={cat.image}
+                  src={cat.num === '02' ? '/images/CIT09345.jpg' : cat.image}
                   alt={cat.title}
                   fill
                   className="object-cover object-center group-hover:scale-[1.04] transition-transform duration-700 ease-out"
@@ -219,6 +219,164 @@ export default function CategoriesPage() {
             </div>
           ))}
         </div>
+
+        {/* ── ETHNIC STYLING FEATURED CURATION (CLIENT CATEGORY SHOWCASE) ── */}
+        <section className="border-t border-black/10 pt-16 pb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/45 block mb-2 font-semibold">
+                ✦ ETHNIC STYLING CURATION
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl font-light text-black tracking-tight">
+                Festive, Bridal & Ceremony Looks
+              </h2>
+            </div>
+            <p className="font-sans text-xs text-black/60 max-w-sm font-light leading-relaxed">
+              Curated heritage drapes, contemporary sarees, and statement occasion ensembles designed for high-value celebrations.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                category: 'Festive Wear',
+                title: 'Silk Heritage Drape',
+                desc: 'Classic blue silk saree paired with sweet-neck blouse and gold accents.',
+                image: '/images/DSC07159.jpg'
+              },
+              {
+                category: 'Bridesmaids',
+                title: 'Modern Saree Ensemble',
+                desc: 'Statement black saree paired with sequined strapless blouse.',
+                image: '/images/DSC04682.jpg'
+              },
+              {
+                category: 'Traditional Ceremony',
+                title: 'Temple Gold Curation',
+                desc: 'Green & red silk weave styled with opulent gold temple jewelry.',
+                image: '/images/CIT09345.jpg'
+              },
+              {
+                category: 'Engagement',
+                title: 'Contoured Lehenga Drape',
+                desc: 'Silver-grey embellished lehenga styled with waistband & delicate stones.',
+                image: '/images/DSC04633.jpg'
+              }
+            ].map((item, idx) => (
+              <div 
+                key={idx}
+                className="group flex flex-col bg-white border border-black/10 overflow-hidden hover:shadow-lg transition-all duration-500"
+              >
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#EFECE6]">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute top-3 left-3 bg-black/80 text-white font-sans text-[8px] tracking-[0.25em] uppercase font-semibold px-2.5 py-1 backdrop-blur-sm">
+                    {item.category}
+                  </div>
+                </div>
+                <div className="p-5 flex flex-col flex-1 justify-between">
+                  <div>
+                    <h3 className="font-serif text-lg text-black font-light mb-1 leading-snug group-hover:text-black/70 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="font-sans text-xs text-black/60 font-light leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-black/5 flex items-center justify-between">
+                    <span className="font-mono text-[9px] text-black/40">Ethnic / 0{idx + 1}</span>
+                    <Link href="/connect" className="font-sans text-[9px] tracking-[0.2em] uppercase font-semibold text-black hover:opacity-60 transition-opacity">
+                      Style This Look →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── WESTERN & CONTEMPORARY STYLING CURATION SHOWCASE ── */}
+        <section className="border-t border-black/10 pt-16 pb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/45 block mb-2 font-semibold">
+                ✦ WESTERN & CONTEMPORARY CURATION
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl font-light text-black tracking-tight">
+                Modern Silhouettes, Resort & Evening Drapes
+              </h2>
+            </div>
+            <p className="font-sans text-xs text-black/60 max-w-sm font-light leading-relaxed">
+              Tailored contemporary wear, bias-cut silk slips, and sculpted evening silhouettes styled for intentional modern living.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                category: 'Staircase Silk Slip',
+                title: 'Polka Dot Satin Drape',
+                desc: 'Fluid bias-cut polka dot slip dress styled with ankle strap heels.',
+                image: '/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg'
+              },
+              {
+                category: 'Resort Evening',
+                title: 'Sculpted Peplum Gown',
+                desc: 'Structured black strapless peplum column gown by resort pool.',
+                image: '/images/includes/IMG_8709.JPG.jpeg'
+              },
+              {
+                category: 'Elevated Casual',
+                title: 'Meadow Halter Midi',
+                desc: 'Earthy white halter midi with artisanal leather waist belt.',
+                image: '/images/includes/IMG_9051.JPG.jpeg'
+              },
+              {
+                category: 'Ocean Luxury',
+                title: 'Backless Halter Maxi',
+                desc: 'Minimalist black backless gown against coastal ocean horizons.',
+                image: '/images/includes/IMG_3112.JPG.jpeg'
+              }
+            ].map((item, idx) => (
+              <div 
+                key={idx}
+                className="group flex flex-col bg-white border border-black/10 overflow-hidden hover:shadow-lg transition-all duration-500"
+              >
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#EFECE6]">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute top-3 left-3 bg-black/80 text-white font-sans text-[8px] tracking-[0.25em] uppercase font-semibold px-2.5 py-1 backdrop-blur-sm">
+                    {item.category}
+                  </div>
+                </div>
+                <div className="p-5 flex flex-col flex-1 justify-between">
+                  <div>
+                    <h3 className="font-serif text-lg text-black font-light mb-1 leading-snug group-hover:text-black/70 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="font-sans text-xs text-black/60 font-light leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-black/5 flex items-center justify-between">
+                    <span className="font-mono text-[9px] text-black/40">Western / 0{idx + 1}</span>
+                    <Link href="/lookbook" className="font-sans text-[9px] tracking-[0.2em] uppercase font-semibold text-black hover:opacity-60 transition-opacity">
+                      View Lookbook →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
       </main>
 
