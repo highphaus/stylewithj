@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
+import { useLightbox } from '@/components/ImageLightbox';
 
 // ── DATA ────────────────────────────────────────────────────────────────────
 
@@ -118,6 +119,8 @@ const categories = [
 // ── COMPONENT ────────────────────────────────────────────────────────────────
 
 export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }) {
+  const { openLightbox } = useLightbox();
+
   return (
     <div className={isEmbedded ? "" : "min-h-screen bg-[#FAF9F6] text-[#1A1A1A]"}>
       {!isEmbedded && <Navigation />}
@@ -252,18 +255,19 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                 </div>
               </div>
 
-              {/* Service Image Card */}
+              {/* Service Image Card (Click to Pick / Open Lightbox) */}
               <div className="lg:col-span-4 flex items-center justify-center lg:justify-end mt-4 lg:mt-0">
-                <div className="relative w-full max-w-[280px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs">
+                <div 
+                  onClick={() => openLightbox(svc.image, svc.title)}
+                  className="relative w-full max-w-[280px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
+                  title="Click to view image"
+                >
                   <Image
                     src={svc.image}
                     alt={svc.title}
                     fill
                     className="object-cover object-center"
                   />
-                  <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 text-[7px] tracking-[0.3em] uppercase font-sans text-black rounded-xs">
-                    SERVICE // {svc.num}
-                  </div>
                 </div>
               </div>
 

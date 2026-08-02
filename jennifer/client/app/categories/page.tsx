@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
+import { useLightbox } from '@/components/ImageLightbox';
 
 const categoryData = [
   {
@@ -46,6 +47,7 @@ const categoryData = [
 
 export default function CategoriesPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const { openLightbox } = useLightbox();
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
@@ -133,7 +135,11 @@ export default function CategoriesPage() {
               </div>
 
               {/* Right: Image */}
-              <div className="relative min-h-[260px] sm:min-h-full overflow-hidden order-1 sm:order-2">
+              <div 
+                onClick={() => openLightbox(categoryData[0].image, categoryData[0].headline)}
+                className="relative min-h-[260px] sm:min-h-full overflow-hidden order-1 sm:order-2 cursor-pointer"
+                title="Click to view image"
+              >
                 <Image
                   src={categoryData[0].image}
                   alt={categoryData[0].title}
@@ -156,7 +162,11 @@ export default function CategoriesPage() {
               style={{ background: cat.color }}
             >
               {/* Image */}
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div 
+                onClick={() => openLightbox(cat.num === '02' ? '/images/CIT09345.jpg' : cat.image, cat.headline)}
+                className="relative aspect-[4/5] overflow-hidden cursor-pointer"
+                title="Click to view image"
+              >
                 <Image
                   src={cat.num === '02' ? '/images/CIT09345.jpg' : cat.image}
                   alt={cat.title}

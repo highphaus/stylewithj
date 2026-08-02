@@ -11,13 +11,14 @@ import MeetSection from '@/components/MeetSection';
 import InfiniteMarquee from '@/components/sections/InfiniteMarquee';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 import Navigation from '@/components/Navigation';
+import { useLightbox } from '@/components/ImageLightbox';
 
 // Template showcase components
 import SplitScroll from '@/components/sections/SplitScroll';
 import LookbookHorizon from '@/components/sections/LookbookHorizon';
-import AvantGardeShowcase from '@/components/sections/AvantGardeShowcase';
 
 export default function Home() {
+  const { openLightbox } = useLightbox();
   return (
     <div className="bg-[#FAF9F6] text-[#1A1A1A] min-h-screen font-sans antialiased selection:bg-black selection:text-white">
       <Navigation />
@@ -31,19 +32,15 @@ export default function Home() {
 
       <main className="relative z-20">
         {/* 2. The Philosophy */}
-        <div id="philosophy" />
         <CinematicPhilosophy />
 
-        {/* 3. Who We Help */}
-        <div id="who-we-help" />
+        {/* 3. Who We Accompany */}
         <AudienceGrid />
 
-        {/* 4. Services */}
-        <div id="services" />
+        {/* 4. What We Do (Services) */}
         <ServicesGrid />
 
         {/* 4.5. The Horizon Silhouettes */}
-        <div id="horizon" />
         <SplitScroll />
 
         {/* 5. Transformations */}
@@ -98,8 +95,16 @@ export default function Home() {
                   href="/journal"
                   className="group flex gap-5 items-center p-4 border border-black/5 hover:border-black/20 bg-white/50 hover:bg-[#EFECE6]/30 transition-all duration-500 rounded-sm shadow-[0_4px_25px_rgba(0,0,0,0.01)]"
                 >
-                  {/* Small Editorial Image Frame */}
-                  <div className="relative w-20 sm:w-24 aspect-[3/4] overflow-hidden bg-[#EFECE6] flex-shrink-0 border border-black/5">
+                  {/* Small Editorial Image Frame (Click to Pick) */}
+                  <div 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      openLightbox(article.image, article.title);
+                    }}
+                    className="relative w-20 sm:w-24 aspect-[3/4] overflow-hidden bg-[#EFECE6] flex-shrink-0 border border-black/5 cursor-pointer z-10"
+                    title="Click to view image"
+                  >
                     <img
                       src={article.image}
                       alt={article.title}

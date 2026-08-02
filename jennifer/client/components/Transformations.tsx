@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
+import { useLightbox } from '@/components/ImageLightbox';
 
 const transformationData = [
   {
@@ -51,6 +52,7 @@ interface RowProps {
 }
 
 function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideButton }: RowProps) {
+  const { openLightbox } = useLightbox();
   const segment = 1 / totalItems;
   const isFirst = idx === 0;
   const isLast = idx === totalItems - 1;
@@ -101,14 +103,18 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
         {/* Images Dual Frame */}
         <div className="w-full h-full col-span-12 lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3]">
           
-          {/* Left Column: Before Image */}
-          <div className="col-span-6 h-full overflow-hidden relative border-r border-black/10">
+          {/* Left Column: Before Image (Click to Pick / Open Lightbox) */}
+          <div 
+            onClick={() => openLightbox(item.beforeImg, `${item.client} — BEFORE`)}
+            className="col-span-6 h-full overflow-hidden relative border-r border-black/10 cursor-pointer group"
+            title="Click to view image"
+          >
             <motion.div style={{ x: beforeX }} className="w-full h-full relative">
               <motion.img 
                 style={{ scale }}
                 src={item.beforeImg} 
                 alt="Initial Silhouette" 
-                className="w-full h-full object-cover object-top grayscale-[15%]" 
+                className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700" 
                 draggable="false" 
               />
               <div className="absolute top-6 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm z-10">
@@ -117,14 +123,18 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
             </motion.div>
           </div>
 
-          {/* Right Column: After Image */}
-          <div className="col-span-6 h-full overflow-hidden relative">
+          {/* Right Column: After Image (Click to Pick / Open Lightbox) */}
+          <div 
+            onClick={() => openLightbox(item.afterImg, `${item.client} — AFTER`)}
+            className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
+            title="Click to view image"
+          >
             <motion.div style={{ x: afterX }} className="w-full h-full relative">
               <motion.img 
                 style={{ scale }}
                 src={item.afterImg} 
                 alt="Realized Design Target" 
-                className="w-full h-full object-cover object-top" 
+                className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700" 
                 draggable="false" 
               />
               <div className="absolute top-6 right-6 bg-black text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm z-10">
@@ -156,7 +166,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
               onClick={() => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-black text-white text-[9px] tracking-[0.2em] uppercase font-semibold rounded-full shadow-sm hover:bg-black/80 transition-all"
+              className="hidden lg:flex items-center gap-1.5 px-3.5 py-2 bg-black text-white text-[9px] tracking-[0.2em] uppercase font-semibold rounded-full shadow-sm hover:bg-black/80 transition-all"
             >
               Skip Section ↓
             </button>

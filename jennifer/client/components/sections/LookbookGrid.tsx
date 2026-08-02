@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLightbox } from '@/components/ImageLightbox';
 
 const looks = [
   {
@@ -62,6 +63,7 @@ const looks = [
 
 export default function LookbookGrid() {
   const [openIdx, setOpenIdx] = useState<number | null>(0); // First look open by default
+  const { openLightbox } = useLightbox();
 
   const toggleItem = (idx: number) => {
     setOpenIdx(openIdx === idx ? null : idx);
@@ -103,15 +105,20 @@ export default function LookbookGrid() {
                   </h3>
                 </div>
 
-                {/* Plus / Minus Indicator */}
-                <div className="flex-shrink-0 ml-4">
-                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
-                    isOpen 
-                      ? 'bg-white text-black border-white scale-105' 
-                      : 'bg-transparent text-black/40 border-black/15 group-hover:border-black/40 group-hover:text-black'
+                {/* Prominent High-Visibility Arrow Indicator */}
+                <div className="flex items-center gap-2.5 flex-shrink-0 ml-4">
+                  <span className={`hidden sm:inline-block font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold transition-colors ${
+                    isOpen ? 'text-white/80' : 'text-black/60 group-hover:text-black'
                   }`}>
-                    <span className="text-sm sm:text-base leading-none font-light">
-                      {isOpen ? '−' : '+'}
+                    {isOpen ? 'COLLAPSE' : 'EXPAND'}
+                  </span>
+                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                    isOpen 
+                      ? 'bg-white text-black border-white scale-105 shadow-md' 
+                      : 'bg-black/5 text-black border-black/20 group-hover:bg-black group-hover:text-white group-hover:border-black'
+                  }`}>
+                    <span className={`text-sm sm:text-base leading-none transition-transform duration-300 font-bold ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
+                      ↓
                     </span>
                   </div>
                 </div>
@@ -129,15 +136,31 @@ export default function LookbookGrid() {
                   >
                     <div className="px-5 sm:px-8 pb-7 sm:pb-9 pt-2 flex flex-col gap-6 border-t border-white/10">
                       
-                      {/* Photo Frame Inside the Item Card */}
-                      <div className="relative aspect-[3/4] sm:aspect-[16/10] w-full max-h-[520px] overflow-hidden bg-[#1A1A1A] border border-white/10 rounded-sm shadow-md">
+                      {/* Photo Frame Inside the Item Card (Click to Pick / Open Lightbox) */}
+                      <div 
+                        onClick={() => openLightbox(look.image, look.title)}
+                        className="relative aspect-[3/4] sm:aspect-[16/10] w-full max-h-[520px] overflow-hidden bg-[#1A1A1A] border border-white/10 rounded-sm shadow-md cursor-pointer group/img"
+                        title="Click to view image in Lightbox"
+                      >
                         <Image
                           src={look.image}
                           alt={look.title}
                           fill
-                          className="object-cover object-center"
+                          className="object-cover object-center group-hover/img:scale-[1.02] transition-transform duration-700"
                           unoptimized
                         />
+                        {/* Prominent Overlay Click-to-Enlarge Badge */}
+                        <div className="absolute inset-0 bg-black/25 group-hover/img:bg-black/10 transition-colors flex items-center justify-center">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openLightbox(look.image, look.title);
+                            }}
+                            className="bg-black/85 hover:bg-black text-white px-5 py-2.5 rounded-xs text-[10px] tracking-[0.25em] uppercase font-mono font-semibold border border-white/20 shadow-xl flex items-center gap-2 transition-transform hover:scale-105"
+                          >
+                            <span>🔍 CLICK TO ENLARGE IMAGE</span>
+                          </button>
+                        </div>
                       </div>
 
                       {/* Description & Metadata */}

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLightbox } from '@/components/ImageLightbox';
 
 const galleryItems = [
   { id: 1, category: "western", src: "/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg", aspect: "aspect-[3/4]", title: "Satin Polka Dot Slip", desc: "Fluid bias-cut polka dot slip dress styled with ankle strap heels on a grand wooden staircase." },
@@ -23,6 +24,7 @@ const galleryItems = [
 
 export default function GalleryGrid() {
   const [filter, setFilter] = useState<'all' | 'western' | 'editorial' | 'resort' | 'casual'>('all');
+  const { openLightbox } = useLightbox();
 
   const filteredItems = filter === 'all'
     ? galleryItems
@@ -76,7 +78,9 @@ export default function GalleryGrid() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="relative group overflow-hidden bg-[#EAE8E3] border border-black/[0.04] aspect-[3/4] rounded-sm shadow-xs"
+                onClick={() => openLightbox(item.src, item.title)}
+                className="relative group overflow-hidden bg-[#EAE8E3] border border-black/[0.04] aspect-[3/4] rounded-sm shadow-xs cursor-pointer"
+                title="Click to view image"
               >
                 <Image
                   src={item.src}

@@ -4,6 +4,7 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useLightbox } from '@/components/ImageLightbox';
 
 const deepArchiveCollection = [
   { id: 1, src: '/images/img06.jpeg', left: '6%', top: '10%', size: 'w-[120px] sm:w-[170px] md:w-[240px]' },
@@ -30,6 +31,12 @@ function TactileCard({
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const { openLightbox } = useLightbox();
+
+  const handleOpen = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    openLightbox(item.src, `Atelier Editorial Look 0${index + 1}`);
+  };
 
   return (
     <motion.div
@@ -38,9 +45,14 @@ function TactileCard({
       dragElastic={0.08}
       dragMomentum={true}
       onDragStart={() => setIsDragging(true)}
-      onDragEnd={() => setIsDragging(false)}
+      onDragEnd={() => setTimeout(() => setIsDragging(false), 50)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTap={() => {
+        if (!isDragging) {
+          openLightbox(item.src, `Atelier Editorial Look 0${index + 1}`);
+        }
+      }}
       style={{
         left: item.left,
         top: item.top,
@@ -56,7 +68,8 @@ function TactileCard({
           : '0 8px 25px rgba(0,0,0,0.04)'
       }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      className="absolute aspect-[3/4] border border-black/15 bg-white overflow-hidden cursor-grab active:cursor-grabbing touch-none select-none rounded-[2px]"
+      className="absolute aspect-[3/4] border border-black/15 bg-white overflow-hidden cursor-pointer touch-none select-none rounded-[2px] group"
+      title="Click to view image in Lightbox"
     >
       <div className={`relative h-full ${item.size} pointer-events-none`}>
         <Image
@@ -67,6 +80,12 @@ function TactileCard({
           className="object-cover pointer-events-none"
           sizes="(max-width: 768px) 150px, 300px"
         />
+        {/* Subtle Hover Click-to-View Badge Overlay */}
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center pointer-events-none">
+          <span className="font-mono text-[8px] sm:text-[9px] tracking-[0.25em] text-white uppercase font-semibold bg-black/90 backdrop-blur-md px-3 py-1.5 rounded-xs border border-white/20 shadow-md">
+            🔍 CLICK TO VIEW
+          </span>
+        </div>
       </div>
     </motion.div>
   );
@@ -90,8 +109,8 @@ export default function LookbookHorizon() {
         </div>
 
         <div className="flex flex-col sm:items-end gap-3">
-          <p className="font-mono text-[8px] sm:text-[9px] text-neutral-700 uppercase tracking-widest sm:text-right font-semibold bg-black/5 px-3 py-1.5 rounded-full border border-black/10">
-            🖐️ Click or Touch Photos to Drag & Rearrange
+          <p className="font-mono text-[8px] sm:text-[9px] text-neutral-700 uppercase tracking-widest sm:text-right font-semibold bg-black/5 px-3.5 py-1.5 rounded-full border border-black/10">
+            🔍 Click any photo to enlarge & view • Drag to rearrange
           </p>
           <button
             onClick={() => setResetKey((k) => k + 1)}
