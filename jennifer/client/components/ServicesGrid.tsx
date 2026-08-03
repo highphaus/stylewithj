@@ -154,7 +154,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               {/* CLEAN FULL IMAGE (Click to open Lightbox) */}
               <div 
                 onClick={() => openLightbox(item.image, item.name)}
-                className="relative w-full aspect-[4/5] sm:aspect-[3/4] overflow-hidden bg-[#EFECE6] border border-black/5 rounded-xs shadow-sm cursor-pointer"
+                className="relative w-full h-[100dvh] sm:h-auto sm:aspect-[3/4] overflow-hidden bg-[#EFECE6] border border-black/5 rounded-xs shadow-sm cursor-pointer"
                 title="Click to view image"
               >
                 <Image 

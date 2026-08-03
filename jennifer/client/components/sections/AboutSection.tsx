@@ -77,14 +77,14 @@ export default function AboutSection() {
             <div
               key={idx}
               onClick={() => openLightbox(img.src, img.alt)}
-              className="group relative w-full aspect-[3/4] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 shadow-md cursor-pointer"
+              className="group relative w-full h-[100dvh] md:h-auto md:aspect-[3/4] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 shadow-md cursor-pointer flex-shrink-0"
               title={`Click to view ${img.alt}`}
             >
               <Image
                 src={img.src}
                 alt={img.alt}
                 fill
-                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                className="object-cover object-top sm:object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 sizes="(max-width: 768px) 100vw, 33vw"
                 unoptimized
               />

@@ -69,7 +69,7 @@ export default function MeetSection() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             onClick={() => openLightbox('/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg', 'Jennifer — Founder & Creative Director')}
-            className="w-full relative aspect-[3/4] bg-[#EFECE6] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.06)] border border-black/10 rounded-xs cursor-pointer group"
+            className="w-full relative h-[100dvh] lg:h-auto lg:aspect-[3/4] bg-[#EFECE6] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.06)] border border-black/10 rounded-xs cursor-pointer group"
             title="Click to view image"
           >
             <img

@@ -37,7 +37,7 @@ export default function GallerySection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, delay: idx * 0.2 }}
-              className="relative w-full aspect-[3/4] overflow-hidden group cursor-pointer bg-[#EFECE6] border border-black/10 rounded-xs"
+              className="relative w-full h-[100dvh] md:h-auto md:aspect-[3/4] overflow-hidden group cursor-pointer bg-[#EFECE6] border border-black/10 rounded-xs"
             >
               <img 
                 src={src} 

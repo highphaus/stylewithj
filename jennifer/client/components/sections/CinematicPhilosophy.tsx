@@ -23,7 +23,7 @@ export default function CinematicPhilosophy() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         
         {/* LEFT COLUMN: 100% CLEAN IMAGE FRAME (ZERO TEXT OVER PICTURE) */}
-        <div className="col-span-1 lg:col-span-5 relative w-full aspect-[3/4] sm:aspect-[4/5] overflow-hidden bg-[#EFECE6] border border-black/10 shadow-xl rounded-xs">
+        <div className="col-span-1 lg:col-span-5 relative w-full h-[100dvh] sm:h-auto sm:aspect-[4/5] overflow-hidden bg-[#EFECE6] border border-black/10 shadow-xl rounded-xs flex-shrink-0">
           <motion.div style={{ scale: imageScale }} className="w-full h-full relative">
             <Image
               src="/images/includes/IMG_0330.JPG.jpeg" 

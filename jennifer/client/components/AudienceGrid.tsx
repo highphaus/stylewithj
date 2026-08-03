@@ -232,7 +232,7 @@ export default function AudienceGrid() {
         {/* Step B: 100% Clean Image projection block IN THE MIDDLE (Click to open Lightbox) */}
         <div 
           onClick={() => openLightbox(audiences[activeIndex].image, audiences[activeIndex].title)}
-          className="w-full h-[40vh] sm:h-[45vh] relative border-b border-black/10 overflow-hidden bg-[#EFECE6] cursor-pointer"
+          className="w-full h-[100dvh] relative border-b border-black/10 overflow-hidden bg-[#EFECE6] cursor-pointer"
           title="Click to view image"
         >
           <AnimatePresence mode="wait">
