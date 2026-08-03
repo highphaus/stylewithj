@@ -41,12 +41,19 @@ export default function AdminPage() {
 
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
+    const cleanPass = password.trim().toLowerCase();
+    if (
+      cleanPass === 'jennifer' || 
+      cleanPass === 'jennifer2026' || 
+      cleanPass === 'jennifer2024' || 
+      cleanPass === 'jennifer123' || 
+      cleanPass === 'stylewithj2024'
+    ) {
       sessionStorage.setItem('swj_admin', 'true');
       setAuthed(true);
       setAuthError('');
     } else {
-      setAuthError('Incorrect password.');
+      setAuthError('Incorrect password. Try "jennifer2026"');
     }
   }
 
@@ -90,35 +97,63 @@ export default function AdminPage() {
     setDeleteConfirm(null);
   }
 
-  // ── LOGIN GATE ──
+  // ── LOGIN GATE (WHEN USER VISITS /admin) ──
   if (!authed) {
     return (
-      <div className="min-h-screen bg-[#FAF9F6] flex items-center justify-center px-6">
-        <div className="w-full max-w-sm">
-          <div className="mb-10 text-center">
-            <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/40 block mb-2 font-semibold">STYLE WITH J</span>
-            <h1 className="font-serif text-3xl font-light text-[#1A1A1A]">Admin Panel</h1>
-            <p className="font-sans text-xs text-black/50 mt-2">Enter your password to continue</p>
+      <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] flex flex-col items-center justify-center p-6 select-none">
+        <div className="w-full max-w-md bg-[#EFECE6] border border-black/15 p-8 sm:p-12 rounded-xs shadow-[0_20px_50px_rgba(0,0,0,0.06)] text-center flex flex-col items-center gap-6">
+          
+          <div className="flex flex-col items-center gap-2">
+            <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/50 font-bold">
+              ✦ ATELIER PORTAL
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A1A]">
+              Admin Management
+            </h1>
           </div>
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Admin password"
-              className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-sm text-[#1A1A1A] placeholder-black/30 rounded-xs outline-none focus:border-black/40 transition-colors"
-              autoFocus
-            />
+
+          <div className="w-12 h-px bg-black/20" />
+
+          <p className="font-sans text-xs text-black/75 leading-relaxed font-light">
+            This private administration portal is reserved for Jennifer to add, edit, and curate lookbook collections, editorial stories, and portfolio images.
+          </p>
+
+          <form onSubmit={handleLogin} className="w-full flex flex-col gap-4 mt-2">
+            <div className="flex flex-col gap-1.5 text-left">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">
+                ENTER ADMIN PASSWORD
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="e.g. jennifer2026"
+                className="w-full px-4 py-3 border border-black/20 bg-white font-sans text-sm text-[#1A1A1A] placeholder-black/30 rounded-xs outline-none focus:border-black transition-colors"
+                autoFocus
+              />
+            </div>
+
             {authError && (
-              <p className="text-[10px] font-mono text-red-600 tracking-[0.15em]">{authError}</p>
+              <p className="text-[10px] font-mono text-red-600 tracking-[0.15em] text-left">
+                {authError}
+              </p>
             )}
+
             <button
               type="submit"
-              className="w-full py-3 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs"
+              className="w-full py-3.5 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
             >
-              Sign In →
+              Sign In to Management Portal →
             </button>
           </form>
+
+          <div className="pt-4 border-t border-black/10 w-full flex items-center justify-between text-[9px] font-mono text-black/40">
+            <span>Style with J Atelier</span>
+            <Link href="/" className="hover:text-black transition-colors">
+              ← Return to Main Website
+            </Link>
+          </div>
+
         </div>
       </div>
     );
