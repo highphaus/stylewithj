@@ -2,8 +2,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useSiteData } from '@/lib/use-site-data';
 
 export default function HeroSection() {
+  const { hero } = useSiteData();
+
   return (
     <section className="relative w-full h-screen bg-[#111] text-white overflow-hidden flex items-center">
       
@@ -11,7 +14,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-[#0c0c0c]">
         {/* Desktop Hero Image */}
         <Image
-          src="/images/hero/hero image desktop.png"
+          src={hero.desktopImage || "/images/hero/hero image desktop.png"}
           alt="Style with J — Hero Desktop"
           fill
           priority
@@ -21,7 +24,7 @@ export default function HeroSection() {
         />
         {/* Mobile / Small Device Hero Image */}
         <Image
-          src="/images/hero/hero image.jpeg"
+          src={hero.mobileImage || "/images/hero/hero image.jpeg"}
           alt="Style with J — Hero Mobile"
           fill
           priority
@@ -44,7 +47,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8 }}
             className="text-[10px] sm:text-xs tracking-[0.4em] uppercase text-white/60 mb-3 block font-light"
           >
-            Personal Stylist
+            {hero.eyebrow}
           </motion.span>
 
           <motion.h1 
@@ -53,9 +56,9 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-4xl sm:text-5xl md:text-6xl font-serif font-light leading-[1.15] tracking-wide mb-6"
           >
-            Style that <br />
-            reflects who <br />
-            <span className="italic font-normal">you are.</span>
+            {hero.titleLine1} <br />
+            {hero.titleLine2} <br />
+            <span className="italic font-normal">{hero.titleItalic}</span>
           </motion.h1>
 
           <motion.div 
@@ -71,18 +74,18 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-sm sm:text-base font-light text-white/70 max-w-[280px] sm:max-w-xs leading-relaxed mb-10 tracking-wide"
           >
-            Intentional wardrobes. <br />
-            Timeless confidence.
+            {hero.subtitleLine1} <br />
+            {hero.subtitleLine2}
           </motion.p>
 
           <motion.a
-            href="/connect"
+            href={hero.ctaUrl || "/connect"}
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="group flex items-center gap-12 px-6 py-3 border border-white/30 hover:border-white text-[10px] tracking-[0.25em] uppercase font-light transition-all duration-300 backdrop-blur-[2px]"
           >
-            Connect
+            {hero.ctaText || "Connect"}
             <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-sm">→</span>
           </motion.a>
         </div>
@@ -90,7 +93,7 @@ export default function HeroSection() {
         {/* Right Side: Editorial Callout Line */}
         <div className="hidden md:flex flex-col items-start border-l border-white/20 pl-6 py-2 max-w-[150px]">
           <p className="text-[10px] tracking-[0.2em] uppercase font-light leading-relaxed text-white/80">
-            Editorial approach. Personal touch.
+            {hero.sideText}
           </p>
         </div>
 

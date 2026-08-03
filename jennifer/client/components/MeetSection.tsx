@@ -3,9 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
+import { useSiteData } from '@/lib/use-site-data';
 
 export default function MeetSection() {
   const { openLightbox } = useLightbox();
+  const { meet } = useSiteData();
 
   return (
     <section className="w-full bg-[#FAF9F6] text-[#1A1A1A] pt-16 pb-28 lg:pt-24 lg:pb-36 px-6 md:px-16 lg:px-24 border-b border-black/[0.06] overflow-hidden">
@@ -22,11 +24,10 @@ export default function MeetSection() {
           >
             <div>
               <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.5em] text-black/40 block mb-3 uppercase font-semibold">
-                THE DESIGNER PROFILE
+                {meet.eyebrow}
               </span>
               <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-none text-[#1A1A1A]">
-                Meet <br />
-                <span className="italic text-black/40 font-normal">Jennifer.</span>
+                {meet.title}
               </h2>
             </div>
 
@@ -34,10 +35,10 @@ export default function MeetSection() {
 
             <div className="flex flex-col gap-2">
               <span className="font-sans text-[10px] tracking-[0.3em] text-black/60 uppercase font-semibold">
-                FOUNDER & CREATIVE DIRECTOR
+                {meet.subtitle}
               </span>
               <p className="font-sans text-xs sm:text-sm font-light text-black/75 leading-relaxed max-w-sm">
-                Helping individuals discover, refine, and elevate their personal style with custom wardrobe curations built for real life, confidence, and quiet luxury.
+                {meet.bioText}
               </p>
             </div>
 
@@ -68,13 +69,13 @@ export default function MeetSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            onClick={() => openLightbox('/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg', 'Jennifer — Founder & Creative Director')}
+            onClick={() => openLightbox(meet.image || '/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg', `${meet.title} — ${meet.subtitle}`)}
             className="w-full relative h-[100dvh] lg:h-auto lg:aspect-[3/4] bg-[#EFECE6] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.06)] border border-black/10 rounded-xs cursor-pointer group"
             title="Click to view image"
           >
             <img
-              src="/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg"
-              alt="Jennifer — Founder & Creative Identity Director"
+              src={meet.image || '/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg'}
+              alt={meet.title}
               className="w-full h-full object-cover object-top transition-transform duration-[3000ms] ease-out group-hover:scale-[1.03]"
             />
             {/* Subtle floating badge */}
@@ -96,15 +97,15 @@ export default function MeetSection() {
             <div className="w-8 h-px bg-black/40" />
             
             <blockquote className="font-serif text-2xl md:text-3xl font-light italic leading-snug tracking-tight text-[#1A1A1A]">
-              “Style is a deeply personal expression of who you are. Every time you dress, you are telling the world how you want to show up.”
+              {meet.quote}
             </blockquote>
 
             <div className="bg-[#EFECE6]/60 border-l-2 border-black/30 p-5 rounded-xs flex flex-col gap-2">
               <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/50 font-semibold">
-                PHILOSOPHY ACCENT
+                {meet.accentTitle}
               </span>
               <p className="font-sans text-xs text-black/70 leading-relaxed font-light">
-                An intentional approach focused on physical posture, silhouette proportions, and personal confidence over fleeting trends.
+                {meet.accentText}
               </p>
             </div>
           </motion.div>

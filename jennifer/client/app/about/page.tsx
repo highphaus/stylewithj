@@ -4,8 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
+import { useSiteData } from '@/lib/use-site-data';
 
 export function AboutContent() {
+  const { about } = useSiteData();
+
   return (
     <>
       {/* ── EDITORIAL HEADER ── */}
@@ -14,13 +17,13 @@ export function AboutContent() {
           
           <div className="flex items-center gap-3">
             <span className="text-[10px] sm:text-xs tracking-[0.4em] uppercase font-semibold text-black/60 font-sans">
-              About Me
+              {about.eyebrow}
             </span>
           </div>
 
           <h1 className="font-serif text-[22px] min-[360px]:text-[25px] sm:text-6xl md:text-7xl font-light tracking-tight leading-snug sm:leading-[1.1] text-[#1A1A1A] max-w-4xl mt-2">
-            <span className="block font-light">Clothes caught my eye.</span>
-            <span className="block italic font-normal text-black/60 mt-1 sm:mt-2">Style caught my heart.</span>
+            <span className="block font-light">{about.titleLine1}</span>
+            <span className="block italic font-normal text-black/60 mt-1 sm:mt-2">{about.titleLine2}</span>
           </h1>
 
         </div>
@@ -34,22 +37,22 @@ export function AboutContent() {
           <div className="lg:col-span-5 relative lg:sticky lg:top-28">
             <div className="relative aspect-[3/4] w-full bg-[#EAE8E3] overflow-hidden shadow-2xl border border-black/5">
               <Image
-                src="/images/includes/IMG_0267.JPG.jpeg"
-                alt="Jennifer, Founder of Style with J"
+                src={about.creativeDirectorImage || "/images/includes/IMG_0267.JPG.jpeg"}
+                alt={`${about.creativeDirectorName}, ${about.creativeDirectorTitle}`}
                 fill
                 priority
                 className="object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
               />
               <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 border border-black/5">
-                <span className="text-[8px] tracking-[0.3em] uppercase block text-black/50 font-sans">CREATIVE DIRECTOR</span>
-                <span className="font-serif text-xs text-black">Jennifer</span>
+                <span className="text-[8px] tracking-[0.3em] uppercase block text-black/50 font-sans">{about.creativeDirectorTitle}</span>
+                <span className="font-serif text-xs text-black">{about.creativeDirectorName}</span>
               </div>
             </div>
 
             <div className="mt-6 p-6 bg-[#EFECE6] border border-black/5 flex flex-col gap-2">
               <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-sans">OUR PHILOSOPHY</span>
               <p className="font-serif text-sm italic text-black/80">
-                “Style is personal. It should fit you, your personality, your lifestyle, your comfort, and the way you want to show up in the world.”
+                {about.philosophyQuote}
               </p>
             </div>
           </div>
@@ -58,15 +61,15 @@ export function AboutContent() {
           <div className="lg:col-span-7 flex flex-col gap-8 text-base sm:text-lg font-sans font-light text-black/80 leading-relaxed">
             
             <p className="text-xl sm:text-2xl font-serif font-light text-black leading-snug">
-              I've always believed that getting dressed should feel good, not like a rulebook you have to follow.
+              {about.storyParagraph1}
             </p>
 
             <p>
-              My journey with styling started through modelling, where I found myself more fascinated by what happened behind the scenes: the outfits, the details, and the way the right look could change how someone carried themselves.
+              {about.storyParagraph2}
             </p>
 
             <p>
-              As I explored my own style, I learned what made me feel comfortable, confident, and like the best version of myself. That journey led me to start styling friends and people around me, helping them discover what truly suited them. The incredibly positive feedback and seeing how confident and comfortable they felt in their looks gave me the confidence to take this passion further.
+              {about.storyParagraph3}
             </p>
 
             <div className="py-2 my-2">
@@ -75,15 +78,11 @@ export function AboutContent() {
               </span>
             </div>
 
-            <p>
-              I don't believe in dressing people according to trends or forcing them into a version of themselves that doesn't feel natural. Style is personal. It should fit you, your personality, your lifestyle, your comfort, and the way you want to show up in the world.
-            </p>
-
             {/* HIGHLIGHTED GOAL CARD (MATCHES OUR PHILOSOPHY STYLE) */}
             <div className="p-6 bg-[#EFECE6] border border-black/5 flex flex-col gap-2 my-2 shadow-xs rounded-xs">
               <span className="text-[8px] tracking-[0.3em] uppercase text-black/50 font-sans font-semibold">MY GOAL</span>
               <p className="font-serif text-lg sm:text-xl italic text-black font-normal leading-relaxed">
-                “My goal is simple: to help you find a style that feels like you, only better.”
+                {about.goalQuote}
               </p>
             </div>
 

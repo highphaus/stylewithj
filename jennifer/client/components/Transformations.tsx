@@ -55,12 +55,10 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   const { openLightbox } = useLightbox();
   const segment = 1 / totalItems;
   const isFirst = idx === 0;
-  const isLast = idx === totalItems - 1;
 
   const pStart = idx * segment;
   const pMid = pStart + segment * 0.2;
 
-  // Dedicated scroll hold window so cards stay pinned for reading
   const inputRange = isFirst
     ? [0.0, 0.8, 1.0]
     : [pStart, pMid, 1.0];
@@ -85,7 +83,6 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
     ? [1.0, 1.0, 1.0]
     : [1.03, 1.0, 1.0];
 
-  // Map scroll progress cleanly using transform values
   const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
   const beforeX = useTransform(scrollYProgress, inputRange, beforeRange);
   const afterX = useTransform(scrollYProgress, inputRange, afterRange);
@@ -103,7 +100,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
         {/* Images Dual Frame */}
         <div className="w-full h-full col-span-12 lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3]">
           
-          {/* Left Column: Before Image (Click to Pick / Open Lightbox) */}
+          {/* Left Column: Before Image */}
           <div 
             onClick={() => openLightbox(item.beforeImg, `${item.client} — BEFORE`)}
             className="col-span-6 h-full overflow-hidden relative border-r border-black/10 cursor-pointer group"
@@ -123,7 +120,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
             </motion.div>
           </div>
 
-          {/* Right Column: After Image (Click to Pick / Open Lightbox) */}
+          {/* Right Column: After Image */}
           <div 
             onClick={() => openLightbox(item.afterImg, `${item.client} — AFTER`)}
             className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
@@ -183,42 +180,57 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   );
 }
 
-// Clean Case Study Card for mobile and subpages
-function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
+// Clean Full-Bleed Edge-to-Edge Mobile & Subpage Case Study Card
+function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transformationData[0]; fullBleedMobile?: boolean }) {
   const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
+  const { openLightbox } = useLightbox();
 
   return (
-    <div className="flex flex-col bg-[#FAF8F3] border border-black/10 p-5 sm:p-7 shadow-[0_10px_35px_rgba(0,0,0,0.02)] rounded-sm">
-      {/* Photo Frame */}
-      <div className="relative aspect-[3/4] sm:aspect-[4/5] w-full overflow-hidden bg-[#EAE8E3] border border-black/5 shadow-sm rounded-[1px]">
+    <div className={`flex flex-col bg-[#FAF8F3] ${fullBleedMobile ? 'w-full' : 'border border-black/10 p-5 sm:p-7 rounded-sm shadow-sm'}`}>
+      
+      {/* 100% FULL-BLEED MOBILE SCREEN COVER PHOTO FRAME (0 SIDE DEAD SPACE) */}
+      <div className={`relative ${fullBleedMobile ? 'w-full h-[82vh] min-h-[480px] bg-[#0D0D0D]' : 'aspect-[3/4] sm:aspect-[4/5] w-full bg-[#EAE8E3] rounded-[1px] border border-black/5'} overflow-hidden shadow-sm cursor-pointer`}>
         {activeMode === 'both' ? (
           <div className="grid grid-cols-2 w-full h-full divide-x divide-black/10">
-            <div className="relative h-full overflow-hidden">
+            <div 
+              onClick={() => openLightbox(item.beforeImg, `${item.client} — BEFORE`)}
+              className="relative h-full overflow-hidden group"
+              title="Click to view full image"
+            >
               <img
                 src={item.beforeImg}
                 alt="Before"
-                className="w-full h-full object-cover object-top grayscale-[15%]"
+                className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700"
                 draggable="false"
               />
-              <div className="absolute top-2.5 left-2.5 bg-[#FAF9F6]/95 px-2 py-1 text-[7px] tracking-[0.2em] font-sans text-black uppercase font-bold shadow-xs">
+              <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-2.5 py-1 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs">
                 BEFORE
               </div>
             </div>
-            <div className="relative h-full overflow-hidden">
+            <div 
+              onClick={() => openLightbox(item.afterImg, `${item.client} — AFTER`)}
+              className="relative h-full overflow-hidden group"
+              title="Click to view full image"
+            >
               <img
                 src={item.afterImg}
                 alt="After"
-                className="w-full h-full object-cover object-top"
+                className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
                 draggable="false"
               />
-              <div className="absolute top-2.5 right-2.5 bg-black text-white px-2 py-1 text-[7px] tracking-[0.2em] font-sans uppercase font-bold shadow-xs">
+              <div className="absolute top-4 right-4 bg-black text-white px-2.5 py-1 text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-xs">
                 AFTER
               </div>
             </div>
           </div>
         ) : (
           <AnimatePresence mode="wait">
-            <motion.div key={activeMode} className="relative w-full h-full">
+            <motion.div 
+              key={activeMode} 
+              onClick={() => openLightbox(activeMode === 'before' ? item.beforeImg : item.afterImg, `${item.client} — ${activeMode.toUpperCase()}`)}
+              className="relative w-full h-full cursor-pointer group"
+              title="Click to view full image"
+            >
               <motion.img
                 src={activeMode === 'before' ? item.beforeImg : item.afterImg}
                 alt={activeMode}
@@ -226,46 +238,46 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className={`w-full h-full object-cover object-top ${
+                className={`w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ${
                   activeMode === 'before' ? 'grayscale-[20%]' : ''
                 }`}
                 draggable="false"
               />
-              <div className="absolute top-3 left-3 bg-[#FAF9F6]/95 px-2.5 py-1 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs">
+              <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs">
                 {activeMode === 'before' ? 'BEFORE' : 'AFTER'}
               </div>
             </motion.div>
           </AnimatePresence>
         )}
 
-        {/* View Mode Switcher Pill */}
-        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md border border-black/10 rounded-full p-0.5 sm:p-1 flex gap-0.5 sm:gap-1 shadow-md z-20">
+        {/* View Mode Switcher Pill Overlay */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md border border-white/10 rounded-full p-1 flex gap-1 shadow-lg z-20">
           <button
-            onClick={() => setActiveMode('both')}
-            className={`px-2.5 sm:px-3 py-0.5 sm:py-1 text-[7px] sm:text-[8px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
+            onClick={(e) => { e.stopPropagation(); setActiveMode('both'); }}
+            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
               activeMode === 'both'
-                ? 'bg-black text-white'
-                : 'bg-transparent text-black/50 hover:text-black'
+                ? 'bg-white text-black'
+                : 'bg-transparent text-white/60 hover:text-white'
             }`}
           >
             Both
           </button>
           <button
-            onClick={() => setActiveMode('before')}
-            className={`px-2.5 sm:px-3 py-0.5 sm:py-1 text-[7px] sm:text-[8px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
+            onClick={(e) => { e.stopPropagation(); setActiveMode('before'); }}
+            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
               activeMode === 'before'
-                ? 'bg-black text-white'
-                : 'bg-transparent text-black/50 hover:text-black'
+                ? 'bg-white text-black'
+                : 'bg-transparent text-white/60 hover:text-white'
             }`}
           >
             Before
           </button>
           <button
-            onClick={() => setActiveMode('after')}
-            className={`px-2.5 sm:px-3 py-0.5 sm:py-1 text-[7px] sm:text-[8px] tracking-[0.18em] uppercase font-bold rounded-full transition-all duration-300 ${
+            onClick={(e) => { e.stopPropagation(); setActiveMode('after'); }}
+            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
               activeMode === 'after'
-                ? 'bg-black text-white'
-                : 'bg-transparent text-black/50 hover:text-black'
+                ? 'bg-white text-black'
+                : 'bg-transparent text-white/60 hover:text-white'
             }`}
           >
             After
@@ -274,8 +286,11 @@ function CaseStudyCard({ item }: { item: typeof transformationData[0] }) {
       </div>
 
       {/* Spacious Clean Details Section */}
-      <div className="flex flex-col text-left mt-5 px-1">
-        <h3 className="font-serif text-lg sm:text-xl tracking-wide font-normal text-[#1A1A1A] uppercase mb-2 leading-snug">
+      <div className={`flex flex-col text-left ${fullBleedMobile ? 'px-6 pt-6 pb-8' : 'mt-5 px-1'}`}>
+        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/40 font-bold block mb-1">
+          {item.demographic}
+        </span>
+        <h3 className="font-serif text-xl sm:text-2xl tracking-wide font-light text-[#1A1A1A] uppercase mb-2 leading-snug">
           {item.client}
         </h3>
         <p className="font-serif text-sm italic text-black/75 leading-relaxed font-light border-l-2 border-black/15 pl-4 py-0.5">
@@ -294,7 +309,6 @@ interface TransformationsProps {
 export default function Transformations({ hideButton = false, isStatic = false }: TransformationsProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Smooth, fluid scroll progress without sluggish spring delay
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"]
@@ -309,19 +323,29 @@ export default function Transformations({ hideButton = false, isStatic = false }
   return (
     <div className="relative w-full bg-[#FAF9F6] overflow-clip">
       
-      {/* ── MOBILE EXCLUSIVE VIEW (block lg:hidden): Clean Editorial Flow ── */}
+      {/* ── MOBILE EXCLUSIVE VIEW (100% FULL-BLEED HERO SCREEN COVER IMAGES WITH NO SIDE MARGINS/DEAD SPACE) ── */}
       {!isStatic && (
-        <div className="block lg:hidden w-full py-10 px-4 sm:px-8 bg-[#FAF9F6]">
-          {/* Stack of Clean Integrated Mobile Cards */}
-          <div className="flex flex-col gap-10 max-w-md mx-auto">
+        <div className="block lg:hidden w-full bg-[#FAF9F6]">
+          {/* Header */}
+          <div className="px-6 pt-16 pb-8 border-b border-black/10 bg-[#FAF9F6]">
+            <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/45 block mb-2 font-semibold">
+              ✦ TRANSFORMATIONS
+            </span>
+            <h2 className="font-serif text-3xl font-light text-black tracking-tight">
+              Visual Structural Evolutions
+            </h2>
+          </div>
+
+          {/* Stack of 100% Full Bleed Mobile Cards */}
+          <div className="flex flex-col divide-y divide-black/10 bg-[#FAF9F6]">
             {transformationData.map((item) => (
-              <CaseStudyCard key={item.id} item={item} />
+              <CaseStudyCard key={item.id} item={item} fullBleedMobile={true} />
             ))}
           </div>
         </div>
       )}
 
-      {/* ── DESKTOP EXCLUSIVE VIEW (hidden lg:block): Extended Smooth Flight Scroll ── */}
+      {/* ── DESKTOP EXCLUSIVE VIEW: Extended Smooth Flight Scroll ── */}
       {!isStatic ? (
         <div ref={sectionRef} className="hidden lg:block relative w-full h-[380vh] bg-[#FAF9F6] overflow-x-clip">
           <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]">

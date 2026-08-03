@@ -26,16 +26,10 @@ export default function GalleryGrid() {
               Lookbook
             </h1>
           </div>
-          <div className="max-w-xs text-left md:text-right flex flex-col items-start md:items-end gap-2">
+          <div className="max-w-xs text-left md:text-right">
             <p className="font-serif text-xs italic text-black/60 leading-relaxed font-light">
               A visual archive cataloging Western wear, resort silhouettes, and curated editorial looks styled by Jennifer.
             </p>
-            <Link 
-              href="/admin" 
-              className="text-[9px] font-mono tracking-[0.25em] uppercase text-black/40 hover:text-black transition-colors"
-            >
-              ⚙ Admin Portal
-            </Link>
           </div>
         </div>
 

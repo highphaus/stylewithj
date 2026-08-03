@@ -1,40 +1,130 @@
 'use client';
 // lib/use-site-data.ts
-// Client hook managing Services, Clientele, and Journal articles for the entire site & admin panel
+// Comprehensive hook managing all site content & text blocks for home page, about page, meet section, hero section, contact info, testimonials, services, clientele, and journal.
 
 import { useState, useEffect, useCallback } from 'react';
 import { 
+  HeroContent, seedHeroContent,
+  AboutContentData, seedAboutContent,
+  MeetContentData, seedMeetContent,
+  ContactContentData, seedContactContent,
+  TestimonialItem, seedTestimonials,
   ServiceItem, seedServices, 
   AudienceItem, seedAudiences, 
   JournalArticle, seedArticles 
 } from './site-data';
 
+const HERO_KEY = 'swj_hero';
+const ABOUT_KEY = 'swj_about';
+const MEET_KEY = 'swj_meet';
+const CONTACT_KEY = 'swj_contact';
+const TESTIMONIALS_KEY = 'swj_testimonials';
 const SERVICES_KEY = 'swj_services';
 const AUDIENCES_KEY = 'swj_audiences';
 const ARTICLES_KEY = 'swj_articles';
 
 export function useSiteData() {
-  const [services, setServices] = useState<ServiceItem[]>([]);
-  const [audiences, setAudiences] = useState<AudienceItem[]>([]);
-  const [articles, setArticles] = useState<JournalArticle[]>([]);
+  const [hero, setHero] = useState<HeroContent>(seedHeroContent);
+  const [about, setAbout] = useState<AboutContentData>(seedAboutContent);
+  const [meet, setMeet] = useState<MeetContentData>(seedMeetContent);
+  const [contact, setContact] = useState<ContactContentData>(seedContactContent);
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(seedTestimonials);
+  const [services, setServices] = useState<ServiceItem[]>(seedServices);
+  const [audiences, setAudiences] = useState<AudienceItem[]>(seedAudiences);
+  const [articles, setArticles] = useState<JournalArticle[]>(seedArticles);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     try {
+      const storedHero = localStorage.getItem(HERO_KEY);
+      if (storedHero) setHero(JSON.parse(storedHero));
+
+      const storedAbout = localStorage.getItem(ABOUT_KEY);
+      if (storedAbout) setAbout(JSON.parse(storedAbout));
+
+      const storedMeet = localStorage.getItem(MEET_KEY);
+      if (storedMeet) setMeet(JSON.parse(storedMeet));
+
+      const storedContact = localStorage.getItem(CONTACT_KEY);
+      if (storedContact) setContact(JSON.parse(storedContact));
+
+      const storedTestimonials = localStorage.getItem(TESTIMONIALS_KEY);
+      if (storedTestimonials) setTestimonials(JSON.parse(storedTestimonials));
+
       const storedServices = localStorage.getItem(SERVICES_KEY);
-      setServices(storedServices ? JSON.parse(storedServices) : seedServices);
+      if (storedServices) setServices(JSON.parse(storedServices));
 
       const storedAudiences = localStorage.getItem(AUDIENCES_KEY);
-      setAudiences(storedAudiences ? JSON.parse(storedAudiences) : seedAudiences);
+      if (storedAudiences) setAudiences(JSON.parse(storedAudiences));
 
       const storedArticles = localStorage.getItem(ARTICLES_KEY);
-      setArticles(storedArticles ? JSON.parse(storedArticles) : seedArticles);
+      if (storedArticles) setArticles(JSON.parse(storedArticles));
     } catch {
-      setServices(seedServices);
-      setAudiences(seedAudiences);
-      setArticles(seedArticles);
+      // Fallbacks to seeds on error
     }
     setIsLoaded(true);
+  }, []);
+
+  // ── HERO SECTION UPDATER ──
+  const updateHero = useCallback((changes: Partial<HeroContent>) => {
+    setHero(prev => {
+      const updated = { ...prev, ...changes };
+      localStorage.setItem(HERO_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  // ── ABOUT SECTION UPDATER ──
+  const updateAbout = useCallback((changes: Partial<AboutContentData>) => {
+    setAbout(prev => {
+      const updated = { ...prev, ...changes };
+      localStorage.setItem(ABOUT_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  // ── MEET SECTION UPDATER ──
+  const updateMeet = useCallback((changes: Partial<MeetContentData>) => {
+    setMeet(prev => {
+      const updated = { ...prev, ...changes };
+      localStorage.setItem(MEET_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  // ── CONTACT SECTION UPDATER ──
+  const updateContact = useCallback((changes: Partial<ContactContentData>) => {
+    setContact(prev => {
+      const updated = { ...prev, ...changes };
+      localStorage.setItem(CONTACT_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  // ── TESTIMONIALS CRUD ──
+  const addTestimonial = useCallback((item: Omit<TestimonialItem, 'id'>) => {
+    setTestimonials(prev => {
+      const id = `test-${Date.now()}`;
+      const updated = [...prev, { ...item, id }];
+      localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  const updateTestimonial = useCallback((id: string, changes: Partial<TestimonialItem>) => {
+    setTestimonials(prev => {
+      const updated = prev.map(t => t.id === id ? { ...t, ...changes } : t);
+      localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  const deleteTestimonial = useCallback((id: string) => {
+    setTestimonials(prev => {
+      const updated = prev.filter(t => t.id !== id);
+      localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      return updated;
+    });
   }, []);
 
   // ── SERVICES CRUD ──
@@ -117,16 +207,33 @@ export function useSiteData() {
     });
   }, []);
 
+  // ── RESET ALL ──
   const resetAllSiteData = useCallback(() => {
+    setHero(seedHeroContent);
+    setAbout(seedAboutContent);
+    setMeet(seedMeetContent);
+    setContact(seedContactContent);
+    setTestimonials(seedTestimonials);
     setServices(seedServices);
     setAudiences(seedAudiences);
     setArticles(seedArticles);
+
+    localStorage.setItem(HERO_KEY, JSON.stringify(seedHeroContent));
+    localStorage.setItem(ABOUT_KEY, JSON.stringify(seedAboutContent));
+    localStorage.setItem(MEET_KEY, JSON.stringify(seedMeetContent));
+    localStorage.setItem(CONTACT_KEY, JSON.stringify(seedContactContent));
+    localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(seedTestimonials));
     localStorage.setItem(SERVICES_KEY, JSON.stringify(seedServices));
     localStorage.setItem(AUDIENCES_KEY, JSON.stringify(seedAudiences));
     localStorage.setItem(ARTICLES_KEY, JSON.stringify(seedArticles));
   }, []);
 
   return {
+    hero, updateHero,
+    about, updateAbout,
+    meet, updateMeet,
+    contact, updateContact,
+    testimonials, addTestimonial, updateTestimonial, deleteTestimonial,
     services, addService, updateService, deleteService,
     audiences, addAudience, updateAudience, deleteAudience,
     articles, addArticle, updateArticle, deleteArticle,

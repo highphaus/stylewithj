@@ -1,5 +1,61 @@
 // lib/site-data.ts
-// Shared types + seed data for all dynamic site content (Services, Clientele, Journal, Lookbook)
+// Shared types + seed data for all dynamic site content (Hero, About, Meet, Contact, Services, Clientele, Journal, Lookbook, Testimonials)
+
+export interface HeroContent {
+  eyebrow: string;
+  titleLine1: string;
+  titleLine2: string;
+  titleItalic: string;
+  subtitleLine1: string;
+  subtitleLine2: string;
+  ctaText: string;
+  ctaUrl: string;
+  desktopImage: string;
+  mobileImage: string;
+  sideText: string;
+}
+
+export interface AboutContentData {
+  eyebrow: string;
+  titleLine1: string;
+  titleLine2: string;
+  philosophyQuote: string;
+  goalQuote: string;
+  storyParagraph1: string;
+  storyParagraph2: string;
+  storyParagraph3: string;
+  creativeDirectorTitle: string;
+  creativeDirectorName: string;
+  creativeDirectorImage: string;
+}
+
+export interface MeetContentData {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  bioText: string;
+  quote: string;
+  accentTitle: string;
+  accentText: string;
+  image: string;
+}
+
+export interface ContactContentData {
+  heading: string;
+  address: string;
+  email: string;
+  phone: string;
+  hours: string;
+}
+
+export interface TestimonialItem {
+  id: string;
+  name: string;
+  role: string;
+  location: string;
+  text: string;
+  avatar?: string;
+}
 
 export interface ServiceItem {
   id: string;
@@ -28,6 +84,82 @@ export interface JournalArticle {
   excerpt: string;
   date?: string;
 }
+
+// ── SEED DATA DEFAULTS ──
+
+export const seedHeroContent: HeroContent = {
+  eyebrow: "Personal Stylist",
+  titleLine1: "Style that",
+  titleLine2: "reflects who",
+  titleItalic: "you are.",
+  subtitleLine1: "Intentional wardrobes.",
+  subtitleLine2: "Timeless confidence.",
+  ctaText: "Connect",
+  ctaUrl: "/connect",
+  desktopImage: "/images/hero/hero image desktop.png",
+  mobileImage: "/images/hero/hero image.jpeg",
+  sideText: "Editorial approach. Personal touch.",
+};
+
+export const seedAboutContent: AboutContentData = {
+  eyebrow: "About Me",
+  titleLine1: "Clothes caught my eye.",
+  titleLine2: "Style caught my heart.",
+  philosophyQuote: "“Style is personal. It should fit you, your personality, your lifestyle, your comfort, and the way you want to show up in the world.”",
+  goalQuote: "“My goal is simple: to help you find a style that feels like you, only better.”",
+  storyParagraph1: "I've always believed that getting dressed should feel good, not like a rulebook you have to follow.",
+  storyParagraph2: "My journey with styling started through modelling, where I found myself more fascinated by what happened behind the scenes: the outfits, the details, and the way the right look could change how someone carried themselves.",
+  storyParagraph3: "As I explored my own style, I learned what made me feel comfortable, confident, and like the best version of myself. That journey led me to start styling friends and people around me, helping them discover what truly suited them.",
+  creativeDirectorTitle: "CREATIVE DIRECTOR",
+  creativeDirectorName: "Jennifer",
+  creativeDirectorImage: "/images/includes/IMG_0267.JPG.jpeg",
+};
+
+export const seedMeetContent: MeetContentData = {
+  eyebrow: "THE DESIGNER PROFILE",
+  title: "Meet Jennifer.",
+  subtitle: "FOUNDER & CREATIVE DIRECTOR",
+  bioText: "Helping individuals discover, refine, and elevate their personal style with custom wardrobe curations built for real life, confidence, and quiet luxury.",
+  quote: "“Style is a deeply personal expression of who you are. Every time you dress, you are telling the world how you want to show up.”",
+  accentTitle: "PHILOSOPHY ACCENT",
+  accentText: "An intentional approach focused on physical posture, silhouette proportions, and personal confidence over fleeting trends.",
+  image: "/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg",
+};
+
+export const seedContactContent: ContactContentData = {
+  heading: "Let's Connect",
+  address: "DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070",
+  email: "info@stylewithj.com",
+  phone: "+91 98765 43210",
+  hours: "Mon - Fri: 9am - 6pm\nSat: 10am - 4pm\nSun: Closed",
+};
+
+export const seedTestimonials: TestimonialItem[] = [
+  {
+    id: "test-01",
+    name: "Ananya R.",
+    role: "Founder & CEO",
+    location: "New Delhi",
+    text: "Jennifer completely transformed how I present myself for board meetings and investor presentations. My wardrobe finally reflects my leadership style.",
+    avatar: "/images/includes/IMG_8846.JPG.jpeg"
+  },
+  {
+    id: "test-02",
+    name: "Meera K.",
+    role: "Architect & Creative",
+    location: "Mumbai",
+    text: "Working with Style with J gave me clarity. I no longer panic when getting dressed for events or daily meetings. Every piece has purpose.",
+    avatar: "/images/includes/IMG_0283.JPG.jpeg"
+  },
+  {
+    id: "test-03",
+    name: "Priya S.",
+    role: "Bridesmaid & Guest",
+    location: "Bengaluru",
+    text: "The occasion curation for my sister's wedding week was flawless. Jennifer handled everything from heritage drapes to footwear pairing.",
+    avatar: "/images/includes/IMG_8881.JPG.jpeg"
+  }
+];
 
 export const seedServices: ServiceItem[] = [
   { 
