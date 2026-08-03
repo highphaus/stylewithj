@@ -34,7 +34,7 @@ export function AboutContent() {
           <div className="lg:col-span-5 relative lg:sticky lg:top-28">
             <div className="relative aspect-[3/4] w-full bg-[#EAE8E3] overflow-hidden shadow-2xl border border-black/5">
               <Image
-                src="/images/img01.jpeg"
+                src="/images/includes/IMG_0267.JPG.jpeg"
                 alt="Jennifer, Founder of Style with J"
                 fill
                 priority

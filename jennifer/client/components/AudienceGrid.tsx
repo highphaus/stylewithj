@@ -10,42 +10,42 @@ const audiences = [
     title: "Creators & Influencers", 
     keyword: "Distinction",
     desc: "Develop a distinctive image that supports your personal brand and audience growth.",
-    image: "/images/img24.jpeg",
+    image: "/images/includes/IMG_8846.JPG.jpeg",
     slug: "creators"
   },
   { 
     title: "Founders & Entrepreneurs", 
     keyword: "Identity",
     desc: "Create a memorable personal brand that aligns with your vision and leadership.",
-    image: "/images/img25.jpeg",
+    image: "/images/includes/IMG_0283.JPG.jpeg",
     slug: "founders"
   },
   { 
     title: "Executives & Leaders", 
     keyword: "Influence",
     desc: "Command respect, authority, and influence through a refined personal image.",
-    image: "/images/img26.jpeg",
+    image: "/images/includes/IMG_8881.JPG.jpeg",
     slug: "executives"
   },
   { 
     title: "Working Professionals", 
     keyword: "Presence",
     desc: "Build confidence and executive presence in your everyday professional life.",
-    image: "/images/img27.jpeg",
+    image: "/images/includes/IMG_9140.JPG.jpeg",
     slug: "professionals"
   },
   { 
     title: "Individuals Seeking Transformation", 
     keyword: "Genesis",
     desc: "Reinvent your style, confidence, and self-image with expert guidance.",
-    image: "/images/img28.jpeg",
+    image: "/images/includes/IMG_0332.JPG.jpeg",
     slug: "individuals"
   },
   { 
     title: "Students & Job Seekers", 
     keyword: "Impression",
     desc: "Make stronger first impressions and stand out in competitive environments.",
-    image: "/images/img29.jpeg",
+    image: "/images/includes/IMG_5321.JPG.jpeg",
     slug: "students"
   },
 ];
@@ -137,7 +137,7 @@ export default function AudienceGrid() {
                 src={audiences[activeIndex].image} 
                 alt={audiences[activeIndex].title} 
                 fill
-                className="object-cover object-center opacity-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                className="object-cover object-top opacity-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
                 priority
                 unoptimized
               />
@@ -248,7 +248,7 @@ export default function AudienceGrid() {
                 src={audiences[activeIndex].image} 
                 alt={audiences[activeIndex].title} 
                 fill
-                className="object-cover object-center opacity-100"
+                className="object-cover object-top opacity-100"
                 priority
                 unoptimized
               />

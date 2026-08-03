@@ -10,35 +10,35 @@ const allServices = [
     category: "Style Discovery",
     name: "Personal Styling", 
     desc: "Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.",
-    image: "/images/img18.jpeg"
+    image: "/images/includes/IMG_0271.JPG.jpeg"
   },
   { 
     num: "02",
     category: "Closet Evolution",
     name: "Wardrobe Styling", 
     desc: "Make your existing wardrobe work harder. Rediscover forgotten pieces, create fresh outfit combinations, identify what's missing, and build a versatile closet.",
-    image: "/images/img19.jpeg"
+    image: "/images/includes/IMG_1406.JPG.jpeg"
   },
   { 
     num: "03",
     category: "Intentional Shopping",
     name: "Personal Shopping", 
     desc: "Shop with intention through curated recommendations tailored to your style, lifestyle, and budget. Spend less time searching and more time finding what works.",
-    image: "/images/img20.jpeg"
+    image: "/images/includes/IMG_1423.JPG.jpeg"
   },
   { 
     num: "04",
     category: "Event & Celebration",
     name: "Occasion Styling", 
     desc: "Tell us where you're going, and we'll help you figure out what to wear. From weddings and parties to date nights and celebrations, curate the perfect look.",
-    image: "/images/img21.jpeg"
+    image: "/images/includes/IMG_1754.JPG.jpeg"
   },
   { 
     num: "05",
     category: "Professional Identity",
     name: "Workwear Styling", 
     desc: "Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important executive presentations.",
-    image: "/images/img22.jpeg"
+    image: "/images/includes/IMG_8863.JPG.jpeg"
   }
 ];
 
@@ -93,7 +93,7 @@ function ServiceCard({ item, index, total, scrollYProgress }: CardProps) {
           src={item.image} 
           alt={item.name} 
           fill
-          className="object-cover object-center scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
+          className="object-cover object-top scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
           priority={index === 0}
           unoptimized
         />
@@ -161,7 +161,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                   src={item.image} 
                   alt={item.name} 
                   fill
-                  className="object-cover object-center"
+                  className="object-cover object-top"
                   unoptimized
                 />
               </div>

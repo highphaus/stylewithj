@@ -5,9 +5,9 @@ import Link from 'next/link';
 
 export default function GallerySection() {
   const images = [
-    "/images/img18.jpeg",
-    "/images/img19.jpeg",
-    "/images/img20.jpeg"
+    "/images/includes/IMG_0333.JPG.jpeg",
+    "/images/includes/IMG_1418.JPG.jpeg",
+    "/images/includes/IMG_1756.JPG.jpeg"
   ];
 
   return (
@@ -37,12 +37,12 @@ export default function GallerySection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, delay: idx * 0.2 }}
-              className="relative w-full aspect-[3/4] overflow-hidden group cursor-pointer"
+              className="relative w-full aspect-[3/4] overflow-hidden group cursor-pointer bg-[#EFECE6] border border-black/10 rounded-xs"
             >
               <img 
                 src={src} 
                 alt={`Gallery image ${idx + 1}`} 
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-700 ease-out"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-700 ease-out"
               />
             </motion.div>
           ))}

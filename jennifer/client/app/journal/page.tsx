@@ -17,7 +17,7 @@ const topics = [
     num: '01',
     category: 'STYLE 101',
     featuredTitle: '7 Styling Rules That Will Instantly Elevate Your Everyday Looks',
-    image: '/images/img04.jpeg',
+    image: '/images/includes/IMG_3119.JPG.jpeg',
     items: [
       'How to find your personal style',
       'How to dress for your body proportions',
@@ -32,7 +32,7 @@ const topics = [
     num: '02',
     category: 'THE WARDROBE EDIT',
     featuredTitle: "You Don't Need More Clothes. You Need Better Outfits.",
-    image: '/images/img05.jpeg',
+    image: '/images/includes/IMG_4485.JPG.jpeg',
     items: [
       'Wardrobe essentials everyone actually needs',
       'How to build a capsule wardrobe',
@@ -47,7 +47,7 @@ const topics = [
     num: '03',
     category: 'DRESS FOR THE OCCASION',
     featuredTitle: 'What Do I Wear? A No-Stress Guide to Dressing for Any Occasion',
-    image: '/images/img07.jpeg',
+    image: '/images/includes/IMG_5314.JPG.jpeg',
     items: [
       'What to wear to a wedding',
       'What to wear on a first date',
@@ -62,7 +62,7 @@ const topics = [
     num: '04',
     category: 'LOOK EXPENSIVE',
     featuredTitle: 'How to Look Expensive Without Spending a Fortune',
-    image: '/images/img06.jpeg',
+    image: '/images/includes/IMG_5315.JPG.jpeg',
     items: [
       'How to look expensive on a budget',
       'Colours that look luxurious',
@@ -77,7 +77,7 @@ const topics = [
     num: '05',
     category: 'STYLE STORIES',
     featuredTitle: 'What Styling Other People Has Taught Me About Personal Style',
-    image: '/images/img08.jpeg',
+    image: '/images/includes/IMG_7135.JPG.jpeg',
     items: [
       'Your own style journey',
       'Lessons you\'ve learned from styling people',

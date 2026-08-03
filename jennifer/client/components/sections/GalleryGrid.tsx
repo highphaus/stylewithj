@@ -78,7 +78,13 @@ export default function GalleryGrid() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                onClick={() => openLightbox(item.src, item.title)}
+                onClick={() => openLightbox(item.src, item.title, {
+                  category: item.category.toUpperCase(),
+                  story: item.desc,
+                  concept: 'Curated Lookbook Archive',
+                  fabric: 'High-Tier Drape & Craftsmanship',
+                  occasion: item.category === 'western' ? 'Everyday Workwear & Dinners' : item.category === 'editorial' ? 'Red Carpet & Evening Events' : 'Resort, Beachside & Holiday Edits'
+                })}
                 className="relative group overflow-hidden bg-[#EAE8E3] border border-black/[0.04] aspect-[3/4] rounded-sm shadow-xs cursor-pointer"
                 title="Click to view image"
               >

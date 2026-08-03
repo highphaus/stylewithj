@@ -4,7 +4,18 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
 
-const looks = [
+interface LookItem {
+  num: string;
+  title: string;
+  category: string;
+  concept: string;
+  fabric: string;
+  desc: string;
+  image: string;
+  tag: string;
+}
+
+const looks: LookItem[] = [
   {
     num: '01',
     title: 'The Staircase Polka Dot Silk Slip',
@@ -13,6 +24,7 @@ const looks = [
     fabric: 'Bias-Cut Polka Dot Silk Crepe',
     desc: 'A striking polka dot slip dress tailored with fluid drape, paired with lace-up heels and sleek shoulder bag.',
     image: '/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg',
+    tag: 'WESTERN'
   },
   {
     num: '02',
@@ -22,175 +34,391 @@ const looks = [
     fabric: 'Structured Felted Peplum Gown',
     desc: 'Strapless corset peplum gown offering razor-sharp posture for luxury evening affairs and red carpet moments.',
     image: '/images/includes/IMG_8709.JPG.jpeg',
+    tag: 'EVENING'
   },
   {
     num: '03',
     title: 'Sunlit Meadow Halter Curation',
-    category: 'ELEVATED CASUAL',
+    category: 'CONTEMPORARY WESTERN',
     concept: 'Natural Proportions',
     fabric: 'Sand-Washed Linen Halter & Leather',
     desc: 'Clean white halter dress accessorized with an artisanal brown leather disc waist belt in open golden fields.',
     image: '/images/includes/IMG_9051.JPG.jpeg',
+    tag: 'WESTERN'
   },
   {
     num: '04',
     title: 'Coastal Backless Halter Gown',
-    category: 'RESORT LUXURY',
+    category: 'RESORT & DESTINATION',
     concept: 'Ocean Breeze Movement',
     fabric: 'Liquid Black Charmeuse Silk',
     desc: 'Deep backless halter maxi silhouette capturing effortless movement against open sea horizons.',
     image: '/images/includes/IMG_3112.JPG.jpeg',
+    tag: 'RESORT'
   },
   {
     num: '05',
     title: 'Boho Lakeshore Floral Dress',
-    category: 'DESTINATION STYLE',
+    category: 'RESORT & DESTINATION',
     concept: 'Romantic Textures',
     fabric: 'Spun Cotton Floral & Leather',
     desc: 'Soft white floral midi dress paired with rustic leather boots and relaxed lakeside styling.',
     image: '/images/includes/IMG_9135.JPG.jpeg',
+    tag: 'RESORT'
   },
   {
     num: '06',
     title: 'Midnight Off-Shoulder Evening Drape',
-    category: 'HIGH FASHION',
+    category: 'EDITORIAL EVENING',
     concept: 'Sculpted Glamour',
     fabric: 'Gathered Ruched Jersey & Gold Accents',
     desc: 'Sleek off-shoulder dark navy column dress featuring ruched waist detailing, statement gold cuffs, and dark sunglasses.',
     image: '/images/includes/IMG_8826.JPG.jpeg',
+    tag: 'EVENING'
   },
+  {
+    num: '07',
+    title: 'Sculpted High-Waist Tailored Ensemble',
+    category: 'BESPOKE CONSULTATIONS',
+    concept: 'Proportion & Balance',
+    fabric: 'Heavy Crepe & Structured Tailoring',
+    desc: 'Bespoke tailoring built around natural shoulder drops and waist-accentuating architectural cuts.',
+    image: '/images/includes/IMG_0267.JPG.jpeg',
+    tag: 'BESPOKE'
+  },
+  {
+    num: '08',
+    title: 'Resort Silhouette & Pleated Drape',
+    category: 'RESORT & DESTINATION',
+    concept: 'Fluid Resort Motion',
+    fabric: 'Pleated Chiffon & Natural Tonal Weave',
+    desc: 'Intentional holiday capsule edit designed for effortless transition from afternoon beachside to evening dining.',
+    image: '/images/includes/IMG_8771.JPG.jpeg',
+    tag: 'RESORT'
+  }
+];
+
+const filterCategories = [
+  { label: 'ALL EDITS', tag: 'ALL' },
+  { label: 'WESTERN', tag: 'WESTERN' },
+  { label: 'EVENING', tag: 'EVENING' },
+  { label: 'RESORT', tag: 'RESORT' },
+  { label: 'BESPOKE', tag: 'BESPOKE' },
 ];
 
 export default function LookbookGrid() {
-  const [openIdx, setOpenIdx] = useState<number | null>(0); // First look open by default
+  const [activeFilter, setActiveFilter] = useState('ALL');
+  const [viewMode, setViewMode] = useState<'grid' | 'spotlight'>('grid');
+  const [activeSpotlightIdx, setActiveSpotlightIdx] = useState(0);
+  const [expandedLookIdx, setExpandedLookIdx] = useState<number | null>(null);
   const { openLightbox } = useLightbox();
 
-  const toggleItem = (idx: number) => {
-    setOpenIdx(openIdx === idx ? null : idx);
+  const handleOpenLookStory = (look: LookItem) => {
+    openLightbox(look.image, look.title, {
+      num: look.num,
+      category: look.category,
+      concept: look.concept,
+      fabric: look.fabric,
+      story: look.desc,
+      occasion: look.tag === 'WESTERN' 
+        ? 'Contemporary Workwear, Dinners & Daily Elegance'
+        : look.tag === 'EVENING'
+        ? 'Galas, High Fashion Affairs & Red Carpet Events'
+        : look.tag === 'RESORT'
+        ? 'Vacation Edits, Coastal Resort & Romantic Dates'
+        : 'Bespoke Consultation & Personal Image Transformation',
+      tag: look.tag
+    });
   };
 
+  const filteredLooks = activeFilter === 'ALL' 
+    ? looks 
+    : looks.filter(look => look.tag === activeFilter);
+
+  const spotlightLook = filteredLooks[activeSpotlightIdx] || filteredLooks[0] || looks[0];
+
   return (
-    <section className="bg-[#FAF9F6] text-[#1A1A1A] py-12 sm:py-20 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto">
-      
-      {/* ── HEADER ── */}
-      <div className="mb-12 pb-6 border-b border-black/15">
-        <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight">
-          Curated Collections
-        </h2>
-      </div>
+    <section className="w-full bg-[#FAF9F6] text-[#1A1A1A] py-16 sm:py-24 px-6 sm:px-12 lg:px-20 border-b border-black/10">
+      <div className="max-w-7xl mx-auto flex flex-col gap-10 sm:gap-14">
+        
+        {/* ── HEADER & CONTROLS ── */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 pb-8 border-b border-black/15">
+          <div className="max-w-2xl">
+            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
+              ✦ ARCHIVAL EDITS
+            </span>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A]">
+              Curated Collections
+            </h2>
+            <p className="font-sans text-xs sm:text-sm font-light text-black/70 leading-relaxed mt-3 max-w-lg">
+              An interactive visual exhibition cataloging continuous motion, personal proportion, and structural form across every occasion.
+            </p>
+          </div>
 
-      {/* ── INTERACTIVE ACCORDION LIST (IMAGE & DETAILS TOGGLE INSIDE EACH NAME) ── */}
-      <div className="flex flex-col border border-black/10 divide-y divide-black/10 bg-[#FAF9F6] shadow-[0_12px_40px_rgba(0,0,0,0.03)] rounded-sm overflow-hidden">
-        {looks.map((look, idx) => {
-          const isOpen = openIdx === idx;
-
-          return (
-            <div 
-              key={look.num}
-              className={`transition-all duration-300 w-full ${
-                isOpen ? 'bg-black text-white' : 'bg-transparent text-black/80 hover:bg-black/[0.015]'
+          {/* View Mode Toggle Button */}
+          <div className="flex items-center gap-2 p-1 bg-[#EFECE6] border border-black/10 rounded-xs self-start lg:self-auto">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`px-4 py-2 text-[9px] tracking-[0.2em] uppercase font-mono transition-all rounded-xs ${
+                viewMode === 'grid' 
+                  ? 'bg-black text-white shadow-xs font-semibold' 
+                  : 'text-black/60 hover:text-black font-medium'
               }`}
             >
-              {/* TOGGLE HEADER BUTTON */}
-              <button
-                onClick={() => toggleItem(idx)}
-                className="w-full p-5 sm:p-7 text-left flex justify-between items-center outline-none focus:outline-none cursor-pointer select-none group"
-              >
-                <div className="flex items-center gap-4 sm:gap-6">
-                  <span className={`font-mono text-xs sm:text-sm transition-colors ${isOpen ? 'text-white/50 font-bold' : 'text-black/35 group-hover:text-black font-medium'}`}>
-                    /{look.num}
-                  </span>
-                  <h3 className={`font-serif text-lg sm:text-2xl transition-all leading-tight ${isOpen ? 'text-white font-medium italic' : 'text-black/80 group-hover:text-black'}`}>
-                    {look.title}
-                  </h3>
-                </div>
+              Grid Gallery
+            </button>
+            <button
+              onClick={() => setViewMode('spotlight')}
+              className={`px-4 py-2 text-[9px] tracking-[0.2em] uppercase font-mono transition-all rounded-xs ${
+                viewMode === 'spotlight' 
+                  ? 'bg-black text-white shadow-xs font-semibold' 
+                  : 'text-black/60 hover:text-black font-medium'
+              }`}
+            >
+              Spotlight Reel
+            </button>
+          </div>
+        </div>
 
-                {/* Prominent High-Visibility Arrow Indicator */}
-                <div className="flex items-center gap-2.5 flex-shrink-0 ml-4">
-                  <span className={`hidden sm:inline-block font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold transition-colors ${
-                    isOpen ? 'text-white/80' : 'text-black/60 group-hover:text-black'
-                  }`}>
-                    {isOpen ? 'COLLAPSE' : 'EXPAND'}
-                  </span>
-                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
-                    isOpen 
-                      ? 'bg-white text-black border-white scale-105 shadow-md' 
-                      : 'bg-black/5 text-black border-black/20 group-hover:bg-black group-hover:text-white group-hover:border-black'
-                  }`}>
-                    <span className={`text-sm sm:text-base leading-none transition-transform duration-300 font-bold ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
-                      ↓
+        {/* ── CATEGORY FILTER TABS ── */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {filterCategories.map((cat) => {
+            const isActive = activeFilter === cat.tag;
+            return (
+              <button
+                key={cat.tag}
+                onClick={() => {
+                  setActiveFilter(cat.tag);
+                  setActiveSpotlightIdx(0);
+                }}
+                className={`px-4 py-2 text-[9px] sm:text-[10px] tracking-[0.25em] uppercase font-mono border transition-all duration-300 rounded-xs ${
+                  isActive 
+                    ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-sm font-semibold' 
+                    : 'bg-[#EFECE6]/50 text-black/65 border-black/10 hover:border-black/30 hover:text-black'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ── FEATURE DISPLAY MODE 1: EDITORIAL GALLERY GRID ── */}
+        {viewMode === 'grid' && (
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredLooks.map((look, idx) => {
+                const isExpanded = expandedLookIdx === idx;
+
+                return (
+                  <motion.div
+                    key={look.num + look.title}
+                    layout
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className="group bg-[#EFECE6] border border-black/10 rounded-xs overflow-hidden flex flex-col justify-between shadow-[0_4px_25px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition-all duration-500"
+                  >
+                    {/* Look Image Frame with Lightbox Action */}
+                    <div 
+                      onClick={() => handleOpenLookStory(look)}
+                      className="relative aspect-[3/4] w-full overflow-hidden bg-black/5 cursor-pointer"
+                      title={`Click to view ${look.title}`}
+                    >
+                      <Image
+                        src={look.image}
+                        alt={look.title}
+                        fill
+                        className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        unoptimized
+                      />
+                      
+                      {/* Top Floating Badge */}
+                      <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1 text-[8px] tracking-[0.3em] font-mono uppercase font-semibold border border-white/10 rounded-xs">
+                        {look.category}
+                      </div>
+
+                      {/* Hover Overlay Button */}
+                      <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="bg-black/90 text-white px-4 py-2 rounded-xs text-[9px] tracking-[0.25em] uppercase font-mono font-semibold border border-white/20 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                          🔍 View Image & Story
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Look Metadata & Drawer Toggle */}
+                    <div className="p-6 flex flex-col gap-4 bg-[#FAF9F6]">
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[10px] tracking-[0.2em] text-black/40 font-bold">
+                          /{look.num}
+                        </span>
+                        <span className="font-mono text-[9px] tracking-[0.2em] text-black/50 uppercase font-semibold">
+                          {look.concept}
+                        </span>
+                      </div>
+
+                      <h3 className="font-serif text-xl sm:text-2xl font-light text-[#1A1A1A] leading-snug">
+                        {look.title}
+                      </h3>
+
+                      <p className="font-sans text-xs text-black/75 leading-relaxed font-light line-clamp-2">
+                        {look.desc}
+                      </p>
+
+                      {/* Expandable Details Button */}
+                      <button
+                        onClick={() => setExpandedLookIdx(isExpanded ? null : idx)}
+                        className="pt-3 border-t border-black/10 flex items-center justify-between text-[9px] tracking-[0.25em] font-mono uppercase text-black/70 hover:text-black font-semibold transition-colors"
+                      >
+                        <span>{isExpanded ? 'Hide Specs −' : 'View Fabric & Styling Specs +'}</span>
+                        <span className="text-xs">{isExpanded ? '↑' : '↓'}</span>
+                      </button>
+
+                      {/* Expandable Specs Panel */}
+                      <AnimatePresence>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden pt-2 flex flex-col gap-2 border-t border-black/10 text-[10px] font-sans"
+                          >
+                            <div className="flex flex-col gap-1 bg-[#EFECE6] p-3 rounded-xs">
+                              <span className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/40 font-bold">FABRIC COMPOSITION</span>
+                              <span className="font-sans text-xs text-black/85 font-medium">{look.fabric}</span>
+                            </div>
+                            <button
+                              onClick={() => handleOpenLookStory(look)}
+                              className="mt-1 w-full text-center py-2 bg-black text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black/85 transition-colors rounded-xs"
+                            >
+                              Open Image & Story Panel
+                            </button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        )}
+
+        {/* ── FEATURE DISPLAY MODE 2: SPOTLIGHT REEL ── */}
+        {viewMode === 'spotlight' && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-[#EFECE6] p-6 sm:p-10 rounded-xs border border-black/10"
+          >
+            {/* Main Featured Display Frame */}
+            <div 
+              onClick={() => handleOpenLookStory(spotlightLook)}
+              className="lg:col-span-6 relative aspect-[3/4] w-full overflow-hidden bg-black/10 rounded-xs border border-black/10 shadow-xl cursor-pointer group"
+              title="Click to view Image & Story in Lightbox"
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={spotlightLook.image}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.02 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <Image
+                    src={spotlightLook.image}
+                    alt={spotlightLook.title}
+                    fill
+                    className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
+                    priority
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                    <span className="bg-black/90 text-white px-5 py-2.5 text-[9px] tracking-[0.25em] uppercase font-mono font-semibold border border-white/20 shadow-xl rounded-xs">
+                      🔍 Click for High-Res View
                     </span>
                   </div>
-                </div>
-              </button>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-              {/* EXPANDABLE CONTENT (IMAGE & DETAILS INSIDE EACH ITEM CARD) */}
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-5 sm:px-8 pb-7 sm:pb-9 pt-2 flex flex-col gap-6 border-t border-white/10">
-                      
-                      {/* Photo Frame Inside the Item Card (Click to Pick / Open Lightbox) */}
-                      <div 
-                        onClick={() => openLightbox(look.image, look.title)}
-                        className="relative aspect-[3/4] sm:aspect-[16/10] w-full max-h-[520px] overflow-hidden bg-[#1A1A1A] border border-white/10 rounded-sm shadow-md cursor-pointer group/img"
-                        title="Click to view image in Lightbox"
+            {/* Featured Look Info & Navigation Stack */}
+            <div className="lg:col-span-6 flex flex-col justify-between h-full gap-8">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/50 font-bold">
+                    /{spotlightLook.num}
+                  </span>
+                  <span className="px-3 py-1 bg-black text-white font-mono text-[8px] tracking-[0.25em] uppercase font-semibold rounded-xs">
+                    {spotlightLook.category}
+                  </span>
+                </div>
+
+                <h3 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A1A] leading-tight">
+                  {spotlightLook.title}
+                </h3>
+
+                <p className="font-sans text-xs sm:text-sm text-black/80 font-light leading-relaxed border-l-2 border-black/20 pl-4 py-1">
+                  {spotlightLook.desc}
+                </p>
+
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-black/10">
+                  <div className="flex flex-col gap-1">
+                    <span className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/40 font-bold">CONCEPT</span>
+                    <span className="font-sans text-xs text-black/85 font-medium">{spotlightLook.concept}</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/40 font-bold">FABRIC</span>
+                    <span className="font-sans text-xs text-black/85 font-medium">{spotlightLook.fabric}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thumbnail Selection Reel */}
+              <div className="flex flex-col gap-3 pt-6 border-t border-black/10">
+                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
+                  SELECT LOOK ({filteredLooks.length})
+                </span>
+                
+                <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
+                  {filteredLooks.map((look, i) => {
+                    const isSelected = i === activeSpotlightIdx;
+                    return (
+                      <button
+                        key={look.num + look.title}
+                        onClick={() => setActiveSpotlightIdx(i)}
+                        className={`relative w-16 h-20 flex-shrink-0 overflow-hidden rounded-xs border-2 transition-all ${
+                          isSelected 
+                            ? 'border-black scale-105 shadow-md' 
+                            : 'border-transparent opacity-60 hover:opacity-100'
+                        }`}
                       >
                         <Image
                           src={look.image}
                           alt={look.title}
                           fill
-                          className="object-cover object-center group-hover/img:scale-[1.02] transition-transform duration-700"
+                          className="object-cover object-top"
                           unoptimized
                         />
-                        {/* Prominent Overlay Click-to-Enlarge Badge */}
-                        <div className="absolute inset-0 bg-black/25 group-hover/img:bg-black/10 transition-colors flex items-center justify-center">
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openLightbox(look.image, look.title);
-                            }}
-                            className="bg-black/85 hover:bg-black text-white px-5 py-2.5 rounded-xs text-[10px] tracking-[0.25em] uppercase font-mono font-semibold border border-white/20 shadow-xl flex items-center gap-2 transition-transform hover:scale-105"
-                          >
-                            <span>🔍 CLICK TO ENLARGE IMAGE</span>
-                          </button>
-                        </div>
-                      </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
-                      {/* Description & Metadata */}
-                      <div className="flex flex-col gap-3">
-                        <p className="font-sans text-xs sm:text-sm text-white/85 leading-relaxed font-light max-w-2xl border-l-2 border-white/20 pl-4 py-0.5">
-                          {look.desc}
-                        </p>
-
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-3 border-t border-white/10 text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-medium text-white/60">
-                          <div className="flex items-center gap-2">
-                            <span className="text-white/40">Concept:</span>
-                            <span className="text-white/90">{look.concept}</span>
-                          </div>
-                          <span className="text-white/20">•</span>
-                          <div className="flex items-center gap-2">
-                            <span className="text-white/40">Fabric:</span>
-                            <span className="text-white/90">{look.fabric}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </div>
-          );
-        })}
-      </div>
+          </motion.div>
+        )}
 
+      </div>
     </section>
   );
 }

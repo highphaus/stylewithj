@@ -75,51 +75,30 @@ export default function SplitScroll() {
 
   return (
     <section ref={sectionRef} className="w-full bg-[#FAF9F6] overflow-clip">
-      <div className="flex flex-col-reverse md:flex-row w-full min-h-screen">
+      <div className="flex flex-col md:flex-row w-full min-h-screen">
         
-        {/* LEFT CANVAS: 100% Screen Viewport Fitting Per Image (Click to Pick / Open Lightbox) */}
-        <div className="w-full md:w-1/2 flex flex-col snap-y snap-mandatory scroll-smooth">
-          {horizonCategoryItems.map((look) => (
-            <div 
-              key={look.id} 
-              onClick={() => openLightbox(look.src, look.title)}
-              className="w-full h-[100dvh] h-screen relative overflow-hidden bg-[#EAE8E3] group snap-start snap-always flex-shrink-0 cursor-pointer"
-              title="Click to view image"
-            >
-              <Image
-                src={look.src}
-                alt={look.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-center transition-transform duration-1000 group-hover:scale-[1.02] ease-out"
-                unoptimized
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* RIGHT CANVAS: Stationary / Sticky (Shows ONLY active image writing in white space) */}
-        <div className="w-full md:w-1/2 h-[100dvh] md:h-screen md:sticky md:top-0 bg-[#FAF9F6] flex flex-col justify-between p-6 sm:p-10 md:p-16 border-b md:border-b-0 md:border-l border-black/5 relative overflow-y-auto">
+        {/* RIGHT CANVAS / MOBILE HEADER: Sticky text header on mobile & 1/2 split sticky on desktop (NO GAP ON SMALL DEVICES) */}
+        <div className="w-full md:w-1/2 h-auto md:h-screen md:sticky md:top-0 bg-[#FAF9F6] flex flex-col justify-between p-6 sm:p-8 md:p-16 border-b md:border-b-0 md:border-l border-black/10 relative z-20 order-1 md:order-2">
           <div>
             <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
               STYLING CATEGORIES
             </span>
-            <h3 className="font-serif text-3xl sm:text-4xl md:text-6xl font-light tracking-tight text-[#1A1A1A] mb-3">
+            <h3 className="font-serif text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A] mb-2 sm:mb-3">
               Curated Category <br /> Silhouettes.
             </h3>
-            <p className="font-sans text-xs tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed mb-6 sm:mb-8">
+            <p className="font-sans text-[11px] sm:text-xs tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed mb-4 sm:mb-6">
               A study in continuous motion, personal proportion, and structural form across every occasion.
             </p>
 
-            {/* DYNAMIC WRITING FOR THE ACTIVE VISIBLE IMAGE ONLY (05 // CATEGORY REMOVED) */}
+            {/* DYNAMIC WRITING FOR THE ACTIVE VISIBLE IMAGE ONLY */}
             <motion.div 
               key={activeIndex}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="pt-6 border-t border-black/10 flex flex-col gap-2 sm:gap-3"
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="pt-4 sm:pt-6 border-t border-black/10 flex flex-col gap-1.5 sm:gap-3"
             >
-              <h4 className="font-sans text-lg sm:text-xl md:text-2xl tracking-[0.2em] uppercase font-bold text-[#1A1A1A]">
+              <h4 className="font-sans text-base sm:text-lg md:text-2xl tracking-[0.18em] uppercase font-bold text-[#1A1A1A]">
                 {activeItem.title}
               </h4>
 
@@ -129,7 +108,7 @@ export default function SplitScroll() {
             </motion.div>
           </div>
 
-          <div className="pt-6 flex items-center justify-between">
+          <div className="pt-4 sm:pt-6 flex items-center justify-between">
             <Link
               href="/categories"
               className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-medium"
@@ -149,6 +128,27 @@ export default function SplitScroll() {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* LEFT CANVAS: 100% Screen Viewport Fitting Per Image (Click to Pick / Open Lightbox) */}
+        <div className="w-full md:w-1/2 flex flex-col snap-y snap-mandatory scroll-smooth order-2 md:order-1">
+          {horizonCategoryItems.map((look) => (
+            <div 
+              key={look.id} 
+              onClick={() => openLightbox(look.src, look.title)}
+              className="w-full h-[100dvh] h-screen relative overflow-hidden bg-[#EAE8E3] group snap-start snap-always flex-shrink-0 cursor-pointer"
+              title="Click to view image"
+            >
+              <Image
+                src={look.src}
+                alt={look.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-top sm:object-center transition-transform duration-1000 group-hover:scale-[1.02] ease-out"
+                unoptimized
+              />
+            </div>
+          ))}
         </div>
 
       </div>

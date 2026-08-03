@@ -40,7 +40,7 @@ const servicesList = [
       'Create outfits that suit your personality and lifestyle',
       'Feel comfortable and confident in what you wear',
     ],
-    image: '/images/img18.jpeg',
+    image: '/images/includes/IMG_0271.JPG.jpeg',
   },
   {
     num: '02',
@@ -53,7 +53,7 @@ const servicesList = [
       'Creating multiple looks from the same wardrobe',
       'Building an intentional, versatile closet',
     ],
-    image: '/images/img19.jpeg',
+    image: '/images/includes/IMG_1406.JPG.jpeg',
   },
   {
     num: '03',
@@ -66,7 +66,7 @@ const servicesList = [
       'Avoiding unnecessary impulse purchases',
       'Finding pieces that complement your wardrobe',
     ],
-    image: '/images/img20.jpeg',
+    image: '/images/includes/IMG_1423.JPG.jpeg',
   },
   {
     num: '04',
@@ -81,7 +81,7 @@ const servicesList = [
       'Special events',
       'Casual styling',
     ],
-    image: '/images/img21.jpeg',
+    image: '/images/includes/IMG_1754.JPG.jpeg',
   },
   {
     num: '05',
@@ -93,7 +93,7 @@ const servicesList = [
       'Corporate dressing & key presentations',
       'Important meetings & first impressions',
     ],
-    image: '/images/img22.jpeg',
+    image: '/images/includes/IMG_8863.JPG.jpeg',
   },
 ];
 

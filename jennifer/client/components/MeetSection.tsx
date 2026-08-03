@@ -68,12 +68,12 @@ export default function MeetSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            onClick={() => openLightbox('/images/img31.jpeg', 'Jennifer — Founder & Creative Director')}
+            onClick={() => openLightbox('/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg', 'Jennifer — Founder & Creative Director')}
             className="w-full relative aspect-[3/4] bg-[#EFECE6] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.06)] border border-black/10 rounded-xs cursor-pointer group"
             title="Click to view image"
           >
             <img
-              src="/images/img31.jpeg"
+              src="/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg"
               alt="Jennifer — Founder & Creative Identity Director"
               className="w-full h-full object-cover object-top transition-transform duration-[3000ms] ease-out group-hover:scale-[1.03]"
             />

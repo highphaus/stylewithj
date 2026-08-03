@@ -26,10 +26,10 @@ export default function CinematicPhilosophy() {
         <div className="col-span-1 lg:col-span-5 relative w-full aspect-[3/4] sm:aspect-[4/5] overflow-hidden bg-[#EFECE6] border border-black/10 shadow-xl rounded-xs">
           <motion.div style={{ scale: imageScale }} className="w-full h-full relative">
             <Image
-              src="/images/philosophy_bg.png" 
+              src="/images/includes/IMG_0330.JPG.jpeg" 
               alt="Style with J Philosophy"
               fill
-              className="object-cover object-center"
+              className="object-cover object-top sm:object-center"
               priority
               unoptimized
             />

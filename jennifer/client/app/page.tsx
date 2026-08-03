@@ -86,9 +86,9 @@ export default function Home() {
             {/* Right articles list with pictures */}
             <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
               {[
-                { num: '01', title: '7 Styling Rules That Will Instantly Elevate Your Everyday Looks', category: 'The Style Edit', image: '/images/img09.jpeg' },
-                { num: '02', title: "You Don't Need More Clothes. You Need Better Outfits.", category: 'The Wardrobe Edit', image: '/images/img10.jpeg' },
-                { num: '03', title: 'How to Look Expensive Without Spending a Fortune', category: 'The Expensive Edit', image: '/images/img11.jpeg' }
+                { num: '01', title: '7 Styling Rules That Will Instantly Elevate Your Everyday Looks', category: 'The Style Edit', image: '/images/includes/IMG_0330.JPG.jpeg' },
+                { num: '02', title: "You Don't Need More Clothes. You Need Better Outfits.", category: 'The Wardrobe Edit', image: '/images/includes/IMG_8857.JPG.jpeg' },
+                { num: '03', title: 'How to Look Expensive Without Spending a Fortune', category: 'The Expensive Edit', image: '/images/includes/IMG_9158.JPG.jpeg' }
               ].map((article) => (
                 <Link
                   key={article.num}
