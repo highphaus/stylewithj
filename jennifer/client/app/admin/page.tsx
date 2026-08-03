@@ -173,14 +173,60 @@ export default function AdminPage() {
 
         <div className="max-w-3xl mx-auto px-6 sm:px-12 py-12">
           <form onSubmit={handleSave} className="flex flex-col gap-6">
-            {/* Image Preview */}
-            {form.image && (
-              <div className="relative w-full aspect-[3/2] overflow-hidden bg-[#EFECE6] rounded-xs border border-black/10">
-                <img src={form.image} alt="Preview" className="w-full h-full object-cover object-top" />
+            {/* Image Upload & Path Selection Section */}
+            <div className="flex flex-col gap-3 p-5 bg-[#EFECE6]/60 border border-black/10 rounded-xs">
+              <div className="flex items-center justify-between">
+                <label className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                  LOOK IMAGE SOURCE <span className="text-red-500">*</span>
+                </label>
+                <span className="font-sans text-[10px] text-black/50">Upload file OR enter image URL / path</span>
               </div>
-            )}
 
-            <FormField label="Image Path or URL" value={form.image} onChange={v => handleFormChange('image', v)} placeholder="e.g. /images/includes/IMG_0267.JPG.jpeg" required />
+              {/* Live Image Preview */}
+              {form.image && (
+                <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#D8D4CC] rounded-xs border border-black/10 shadow-sm group">
+                  <img src={form.image} alt="Preview" className="w-full h-full object-cover object-top" />
+                  <div className="absolute top-3 left-3 bg-black/80 text-white px-2.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs">
+                    ✦ Active Image Preview
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                {/* Upload Image Button */}
+                <label className="flex-shrink-0 cursor-pointer inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#1A1A1A] hover:bg-black text-white text-[10px] tracking-[0.2em] uppercase font-mono font-semibold transition-all rounded-xs shadow-sm">
+                  <span>📁 Upload Image File</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          const dataUrl = event.target?.result as string;
+                          if (dataUrl) handleFormChange('image', dataUrl);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                </label>
+
+                <div className="text-[10px] font-mono text-black/40 text-center sm:text-left">OR</div>
+
+                {/* Text input for manual URL or /images/includes/ path */}
+                <input
+                  type="text"
+                  value={form.image}
+                  onChange={e => handleFormChange('image', e.target.value)}
+                  placeholder="Paste Image URL or path (e.g. /images/includes/IMG_0267.JPG.jpeg)"
+                  required
+                  className="flex-1 px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] placeholder-black/30 rounded-xs outline-none focus:border-black transition-colors"
+                />
+              </div>
+            </div>
             <FormField label="Title" value={form.title} onChange={v => handleFormChange('title', v)} placeholder="Look title" required />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
