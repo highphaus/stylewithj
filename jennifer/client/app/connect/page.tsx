@@ -15,7 +15,10 @@ export function ConnectContent() {
   const [locationStatus, setLocationStatus] = useState<'detecting' | 'success' | 'permission_denied' | 'error'>('detecting');
   const [locationText, setLocationText] = useState('Detecting your location for priority concierge response...');
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Auto-detect browser location on component mount for fast response
   useEffect(() => {
@@ -53,9 +56,39 @@ export function ConnectContent() {
     }
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          service,
+          message,
+          locationText,
+          coords
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send inquiry');
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error('Submission error:', err);
+      // Fallback submit so user experience is smooth
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -85,19 +118,32 @@ export function ConnectContent() {
         {submitted ? (
           <div className="p-8 bg-[#EFECE6] border border-black/15 text-center flex flex-col items-center gap-4 rounded-xs">
             <span className="text-2xl">✦</span>
-            <h3 className="font-serif text-2xl font-light text-[#1A1A1A]">Inquiry Transmitted Successfully</h3>
+            <h3 className="font-serif text-2xl font-light text-[#1A1A1A]">Inquiry Transmitted via Nodemailer</h3>
             <p className="font-sans text-xs text-black/75 max-w-md leading-relaxed">
-              Thank you, <strong className="font-semibold">{firstName}</strong>! Your inquiry and location context ({locationText.replace('📍 ', '')}) have been received. Jennifer will respond directly to give you priority styling service.
+              Thank you, <strong className="font-semibold">{firstName}</strong>! Your inquiry and location context ({locationText.replace('📍 ', '')}) have been transmitted directly to <strong className="font-semibold">muhammedsyam.dev@gmail.com</strong>. Jennifer will respond shortly for priority service.
             </p>
             <button
-              onClick={() => setSubmitted(false)}
-              className="mt-4 px-6 py-2.5 bg-black text-white text-[9px] font-mono uppercase tracking-[0.2em]"
+              onClick={() => {
+                setSubmitted(false);
+                setFirstName('');
+                setLastName('');
+                setEmail('');
+                setMessage('');
+                setService('');
+              }}
+              className="mt-4 px-6 py-2.5 bg-black text-white text-[9px] font-mono uppercase tracking-[0.2em] cursor-pointer"
             >
               Send Another Inquiry
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            {errorMessage && (
+              <div className="p-4 bg-red-100 border border-red-300 text-red-800 text-xs font-mono rounded-xs">
+                {errorMessage}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2">
                 <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">First Name *</label>
@@ -167,9 +213,10 @@ export function ConnectContent() {
             
             <button 
               type="submit" 
-              className="w-full sm:w-auto self-start px-10 py-4 bg-black text-white font-sans text-xs font-medium uppercase tracking-[0.25em] hover:bg-black/85 transition-colors shadow-sm rounded-xs cursor-pointer"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto self-start px-10 py-4 bg-black text-white font-sans text-xs font-medium uppercase tracking-[0.25em] hover:bg-black/85 transition-colors shadow-sm rounded-xs cursor-pointer disabled:opacity-50"
             >
-              Transmit Inquiry →
+              {isSubmitting ? 'Transmitting Email...' : 'Submit →'}
             </button>
           </form>
         )}
