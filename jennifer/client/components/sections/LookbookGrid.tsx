@@ -1,102 +1,10 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLightbox } from '@/components/ImageLightbox';
-
-interface LookItem {
-  num: string;
-  title: string;
-  category: string;
-  concept: string;
-  fabric: string;
-  desc: string;
-  image: string;
-  tag: string;
-}
-
-const looks: LookItem[] = [
-  {
-    num: '01',
-    title: 'The Staircase Polka Dot Silk Slip',
-    category: 'CONTEMPORARY WESTERN',
-    concept: 'Monochrome Fluidity',
-    fabric: 'Bias-Cut Polka Dot Silk Crepe',
-    desc: 'A striking polka dot slip dress tailored with fluid drape, paired with lace-up heels and sleek shoulder bag.',
-    image: '/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg',
-    tag: 'WESTERN'
-  },
-  {
-    num: '02',
-    title: 'Poolside Peplum Evening Column',
-    category: 'EDITORIAL EVENING',
-    concept: 'Architectural Waistlines',
-    fabric: 'Structured Felted Peplum Gown',
-    desc: 'Strapless corset peplum gown offering razor-sharp posture for luxury evening affairs and red carpet moments.',
-    image: '/images/includes/IMG_8709.JPG.jpeg',
-    tag: 'EVENING'
-  },
-  {
-    num: '03',
-    title: 'Sunlit Meadow Halter Curation',
-    category: 'CONTEMPORARY WESTERN',
-    concept: 'Natural Proportions',
-    fabric: 'Sand-Washed Linen Halter & Leather',
-    desc: 'Clean white halter dress accessorized with an artisanal brown leather disc waist belt in open golden fields.',
-    image: '/images/includes/IMG_9051.JPG.jpeg',
-    tag: 'WESTERN'
-  },
-  {
-    num: '04',
-    title: 'Coastal Backless Halter Gown',
-    category: 'RESORT & DESTINATION',
-    concept: 'Ocean Breeze Movement',
-    fabric: 'Liquid Black Charmeuse Silk',
-    desc: 'Deep backless halter maxi silhouette capturing effortless movement against open sea horizons.',
-    image: '/images/includes/IMG_3112.JPG.jpeg',
-    tag: 'RESORT'
-  },
-  {
-    num: '05',
-    title: 'Boho Lakeshore Floral Dress',
-    category: 'RESORT & DESTINATION',
-    concept: 'Romantic Textures',
-    fabric: 'Spun Cotton Floral & Leather',
-    desc: 'Soft white floral midi dress paired with rustic leather boots and relaxed lakeside styling.',
-    image: '/images/includes/IMG_9135.JPG.jpeg',
-    tag: 'RESORT'
-  },
-  {
-    num: '06',
-    title: 'Midnight Off-Shoulder Evening Drape',
-    category: 'EDITORIAL EVENING',
-    concept: 'Sculpted Glamour',
-    fabric: 'Gathered Ruched Jersey & Gold Accents',
-    desc: 'Sleek off-shoulder dark navy column dress featuring ruched waist detailing, statement gold cuffs, and dark sunglasses.',
-    image: '/images/includes/IMG_8826.JPG.jpeg',
-    tag: 'EVENING'
-  },
-  {
-    num: '07',
-    title: 'Sculpted High-Waist Tailored Ensemble',
-    category: 'BESPOKE CONSULTATIONS',
-    concept: 'Proportion & Balance',
-    fabric: 'Heavy Crepe & Structured Tailoring',
-    desc: 'Bespoke tailoring built around natural shoulder drops and waist-accentuating architectural cuts.',
-    image: '/images/includes/IMG_0267.JPG.jpeg',
-    tag: 'BESPOKE'
-  },
-  {
-    num: '08',
-    title: 'Resort Silhouette & Pleated Drape',
-    category: 'RESORT & DESTINATION',
-    concept: 'Fluid Resort Motion',
-    fabric: 'Pleated Chiffon & Natural Tonal Weave',
-    desc: 'Intentional holiday capsule edit designed for effortless transition from afternoon beachside to evening dining.',
-    image: '/images/includes/IMG_8771.JPG.jpeg',
-    tag: 'RESORT'
-  }
-];
+import { useLooks } from '@/lib/use-looks';
+import { Look } from '@/lib/looks-data';
 
 const filterCategories = [
   { label: 'ALL EDITS', tag: 'ALL' },
@@ -111,24 +19,11 @@ export default function LookbookGrid() {
   const [viewMode, setViewMode] = useState<'grid' | 'spotlight'>('grid');
   const [activeSpotlightIdx, setActiveSpotlightIdx] = useState(0);
   const [expandedLookIdx, setExpandedLookIdx] = useState<number | null>(null);
-  const { openLightbox } = useLightbox();
+  const { looks, isLoaded } = useLooks();
+  const router = useRouter();
 
-  const handleOpenLookStory = (look: LookItem) => {
-    openLightbox(look.image, look.title, {
-      num: look.num,
-      category: look.category,
-      concept: look.concept,
-      fabric: look.fabric,
-      story: look.desc,
-      occasion: look.tag === 'WESTERN' 
-        ? 'Contemporary Workwear, Dinners & Daily Elegance'
-        : look.tag === 'EVENING'
-        ? 'Galas, High Fashion Affairs & Red Carpet Events'
-        : look.tag === 'RESORT'
-        ? 'Vacation Edits, Coastal Resort & Romantic Dates'
-        : 'Bespoke Consultation & Personal Image Transformation',
-      tag: look.tag
-    });
+  const handleOpenLookStory = (look: Look) => {
+    router.push(`/lookbook/${look.id}`);
   };
 
   const filteredLooks = activeFilter === 'ALL' 
@@ -267,7 +162,7 @@ export default function LookbookGrid() {
                       </h3>
 
                       <p className="font-sans text-xs text-black/75 leading-relaxed font-light line-clamp-2">
-                        {look.desc}
+                        {look.story}
                       </p>
 
                       {/* Expandable Details Button */}
@@ -367,7 +262,7 @@ export default function LookbookGrid() {
                 </h3>
 
                 <p className="font-sans text-xs sm:text-sm text-black/80 font-light leading-relaxed border-l-2 border-black/20 pl-4 py-1">
-                  {spotlightLook.desc}
+                  {spotlightLook.story}
                 </p>
 
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-black/10">
