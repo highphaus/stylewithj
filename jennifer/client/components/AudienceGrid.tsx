@@ -50,6 +50,8 @@ const audiences = [
   },
 ];
 
+import { useSiteData } from '@/lib/use-site-data';
+
 const AUTO_DELAY = 4000;
 
 export default function AudienceGrid() {
@@ -59,6 +61,9 @@ export default function AudienceGrid() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const progressRef = useRef<NodeJS.Timeout | null>(null);
   const { openLightbox } = useLightbox();
+
+  const { audiences: dynamicAudiences } = useSiteData();
+  const audiencesList = dynamicAudiences.length > 0 ? dynamicAudiences : audiences;
 
   const startTimer = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
@@ -80,7 +85,7 @@ export default function AudienceGrid() {
     }, intervalTime);
 
     timerRef.current = setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % audiences.length);
+      setActiveIndex((prev) => (prev + 1) % (audiencesList.length || 1));
     }, totalTime);
   }, []);
 
@@ -115,12 +120,12 @@ export default function AudienceGrid() {
       <div className="hidden lg:flex lg:flex-row w-full h-screen relative">
         {/* Background Watermark Accent */}
         <div className="absolute right-12 bottom-12 text-[15vw] font-sans font-light italic text-black/[0.03] leading-none pointer-events-none z-0">
-          {audiences[activeIndex].keyword}
+          {audiencesList[activeIndex]?.keyword}
         </div>
 
         {/* Left Column: 100% Clean Image Projection (Click to open Lightbox) */}
         <div 
-          onClick={() => openLightbox(audiences[activeIndex].image, audiences[activeIndex].title)}
+          onClick={() => openLightbox(audiencesList[activeIndex]?.image || '', audiencesList[activeIndex]?.title || '')}
           className="w-7/12 h-screen relative flex-shrink-0 border-r border-black/10 z-10 bg-[#EFECE6] overflow-hidden cursor-pointer group"
           title="Click to view image"
         >
@@ -134,8 +139,8 @@ export default function AudienceGrid() {
               className="absolute inset-0 w-full h-full"
             >
               <Image 
-                src={audiences[activeIndex].image} 
-                alt={audiences[activeIndex].title} 
+                src={audiencesList[activeIndex]?.image || ''} 
+                alt={audiencesList[activeIndex]?.title || ''} 
                 fill
                 className="object-cover object-top opacity-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
                 priority
@@ -162,7 +167,7 @@ export default function AudienceGrid() {
 
           {/* Links stack with writing text under active item */}
           <div className="flex flex-col gap-2 my-auto w-full">
-            {audiences.map((item, i) => {
+            {audiencesList.map((item, i) => {
               const isActive = activeIndex === i;
 
               return (
@@ -231,7 +236,7 @@ export default function AudienceGrid() {
 
         {/* Step B: 100% Clean Image projection block IN THE MIDDLE (Click to open Lightbox) */}
         <div 
-          onClick={() => openLightbox(audiences[activeIndex].image, audiences[activeIndex].title)}
+          onClick={() => openLightbox(audiencesList[activeIndex]?.image || '', audiencesList[activeIndex]?.title || '')}
           className="w-full h-[100dvh] relative border-b border-black/10 overflow-hidden bg-[#EFECE6] cursor-pointer"
           title="Click to view image"
         >
@@ -245,8 +250,8 @@ export default function AudienceGrid() {
               className="absolute inset-0 w-full h-full"
             >
               <Image 
-                src={audiences[activeIndex].image} 
-                alt={audiences[activeIndex].title} 
+                src={audiencesList[activeIndex]?.image || ''} 
+                alt={audiencesList[activeIndex]?.title || ''} 
                 fill
                 className="object-cover object-top opacity-100"
                 priority
@@ -258,7 +263,7 @@ export default function AudienceGrid() {
 
         {/* Step C: Index stack links with writing text below the image */}
         <div className="p-6 sm:p-12 flex flex-col gap-1 w-full bg-[#FAF9F6]">
-          {audiences.map((item, i) => {
+          {audiencesList.map((item, i) => {
             const isActive = activeIndex === i;
 
             return (

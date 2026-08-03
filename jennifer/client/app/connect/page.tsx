@@ -26,6 +26,24 @@ export function ConnectContent() {
             <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Email *</label>
             <input type="email" className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" required />
           </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Service Interested In *</label>
+            <select 
+              className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors text-black/90 cursor-pointer"
+              required
+              defaultValue=""
+            >
+              <option value="" disabled className="bg-[#FAF8F3] text-black/50">Select a service from What We Do...</option>
+              <option value="Personal Styling" className="bg-[#FAF8F3] text-black">Personal Styling (Style Discovery)</option>
+              <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling (Closet Evolution)</option>
+              <option value="Personal Shopping" className="bg-[#FAF8F3] text-black">Personal Shopping (Intentional Shopping)</option>
+              <option value="Occasion Styling" className="bg-[#FAF8F3] text-black">Occasion Styling (Event & Celebration)</option>
+              <option value="Workwear Styling" className="bg-[#FAF8F3] text-black">Workwear Styling (Professional Identity)</option>
+              <option value="Full Transformation" className="bg-[#FAF8F3] text-black">Full Personal Wardrobe & Style Transformation</option>
+              <option value="Bespoke Consultation" className="bg-[#FAF8F3] text-black">Bespoke Styling Consultation</option>
+            </select>
+          </div>
           
           <div className="flex flex-col gap-2">
             <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Message *</label>

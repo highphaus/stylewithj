@@ -102,6 +102,8 @@ function ServiceCard({ item, index, total, scrollYProgress }: CardProps) {
   );
 }
 
+import { useSiteData } from '@/lib/use-site-data';
+
 interface ServicesGridProps {
   hideButton?: boolean;
 }
@@ -110,6 +112,8 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   const targetRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const { openLightbox } = useLightbox();
+  const { services: dynamicServices } = useSiteData();
+  const servicesList = dynamicServices.length > 0 ? dynamicServices : allServices;
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -124,13 +128,13 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
   useMotionValueEvent(smoothProgress, "change", (latest) => {
     const idx = Math.min(
-      allServices.length - 1,
-      Math.max(0, Math.floor(latest * allServices.length))
+      servicesList.length - 1,
+      Math.max(0, Math.floor(latest * servicesList.length))
     );
     setActiveIndex(idx);
   });
 
-  const currentService = allServices[activeIndex] || allServices[0];
+  const currentService = servicesList[activeIndex] || servicesList[0];
 
   return (
     <div id="services" className="relative w-full bg-[#FAF9F6]">
@@ -149,7 +153,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
         {/* Stacked Images Down-by-Down with Captions Under Each Image */}
         <div className="flex flex-col divide-y divide-black/10 bg-[#FAF9F6]">
-          {allServices.map((item) => (
+          {servicesList.map((item) => (
             <div key={item.num} className="p-6 sm:p-8 flex flex-col gap-5">
               {/* CLEAN FULL IMAGE (Click to open Lightbox) */}
               <div 
@@ -250,12 +254,12 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
             {/* Container bg-[#FAF9F6] prevents visual seams */}
             <div className="relative w-full h-full overflow-hidden bg-[#FAF9F6]">
               
-              {allServices.map((item, i) => (
+              {servicesList.map((item, i) => (
                 <ServiceCard 
                   key={i} 
                   item={item} 
                   index={i} 
-                  total={allServices.length} 
+                  total={servicesList.length} 
                   scrollYProgress={smoothProgress}
                 />
               ))}
