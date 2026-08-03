@@ -12,14 +12,19 @@ export async function POST(req: Request) {
 
     const recipientEmail = 'muhammedsyam.dev@gmail.com';
 
-    // Transporter configuration: uses environment variables if present, or fallback SMTP transport
+    // Retrieve and sanitize credentials from process.env
+    const emailUser = (process.env.EMAIL_USER || process.env.SMTP_USER || 'muhammedsyam.dev@gmail.com').trim();
+    const rawPass = process.env.EMAIL_PASS || process.env.SMTP_PASS || '';
+    const emailPass = rawPass.replace(/\s+/g, '').trim(); // Remove spaces from Google App Password
+
+    console.log(`[Nodemailer Route] Attempting email dispatch for ${emailUser}... Pass configured: ${Boolean(emailPass)}`);
+
+    // Gmail Transporter configuration
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: false, // true for 465, false for other ports
+      service: 'gmail',
       auth: {
-        user: process.env.SMTP_USER || process.env.EMAIL_USER || 'muhammedsyam.dev@gmail.com',
-        pass: process.env.SMTP_PASS || process.env.EMAIL_PASS || '',
+        user: emailUser,
+        pass: emailPass,
       },
     });
 
@@ -72,26 +77,18 @@ export async function POST(req: Request) {
       </div>
     `;
 
-    // Attempt to send email
-    if (process.env.SMTP_PASS || process.env.EMAIL_PASS) {
-      await transporter.sendMail({
-        from: `"Style with J Atelier" <${process.env.SMTP_USER || 'muhammedsyam.dev@gmail.com'}>`,
+    if (emailPass) {
+      const info = await transporter.sendMail({
+        from: `"Style with J Atelier" <${emailUser}>`,
         to: recipientEmail,
         replyTo: email,
         subject: `✦ NEW ATELIER INQUIRY: ${firstName} ${lastName || ''} (${service || 'General'})`,
         text: `New Client Consultation Request\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nService: ${service}\nLocation: ${formattedLocation}\n\nMessage:\n${message}`,
         html: htmlContent,
       });
-      console.log(`[Nodemailer] Successfully sent email to ${recipientEmail}`);
+      console.log(`[Nodemailer Success] Sent email to ${recipientEmail}, MessageId: ${info.messageId}`);
     } else {
-      console.log(`[Nodemailer Simulation] No SMTP_PASS set. Simulated sending email to ${recipientEmail}:`, {
-        to: recipientEmail,
-        client: `${firstName} ${lastName}`,
-        email,
-        service,
-        location: formattedLocation,
-        message
-      });
+      console.log(`[Nodemailer Simulation] No EMAIL_PASS set in environment. Simulated sending to ${recipientEmail}`);
     }
 
     return NextResponse.json({ 
