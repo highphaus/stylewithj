@@ -35,17 +35,18 @@ export function AboutContent() {
           
           {/* Left Column: Portrait & Archival Details */}
           <div className="lg:col-span-5 relative lg:sticky lg:top-28">
-            <div className="relative aspect-[3/4] w-full bg-[#EAE8E3] overflow-hidden shadow-2xl border border-black/5">
+            <div className="relative w-full h-[85vh] sm:h-auto sm:aspect-[3/4] min-h-[480px] bg-[#0D0D0D] overflow-hidden shadow-2xl border border-black/5 rounded-xs">
               <Image
                 src={about.creativeDirectorImage || "/images/includes/IMG_0267.JPG.jpeg"}
                 alt={`${about.creativeDirectorName}, ${about.creativeDirectorTitle}`}
                 fill
                 priority
-                className="object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
+                className="object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
               />
-              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 border border-black/5">
-                <span className="text-[8px] tracking-[0.3em] uppercase block text-black/50 font-sans">{about.creativeDirectorTitle}</span>
-                <span className="font-serif text-xs text-black">{about.creativeDirectorName}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-4 left-4 bg-black/85 backdrop-blur-md px-4 py-2 border border-white/10 text-white rounded-xs">
+                <span className="text-[8px] tracking-[0.3em] uppercase block text-white/60 font-sans">{about.creativeDirectorTitle}</span>
+                <span className="font-serif text-xs text-white font-medium">{about.creativeDirectorName}</span>
               </div>
             </div>
 

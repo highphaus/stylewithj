@@ -286,10 +286,17 @@ export default function AudienceGrid() {
 
                 {/* WRITING TEXT IN TEXT SECTION */}
                 {isActive && (
-                  <div className="mt-2 flex flex-col gap-1.5">
+                  <div className="mt-2 flex flex-col gap-2.5">
                     <p className="font-sans text-xs text-black/80 font-light italic leading-relaxed">
                       “{item.desc}”
                     </p>
+
+                    <Link
+                      href="/connect"
+                      className="self-start inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-[8px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black/80 transition-all rounded-xs shadow-xs"
+                    >
+                      Book Consultation →
+                    </Link>
 
                     <div className="w-full h-[1px] bg-black/10 mt-1 overflow-hidden">
                       <motion.div

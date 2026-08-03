@@ -172,14 +172,15 @@ export default function JournalPage() {
                   {topic.num} / {topic.category}
                 </span>
 
-                {/* Category Cover Image */}
-                <div className="relative w-full aspect-[4/3] sm:aspect-[4/5] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-md rounded-xs">
+                {/* Category Cover Image - Full Bleed Hero Style Cover on Mobile */}
+                <div className="relative w-full h-[65vh] sm:h-auto sm:aspect-[4/5] min-h-[380px] overflow-hidden bg-[#0D0D0D] border border-black/5 shadow-md rounded-xs">
                   <img
                     src={topic.image}
                     alt={topic.category}
-                    className="absolute inset-0 w-full h-full object-cover object-center hover:scale-[1.02] transition-transform duration-700 ease-out"
+                    className="absolute inset-0 w-full h-full object-cover object-top hover:scale-[1.02] transition-transform duration-700 ease-out"
                     draggable="false"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                 </div>
                 
                 <div className="bg-[#EFECE6] p-4 sm:p-8 border border-black/5 shadow-xs w-full rounded-xs">

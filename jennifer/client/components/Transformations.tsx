@@ -380,9 +380,9 @@ export default function Transformations({ hideButton = false, isStatic = false }
           </h4>
           <Link
             href="/transformations"
-            className="tracking-[0.4em] text-[9px] uppercase font-light text-black/60 hover:text-black transition-all duration-500 py-3.5 px-8 border border-black/20 hover:border-black rounded-none bg-transparent hover:bg-black hover:text-white"
+            className="tracking-[0.4em] text-[9px] uppercase font-mono font-semibold text-white bg-black hover:bg-black/85 transition-all duration-300 py-4 px-9 shadow-md rounded-xs cursor-pointer inline-block"
           >
-            Access Full Ledger
+            Access Full Ledger →
           </Link>
         </div>
       )}

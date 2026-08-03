@@ -134,19 +134,19 @@ export default function CategoriesPage() {
                 </div>
               </div>
 
-              {/* Right: Image */}
+              {/* Right: Image - Hero Style Cover on Mobile */}
               <div 
                 onClick={() => openLightbox(categoryData[0].image, categoryData[0].headline)}
-                className="relative min-h-[260px] sm:min-h-full overflow-hidden order-1 sm:order-2 cursor-pointer"
+                className="relative w-full h-[75vh] sm:h-full min-h-[400px] overflow-hidden order-1 sm:order-2 cursor-pointer bg-[#0D0D0D]"
                 title="Click to view image"
               >
                 <Image
                   src={categoryData[0].image}
                   alt={categoryData[0].title}
                   fill
-                  className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               </div>
 
             </div>
@@ -161,17 +161,17 @@ export default function CategoriesPage() {
               className="group flex flex-col overflow-hidden border border-black/10 hover:border-black/30 transition-all duration-300"
               style={{ background: cat.color }}
             >
-              {/* Image */}
+              {/* Image - Hero Style Cover on Mobile */}
               <div 
                 onClick={() => openLightbox(cat.num === '02' ? '/images/CIT09345.jpg' : cat.image, cat.headline)}
-                className="relative aspect-[4/5] overflow-hidden cursor-pointer"
+                className="relative w-full h-[75vh] sm:h-auto sm:aspect-[4/5] min-h-[400px] overflow-hidden cursor-pointer bg-[#0D0D0D]"
                 title="Click to view image"
               >
                 <Image
                   src={cat.num === '02' ? '/images/CIT09345.jpg' : cat.image}
                   alt={cat.title}
                   fill
-                  className="object-cover object-center group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                  className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-700 ease-out"
                 />
                 {/* Overlay label */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
