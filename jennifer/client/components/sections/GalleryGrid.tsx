@@ -34,7 +34,7 @@ export default function GalleryGrid() {
     <div className="w-full bg-[#FAF9F6] text-[#1A1A1A] pb-20 sm:pb-32">
       
       {/* ── HEADER BUCKET ── */}
-      <header className="px-6 md:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/5 pb-10">
+      <header className="px-6 md:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/5 pb-10 pt-16 sm:pt-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="font-serif text-4xl sm:text-6xl font-light tracking-tight leading-none text-[#1A1A1A]">
@@ -67,8 +67,8 @@ export default function GalleryGrid() {
       </header>
 
       {/* ── RESPONSIVE 2-COLUMN MOBILE & 3-COLUMN DESKTOP GRID CONTAINER ── */}
-      <main className="px-3 sm:px-8 lg:px-20 max-w-7xl mx-auto py-8 sm:py-16">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-8">
+      <main className="sm:px-8 lg:px-20 max-w-7xl mx-auto py-0 sm:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 sm:gap-6 lg:gap-8">
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
               <motion.div
@@ -85,15 +85,15 @@ export default function GalleryGrid() {
                   fabric: 'High-Tier Drape & Craftsmanship',
                   occasion: item.category === 'western' ? 'Everyday Workwear & Dinners' : item.category === 'editorial' ? 'Red Carpet & Evening Events' : 'Resort, Beachside & Holiday Edits'
                 })}
-                className="relative group overflow-hidden bg-[#EAE8E3] border border-black/[0.04] aspect-[3/4] rounded-sm shadow-xs cursor-pointer"
+                className="relative group overflow-hidden bg-[#EAE8E3] border-b border-black/[0.06] sm:border sm:rounded-sm h-[100dvh] sm:h-auto sm:aspect-[3/4] shadow-xs cursor-pointer"
                 title="Click to view image"
               >
                 <Image
                   src={item.src}
                   alt={item.title}
                   fill
-                  className="object-cover object-center transition-transform duration-[2500ms] ease-out group-hover:scale-105"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover object-top sm:object-center transition-transform duration-[2500ms] ease-out group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
 
                 {/* EDITORIAL GLIDE-UP HOVER OVERLAY */}
