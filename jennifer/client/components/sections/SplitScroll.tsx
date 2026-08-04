@@ -159,12 +159,9 @@ export default function SplitScroll() {
             <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
               STYLING CATEGORIES
             </span>
-            <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A] mb-3">
+            <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A] mb-6">
               Curated Category <br /> Silhouettes.
             </h3>
-            <p className="font-sans text-xs tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed mb-6">
-              A study in continuous motion, personal proportion, and structural form across every occasion.
-            </p>
 
             {/* DYNAMIC WRITING FOR THE ACTIVE VISIBLE IMAGE ONLY */}
             <motion.div 
