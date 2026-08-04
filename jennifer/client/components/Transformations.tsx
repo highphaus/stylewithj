@@ -80,22 +80,17 @@ export default function Transformations({ hideButton = false }: TransformationsP
   return (
     <section 
       id="transformations" 
-      className="relative w-full bg-[#FAF9F6] border-b border-black/10 py-12 sm:py-20 overflow-hidden"
+      className="relative w-full h-[100dvh] min-h-[580px] bg-[#FAF9F6] border-b border-black/10 py-4 sm:py-6 overflow-hidden flex flex-col justify-between"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-10 lg:px-16">
+      <div className="max-w-7xl mx-auto w-full h-full flex flex-col justify-between px-4 sm:px-10 lg:px-16 overflow-hidden">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/10 pb-6 mb-8">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
-              <span className="text-[10px] tracking-[0.4em] uppercase font-light text-black/50 font-sans font-semibold">
-                VISUAL IDENTITY ARCHIVE
-              </span>
-            </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight">
+        <div className="flex-shrink-0 flex items-center justify-between border-b border-black/10 pb-3 mb-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
+            <h2 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A] tracking-tight">
               Transformations
             </h2>
           </div>
@@ -107,25 +102,25 @@ export default function Transformations({ hideButton = false }: TransformationsP
           </div>
         </div>
 
-        {/* Dynamic Carousel Slide Container */}
+        {/* Dynamic Carousel Slide Container (FITS EXACTLY INSIDE 1 SCREEN HEIGHT) */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="flex flex-col gap-6"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="flex-1 min-h-0 flex flex-col justify-between my-1 overflow-hidden"
           >
             
-            {/* EXPANDED MAXIMUM HEIGHT PORTRAIT PHOTO CANVAS PROJECTION (HEADER TEXT REMOVED SO IMAGES COVER AREA FULLY) */}
-            <div className="w-full">
-              <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            {/* 100% 1-SCREEN VIEWPORT PHOTO CANVAS */}
+            <div className="flex-1 min-h-0 w-full overflow-hidden my-1">
+              <div className="grid grid-cols-2 gap-3 sm:gap-5 h-full">
                 
                 {/* BEFORE FRAME */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.beforeImg, 'BEFORE')}
-                  className="group relative w-full h-[80vh] min-h-[500px] sm:min-h-[600px] bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
                   title="Click to view full high-res image & details"
                 >
                   <img
@@ -135,10 +130,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
                     draggable="false"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
-                    BEFORE // INITIAL FIT
+                  <div className="absolute top-3 left-3 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
+                    BEFORE
                   </div>
-                  <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
+                  <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-white/90 px-3 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>
                 </div>
@@ -146,7 +141,7 @@ export default function Transformations({ hideButton = false }: TransformationsP
                 {/* AFTER FRAME */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.afterImg, 'AFTER')}
-                  className="group relative w-full h-[80vh] min-h-[500px] sm:min-h-[600px] bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
                   title="Click to view full high-res image & details"
                 >
                   <img
@@ -156,10 +151,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
                     draggable="false"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-4 right-4 bg-black text-white px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
-                    AFTER // REFINED SILHOUETTE
+                  <div className="absolute top-3 right-3 bg-black text-white px-3 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
+                    AFTER
                   </div>
-                  <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
+                  <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md text-white/90 px-3 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>
                 </div>
@@ -168,19 +163,19 @@ export default function Transformations({ hideButton = false }: TransformationsP
             </div>
 
             {/* Subtext Bar: Narrative & Specs Underneath */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#EFECE6] p-6 border border-black/10 rounded-xs shadow-xs">
-              <div className="flex flex-col gap-1 max-w-xl">
-                <p className="font-serif text-sm sm:text-base italic font-light text-black/85 leading-relaxed">
+            <div className="flex-shrink-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#EFECE6] p-4 border border-black/10 rounded-xs shadow-xs mt-1">
+              <div className="flex flex-col gap-0.5 max-w-xl">
+                <p className="font-serif text-xs sm:text-sm italic font-light text-black/85 leading-snug">
                   "{currentItem.concept}"
                 </p>
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/40 font-bold mr-1">
+                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                  <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold mr-1">
                     SPECS:
                   </span>
                   {currentItem.specs.map((spec, i) => (
                     <span 
                       key={i} 
-                      className="font-mono text-[9px] tracking-wide text-black/75 bg-white/70 px-2.5 py-0.5 rounded-xs border border-black/5"
+                      className="font-mono text-[8px] tracking-wide text-black/75 bg-white/70 px-2 py-0.5 rounded-xs border border-black/5"
                     >
                       {spec}
                     </span>
@@ -188,10 +183,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 self-end sm:self-auto flex-shrink-0">
+              <div className="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
                 <Link
                   href="/connect"
-                  className="tracking-[0.25em] text-[9px] uppercase font-mono font-semibold text-white bg-[#1A1A1A] hover:bg-black transition-all py-3 px-6 shadow-xs rounded-xs cursor-pointer"
+                  className="tracking-[0.2em] text-[8px] sm:text-[9px] uppercase font-mono font-semibold text-white bg-[#1A1A1A] hover:bg-black transition-all py-2.5 px-4 shadow-xs rounded-xs cursor-pointer"
                 >
                   Book Transformation →
                 </Link>
@@ -202,38 +197,20 @@ export default function Transformations({ hideButton = false }: TransformationsP
         </AnimatePresence>
 
         {/* Slide Indicator Dots */}
-        <div className="flex justify-center items-center gap-3 mt-10">
+        <div className="flex-shrink-0 flex justify-center items-center gap-2.5 mt-2">
           {transformationData.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}
               aria-label={`Go to slide ${idx + 1}`}
-              className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
-                currentIndex === idx ? 'w-10 bg-[#1A1A1A]' : 'w-2 bg-black/20 hover:bg-black/40'
+              className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                currentIndex === idx ? 'w-8 bg-[#1A1A1A]' : 'w-1.5 bg-black/20 hover:bg-black/40'
               }`}
             />
           ))}
         </div>
 
       </div>
-
-      {/* Ledger Footer Call to Action */}
-      {!hideButton && (
-        <div className="w-full pt-14 pb-6 border-t border-black/10 flex flex-col items-center text-center px-6 mt-14">
-          <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/45 block mb-2 font-semibold">
-            EXPLORE THE COMPLETE COLLECTION
-          </span>
-          <h4 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A] mb-6 leading-tight max-w-md">
-            Ready for your personal style transformation?
-          </h4>
-          <Link
-            href="/transformations"
-            className="tracking-[0.3em] text-[9px] uppercase font-mono font-semibold text-[#1A1A1A] bg-[#EFECE6] hover:bg-[#EAE8E3] border border-black/10 transition-all py-4 px-8 rounded-xs cursor-pointer inline-block"
-          >
-            Access Full Archive →
-          </Link>
-        </div>
-      )}
 
     </section>
   );
