@@ -111,9 +111,6 @@ export default function Transformations({ hideButton = false }: TransformationsP
         {/* Section Header with Case Eyebrow, Main Title, Client Subtitle, and Interactive Case Selectors */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/10 pb-6 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
           <div>
-            <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block mb-1">
-              ✦ CASE STUDY {currentItem.id} // {currentItem.demographic}
-            </span>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight">
               Transformations
             </h2>
