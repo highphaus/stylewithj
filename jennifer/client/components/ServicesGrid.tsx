@@ -66,13 +66,7 @@ function ServiceCard({
   scrollYProgress: MotionValue<number>;
 }) {
   const { openLightbox } = useLightbox();
-  const segment = 1 / total;
-  const start = index * segment;
-  const peak = start + segment * 0.5;
-  const end = (index + 1) * segment;
 
-  const yPos = index === 0 ? 0 : 40;
-  
   return (
     <motion.div
       style={{
@@ -162,22 +156,41 @@ export default function ServicesGrid({ hideButton }: ServicesGridProps = {}) {
   return (
     <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
       
-      {/* ── MOBILE / SMALL DEVICE LAYOUT (WRITING FIRST -> FULL BLEED IMAGE TOUCHING BOTTOM DIVIDING LINE WITH ZERO GAP) ── */}
+      {/* ── MOBILE / SMALL DEVICE LAYOUT (PHOTO FIRST TOUCHING HEADER DIVIDING LINE -> WRITING DIRECTLY UNDER PHOTO) ── */}
       <div className="block lg:hidden bg-[#FAF9F6] w-full overflow-hidden">
         {/* Header */}
-        <div className="px-6 pt-12 pb-6 border-b border-black/10 bg-[#FAF9F6]">
+        <div className="px-6 pt-6 pb-4 border-b border-black/10 bg-[#FAF9F6]">
           <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A]">
             What We Do
           </h2>
         </div>
 
-        {/* Stacked Images Down-by-Down: Writing FIRST -> Full-Bleed Cover Image DIRECTLY TOUCHING the bottom dividing line */}
+        {/* Stacked Images Down-by-Down: Cover Image FIRST touching header line -> Writing DIRECTLY UNDER Cover Image */}
         <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
           {servicesList.map((item) => (
-            <div key={item.num} className="w-full flex flex-col bg-[#FAF9F6]">
+            <div key={item.num} className="w-full flex flex-col bg-[#FAF9F6] pb-8">
               
-              {/* 1. CAPTION / WRITING DIRECTLY ABOVE THE IMAGE */}
-              <div className="px-6 pt-8 pb-6 flex flex-col gap-2.5 bg-[#FAF9F6]">
+              {/* 1. FULL BLEED COVER IMAGE DIRECTLY TOUCHING THE TOP DIVIDING LINE WITH 0 GAP */}
+              <div 
+                onClick={() => openLightbox(item.image, item.name)}
+                className="relative w-full h-[80vh] min-h-[460px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+                title="Click to view image"
+              >
+                <Image 
+                  src={item.image} 
+                  alt={item.name} 
+                  fill
+                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
+                  ✦ {item.num} // {item.category}
+                </div>
+              </div>
+
+              {/* 2. CAPTION / WRITING DIRECTLY UNDER THE IMAGE */}
+              <div className="px-6 pt-6 flex flex-col gap-2.5 bg-[#FAF9F6]">
                 <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
                   {item.category}
                 </span>
@@ -197,25 +210,6 @@ export default function ServicesGrid({ hideButton }: ServicesGridProps = {}) {
                   >
                     Explore Service Details →
                   </a>
-                </div>
-              </div>
-
-              {/* 2. FULL BLEED COVER IMAGE DIRECTLY TOUCHING THE BOTTOM DIVIDING LINE WITH 0 GAP */}
-              <div 
-                onClick={() => openLightbox(item.image, item.name)}
-                className="relative w-full h-[80vh] min-h-[460px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
-                title="Click to view image"
-              >
-                <Image 
-                  src={item.image} 
-                  alt={item.name} 
-                  fill
-                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
-                  ✦ {item.num} // {item.category}
                 </div>
               </div>
 
