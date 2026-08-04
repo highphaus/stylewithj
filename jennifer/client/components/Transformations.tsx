@@ -103,7 +103,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
     >
       <div className="relative w-full h-full flex flex-col lg:grid lg:grid-cols-12 items-stretch overflow-hidden pointer-events-auto">
         
-        {/* Clean 100% Dual Image Frame (Zero Overlapping Text Boxes) */}
+        {/* Clean 100% Screen Cover Dual Image Frame (No Overlapping Text Box) */}
         <div className="w-full h-full col-span-12 lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3]">
           
           {/* Left Column: Before Image */}
@@ -185,7 +185,7 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
             <div 
               onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
               className="relative h-full overflow-hidden group"
-              title="Click to view story and details"
+              title="Click photo to view story and details"
             >
               <img
                 src={item.beforeImg}
@@ -200,7 +200,7 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
             <div 
               onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
               className="relative h-full overflow-hidden group"
-              title="Click to view story and details"
+              title="Click photo to view story and details"
             >
               <img
                 src={item.afterImg}
@@ -219,7 +219,7 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
               key={activeMode} 
               onClick={() => handleOpenDetails(activeMode === 'before' ? item.beforeImg : item.afterImg, activeMode === 'before' ? 'BEFORE' : 'AFTER')}
               className="relative w-full h-full cursor-pointer group"
-              title="Click to view story and details"
+              title="Click photo to view story and details"
             >
               <motion.img
                 src={activeMode === 'before' ? item.beforeImg : item.afterImg}
