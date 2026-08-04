@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
 
 const transformationData = [
@@ -44,306 +44,140 @@ const transformationData = [
   }
 ];
 
-interface RowProps {
-  item: typeof transformationData[0];
-  idx: number;
-  scrollYProgress: MotionValue<number>;
-  totalItems: number;
-  hideButton?: boolean;
-}
-
-function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowProps) {
+// ── WORLD-CLASS INTERACTIVE DRAG-TO-REVEAL CURTAIN SLIDER COMPONENT ──
+function BeforeAfterSliderCard({ item, isMobile = false }: { item: typeof transformationData[0]; isMobile?: boolean }) {
+  const [sliderPos, setSliderPos] = useState(50); // percentage 0-100
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { openLightbox } = useLightbox();
-  const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
 
-  const segment = 1 / totalItems;
-  const isFirst = idx === 0;
+  const handleMove = useCallback((clientX: number) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    let percentage = (x / rect.width) * 100;
+    if (percentage < 0) percentage = 0;
+    if (percentage > 100) percentage = 100;
+    setSliderPos(percentage);
+  }, []);
 
-  const pStart = idx * segment;
-  const pMid = pStart + segment * 0.2;
+  const handleTouchMove = (e: React.TouchEvent) => {
+    handleMove(e.touches[0].clientX);
+  };
 
-  const inputRange = isFirst
-    ? [0.0, 0.8, 1.0]
-    : [pStart, pMid, 1.0];
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging || e.buttons === 1) {
+      handleMove(e.clientX);
+    }
+  };
 
-  const opacityRange = isFirst
-    ? [1.0, 1.0, 1.0]
-    : [0.0, 1.0, 1.0];
-
-  const beforeRange = isFirst
-    ? ["0vw", "0vw", "0vw"]
-    : ["-100vw", "0vw", "0vw"];
-
-  const afterRange = isFirst
-    ? ["0vw", "0vw", "0vw"]
-    : ["100vw", "0vw", "0vw"];
-
-  const scaleRange = isFirst
-    ? [1.0, 1.0, 1.0]
-    : [1.02, 1.0, 1.0];
-
-  const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
-  const beforeX = useTransform(scrollYProgress, inputRange, beforeRange);
-  const afterX = useTransform(scrollYProgress, inputRange, afterRange);
-  const scale = useTransform(scrollYProgress, inputRange, scaleRange);
-
-  const handleOpenDetails = (imgSrc: string, mode: 'BEFORE' | 'AFTER') => {
-    openLightbox(imgSrc, `${item.client} (${mode})`, {
+  const handleOpenDetails = () => {
+    openLightbox(item.afterImg, item.client, {
       num: item.id,
       category: item.demographic,
       concept: item.concept,
       story: `${item.concept} — Specifications: ${item.specs.join(' • ')}`,
       fabric: item.specs.join(' • '),
-      tag: mode
+      tag: 'TRANSFORMATION'
     });
   };
 
   return (
-    <motion.div 
-      style={{ opacity, zIndex: (idx + 1) * 10 }}
-      className="absolute inset-0 w-full h-full flex flex-col lg:flex-row items-center justify-center pointer-events-none"
-    >
-      <div className="relative w-full h-full flex flex-col lg:grid lg:grid-cols-12 items-stretch overflow-hidden pointer-events-auto">
-        
-        {/* Clean Museum Dual Image Projection */}
-        <div className="w-full h-full col-span-12 relative overflow-hidden bg-[#0D0D0D]">
+    <div className="w-full flex flex-col bg-[#FAF9F6]">
+      
+      {/* Interactive Curtain Frame */}
+      <div 
+        ref={containerRef}
+        onMouseMove={handleMouseMove}
+        onTouchMove={handleTouchMove}
+        onMouseDown={() => setIsDragging(true)}
+        onMouseUp={() => setIsDragging(false)}
+        onMouseLeave={() => setIsDragging(false)}
+        className={`relative w-full ${isMobile ? 'h-[85vh] min-h-[480px]' : 'h-[90vh] min-h-[600px]'} bg-[#0D0D0D] overflow-hidden select-none cursor-ew-resize group`}
+      >
+        {/* 1. AFTER IMAGE (UNDERNEATH FULL WIDTH) */}
+        <div className="absolute inset-0 w-full h-full">
+          <img
+            src={item.afterImg}
+            alt={`${item.client} After`}
+            className="w-full h-full object-cover object-top"
+            draggable="false"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
           
-          {activeMode === 'both' ? (
-            <div className="grid grid-cols-1 lg:grid-cols-12 w-full h-full divide-x divide-white/10">
-              
-              {/* Left Column: Before Image */}
-              <div 
-                onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
-                className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
-                title="Click to view story and details"
-              >
-                <motion.div style={{ x: beforeX }} className="w-full h-full relative">
-                  <motion.img 
-                    style={{ scale }}
-                    src={item.beforeImg} 
-                    alt="Initial Silhouette" 
-                    className="w-full h-full object-cover object-top grayscale-[20%] group-hover:scale-[1.02] transition-transform duration-700 ease-out" 
-                    draggable="false" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-8 left-8 bg-[#FAF9F6]/95 backdrop-blur-md border border-black/10 px-4 py-2 text-[9px] tracking-[0.3em] font-mono text-black uppercase font-bold shadow-md z-10 rounded-xs">
-                    BEFORE // INITIAL FIT
-                  </div>
-                  <div className="absolute bottom-8 left-8 bg-black/80 backdrop-blur-md text-white/90 px-4 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    ✦ CLICK TO VIEW STORY & SPECS
-                  </div>
-                </motion.div>
-              </div>
+          {/* After Floating Tag */}
+          <div className="absolute top-6 right-6 bg-black text-white px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.3em] font-mono uppercase font-bold shadow-md z-10 rounded-xs border border-white/10">
+            AFTER // REFINED SILHOUETTE
+          </div>
+        </div>
 
-              {/* Right Column: After Image */}
-              <div 
-                onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
-                className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
-                title="Click to view story and details"
-              >
-                <motion.div style={{ x: afterX }} className="w-full h-full relative">
-                  <motion.img 
-                    style={{ scale }}
-                    src={item.afterImg} 
-                    alt="Realized Design Target" 
-                    className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out" 
-                    draggable="false" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-8 right-8 bg-black text-white px-4 py-2 text-[9px] tracking-[0.3em] font-mono uppercase font-bold shadow-md z-10 rounded-xs border border-white/10">
-                    AFTER // REFINED SILHOUETTE
-                  </div>
-                  <div className="absolute bottom-8 right-8 bg-black/80 backdrop-blur-md text-white/90 px-4 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    ✦ CLICK TO VIEW STORY & SPECS
-                  </div>
-                </motion.div>
-              </div>
-
-            </div>
-          ) : (
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={activeMode} 
-                onClick={() => handleOpenDetails(activeMode === 'before' ? item.beforeImg : item.afterImg, activeMode === 'before' ? 'BEFORE' : 'AFTER')}
-                className="relative w-full h-full cursor-pointer group"
-                title="Click to view story and details"
-              >
-                <motion.img
-                  src={activeMode === 'before' ? item.beforeImg : item.afterImg}
-                  alt={activeMode}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className={`w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ${
-                    activeMode === 'before' ? 'grayscale-[20%]' : ''
-                  }`}
-                  draggable="false"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute top-8 left-8 bg-[#FAF9F6]/95 border border-black/10 px-4 py-2 text-[9px] tracking-[0.3em] font-mono text-black uppercase font-bold shadow-md z-10 rounded-xs">
-                  {activeMode === 'before' ? 'BEFORE // INITIAL FIT' : 'AFTER // REFINED SILHOUETTE'}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          )}
-
-          {/* Floating Archetype Badge */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-5 py-2.5 rounded-full border border-white/15 shadow-2xl z-30 flex items-center gap-3">
-            <span className="font-mono text-[9px] tracking-[0.3em] uppercase font-bold text-white">
-              ✦ {item.id} // {item.client}
-            </span>
-            <div className="h-3 w-px bg-white/20" />
+        {/* 2. BEFORE IMAGE (CLIPPED ON TOP BY SLIDER POSITION) */}
+        <div 
+          className="absolute inset-y-0 left-0 overflow-hidden"
+          style={{ width: `${sliderPos}%` }}
+        >
+          <div className="relative w-full h-full" style={{ width: containerRef.current ? `${containerRef.current.clientWidth}px` : '100vw' }}>
+            <img
+              src={item.beforeImg}
+              alt={`${item.client} Before`}
+              className="w-full h-full object-cover object-top grayscale-[20%]"
+              draggable="false"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
             
-            {/* View Mode Switcher Pills */}
-            <div className="flex gap-1">
-              <button
-                onClick={(e) => { e.stopPropagation(); setActiveMode('both'); }}
-                className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 cursor-pointer ${
-                  activeMode === 'both' ? 'bg-white text-black' : 'bg-transparent text-white/60 hover:text-white'
-                }`}
-              >
-                Split
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); setActiveMode('before'); }}
-                className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 cursor-pointer ${
-                  activeMode === 'before' ? 'bg-white text-black' : 'bg-transparent text-white/60 hover:text-white'
-                }`}
-              >
-                Before
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); setActiveMode('after'); }}
-                className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 cursor-pointer ${
-                  activeMode === 'after' ? 'bg-white text-black' : 'bg-transparent text-white/60 hover:text-white'
-                }`}
-              >
-                After
-              </button>
+            {/* Before Floating Tag */}
+            <div className="absolute top-6 left-6 bg-[#FAF9F6]/95 backdrop-blur-md border border-black/10 px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.3em] font-mono text-black uppercase font-bold shadow-md z-10 rounded-xs">
+              BEFORE // INITIAL FIT
             </div>
           </div>
+        </div>
 
+        {/* 3. VERTICAL DIVIDER LINE & GRIP HANDLE */}
+        <div 
+          className="absolute inset-y-0 z-30 pointer-events-none flex items-center justify-center"
+          style={{ left: `${sliderPos}%` }}
+        >
+          <div className="w-[2px] h-full bg-white shadow-[0_0_15px_rgba(0,0,0,0.8)]" />
+          
+          {/* Circular Luxury Grip Badge */}
+          <div className="absolute w-10 h-10 rounded-full bg-black/90 text-white border border-white/40 shadow-2xl flex items-center justify-center text-xs font-mono tracking-tighter backdrop-blur-md cursor-ew-resize">
+            <span>‹ ›</span>
+          </div>
+        </div>
+
+        {/* Bottom Floating Info Badge & Click Details Button */}
+        <div className="absolute bottom-6 left-6 right-6 z-20 flex items-center justify-between pointer-events-none">
+          <div className="bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-xs text-[8px] sm:text-[9px] tracking-[0.3em] font-mono uppercase font-bold border border-white/10">
+            ✦ {item.id} // {item.client}
+          </div>
+
+          <button
+            onClick={(e) => { e.stopPropagation(); handleOpenDetails(); }}
+            className="pointer-events-auto px-4 py-2 bg-white text-black hover:bg-white/90 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold rounded-xs shadow-lg transition-all"
+          >
+            View Details & Story →
+          </button>
         </div>
 
       </div>
-    </motion.div>
-  );
-}
 
-// Clean Full-Bleed Mobile Case Study Card
-function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transformationData[0]; fullBleedMobile?: boolean }) {
-  const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
-  const { openLightbox } = useLightbox();
-
-  const handleOpenDetails = (imgSrc: string, mode: 'BEFORE' | 'AFTER' | 'BOTH') => {
-    openLightbox(imgSrc, `${item.client} (${mode})`, {
-      num: item.id,
-      category: item.demographic,
-      concept: item.concept,
-      story: `${item.concept} — Specifications: ${item.specs.join(' • ')}`,
-      fabric: item.specs.join(' • '),
-      tag: mode
-    });
-  };
-
-  return (
-    <div className={`flex flex-col bg-[#FAF9F6] ${fullBleedMobile ? 'w-full' : 'border border-black/10 p-0 rounded-xs shadow-xs'}`}>
-      
-      <div className={`relative ${fullBleedMobile ? 'w-full h-[85vh] min-h-[480px] bg-[#0D0D0D]' : 'aspect-[3/4] sm:aspect-[4/5] w-full bg-[#0D0D0D] rounded-xs border border-black/5'} overflow-hidden cursor-pointer`}>
-        {activeMode === 'both' ? (
-          <div className="grid grid-cols-2 w-full h-full divide-x divide-white/10">
-            <div 
-              onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
-              className="relative h-full overflow-hidden group"
-              title="Click photo to view story and details"
-            >
-              <img
-                src={item.beforeImg}
-                alt="Before"
-                className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700"
-                draggable="false"
-              />
-              <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-2.5 py-1 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs">
-                BEFORE
-              </div>
-            </div>
-            <div 
-              onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
-              className="relative h-full overflow-hidden group"
-              title="Click photo to view story and details"
-            >
-              <img
-                src={item.afterImg}
-                alt="After"
-                className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
-                draggable="false"
-              />
-              <div className="absolute top-4 right-4 bg-black text-white px-2.5 py-1 text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-xs">
-                AFTER
-              </div>
-            </div>
-          </div>
-        ) : (
-          <AnimatePresence mode="wait">
-            <motion.div 
-              key={activeMode} 
-              onClick={() => handleOpenDetails(activeMode === 'before' ? item.beforeImg : item.afterImg, activeMode === 'before' ? 'BEFORE' : 'AFTER')}
-              className="relative w-full h-full cursor-pointer group"
-              title="Click photo to view story and details"
-            >
-              <motion.img
-                src={activeMode === 'before' ? item.beforeImg : item.afterImg}
-                alt={activeMode}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className={`w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ${
-                  activeMode === 'before' ? 'grayscale-[20%]' : ''
-                }`}
-                draggable="false"
-              />
-              <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs">
-                {activeMode === 'before' ? 'BEFORE' : 'AFTER'}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        )}
-
-        {/* View Mode Switcher Pill Overlay */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/85 backdrop-blur-md border border-white/10 rounded-full p-1 flex gap-1 shadow-lg z-20">
-          <button
-            onClick={(e) => { e.stopPropagation(); setActiveMode('both'); }}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 ${
-              activeMode === 'both'
-                ? 'bg-white text-black'
-                : 'bg-transparent text-white/60 hover:text-white'
-            }`}
-          >
-            Split
-          </button>
-          <button
-            onClick={(e) => { e.stopPropagation(); setActiveMode('before'); }}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 ${
-              activeMode === 'before'
-                ? 'bg-white text-black'
-                : 'bg-transparent text-white/60 hover:text-white'
-            }`}
-          >
-            Before
-          </button>
-          <button
-            onClick={(e) => { e.stopPropagation(); setActiveMode('after'); }}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 ${
-              activeMode === 'after'
-                ? 'bg-white text-black'
-                : 'bg-transparent text-white/60 hover:text-white'
-            }`}
-          >
-            After
-          </button>
+      {/* Narrative Section Below Card */}
+      <div className="px-6 py-6 border-b border-black/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#FAF9F6]">
+        <div>
+          <span className="font-mono text-[8px] sm:text-[9px] tracking-[0.3em] uppercase text-black/45 block mb-1 font-bold">
+            {item.demographic}
+          </span>
+          <p className="font-serif text-sm sm:text-base italic text-black/80 font-light max-w-xl leading-relaxed">
+            "{item.concept}"
+          </p>
         </div>
+
+        <button
+          onClick={handleOpenDetails}
+          className="font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold whitespace-nowrap cursor-pointer"
+        >
+          Read Full Case Study →
+        </button>
       </div>
 
     </div>
@@ -355,75 +189,35 @@ interface TransformationsProps {
   isStatic?: boolean;
 }
 
-export default function Transformations({ hideButton = false, isStatic = false }: TransformationsProps) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"]
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
-    damping: 26,
-    restDelta: 0.001
-  });
-
+export default function Transformations({ hideButton = false }: TransformationsProps) {
   return (
     <div className="relative w-full bg-[#FAF9F6] overflow-clip">
       
-      {/* ── MOBILE EXCLUSIVE VIEW ── */}
-      {!isStatic && (
-        <div className="block lg:hidden w-full bg-[#FAF9F6]">
-          {/* Header */}
-          <div className="px-6 pt-16 pb-8 border-b border-black/10 bg-[#FAF9F6]">
-            <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/45 block mb-2 font-semibold">
-              ✦ TRANSFORMATIONS
-            </span>
-            <h2 className="font-serif text-3xl font-light text-black tracking-tight">
-              Visual Structural Evolutions
-            </h2>
-          </div>
+      {/* Section Header */}
+      <div className="px-6 sm:px-12 lg:px-20 pt-16 pb-8 border-b border-black/10 bg-[#FAF9F6] flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/45 block mb-2 font-semibold">
+            ✦ BEFORE & AFTER SILHOUETTE STUDIES
+          </span>
+          <h2 className="font-serif text-3xl sm:text-5xl font-light text-black tracking-tight">
+            Visual Structural Transformations
+          </h2>
+        </div>
+        <p className="font-serif text-xs italic text-black/60 max-w-xs leading-relaxed">
+          Drag the center handle on any photo to reveal the before and after silhouette evolution.
+        </p>
+      </div>
 
-          {/* Stack of 100% Full Bleed Mobile Cards */}
-          <div className="flex flex-col divide-y divide-black/10 bg-[#FAF9F6]">
-            {transformationData.map((item) => (
-              <CaseStudyCard key={item.id} item={item} fullBleedMobile={true} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── DESKTOP EXCLUSIVE VIEW: Smooth Flight Scroll ── */}
-      {!isStatic ? (
-        <div ref={sectionRef} className="hidden lg:block relative w-full h-[380vh] bg-[#FAF9F6] overflow-x-clip">
-          <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]">
-            {transformationData.map((item, idx) => (
-              <ScrollingCaseStudyRow
-                key={item.id}
-                item={item}
-                idx={idx}
-                scrollYProgress={smoothProgress}
-                totalItems={transformationData.length}
-                hideButton={hideButton}
-              />
-            ))}
-          </div>
-        </div>
-      ) : (
-        /* ── STATIC SUBPAGE VIEW (2-COLUMN GRID) ── */
-        <div className="w-full max-w-6xl mx-auto px-4 sm:px-12 py-12 sm:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 sm:gap-y-16">
-            {transformationData.map((item) => (
-              <CaseStudyCard key={item.id} item={item} />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Stack of Interactive Drag-to-Reveal Case Studies */}
+      <div className="flex flex-col bg-[#FAF9F6]">
+        {transformationData.map((item) => (
+          <BeforeAfterSliderCard key={item.id} item={item} />
+        ))}
+      </div>
 
       {/* Ledger Footer Call to Action */}
       {!hideButton && (
-        <div className="w-full pt-10 pb-16 border-t border-black/10 flex flex-col items-center text-center px-6">
+        <div className="w-full pt-12 pb-16 border-t border-black/10 flex flex-col items-center text-center px-6">
           <h4 className="font-serif text-xl sm:text-2xl font-light text-[#1A1A1A] mb-6 leading-tight max-w-xs">
             Unlock the entire visual identity ledger.
           </h4>
