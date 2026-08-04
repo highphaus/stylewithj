@@ -87,33 +87,33 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
       style={{ opacity, zIndex: (idx + 1) * 10 }}
       className="absolute inset-0 w-full h-full flex flex-col items-center justify-center pointer-events-none"
     >
-      <div className="relative w-full h-full flex flex-col justify-between p-6 lg:p-12 pointer-events-auto overflow-hidden bg-[#FAF9F6]">
+      <div className="relative w-full h-full flex flex-col justify-between px-4 sm:px-8 py-4 sm:py-6 pointer-events-auto overflow-hidden bg-[#FAF9F6]">
         
         {/* Header Title Above Frame */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-black/10 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-black/10 pb-3">
           <div>
-            <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 block mb-1 font-bold">
+            <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 block mb-0.5 font-bold">
               ✦ {item.id} // {item.demographic}
             </span>
-            <h3 className="font-serif text-2xl lg:text-4xl font-light text-[#1A1A1A] tracking-tight uppercase">
+            <h3 className="font-serif text-2xl lg:text-3xl font-light text-[#1A1A1A] tracking-tight uppercase">
               {item.client}
             </h3>
           </div>
-          <p className="font-serif text-xs sm:text-sm italic text-black/75 font-light max-w-md leading-relaxed">
+          <p className="font-serif text-xs italic text-black/75 font-light max-w-md leading-relaxed">
             "{item.concept}"
           </p>
         </div>
 
-        {/* Clean Side-by-Side Dual Photo Projection (0 Box Overlays) */}
-        <div className="flex-1 w-full grid grid-cols-2 gap-4 lg:gap-8 my-4 overflow-hidden">
+        {/* EXPANDED BIGGER DUAL FRAME (MAXIMIZED VIEWABLE SCREEN AREA) */}
+        <div className="flex-1 w-full grid grid-cols-2 gap-3 lg:gap-6 my-3 overflow-hidden">
           
           {/* Left Frame: BEFORE */}
           <div 
             onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
-            className="relative h-full w-full bg-[#EAE8E3] overflow-hidden border border-black/10 cursor-pointer group rounded-xs"
-            title="Click to view full image & details"
+            className="relative h-full w-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer group rounded-xs shadow-xs"
+            title="Click to view full high-res image & details"
           >
-            <motion.div style={{ x: beforeX }} className="w-full h-full relative">
+            <motion.div style={{ x: beforeX }} className="w-full h-full relative flex items-center justify-center">
               <motion.img 
                 style={{ scale }}
                 src={item.beforeImg} 
@@ -121,8 +121,11 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
                 className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700" 
                 draggable="false" 
               />
-              <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs">
+              <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-xs z-10">
                 BEFORE
+              </div>
+              <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white/90 px-3 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                ✦ CLICK TO EXPAND
               </div>
             </motion.div>
           </div>
@@ -130,10 +133,10 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
           {/* Right Frame: AFTER */}
           <div 
             onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
-            className="relative h-full w-full bg-[#EAE8E3] overflow-hidden border border-black/10 cursor-pointer group rounded-xs"
-            title="Click to view full image & details"
+            className="relative h-full w-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer group rounded-xs shadow-xs"
+            title="Click to view full high-res image & details"
           >
-            <motion.div style={{ x: afterX }} className="w-full h-full relative">
+            <motion.div style={{ x: afterX }} className="w-full h-full relative flex items-center justify-center">
               <motion.img 
                 style={{ scale }}
                 src={item.afterImg} 
@@ -141,8 +144,11 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
                 className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700" 
                 draggable="false" 
               />
-              <div className="absolute top-4 right-4 bg-black text-white px-3 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-sans uppercase font-bold shadow-xs">
+              <div className="absolute top-4 right-4 bg-black text-white px-3 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-sans uppercase font-bold shadow-xs z-10">
                 AFTER
+              </div>
+              <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md text-white/90 px-3 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                ✦ CLICK TO EXPAND
               </div>
             </motion.div>
           </div>
@@ -150,15 +156,15 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
         </div>
 
         {/* Footer Subtext */}
-        <div className="flex items-center justify-between border-t border-black/10 pt-3">
+        <div className="flex items-center justify-between border-t border-black/10 pt-2.5">
           <span className="font-mono text-[8px] sm:text-[9px] tracking-[0.2em] text-black/50 uppercase">
             Specifications: {item.specs.join(' • ')}
           </span>
           <button
             onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
-            className="font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold"
+            className="font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold cursor-pointer"
           >
-            Explore Details →
+            Full View & Details →
           </button>
         </div>
 
@@ -167,7 +173,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
   );
 }
 
-// Clean Mobile Card Component
+// Clean Mobile Card Component with Taller Frames
 function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transformationData[0]; fullBleedMobile?: boolean }) {
   const { openLightbox } = useLightbox();
 
@@ -195,11 +201,11 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
         </h3>
       </div>
 
-      {/* Dual Side-by-Side Images */}
-      <div className="grid grid-cols-2 gap-2 px-6">
+      {/* Dual Side-by-Side Images (Taller 78vh Mobile Frames for Full Viewability) */}
+      <div className="grid grid-cols-2 gap-2.5 px-6">
         <div 
           onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
-          className="relative h-[65vh] min-h-[380px] bg-[#0D0D0D] overflow-hidden cursor-pointer group rounded-xs border border-black/10"
+          className="relative h-[75vh] min-h-[440px] bg-[#0D0D0D] overflow-hidden cursor-pointer group rounded-xs border border-black/10"
           title="Click to view image"
         >
           <img
@@ -215,7 +221,7 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
 
         <div 
           onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
-          className="relative h-[65vh] min-h-[380px] bg-[#0D0D0D] overflow-hidden cursor-pointer group rounded-xs border border-black/10"
+          className="relative h-[75vh] min-h-[440px] bg-[#0D0D0D] overflow-hidden cursor-pointer group rounded-xs border border-black/10"
           title="Click to view image"
         >
           <img
@@ -238,9 +244,9 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
         <div className="pt-1">
           <button
             onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
-            className="font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold"
+            className="font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold cursor-pointer"
           >
-            Explore Details →
+            Explore Full View & Details →
           </button>
         </div>
       </div>
