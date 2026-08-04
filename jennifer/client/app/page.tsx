@@ -57,13 +57,13 @@ export default function Home() {
         {/* --- All remaining sections --- */}
         <LookbookHorizon />
        
-        {/* ── 8. JOURNAL SECTION ── */}
+        {/* ── 8. BLOG SECTION ── */}
         <section className="bg-[#FAF9F6] border-t border-black/5 py-24 sm:py-32 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
             {/* Left intro box */}
             <div className="col-span-12 lg:col-span-5 text-left flex flex-col justify-center items-start">
               <span className="font-sans text-[10px] tracking-[0.4em] text-black/45 block mb-4 uppercase font-semibold">
-                ✦ JOURNAL
+                ✦ BLOG
               </span>
               <h3 className="font-serif text-3xl sm:text-5xl font-light tracking-tight leading-tight mb-4 text-[#1A1A1A]">
                 Style, decoded.
@@ -75,7 +75,7 @@ export default function Home() {
                 href="/journal"
                 className="font-mono text-[9px] tracking-[0.25em] text-black hover:text-black/60 uppercase border-b border-black pb-1 transition-colors"
               >
-                Explore the Journal →
+                Explore the Blog →
               </Link>
             </div>
 

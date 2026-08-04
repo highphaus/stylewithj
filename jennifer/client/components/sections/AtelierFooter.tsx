@@ -57,7 +57,7 @@ export default function AtelierFooter() {
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-4 font-mono font-medium">Explore</h4>
             <ul className="flex flex-col gap-2.5 text-white/60 font-light text-xs">
               <li><Link href="/services#categories" className="hover:text-white transition-colors">Categories</Link></li>
-              <li><Link href="/journal" className="hover:text-white transition-colors">Journal</Link></li>
+              <li><Link href="/journal" className="hover:text-white transition-colors">Blog</Link></li>
               <li><Link href="/insights" className="hover:text-white transition-colors">Insights</Link></li>
               <li><Link href="/programs" className="hover:text-white transition-colors">Programs</Link></li>
               <li><Link href="/connect" className="hover:text-white transition-colors">Connect</Link></li>

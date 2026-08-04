@@ -117,7 +117,7 @@ export default function JournalPage() {
       {/* ── 1. TYPOGRAPHIC PURE HEADER ── */}
       <header className="pt-32 sm:pt-40 pb-10 sm:pb-16 px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
         <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-2 sm:mb-3 font-semibold">
-          JOURNAL
+          BLOG
         </span>
         <h1 className="font-serif text-3xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-none text-black">
           Style, decoded.
