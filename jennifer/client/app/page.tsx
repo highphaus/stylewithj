@@ -40,12 +40,7 @@ export default function Home() {
         {/* 4. What We Do (Services) */}
         <ServicesGrid />
 
-        {/* Divider Line Between Categories & Silhouettes */}
-        <div className="w-full max-w-7xl mx-auto px-6 my-8 sm:my-16">
-          <div className="h-px bg-black/15 w-full" />
-        </div>
-
-        {/* 4.5. The Horizon Silhouettes */}
+        {/* 4.5. The Horizon Silhouettes (Curated Category Silhouettes) */}
         <SplitScroll />
 
         {/* 5. Transformations */}

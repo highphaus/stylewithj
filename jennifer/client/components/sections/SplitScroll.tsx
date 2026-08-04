@@ -74,7 +74,7 @@ export default function SplitScroll() {
   const activeItem = horizonCategoryItems[activeIndex] || horizonCategoryItems[0];
 
   return (
-    <section ref={sectionRef} className="w-full bg-[#FAF9F6] overflow-clip">
+    <section ref={sectionRef} id="horizon" className="w-full bg-[#FAF9F6] overflow-clip border-t border-black/15">
       
       {/* ── MOBILE / SMALL DEVICE LAYOUT (WRITING FIRST -> EXPLORE BUTTON -> HERO IMAGE BETWEEN EACH CATEGORY) ── */}
       <div className="block md:hidden w-full bg-[#FAF9F6]">

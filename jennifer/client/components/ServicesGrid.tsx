@@ -134,7 +134,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   const currentService = servicesList[activeIndex] || servicesList[0];
 
   return (
-    <div id="services" className="relative w-full bg-[#FAF9F6]">
+    <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
       
       {/* ── MOBILE / SMALL DEVICE LAYOUT (FULL SCREEN EDGE-TO-EDGE COVER IMAGES WITH NO DEAD SPACE) ── */}
       <div className="block lg:hidden bg-[#FAF9F6] w-full overflow-hidden">
