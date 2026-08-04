@@ -80,12 +80,9 @@ export default function SplitScroll() {
       <div className="block md:hidden w-full bg-[#FAF9F6]">
         
         {/* Top Section Header */}
-        <div className="px-6 pt-10 pb-6 border-b border-black/10 bg-[#FAF9F6]">
-          <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
-            CATEGORIES
-          </span>
+        <div className="px-6 pt-8 pb-6 border-b border-black/10 bg-[#FAF9F6]">
           <h3 className="font-serif text-3xl font-light tracking-tight text-[#1A1A1A]">
-            Curated Category Silhouettes.
+            Category Silhouettes
           </h3>
         </div>
 
@@ -156,11 +153,8 @@ export default function SplitScroll() {
         {/* RIGHT CANVAS: Sticky text header on desktop */}
         <div className="w-1/2 h-screen sticky top-0 bg-[#FAF9F6] flex flex-col justify-between p-8 md:p-16 border-l border-black/10 relative z-20 order-2">
           <div>
-            <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
-              CATEGORIES
-            </span>
             <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A] mb-6">
-              Curated Category <br /> Silhouettes.
+              Category Silhouettes
             </h3>
 
             {/* DYNAMIC WRITING FOR THE ACTIVE VISIBLE IMAGE ONLY */}

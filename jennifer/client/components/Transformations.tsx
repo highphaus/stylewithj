@@ -76,11 +76,6 @@ export default function Transformations({ hideButton = false }: TransformationsP
               Transformations
             </h2>
           </div>
-
-          <div className="font-mono text-xs tracking-[0.3em] uppercase text-black/50 font-bold flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-black/60" />
-            0{transformationData.length} CASE STUDIES ARCHIVED
-          </div>
         </div>
 
         {/* STACKED DOWN-BY-DOWN REPEAT CASE STUDIES (ALL CASE STUDIES RENDERED DOWN BY DOWN) */}
