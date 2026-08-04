@@ -140,12 +140,9 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
       <div className="block lg:hidden bg-[#FAF9F6] w-full overflow-hidden">
         {/* Header */}
         <div className="px-6 pt-16 pb-8 border-b border-black/10 bg-[#FAF9F6]">
-          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A] mb-3">
+          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A] mb-1">
             What We Do
           </h2>
-          <p className="text-xs font-sans font-light tracking-wide text-black/60 leading-relaxed border-l-2 border-black/20 pl-3">
-            Custom structural image design and strategic styling consultation built for the discerning modern profile.
-          </p>
         </div>
 
         {/* Stacked Images Down-by-Down with 100% Full-Bleed Screen Coverage */}
@@ -216,9 +213,6 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               <h2 className="font-serif text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-4">
                 What We Do
               </h2>
-              <p className="text-xs font-sans font-light tracking-wide text-black/60 max-w-sm leading-relaxed border-l-2 border-black/20 pl-3 mb-8">
-                Custom structural image design and strategic styling consultation built for the discerning modern profile.
-              </p>
 
               {/* Dynamic Active Service Details directly under "What We Do" */}
               <motion.div 
