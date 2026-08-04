@@ -54,6 +54,8 @@ interface RowProps {
 
 function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowProps) {
   const { openLightbox } = useLightbox();
+  const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
+
   const segment = 1 / totalItems;
   const isFirst = idx === 0;
 
@@ -78,7 +80,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
 
   const scaleRange = isFirst
     ? [1.0, 1.0, 1.0]
-    : [1.03, 1.0, 1.0];
+    : [1.02, 1.0, 1.0];
 
   const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
   const beforeX = useTransform(scrollYProgress, inputRange, beforeRange);
@@ -90,7 +92,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
       num: item.id,
       category: item.demographic,
       concept: item.concept,
-      story: `${item.concept} — Key Specifications: ${item.specs.join(' • ')}`,
+      story: `${item.concept} — Specifications: ${item.specs.join(' • ')}`,
       fabric: item.specs.join(' • '),
       tag: mode
     });
@@ -103,53 +105,123 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
     >
       <div className="relative w-full h-full flex flex-col lg:grid lg:grid-cols-12 items-stretch overflow-hidden pointer-events-auto">
         
-        {/* Clean 100% Screen Cover Dual Image Frame (No Overlapping Text Box) */}
-        <div className="w-full h-full col-span-12 lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3]">
+        {/* Clean Museum Dual Image Projection */}
+        <div className="w-full h-full col-span-12 relative overflow-hidden bg-[#0D0D0D]">
           
-          {/* Left Column: Before Image */}
-          <div 
-            onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
-            className="col-span-6 h-full overflow-hidden relative border-r border-black/10 cursor-pointer group"
-            title="Click photo to view story and details"
-          >
-            <motion.div style={{ x: beforeX }} className="w-full h-full relative">
-              <motion.img 
-                style={{ scale }}
-                src={item.beforeImg} 
-                alt="Initial Silhouette" 
-                className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700" 
-                draggable="false" 
-              />
-              <div className="absolute top-6 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-2 text-[9px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm z-10 rounded-xs">
-                BEFORE
+          {activeMode === 'both' ? (
+            <div className="grid grid-cols-1 lg:grid-cols-12 w-full h-full divide-x divide-white/10">
+              
+              {/* Left Column: Before Image */}
+              <div 
+                onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
+                className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
+                title="Click to view story and details"
+              >
+                <motion.div style={{ x: beforeX }} className="w-full h-full relative">
+                  <motion.img 
+                    style={{ scale }}
+                    src={item.beforeImg} 
+                    alt="Initial Silhouette" 
+                    className="w-full h-full object-cover object-top grayscale-[20%] group-hover:scale-[1.02] transition-transform duration-700 ease-out" 
+                    draggable="false" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute top-8 left-8 bg-[#FAF9F6]/95 backdrop-blur-md border border-black/10 px-4 py-2 text-[9px] tracking-[0.3em] font-mono text-black uppercase font-bold shadow-md z-10 rounded-xs">
+                    BEFORE // INITIAL FIT
+                  </div>
+                  <div className="absolute bottom-8 left-8 bg-black/80 backdrop-blur-md text-white/90 px-4 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    ✦ CLICK TO VIEW STORY & SPECS
+                  </div>
+                </motion.div>
               </div>
-              <div className="absolute bottom-6 left-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                ✦ CLICK TO VIEW STORY & DETAILS
-              </div>
-            </motion.div>
-          </div>
 
-          {/* Right Column: After Image */}
-          <div 
-            onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
-            className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
-            title="Click photo to view story and details"
-          >
-            <motion.div style={{ x: afterX }} className="w-full h-full relative">
-              <motion.img 
-                style={{ scale }}
-                src={item.afterImg} 
-                alt="Realized Design Target" 
-                className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700" 
-                draggable="false" 
-              />
-              <div className="absolute top-6 right-6 bg-black text-white px-3.5 py-2 text-[9px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm z-10 rounded-xs">
-                AFTER
+              {/* Right Column: After Image */}
+              <div 
+                onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
+                className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
+                title="Click to view story and details"
+              >
+                <motion.div style={{ x: afterX }} className="w-full h-full relative">
+                  <motion.img 
+                    style={{ scale }}
+                    src={item.afterImg} 
+                    alt="Realized Design Target" 
+                    className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out" 
+                    draggable="false" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute top-8 right-8 bg-black text-white px-4 py-2 text-[9px] tracking-[0.3em] font-mono uppercase font-bold shadow-md z-10 rounded-xs border border-white/10">
+                    AFTER // REFINED SILHOUETTE
+                  </div>
+                  <div className="absolute bottom-8 right-8 bg-black/80 backdrop-blur-md text-white/90 px-4 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    ✦ CLICK TO VIEW STORY & SPECS
+                  </div>
+                </motion.div>
               </div>
-              <div className="absolute bottom-6 right-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                ✦ CLICK TO VIEW STORY & DETAILS
-              </div>
-            </motion.div>
+
+            </div>
+          ) : (
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={activeMode} 
+                onClick={() => handleOpenDetails(activeMode === 'before' ? item.beforeImg : item.afterImg, activeMode === 'before' ? 'BEFORE' : 'AFTER')}
+                className="relative w-full h-full cursor-pointer group"
+                title="Click to view story and details"
+              >
+                <motion.img
+                  src={activeMode === 'before' ? item.beforeImg : item.afterImg}
+                  alt={activeMode}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className={`w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ${
+                    activeMode === 'before' ? 'grayscale-[20%]' : ''
+                  }`}
+                  draggable="false"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute top-8 left-8 bg-[#FAF9F6]/95 border border-black/10 px-4 py-2 text-[9px] tracking-[0.3em] font-mono text-black uppercase font-bold shadow-md z-10 rounded-xs">
+                  {activeMode === 'before' ? 'BEFORE // INITIAL FIT' : 'AFTER // REFINED SILHOUETTE'}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          )}
+
+          {/* Floating Archetype Badge */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-5 py-2.5 rounded-full border border-white/15 shadow-2xl z-30 flex items-center gap-3">
+            <span className="font-mono text-[9px] tracking-[0.3em] uppercase font-bold text-white">
+              ✦ {item.id} // {item.client}
+            </span>
+            <div className="h-3 w-px bg-white/20" />
+            
+            {/* View Mode Switcher Pills */}
+            <div className="flex gap-1">
+              <button
+                onClick={(e) => { e.stopPropagation(); setActiveMode('both'); }}
+                className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 cursor-pointer ${
+                  activeMode === 'both' ? 'bg-white text-black' : 'bg-transparent text-white/60 hover:text-white'
+                }`}
+              >
+                Split
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setActiveMode('before'); }}
+                className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 cursor-pointer ${
+                  activeMode === 'before' ? 'bg-white text-black' : 'bg-transparent text-white/60 hover:text-white'
+                }`}
+              >
+                Before
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setActiveMode('after'); }}
+                className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 cursor-pointer ${
+                  activeMode === 'after' ? 'bg-white text-black' : 'bg-transparent text-white/60 hover:text-white'
+                }`}
+              >
+                After
+              </button>
+            </div>
           </div>
 
         </div>
@@ -159,7 +231,7 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowPr
   );
 }
 
-// Clean Full-Bleed Edge-to-Edge Mobile & Subpage Case Study Card (Zero Text Box, Click for Story)
+// Clean Full-Bleed Mobile Case Study Card
 function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transformationData[0]; fullBleedMobile?: boolean }) {
   const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
   const { openLightbox } = useLightbox();
@@ -176,12 +248,11 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
   };
 
   return (
-    <div className={`flex flex-col bg-[#FAF9F6] ${fullBleedMobile ? 'w-full' : 'border border-black/10 p-0 sm:p-2 rounded-xs shadow-xs'}`}>
+    <div className={`flex flex-col bg-[#FAF9F6] ${fullBleedMobile ? 'w-full' : 'border border-black/10 p-0 rounded-xs shadow-xs'}`}>
       
-      {/* 100% CLEAN FULL-BLEED MOBILE PHOTO FRAME (ZERO OVERLAY BOX) */}
-      <div className={`relative ${fullBleedMobile ? 'w-full h-[85vh] min-h-[480px] bg-[#0D0D0D]' : 'aspect-[3/4] sm:aspect-[4/5] w-full bg-[#EAE8E3] rounded-xs border border-black/5'} overflow-hidden cursor-pointer`}>
+      <div className={`relative ${fullBleedMobile ? 'w-full h-[85vh] min-h-[480px] bg-[#0D0D0D]' : 'aspect-[3/4] sm:aspect-[4/5] w-full bg-[#0D0D0D] rounded-xs border border-black/5'} overflow-hidden cursor-pointer`}>
         {activeMode === 'both' ? (
-          <div className="grid grid-cols-2 w-full h-full divide-x divide-black/10">
+          <div className="grid grid-cols-2 w-full h-full divide-x divide-white/10">
             <div 
               onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
               className="relative h-full overflow-hidden group"
@@ -241,20 +312,20 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
         )}
 
         {/* View Mode Switcher Pill Overlay */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md border border-white/10 rounded-full p-1 flex gap-1 shadow-lg z-20">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/85 backdrop-blur-md border border-white/10 rounded-full p-1 flex gap-1 shadow-lg z-20">
           <button
             onClick={(e) => { e.stopPropagation(); setActiveMode('both'); }}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
+            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 ${
               activeMode === 'both'
                 ? 'bg-white text-black'
                 : 'bg-transparent text-white/60 hover:text-white'
             }`}
           >
-            Both
+            Split
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); setActiveMode('before'); }}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
+            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 ${
               activeMode === 'before'
                 ? 'bg-white text-black'
                 : 'bg-transparent text-white/60 hover:text-white'
@@ -264,7 +335,7 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); setActiveMode('after'); }}
-            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold rounded-full transition-all duration-300 ${
+            className={`px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all duration-300 ${
               activeMode === 'after'
                 ? 'bg-white text-black'
                 : 'bg-transparent text-white/60 hover:text-white'
@@ -301,7 +372,7 @@ export default function Transformations({ hideButton = false, isStatic = false }
   return (
     <div className="relative w-full bg-[#FAF9F6] overflow-clip">
       
-      {/* ── MOBILE EXCLUSIVE VIEW (100% FULL-BLEED HERO SCREEN COVER IMAGES WITH NO SIDE MARGINS/DEAD SPACE) ── */}
+      {/* ── MOBILE EXCLUSIVE VIEW ── */}
       {!isStatic && (
         <div className="block lg:hidden w-full bg-[#FAF9F6]">
           {/* Header */}
@@ -323,7 +394,7 @@ export default function Transformations({ hideButton = false, isStatic = false }
         </div>
       )}
 
-      {/* ── DESKTOP EXCLUSIVE VIEW: Extended Smooth Flight Scroll ── */}
+      {/* ── DESKTOP EXCLUSIVE VIEW: Smooth Flight Scroll ── */}
       {!isStatic ? (
         <div ref={sectionRef} className="hidden lg:block relative w-full h-[380vh] bg-[#FAF9F6] overflow-x-clip">
           <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FAF9F6]">
