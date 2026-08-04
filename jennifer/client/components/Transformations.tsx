@@ -102,7 +102,7 @@ export default function Transformations({ hideButton = false }: TransformationsP
           </div>
         </div>
 
-        {/* Dynamic Carousel Slide Container (FITS EXACTLY INSIDE 1 SCREEN HEIGHT) */}
+        {/* Dynamic Carousel Slide Container (FITS EXACTLY INSIDE 1 SCREEN HEIGHT WITH PORTRAIT FRAMES) */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -113,14 +113,14 @@ export default function Transformations({ hideButton = false }: TransformationsP
             className="flex-1 min-h-0 flex flex-col justify-between my-1 overflow-hidden"
           >
             
-            {/* 100% 1-SCREEN VIEWPORT PHOTO CANVAS */}
-            <div className="flex-1 min-h-0 w-full overflow-hidden my-1">
-              <div className="grid grid-cols-2 gap-3 sm:gap-5 h-full">
+            {/* 100% 1-SCREEN PORTRAIT PHOTO CANVAS (ASPECT-[3/4]) */}
+            <div className="flex-1 min-h-0 w-full overflow-hidden my-1 flex items-center justify-center">
+              <div className="grid grid-cols-2 gap-3 sm:gap-6 h-full max-h-[66vh] max-w-4xl mx-auto w-full">
                 
-                {/* BEFORE FRAME */}
+                {/* BEFORE FRAME (PORTRAIT ASPECT-[3/4]) */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.beforeImg, 'BEFORE')}
-                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  className="group relative w-full h-full aspect-[3/4] max-h-full mx-auto bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
                   title="Click to view full high-res image & details"
                 >
                   <img
@@ -138,10 +138,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
                   </div>
                 </div>
 
-                {/* AFTER FRAME */}
+                {/* AFTER FRAME (PORTRAIT ASPECT-[3/4]) */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.afterImg, 'AFTER')}
-                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  className="group relative w-full h-full aspect-[3/4] max-h-full mx-auto bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
                   title="Click to view full high-res image & details"
                 >
                   <img
