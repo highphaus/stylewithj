@@ -72,12 +72,6 @@ export default function Transformations({ hideButton = false }: TransformationsP
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/10 pb-6 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
-              <span className="text-[10px] tracking-[0.4em] uppercase font-light text-black/50 font-sans font-semibold">
-                VISUAL IDENTITY ARCHIVE
-              </span>
-            </div>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight">
               Transformations
             </h2>
