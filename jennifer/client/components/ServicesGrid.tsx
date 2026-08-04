@@ -1,137 +1,117 @@
 'use client';
-
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
-import { motion, useScroll, useSpring, useMotionValueEvent, MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent, MotionValue } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
 import { useSiteData } from '@/lib/use-site-data';
 
-interface ServiceItem {
-  num: string;
-  category: string;
-  name: string;
-  desc: string;
-  image: string;
-  bgGradient: string;
-}
-
-const allServices: ServiceItem[] = [
-  {
+const allServices = [
+  { 
     num: "01",
-    category: "Full Image Strategy",
-    name: "Executive & Signature Styling",
-    desc: "Complete wardrobe transformation for high-profile individuals, executives, and leaders needing authentic commanding presence.",
-    image: "/images/includes/IMG_0271.JPG.jpeg",
-    bgGradient: "from-stone-900/60 to-black/80",
+    category: "Style Discovery",
+    name: "Personal Styling", 
+    desc: "Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.",
+    image: "/images/includes/IMG_0271.JPG.jpeg"
   },
-  {
+  { 
     num: "02",
-    category: "Specialized Curation",
-    name: "Occasion & Event Styling",
-    desc: "Exquisite styling for red carpets, galas, weddings, photo shoots, and high-visibility public appearances.",
-    image: "/images/CIT09345.jpg",
-    bgGradient: "from-[#1a1816]/70 to-[#0c0b0a]/90",
+    category: "Closet Evolution",
+    name: "Wardrobe Styling", 
+    desc: "Make your existing wardrobe work harder. Rediscover forgotten pieces, create fresh outfit combinations, identify what's missing, and build a versatile closet.",
+    image: "/images/includes/IMG_1406.JPG.jpeg"
   },
-  {
+  { 
     num: "03",
-    category: "Wardrobe System",
-    name: "Capsule Wardrobe Architecture",
-    desc: "Decluttering, organizing, and building a streamlined, versatile capsule wardrobe aligned with your daily lifestyle.",
-    image: "/images/includes/IMG_1406.JPG.jpeg",
-    bgGradient: "from-[#1c1917]/60 to-[#0a0a0a]/85",
+    category: "Intentional Shopping",
+    name: "Personal Shopping", 
+    desc: "Shop with intention through curated recommendations tailored to your style, lifestyle, and budget. Spend less time searching and more time finding what works.",
+    image: "/images/includes/IMG_1423.JPG.jpeg"
   },
-  {
+  { 
     num: "04",
-    category: "VIP Procurement",
-    name: "Personal Shopping & Sourcing",
-    desc: "Exclusive access to rare luxury pieces, custom garments, and curated collections tailored precisely to your proportions.",
-    image: "/images/includes/IMG_3112.JPG.jpeg",
-    bgGradient: "from-[#181615]/70 to-black/90",
+    category: "Event & Celebration",
+    name: "Occasion Styling", 
+    desc: "Tell us where you're going, and we'll help you figure out what to wear. From weddings and parties to date nights and celebrations, curate the perfect look.",
+    image: "/images/includes/IMG_1754.JPG.jpeg"
   },
+  { 
+    num: "05",
+    category: "Professional Identity",
+    name: "Workwear Styling", 
+    desc: "Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important executive presentations.",
+    image: "/images/includes/IMG_8863.JPG.jpeg"
+  }
 ];
 
-interface ServicesGridProps {
-  hideButton?: boolean;
-}
-
-function ServiceCard({ 
-  item, 
-  index, 
-  total,
-  scrollYProgress 
-}: { 
-  item: ServiceItem; 
-  index: number; 
+interface CardProps {
+  item: typeof allServices[0];
+  index: number;
   total: number;
   scrollYProgress: MotionValue<number>;
-}) {
+}
+
+function ServiceCard({ item, index, total, scrollYProgress }: CardProps) {
   const { openLightbox } = useLightbox();
+  const activeTotal = total - 1;
+  const isLastCard = index === total - 1;
+  
+  const start = index / activeTotal;
+  const end = (index + 1) / activeTotal;
+  const hold = start + (end - start) * 0.65;
+
+  const x = useTransform(
+    scrollYProgress,
+    isLastCard 
+      ? [0, 1] 
+      : [0, start, hold, end],
+    isLastCard
+      ? ["0%", "0%"]
+      : ["0%", "0%", "0%", "-105%"]
+  );
+
+  const scale = useTransform(
+    scrollYProgress,
+    isLastCard
+      ? [0, 1]
+      : [0, start, hold, end],
+    isLastCard
+      ? [1, 1]
+      : [1, 1, 1, 0.96]
+  );
 
   return (
-    <motion.div
-      style={{
-        opacity: scrollYProgress,
-      }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center p-8 md:p-12 lg:p-16"
+    <motion.div 
+      style={{ x, scale, zIndex: total - index }}
+      className="absolute inset-0 w-full h-full bg-[#EFECE6] will-change-transform border-l border-black/10"
     >
       <div 
         onClick={() => openLightbox(item.image, item.name)}
-        className="relative w-full h-full max-w-5xl rounded-xs overflow-hidden shadow-2xl group cursor-pointer border border-black/15 bg-black"
-        title="Click to view full image"
+        className="relative w-full h-full bg-[#EFECE6] overflow-hidden cursor-pointer group"
+        title="Click to view image"
       >
-        <Image
-          src={item.image}
-          alt={item.name}
+        <Image 
+          src={item.image} 
+          alt={item.name} 
           fill
-          className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-1000 ease-out"
+          className="object-cover object-top scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
           priority={index === 0}
           unoptimized
         />
-
-        <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} via-black/20 to-transparent opacity-80`} />
-        
-        <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 text-white flex flex-col gap-3 z-10">
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/75 font-semibold bg-white/15 backdrop-blur-md px-3 py-1 rounded-xs border border-white/20">
-              ✦ {item.num} // {item.category}
-            </span>
-          </div>
-
-          <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl font-light tracking-wide text-white drop-shadow-md">
-            {item.name}
-          </h3>
-
-          <p className="font-sans text-sm md:text-base text-white/90 font-light leading-relaxed max-w-xl drop-shadow-sm">
-            {item.desc}
-          </p>
-
-          <div className="pt-2 flex items-center gap-4">
-            <span className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-white/90 uppercase border-b border-white/40 pb-0.5 group-hover:border-white transition-all font-semibold">
-              Click To View Portrait →
-            </span>
-          </div>
-        </div>
       </div>
     </motion.div>
   );
 }
 
-export default function ServicesGrid({ hideButton }: ServicesGridProps = {}) {
+interface ServicesGridProps {
+  hideButton?: boolean;
+}
+
+export default function ServicesGrid({ hideButton = false }: ServicesGridProps) {
   const targetRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const { openLightbox } = useLightbox();
   const { services: dynamicServices } = useSiteData();
-  
-  const servicesList = dynamicServices && dynamicServices.length > 0 
-    ? dynamicServices.map((s, idx) => ({
-        num: `0${idx + 1}`,
-        category: s.category,
-        name: s.name,
-        desc: s.desc,
-        image: s.image,
-        bgGradient: allServices[idx % allServices.length].bgGradient,
-      }))
-    : allServices;
+  const servicesList = dynamicServices.length > 0 ? dynamicServices : allServices;
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -156,24 +136,24 @@ export default function ServicesGrid({ hideButton }: ServicesGridProps = {}) {
   return (
     <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
       
-      {/* ── MOBILE / SMALL DEVICE LAYOUT (PHOTO FIRST TOUCHING HEADER DIVIDING LINE -> WRITING DIRECTLY UNDER PHOTO) ── */}
+      {/* ── MOBILE / SMALL DEVICE LAYOUT (FULL SCREEN EDGE-TO-EDGE COVER IMAGES WITH NO DEAD SPACE) ── */}
       <div className="block lg:hidden bg-[#FAF9F6] w-full overflow-hidden">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-black/10 bg-[#FAF9F6]">
-          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A]">
+        <div className="px-6 pt-16 pb-8 border-b border-black/10 bg-[#FAF9F6]">
+          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A] mb-1">
             What We Do
           </h2>
         </div>
 
-        {/* Stacked Images Down-by-Down: Cover Image FIRST touching header line -> Writing DIRECTLY UNDER Cover Image */}
+        {/* Stacked Images Down-by-Down with 100% Full-Bleed Screen Coverage */}
         <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
           {servicesList.map((item) => (
-            <div key={item.num} className="w-full flex flex-col bg-[#FAF9F6] pb-8">
+            <div key={item.num} className="w-full flex flex-col pb-8">
               
-              {/* 1. FULL BLEED COVER IMAGE DIRECTLY TOUCHING THE TOP DIVIDING LINE WITH 0 GAP */}
+              {/* FULL BLEED CINEMATIC COVER IMAGE (0 SIDE MARGINS / DEAD SPACE, HERO STYLE) */}
               <div 
                 onClick={() => openLightbox(item.image, item.name)}
-                className="relative w-full h-[80vh] min-h-[460px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+                className="relative w-full h-[85vh] min-h-[480px] bg-[#0D0D0D] overflow-hidden cursor-pointer group"
                 title="Click to view image"
               >
                 <Image 
@@ -189,8 +169,8 @@ export default function ServicesGrid({ hideButton }: ServicesGridProps = {}) {
                 </div>
               </div>
 
-              {/* 2. CAPTION / WRITING DIRECTLY UNDER THE IMAGE */}
-              <div className="px-6 pt-6 flex flex-col gap-2.5 bg-[#FAF9F6]">
+              {/* CAPTION DIRECTLY UNDER THE IMAGE */}
+              <div className="px-6 pt-6 flex flex-col gap-2.5">
                 <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
                   {item.category}
                 </span>
