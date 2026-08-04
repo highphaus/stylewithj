@@ -103,37 +103,59 @@ export default function Transformations({ hideButton = false }: TransformationsP
       className="relative w-full bg-[#FAF9F6] border-b border-black/10 py-12 sm:py-20 overflow-hidden"
     >
       <div 
-        className="w-full flex flex-col gap-10"
+        className="w-full flex flex-col gap-8"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
         
-        {/* Section Header with Interactive Case Selector Tabs */}
+        {/* Section Header with Case Eyebrow, Main Title, Client Subtitle, and Interactive Case Selectors */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/10 pb-6 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
           <div>
+            <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block mb-1">
+              ✦ CASE STUDY {currentItem.id} // {currentItem.demographic}
+            </span>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight">
               Transformations
             </h2>
+            <h3 className="font-serif text-base sm:text-xl font-light text-black/70 tracking-tight uppercase mt-1">
+              {currentItem.client}
+            </h3>
           </div>
 
-          {/* Case Navigation Tabs */}
-          <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto pb-1 sm:pb-0">
-            {transformationData.map((item, idx) => {
-              const isActive = activeIndex === idx;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleSelectCase(idx)}
-                  className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase font-mono transition-all rounded-xs border cursor-pointer ${
-                    isActive 
-                      ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs' 
-                      : 'bg-transparent text-black/50 border-black/10 hover:border-black/30 hover:text-black/80 font-semibold'
-                  }`}
-                >
-                  CASE 0{idx + 1}
-                </button>
-              );
-            })}
+          {/* Case Navigation Tabs & Auto Progress Indicator */}
+          <div className="flex flex-col gap-2 items-start md:items-end">
+            <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto pb-1 sm:pb-0">
+              {transformationData.map((item, idx) => {
+                const isActive = activeIndex === idx;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelectCase(idx)}
+                    className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase font-mono transition-all rounded-xs border cursor-pointer ${
+                      isActive 
+                        ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs' 
+                        : 'bg-transparent text-black/50 border-black/10 hover:border-black/30 hover:text-black/80 font-semibold'
+                    }`}
+                  >
+                    CASE 0{idx + 1}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Seamless Auto Progress Line */}
+            <div className="w-full sm:w-48 flex items-center gap-2 mt-1">
+              <span className="text-[8px] font-mono text-black/40 uppercase tracking-widest whitespace-nowrap">
+                CYCLE 0{activeIndex + 1}/0{transformationData.length}
+              </span>
+              <div className="w-full h-[2px] bg-black/10 overflow-hidden rounded-full">
+                <motion.div
+                  className="h-full bg-[#1A1A1A]"
+                  style={{ width: `${isHovering ? 0 : progress}%` }}
+                  transition={{ ease: 'linear' }}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -147,33 +169,6 @@ export default function Transformations({ hideButton = false }: TransformationsP
             transition={{ duration: 0.7, ease: "easeInOut" }}
             className="flex flex-col gap-6 w-full"
           >
-            {/* Case Header Info */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
-              <div>
-                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block mb-1">
-                  ✦ CASE STUDY {currentItem.id} // {currentItem.demographic}
-                </span>
-                <h3 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A] tracking-tight uppercase">
-                  {currentItem.client}
-                </h3>
-              </div>
-
-              {/* Seamless Auto Progress Line */}
-              <div className="w-32 sm:w-48 flex flex-col gap-1">
-                <div className="flex justify-between items-center text-[8px] font-mono text-black/40 uppercase">
-                  <span>TRANSITION</span>
-                  <span>0{activeIndex + 1} / 0{transformationData.length}</span>
-                </div>
-                <div className="w-full h-[2px] bg-black/10 overflow-hidden">
-                  <motion.div
-                    className="h-full bg-[#1A1A1A]"
-                    style={{ width: `${isHovering ? 0 : progress}%` }}
-                    transition={{ ease: 'linear' }}
-                  />
-                </div>
-              </div>
-            </div>
-
             {/* FULL-BLEED 100% WIDTH CANVAS (0 GAP TOUCHING LEFT AND RIGHT SIDES) */}
             <div className="w-full overflow-hidden">
               <div className="grid grid-cols-2 gap-0 w-full h-[75vh] min-h-[480px] sm:min-h-[600px] border-y border-black/15 overflow-hidden">
