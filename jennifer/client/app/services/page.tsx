@@ -32,6 +32,7 @@ const pillars = [
 const servicesList = [
   {
     num: '01',
+    category: 'Style Discovery',
     title: 'Personal Styling',
     summary: 'Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.',
     points: [
@@ -44,6 +45,7 @@ const servicesList = [
   },
   {
     num: '02',
+    category: 'Closet Evolution',
     title: 'Wardrobe Styling',
     summary: 'Make your existing wardrobe work harder. We\'ll help you rediscover pieces you\'ve forgotten, create fresh outfit combinations, identify what\'s missing, and make your wardrobe feel new again.',
     points: [
@@ -57,6 +59,7 @@ const servicesList = [
   },
   {
     num: '03',
+    category: 'Intentional Shopping',
     title: 'Personal Shopping',
     summary: 'Shop with intention through curated recommendations that fit your personal style, lifestyle, needs, and budget, so you spend less time searching and more time finding pieces that truly work for you.',
     points: [
@@ -70,6 +73,7 @@ const servicesList = [
   },
   {
     num: '04',
+    category: 'Event & Celebration',
     title: 'Occasion Styling',
     summary: 'Tell us where you\'re going, and we\'ll help you figure out what to wear. From celebrations to casual outings, we curate the perfect look for every event.',
     points: [
@@ -85,6 +89,7 @@ const servicesList = [
   },
   {
     num: '05',
+    category: 'Professional Identity',
     title: 'Workwear Styling',
     summary: 'Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important meetings and first impressions, we\'ll help you dress for the way you want to show up.',
     points: [
@@ -130,7 +135,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
         <div className="flex flex-col gap-6 max-w-4xl">
           <div className="flex items-center gap-3">
             <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
-            <span className="text-[10px] tracking-[0.4em] uppercase font-light text-black/50 font-sans">
+            <span className="text-[10px] tracking-[0.4em] uppercase font-light text-black/50 font-sans font-semibold">
               WHAT WE DO
             </span>
           </div>
@@ -205,10 +210,10 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
         </div>
       </section>
 
-      {/* ── DETAILED SERVICES BREAKDOWN (WITH IMAGE PER SERVICE) ── */}
+      {/* ── DETAILED SERVICES BREAKDOWN (FULL BLEED COVER IMAGE FIRST -> WRITINGS DIRECTLY UNDER ON MOBILE) ── */}
       <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16">
         <div className="border-t border-[#1A1A1A]/10 pt-16 mb-12">
-          <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2">
+          <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2 font-semibold">
             HOW WE CAN HELP
           </span>
           <h2 className="font-serif text-3xl sm:text-5xl font-light text-[#1A1A1A]">
@@ -220,17 +225,37 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           {servicesList.map((svc) => (
             <div
               key={svc.num}
-              className="group grid grid-cols-1 lg:grid-cols-12 gap-8 py-12 lg:py-16 hover:bg-[#F5F3EF] -mx-6 sm:-mx-12 px-6 sm:px-12 transition-colors duration-300 items-center"
+              className="group flex flex-col lg:grid lg:grid-cols-12 gap-8 py-12 lg:py-16 hover:bg-[#F5F3EF] -mx-6 sm:-mx-12 px-6 sm:px-12 transition-colors duration-300 items-center"
             >
-              {/* Number */}
-              <div className="lg:col-span-1 flex items-start pt-1">
-                <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/40">{svc.num}</span>
+              {/* 1. FULL BLEED COVER IMAGE FIRST ON MOBILE */}
+              <div className="w-full lg:col-span-5 order-1 lg:order-2 flex items-center justify-center">
+                <div 
+                  onClick={() => openLightbox(svc.image, svc.title)}
+                  className="relative w-full h-[85vh] sm:h-auto sm:aspect-[3/4] min-h-[480px] overflow-hidden bg-[#0D0D0D] border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
+                  title="Click to view image"
+                >
+                  <Image
+                    src={svc.image}
+                    alt={svc.title}
+                    fill
+                    className="object-cover object-top"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
+                    ✦ {svc.num} // {svc.category}
+                  </div>
+                </div>
               </div>
 
-              {/* Service Info & Bullets */}
-              <div className="lg:col-span-7 flex flex-col justify-center gap-4">
+              {/* 2. ALL WRITINGS & DETAILS DIRECTLY UNDER THE IMAGE ON MOBILE */}
+              <div className="w-full lg:col-span-7 order-2 lg:order-1 flex flex-col justify-center gap-4 pt-2 lg:pt-0">
+                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
+                  {svc.category}
+                </span>
+
                 <div className="flex flex-wrap items-center gap-3">
-                  <h3 className="font-serif text-2xl sm:text-3xl font-light tracking-wide text-[#1A1A1A]">
+                  <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/40">/{svc.num}</span>
+                  <h3 className="font-serif text-2xl sm:text-4xl font-light tracking-wide text-[#1A1A1A] uppercase">
                     {svc.title}
                   </h3>
                 </div>
@@ -253,21 +278,14 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                     ))}
                   </ul>
                 </div>
-              </div>
 
-              {/* Service Image Card (Click to Pick / Open Lightbox) */}
-              <div className="lg:col-span-4 flex items-center justify-center lg:justify-end mt-4 lg:mt-0">
-                <div 
-                  onClick={() => openLightbox(svc.image, svc.title)}
-                  className="relative w-full max-w-[280px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#EFECE6] border border-black/5 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
-                  title="Click to view image"
-                >
-                  <Image
-                    src={svc.image}
-                    alt={svc.title}
-                    fill
-                    className="object-cover object-center"
-                  />
+                <div className="pt-3">
+                  <Link
+                    href="/connect"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-sm"
+                  >
+                    Book Consultation →
+                  </Link>
                 </div>
               </div>
 
