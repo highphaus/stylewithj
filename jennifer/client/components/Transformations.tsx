@@ -100,7 +100,7 @@ export default function Transformations({ hideButton = false }: TransformationsP
   return (
     <section 
       id="transformations" 
-      className="relative w-full bg-[#FAF9F6] border-b border-black/10 py-12 sm:py-20 overflow-hidden"
+      className="relative w-full bg-[#FAF9F6] border-t border-b border-black/10 pt-0 pb-12 sm:pb-20 overflow-hidden"
     >
       <div 
         className="w-full flex flex-col gap-8"
@@ -109,7 +109,7 @@ export default function Transformations({ hideButton = false }: TransformationsP
       >
         
         {/* Section Header with Case Eyebrow, Main Title, Client Subtitle, and Interactive Case Selectors */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/10 pb-6 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/10 pt-8 sm:pt-12 pb-6 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
           <div>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight">
               Transformations
