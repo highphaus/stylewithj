@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
@@ -51,7 +52,7 @@ interface RowProps {
   hideButton?: boolean;
 }
 
-function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideButton }: RowProps) {
+function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems }: RowProps) {
   const { openLightbox } = useLightbox();
   const segment = 1 / totalItems;
   const isFirst = idx === 0;
@@ -75,10 +76,6 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
     ? ["0vw", "0vw", "0vw"]
     : ["100vw", "0vw", "0vw"];
 
-  const textYRange = isFirst
-    ? [0, 0, 0]
-    : [25, 0, 0];
-
   const scaleRange = isFirst
     ? [1.0, 1.0, 1.0]
     : [1.03, 1.0, 1.0];
@@ -86,9 +83,18 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
   const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
   const beforeX = useTransform(scrollYProgress, inputRange, beforeRange);
   const afterX = useTransform(scrollYProgress, inputRange, afterRange);
-  const textY = useTransform(scrollYProgress, inputRange, textYRange);
-  const textOpacity = useTransform(scrollYProgress, inputRange, opacityRange);
   const scale = useTransform(scrollYProgress, inputRange, scaleRange);
+
+  const handleOpenDetails = (imgSrc: string, mode: 'BEFORE' | 'AFTER') => {
+    openLightbox(imgSrc, `${item.client} (${mode})`, {
+      num: item.id,
+      category: item.demographic,
+      concept: item.concept,
+      story: `${item.concept} — Key Specifications: ${item.specs.join(' • ')}`,
+      fabric: item.specs.join(' • '),
+      tag: mode
+    });
+  };
 
   return (
     <motion.div 
@@ -97,14 +103,14 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
     >
       <div className="relative w-full h-full flex flex-col lg:grid lg:grid-cols-12 items-stretch overflow-hidden pointer-events-auto">
         
-        {/* Images Dual Frame */}
+        {/* Clean 100% Dual Image Frame (Zero Overlapping Text Boxes) */}
         <div className="w-full h-full col-span-12 lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 relative overflow-hidden bg-[#EAE8E3]">
           
           {/* Left Column: Before Image */}
           <div 
-            onClick={() => openLightbox(item.beforeImg, `${item.client} — BEFORE`)}
+            onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
             className="col-span-6 h-full overflow-hidden relative border-r border-black/10 cursor-pointer group"
-            title="Click to view image"
+            title="Click photo to view story and details"
           >
             <motion.div style={{ x: beforeX }} className="w-full h-full relative">
               <motion.img 
@@ -114,17 +120,20 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
                 className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700" 
                 draggable="false" 
               />
-              <div className="absolute top-6 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm z-10">
-                {"BEFORE"}
+              <div className="absolute top-6 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-2 text-[9px] tracking-[0.25em] font-sans text-black uppercase font-bold shadow-sm z-10 rounded-xs">
+                BEFORE
+              </div>
+              <div className="absolute bottom-6 left-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                ✦ CLICK TO VIEW STORY & DETAILS
               </div>
             </motion.div>
           </div>
 
           {/* Right Column: After Image */}
           <div 
-            onClick={() => openLightbox(item.afterImg, `${item.client} — AFTER`)}
+            onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
             className="col-span-6 h-full overflow-hidden relative cursor-pointer group"
-            title="Click to view image"
+            title="Click photo to view story and details"
           >
             <motion.div style={{ x: afterX }} className="w-full h-full relative">
               <motion.img 
@@ -134,8 +143,11 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
                 className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700" 
                 draggable="false" 
               />
-              <div className="absolute top-6 right-6 bg-black text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm z-10">
-                {"AFTER"}
+              <div className="absolute top-6 right-6 bg-black text-white px-3.5 py-2 text-[9px] tracking-[0.25em] font-sans uppercase font-bold shadow-sm z-10 rounded-xs">
+                AFTER
+              </div>
+              <div className="absolute bottom-6 right-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-2 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                ✦ CLICK TO VIEW STORY & DETAILS
               </div>
             </motion.div>
           </div>
@@ -143,59 +155,37 @@ function ScrollingCaseStudyRow({ item, idx, scrollYProgress, totalItems, hideBut
         </div>
 
       </div>
-
-      {/* Spacious Clean Details Card */}
-      <motion.div 
-        style={{ y: textY, opacity: textOpacity }}
-        className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 w-[90vw] max-w-md p-6 lg:p-9 bg-white/95 backdrop-blur-md border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[2px] text-center pointer-events-auto"
-      >
-        <h3 className="font-serif text-xl lg:text-2xl font-light tracking-wide text-black mb-3 uppercase leading-snug">
-          {item.client}
-        </h3>
-
-        <p className="font-serif text-sm lg:text-base italic text-black/75 leading-relaxed font-light mb-6 border-t border-b border-black/10 py-4 px-2 w-full">
-          {`"${item.concept}"`}
-        </p>
-
-        {!hideButton && (
-          <div className="pt-2 flex justify-between items-center w-full">
-            <button
-              onClick={() => {
-                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="hidden lg:flex items-center gap-1.5 px-3.5 py-2 bg-black text-white text-[9px] tracking-[0.2em] uppercase font-semibold rounded-full shadow-sm hover:bg-black/80 transition-all"
-            >
-              Skip Section ↓
-            </button>
-            <Link
-              href="/transformations"
-              className="font-sans text-[9px] tracking-[0.3em] uppercase text-black/60 hover:text-black transition-colors font-semibold border-b border-black/20 pb-0.5"
-            >
-              Full Archive →
-            </Link>
-          </div>
-        )}
-      </motion.div>
     </motion.div>
   );
 }
 
-// Clean Full-Bleed Edge-to-Edge Mobile & Subpage Case Study Card
+// Clean Full-Bleed Edge-to-Edge Mobile & Subpage Case Study Card (Zero Text Box, Click for Story)
 function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transformationData[0]; fullBleedMobile?: boolean }) {
   const [activeMode, setActiveMode] = useState<'both' | 'before' | 'after'>('both');
   const { openLightbox } = useLightbox();
 
+  const handleOpenDetails = (imgSrc: string, mode: 'BEFORE' | 'AFTER' | 'BOTH') => {
+    openLightbox(imgSrc, `${item.client} (${mode})`, {
+      num: item.id,
+      category: item.demographic,
+      concept: item.concept,
+      story: `${item.concept} — Specifications: ${item.specs.join(' • ')}`,
+      fabric: item.specs.join(' • '),
+      tag: mode
+    });
+  };
+
   return (
-    <div className={`flex flex-col bg-[#FAF8F3] ${fullBleedMobile ? 'w-full' : 'border border-black/10 p-5 sm:p-7 rounded-sm shadow-sm'}`}>
+    <div className={`flex flex-col bg-[#FAF9F6] ${fullBleedMobile ? 'w-full' : 'border border-black/10 p-0 sm:p-2 rounded-xs shadow-xs'}`}>
       
-      {/* 100% FULL-BLEED MOBILE SCREEN COVER PHOTO FRAME (0 SIDE DEAD SPACE) */}
-      <div className={`relative ${fullBleedMobile ? 'w-full h-[82vh] min-h-[480px] bg-[#0D0D0D]' : 'aspect-[3/4] sm:aspect-[4/5] w-full bg-[#EAE8E3] rounded-[1px] border border-black/5'} overflow-hidden shadow-sm cursor-pointer`}>
+      {/* 100% CLEAN FULL-BLEED MOBILE PHOTO FRAME (ZERO OVERLAY BOX) */}
+      <div className={`relative ${fullBleedMobile ? 'w-full h-[85vh] min-h-[480px] bg-[#0D0D0D]' : 'aspect-[3/4] sm:aspect-[4/5] w-full bg-[#EAE8E3] rounded-xs border border-black/5'} overflow-hidden cursor-pointer`}>
         {activeMode === 'both' ? (
           <div className="grid grid-cols-2 w-full h-full divide-x divide-black/10">
             <div 
-              onClick={() => openLightbox(item.beforeImg, `${item.client} — BEFORE`)}
+              onClick={() => handleOpenDetails(item.beforeImg, 'BEFORE')}
               className="relative h-full overflow-hidden group"
-              title="Click to view full image"
+              title="Click to view story and details"
             >
               <img
                 src={item.beforeImg}
@@ -208,9 +198,9 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
               </div>
             </div>
             <div 
-              onClick={() => openLightbox(item.afterImg, `${item.client} — AFTER`)}
+              onClick={() => handleOpenDetails(item.afterImg, 'AFTER')}
               className="relative h-full overflow-hidden group"
-              title="Click to view full image"
+              title="Click to view story and details"
             >
               <img
                 src={item.afterImg}
@@ -227,9 +217,9 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
           <AnimatePresence mode="wait">
             <motion.div 
               key={activeMode} 
-              onClick={() => openLightbox(activeMode === 'before' ? item.beforeImg : item.afterImg, `${item.client} — ${activeMode.toUpperCase()}`)}
+              onClick={() => handleOpenDetails(activeMode === 'before' ? item.beforeImg : item.afterImg, activeMode === 'before' ? 'BEFORE' : 'AFTER')}
               className="relative w-full h-full cursor-pointer group"
-              title="Click to view full image"
+              title="Click to view story and details"
             >
               <motion.img
                 src={activeMode === 'before' ? item.beforeImg : item.afterImg}
@@ -285,18 +275,6 @@ function CaseStudyCard({ item, fullBleedMobile = false }: { item: typeof transfo
         </div>
       </div>
 
-      {/* Spacious Clean Details Section */}
-      <div className={`flex flex-col text-left ${fullBleedMobile ? 'px-6 pt-6 pb-8' : 'mt-5 px-1'}`}>
-        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/40 font-bold block mb-1">
-          {item.demographic}
-        </span>
-        <h3 className="font-serif text-xl sm:text-2xl tracking-wide font-light text-[#1A1A1A] uppercase mb-2 leading-snug">
-          {item.client}
-        </h3>
-        <p className="font-serif text-sm italic text-black/75 leading-relaxed font-light border-l-2 border-black/15 pl-4 py-0.5">
-          {`"${item.concept}"`}
-        </p>
-      </div>
     </div>
   );
 }
