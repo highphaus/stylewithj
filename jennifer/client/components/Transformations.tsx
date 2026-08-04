@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
@@ -51,18 +51,20 @@ interface TransformationsProps {
 
 export default function Transformations({ hideButton = false }: TransformationsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [viewMode, setViewMode] = useState<'both' | 'before' | 'after'>('both');
+  const [isPaused, setIsPaused] = useState(false);
   const { openLightbox } = useLightbox();
 
   const currentItem = transformationData[currentIndex];
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % transformationData.length);
-  };
+  // ── AUTOMATIC MOVEMENT TIMER (ROTATES EVERY 5.5 SECONDS) ──
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % transformationData.length);
+    }, 5500);
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + transformationData.length) % transformationData.length);
-  };
+    return () => clearInterval(timer);
+  }, [isPaused]);
 
   const handleOpenLightbox = (imgSrc: string, label: string) => {
     openLightbox(imgSrc, `${currentItem.client} (${label})`, {
@@ -76,8 +78,12 @@ export default function Transformations({ hideButton = false }: TransformationsP
   };
 
   return (
-    <section id="transformations" className="relative w-full bg-[#FAF9F6] border-b border-black/10 py-12 sm:py-20 overflow-hidden">
-      
+    <section 
+      id="transformations" 
+      className="relative w-full bg-[#FAF9F6] border-b border-black/10 py-12 sm:py-20 overflow-hidden"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-10 lg:px-16">
         
         {/* Section Header */}
@@ -94,28 +100,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
             </h2>
           </div>
 
-          {/* Controls: Slide Indicator & Nav Arrows */}
-          <div className="flex items-center gap-6">
-            <div className="font-mono text-xs tracking-[0.3em] uppercase text-black/50 font-bold">
-              0{currentIndex + 1} / 0{transformationData.length}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handlePrev}
-                aria-label="Previous Transformation"
-                className="w-11 h-11 rounded-full border border-black/15 flex items-center justify-center text-black hover:bg-black hover:text-white transition-all cursor-pointer shadow-xs"
-              >
-                ←
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next Transformation"
-                className="w-11 h-11 rounded-full border border-black/15 flex items-center justify-center text-black hover:bg-black hover:text-white transition-all cursor-pointer shadow-xs"
-              >
-                →
-              </button>
-            </div>
+          {/* Slide Progress Counter */}
+          <div className="font-mono text-xs tracking-[0.3em] uppercase text-black/50 font-bold flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-black/60 animate-pulse" />
+            0{currentIndex + 1} / 0{transformationData.length}
           </div>
         </div>
 
@@ -123,125 +111,63 @@ export default function Transformations({ hideButton = false }: TransformationsP
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             className="flex flex-col gap-6"
           >
             
-            {/* Header info & View Mode Switcher */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-black/10 pb-4">
-              <div>
-                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block mb-1">
-                  ✦ {currentItem.id} // {currentItem.demographic}
-                </span>
-                <h3 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A] tracking-tight uppercase">
-                  {currentItem.client}
-                </h3>
-              </div>
-
-              {/* Mode Toggle Switcher */}
-              <div className="flex items-center gap-1.5 bg-[#EFECE6] p-1 rounded-full border border-black/10 self-start sm:self-auto">
-                <button
-                  onClick={() => setViewMode('both')}
-                  className={`px-4 py-1.5 text-[8px] sm:text-[9px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all cursor-pointer ${
-                    viewMode === 'both' ? 'bg-[#1A1A1A] text-white shadow-xs' : 'text-black/60 hover:text-black'
-                  }`}
-                >
-                  Side-by-Side
-                </button>
-                <button
-                  onClick={() => setViewMode('before')}
-                  className={`px-4 py-1.5 text-[8px] sm:text-[9px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all cursor-pointer ${
-                    viewMode === 'before' ? 'bg-[#1A1A1A] text-white shadow-xs' : 'text-black/60 hover:text-black'
-                  }`}
-                >
-                  Before
-                </button>
-                <button
-                  onClick={() => setViewMode('after')}
-                  className={`px-4 py-1.5 text-[8px] sm:text-[9px] tracking-[0.2em] uppercase font-mono font-bold rounded-full transition-all cursor-pointer ${
-                    viewMode === 'after' ? 'bg-[#1A1A1A] text-white shadow-xs' : 'text-black/60 hover:text-black'
-                  }`}
-                >
-                  After
-                </button>
-              </div>
-            </div>
-
-            {/* EXPANDED BIGGER PORTRAIT PHOTO CANVAS PROJECTION */}
+            {/* EXPANDED MAXIMUM HEIGHT PORTRAIT PHOTO CANVAS PROJECTION (HEADER TEXT REMOVED SO IMAGES COVER AREA FULLY) */}
             <div className="w-full">
-              {viewMode === 'both' ? (
-                <div className="grid grid-cols-2 gap-4 sm:gap-6">
-                  
-                  {/* BEFORE FRAME (BIGGER TALLER PORTRAIT ASPECT RATIO) */}
-                  <div 
-                    onClick={() => handleOpenLightbox(currentItem.beforeImg, 'BEFORE')}
-                    className="group relative w-full h-[72vh] min-h-[460px] sm:min-h-[540px] bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
-                    title="Click to view full high-res image & details"
-                  >
-                    <img
-                      src={currentItem.beforeImg}
-                      alt={`${currentItem.client} Before`}
-                      className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                      draggable="false"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
-                      BEFORE // INITIAL FIT
-                    </div>
-                    <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
-                      ✦ CLICK TO EXPAND
-                    </div>
-                  </div>
-
-                  {/* AFTER FRAME (BIGGER TALLER PORTRAIT ASPECT RATIO) */}
-                  <div 
-                    onClick={() => handleOpenLightbox(currentItem.afterImg, 'AFTER')}
-                    className="group relative w-full h-[72vh] min-h-[460px] sm:min-h-[540px] bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
-                    title="Click to view full high-res image & details"
-                  >
-                    <img
-                      src={currentItem.afterImg}
-                      alt={`${currentItem.client} After`}
-                      className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                      draggable="false"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute top-4 right-4 bg-black text-white px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
-                      AFTER // REFINED SILHOUETTE
-                    </div>
-                    <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
-                      ✦ CLICK TO EXPAND
-                    </div>
-                  </div>
-
-                </div>
-              ) : (
-                /* ISOLATED SINGLE FRAME (BEFORE OR AFTER) */
-                <div
-                  onClick={() => handleOpenLightbox(viewMode === 'before' ? currentItem.beforeImg : currentItem.afterImg, viewMode.toUpperCase())}
-                  className="group relative w-full h-[78vh] min-h-[500px] bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-lg max-w-5xl mx-auto"
-                  title="Click to view full image & details"
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                
+                {/* BEFORE FRAME */}
+                <div 
+                  onClick={() => handleOpenLightbox(currentItem.beforeImg, 'BEFORE')}
+                  className="group relative w-full h-[80vh] min-h-[500px] sm:min-h-[600px] bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  title="Click to view full high-res image & details"
                 >
                   <img
-                    src={viewMode === 'before' ? currentItem.beforeImg : currentItem.afterImg}
-                    alt={viewMode}
-                    className={`w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ${
-                      viewMode === 'before' ? 'grayscale-[20%]' : ''
-                    }`}
+                    src={currentItem.beforeImg}
+                    alt={`${currentItem.client} Before`}
+                    className="w-full h-full object-cover object-top grayscale-[15%] group-hover:scale-[1.02] transition-transform duration-700 ease-out"
                     draggable="false"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-4 left-4 bg-black text-white px-4 py-2 text-[9px] tracking-[0.3em] font-mono uppercase font-bold shadow-xs border border-white/10">
-                    {viewMode === 'before' ? 'BEFORE // INITIAL FIT' : 'AFTER // REFINED SILHOUETTE'}
+                  <div className="absolute top-4 left-4 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
+                    BEFORE // INITIAL FIT
+                  </div>
+                  <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
+                    ✦ CLICK TO EXPAND
                   </div>
                 </div>
-              )}
+
+                {/* AFTER FRAME */}
+                <div 
+                  onClick={() => handleOpenLightbox(currentItem.afterImg, 'AFTER')}
+                  className="group relative w-full h-[80vh] min-h-[500px] sm:min-h-[600px] bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  title="Click to view full high-res image & details"
+                >
+                  <img
+                    src={currentItem.afterImg}
+                    alt={`${currentItem.client} After`}
+                    className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                    draggable="false"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute top-4 right-4 bg-black text-white px-3.5 py-1.5 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
+                    AFTER // REFINED SILHOUETTE
+                  </div>
+                  <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
+                    ✦ CLICK TO EXPAND
+                  </div>
+                </div>
+
+              </div>
             </div>
 
-            {/* Subtext Bar: Narrative, Specs & CTAs Underneath */}
+            {/* Subtext Bar: Narrative & Specs Underneath */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#EFECE6] p-6 border border-black/10 rounded-xs shadow-xs">
               <div className="flex flex-col gap-1 max-w-xl">
                 <p className="font-serif text-sm sm:text-base italic font-light text-black/85 leading-relaxed">
@@ -282,8 +208,8 @@ export default function Transformations({ hideButton = false }: TransformationsP
               key={idx}
               onClick={() => setCurrentIndex(idx)}
               aria-label={`Go to slide ${idx + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                currentIndex === idx ? 'w-8 bg-[#1A1A1A]' : 'w-2 bg-black/20 hover:bg-black/40'
+              className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
+                currentIndex === idx ? 'w-10 bg-[#1A1A1A]' : 'w-2 bg-black/20 hover:bg-black/40'
               }`}
             />
           ))}
