@@ -95,7 +95,7 @@ export default function SplitScroll() {
               <div className="px-6 pt-8 pb-6 flex flex-col gap-2 bg-[#FAF9F6]">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-[9px] text-black/40 font-bold">/0{idx + 1}</span>
-                  <h4 className="font-sans text-base tracking-[0.18em] uppercase font-bold text-[#1A1A1A]">
+                  <h4 className="font-serif text-xl sm:text-2xl font-light tracking-tight text-[#1A1A1A]">
                     {look.title}
                   </h4>
                 </div>
@@ -165,7 +165,7 @@ export default function SplitScroll() {
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="pt-6 border-t border-black/10 flex flex-col gap-3"
             >
-              <h4 className="font-sans text-lg md:text-2xl tracking-[0.18em] uppercase font-bold text-[#1A1A1A]">
+              <h4 className="font-serif text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-[#1A1A1A]">
                 {activeItem.title}
               </h4>
 
