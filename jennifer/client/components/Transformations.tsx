@@ -84,10 +84,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="max-w-7xl mx-auto w-full h-full flex flex-col justify-between px-4 sm:px-10 lg:px-16 overflow-hidden">
+      <div className="w-full h-full flex flex-col justify-between overflow-hidden">
         
         {/* Section Header */}
-        <div className="flex-shrink-0 flex items-center justify-between border-b border-black/10 pb-3 mb-2">
+        <div className="flex-shrink-0 flex items-center justify-between border-b border-black/10 pb-3 mb-2 px-4 sm:px-10 lg:px-16 max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
             <h2 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A] tracking-tight">
@@ -110,17 +110,17 @@ export default function Transformations({ hideButton = false }: TransformationsP
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="flex-1 min-h-0 flex flex-col justify-between my-1 overflow-hidden"
+            className="flex-1 min-h-0 flex flex-col justify-between my-1 overflow-hidden w-full"
           >
             
-            {/* CLEAN FULL-CANVAS PHOTO PROJECTION (ZERO DEAD SPACE / ZERO EXTRA MARGINS) */}
+            {/* FULL-BLEED 100% WIDTH CANVAS (0 GAP ON LEFT AND RIGHT SIDES) */}
             <div className="flex-1 min-h-0 w-full overflow-hidden my-1 flex items-center justify-center">
-              <div className="grid grid-cols-2 gap-3 sm:gap-6 w-full max-w-4xl mx-auto h-full items-center justify-center">
+              <div className="grid grid-cols-2 gap-0 w-full h-full items-center justify-center border-y border-black/15 overflow-hidden">
                 
-                {/* BEFORE FRAME */}
+                {/* BEFORE FRAME (TOUCHES LEFT EDGE) */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.beforeImg, 'BEFORE')}
-                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden border-r border-black/15 cursor-pointer"
                   title="Click to view full high-res image & details"
                 >
                   <img
@@ -130,18 +130,18 @@ export default function Transformations({ hideButton = false }: TransformationsP
                     draggable="false"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-3 left-3 bg-[#FAF9F6]/95 border border-black/10 px-3 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
+                  <div className="absolute top-4 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
                     BEFORE
                   </div>
-                  <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-white/90 px-3 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
+                  <div className="absolute bottom-4 left-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>
                 </div>
 
-                {/* AFTER FRAME */}
+                {/* AFTER FRAME (TOUCHES RIGHT EDGE) */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.afterImg, 'AFTER')}
-                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden border border-black/10 cursor-pointer rounded-xs shadow-md"
+                  className="group relative w-full h-full bg-[#0D0D0D] overflow-hidden cursor-pointer"
                   title="Click to view full high-res image & details"
                 >
                   <img
@@ -151,10 +151,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
                     draggable="false"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute top-3 right-3 bg-black text-white px-3 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
+                  <div className="absolute top-4 right-6 bg-black text-white px-3.5 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
                     AFTER
                   </div>
-                  <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md text-white/90 px-3 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
+                  <div className="absolute bottom-4 right-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>
                 </div>
@@ -163,7 +163,7 @@ export default function Transformations({ hideButton = false }: TransformationsP
             </div>
 
             {/* Subtext Bar: Narrative & Specs Underneath */}
-            <div className="flex-shrink-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#EFECE6] p-4 border border-black/10 rounded-xs shadow-xs mt-1">
+            <div className="flex-shrink-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#EFECE6] p-4 border border-black/10 rounded-xs shadow-xs mt-1 max-w-7xl mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-5rem)]">
               <div className="flex flex-col gap-0.5 max-w-xl">
                 <p className="font-serif text-xs sm:text-sm italic font-light text-black/85 leading-snug">
                   "{currentItem.concept}"
