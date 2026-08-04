@@ -75,18 +75,97 @@ export default function SplitScroll() {
 
   return (
     <section ref={sectionRef} className="w-full bg-[#FAF9F6] overflow-clip">
-      <div className="flex flex-col md:flex-row w-full min-h-screen">
+      
+      {/* ── MOBILE / SMALL DEVICE LAYOUT (WRITING FIRST -> EXPLORE BUTTON -> HERO IMAGE BETWEEN EACH CATEGORY) ── */}
+      <div className="block md:hidden w-full bg-[#FAF9F6]">
         
-        {/* RIGHT CANVAS / MOBILE HEADER: Sticky text header on mobile & 1/2 split sticky on desktop (NO GAP ON SMALL DEVICES) */}
-        <div className="w-full md:w-1/2 h-auto md:h-screen md:sticky md:top-0 bg-[#FAF9F6] flex flex-col justify-between p-6 sm:p-8 md:p-16 border-b md:border-b-0 md:border-l border-black/10 relative z-20 order-1 md:order-2">
+        {/* Top Section Header */}
+        <div className="px-6 pt-12 pb-8 border-b border-black/10 bg-[#FAF9F6]">
+          <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
+            STYLING CATEGORIES
+          </span>
+          <h3 className="font-serif text-3xl font-light tracking-tight text-[#1A1A1A] mb-3">
+            Curated Category Silhouettes.
+          </h3>
+          <p className="font-sans text-xs tracking-wider text-neutral-600 font-light leading-relaxed">
+            A study in continuous motion, personal proportion, and structural form across every occasion.
+          </p>
+        </div>
+
+        {/* Categories Stack: Writing -> Explore Button -> Full-Bleed Hero Cover Image */}
+        <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
+          {horizonCategoryItems.map((look, idx) => (
+            <div key={look.id} className="flex flex-col bg-[#FAF9F6]">
+              
+              {/* Category Writing & Title */}
+              <div className="px-6 pt-8 pb-6 flex flex-col gap-2 bg-[#FAF9F6]">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] text-black/40 font-bold">/0{idx + 1}</span>
+                  <h4 className="font-sans text-base tracking-[0.18em] uppercase font-bold text-[#1A1A1A]">
+                    {look.title}
+                  </h4>
+                </div>
+
+                <p className="font-sans text-xs text-black/75 font-light leading-relaxed mb-3">
+                  {look.caption}
+                </p>
+
+                <div className="flex items-center gap-4">
+                  <Link
+                    href="/categories"
+                    className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold"
+                  >
+                    Explore All Categories →
+                  </Link>
+
+                  <Link
+                    href="/connect"
+                    className="px-3.5 py-1.5 bg-[#1A1A1A] text-white text-[8px] tracking-[0.2em] font-mono uppercase font-semibold rounded-xs shadow-xs"
+                  >
+                    Book Session
+                  </Link>
+                </div>
+              </div>
+
+              {/* 100% FULL BLEED ZERO-GAP HERO STYLE COVER IMAGE RIGHT AFTER WRITING */}
+              <div 
+                onClick={() => openLightbox(look.src, look.title)}
+                className="relative w-full h-[85vh] min-h-[480px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+                title={`Click to view ${look.title}`}
+              >
+                <Image
+                  src={look.src}
+                  alt={look.title}
+                  fill
+                  sizes="100vw"
+                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
+                  ✦ {look.title}
+                </div>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+      {/* ── DESKTOP / TABLET SPLIT STICKY SCROLL LAYOUT (md:flex) ── */}
+      <div className="hidden md:flex flex-row w-full min-h-screen">
+        
+        {/* RIGHT CANVAS: Sticky text header on desktop */}
+        <div className="w-1/2 h-screen sticky top-0 bg-[#FAF9F6] flex flex-col justify-between p-8 md:p-16 border-l border-black/10 relative z-20 order-2">
           <div>
             <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
               STYLING CATEGORIES
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A] mb-2 sm:mb-3">
+            <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A] mb-3">
               Curated Category <br /> Silhouettes.
             </h3>
-            <p className="font-sans text-[11px] sm:text-xs tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed mb-4 sm:mb-6">
+            <p className="font-sans text-xs tracking-widest text-neutral-500 uppercase font-light max-w-xs leading-relaxed mb-6">
               A study in continuous motion, personal proportion, and structural form across every occasion.
             </p>
 
@@ -96,9 +175,9 @@ export default function SplitScroll() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="pt-4 sm:pt-6 border-t border-black/10 flex flex-col gap-1.5 sm:gap-3"
+              className="pt-6 border-t border-black/10 flex flex-col gap-3"
             >
-              <h4 className="font-sans text-base sm:text-lg md:text-2xl tracking-[0.18em] uppercase font-bold text-[#1A1A1A]">
+              <h4 className="font-sans text-lg md:text-2xl tracking-[0.18em] uppercase font-bold text-[#1A1A1A]">
                 {activeItem.title}
               </h4>
 
@@ -108,7 +187,7 @@ export default function SplitScroll() {
             </motion.div>
           </div>
 
-          <div className="pt-4 sm:pt-6 flex items-center justify-between">
+          <div className="pt-6 flex items-center justify-between">
             <Link
               href="/categories"
               className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-medium"
@@ -116,34 +195,31 @@ export default function SplitScroll() {
               Explore All Categories →
             </Link>
 
-            {/* Unified Floating Skip Button (Hidden on smaller devices) */}
-            <div className="hidden lg:block">
-              <button
-                onClick={() => {
-                  document.getElementById('transformations')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="flex items-center gap-1.5 px-4 py-2 bg-black/90 hover:bg-black text-white text-[9px] tracking-[0.2em] uppercase font-light rounded-full border border-white/10 shadow-lg transition-all duration-300 hover:scale-105"
-              >
-                Skip ↓
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                document.getElementById('transformations')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="flex items-center gap-1.5 px-4 py-2 bg-black/90 hover:bg-black text-white text-[9px] tracking-[0.2em] uppercase font-light rounded-full border border-white/10 shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
+            >
+              Skip ↓
+            </button>
           </div>
         </div>
 
-        {/* LEFT CANVAS: 100% Screen Viewport Fitting Per Image (Click to Pick / Open Lightbox) */}
-        <div className="w-full md:w-1/2 flex flex-col snap-y snap-mandatory scroll-smooth order-2 md:order-1">
+        {/* LEFT CANVAS: 100% Screen Viewport Fitting Per Image */}
+        <div className="w-1/2 flex flex-col snap-y snap-mandatory scroll-smooth order-1">
           {horizonCategoryItems.map((look) => (
             <div 
               key={look.id} 
               onClick={() => openLightbox(look.src, look.title)}
-              className="w-full h-[100dvh] h-screen relative overflow-hidden bg-[#EAE8E3] group snap-start snap-always flex-shrink-0 cursor-pointer"
+              className="w-full h-screen relative overflow-hidden bg-[#EAE8E3] group snap-start snap-always flex-shrink-0 cursor-pointer"
               title="Click to view image"
             >
               <Image
                 src={look.src}
                 alt={look.title}
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="50vw"
                 className="object-cover object-top sm:object-center transition-transform duration-1000 group-hover:scale-[1.02] ease-out"
                 unoptimized
               />
