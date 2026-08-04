@@ -157,10 +157,7 @@ export default function AudienceGrid() {
         >
           {/* Header */}
           <div>
-            <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
-              OUR CLIENTELE
-            </span>
-            <h2 className="font-sans text-3xl lg:text-4xl font-light tracking-tight text-[#1A1A1A]">
+            <h2 className="font-serif text-3xl lg:text-5xl font-light tracking-tight text-[#1A1A1A]">
               Who We Accompany
             </h2>
           </div>
@@ -226,10 +223,7 @@ export default function AudienceGrid() {
       >
         {/* Step A: Header block at the top */}
         <div className="p-6 sm:p-12 border-b border-black/10">
-          <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 block mb-1 font-semibold">
-            OUR CLIENTELE
-          </span>
-          <h2 className="font-sans text-2xl sm:text-3xl font-light tracking-tight text-[#1A1A1A]">
+          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A]">
             Who We Accompany
           </h2>
         </div>
