@@ -199,11 +199,11 @@ export default function AudienceGrid() {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────────
-          2. MOBILE & SMALLER DEVICE LAYOUT (lg:hidden) — STACKED CARD-BY-CARD
+          2. MOBILE & SMALLER DEVICE LAYOUT (lg:hidden) — FULL BLEED IMAGE TOUCHING THE BOTTOM DIVIDING LINE
           ───────────────────────────────────────────────────────────────── */}
       <div className="flex flex-col lg:hidden w-full bg-[#FAF9F6]">
         
-        {/* Section Header (BALANCED TYPOGRAPHY SIGNATURE) */}
+        {/* Section Header */}
         <div className="px-6 pt-8 pb-6 border-b border-black/10 bg-[#FAF9F6]">
           <div className="flex items-center gap-2 mb-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
@@ -213,33 +213,13 @@ export default function AudienceGrid() {
           </h2>
         </div>
 
-        {/* Stacked Clientele Cards (Photo FIRST -> Narrative Writing DIRECTLY UNDER Photo) */}
+        {/* Stacked Clientele Cards (Writing FIRST -> Image DIRECTLY TOUCHING the bottom dividing line edge-to-edge) */}
         <div className="flex flex-col divide-y divide-black/10 bg-[#FAF9F6]">
           {audiencesList.map((item, i) => (
-            <div key={i} className="flex flex-col bg-[#FAF9F6] pb-10">
+            <div key={i} className="flex flex-col bg-[#FAF9F6]">
               
-              {/* 1. Full-Bleed Portrait Cover Image */}
-              <div 
-                onClick={() => openLightbox(item.image, item.title)}
-                className="relative w-full h-[75vh] min-h-[440px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
-                title={`Click to view ${item.title}`}
-              >
-                <Image 
-                  src={item.image} 
-                  alt={item.title} 
-                  fill
-                  sizes="100vw"
-                  className="object-cover object-top scale-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase font-semibold border border-white/10">
-                  ✦ 0{i + 1} // {item.title}
-                </div>
-              </div>
-
-              {/* 2. All Writings & Details DIRECTLY UNDER the Image */}
-              <div className="px-6 pt-6 flex flex-col gap-3">
+              {/* 1. All Writings & Details */}
+              <div className="px-6 pt-8 pb-6 flex flex-col gap-3 bg-[#FAF9F6]">
                 <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold">
                   CLIENTELE PROFILE 0{i + 1}
                 </span>
@@ -252,7 +232,7 @@ export default function AudienceGrid() {
                   “{item.desc}”
                 </p>
 
-                <div className="pt-3 flex items-center gap-3">
+                <div className="pt-2 flex items-center gap-3">
                   <Link
                     href={`/services?for=${item.slug}`}
                     className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-xs"
@@ -266,6 +246,26 @@ export default function AudienceGrid() {
                   >
                     Book Session
                   </Link>
+                </div>
+              </div>
+
+              {/* 2. Full-Bleed Cover Image DIRECTLY TOUCHING THE BOTTOM DIVIDING LINE WITH 0 GAP */}
+              <div 
+                onClick={() => openLightbox(item.image, item.title)}
+                className="relative w-full h-[80vh] min-h-[460px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+                title={`Click to view ${item.title}`}
+              >
+                <Image 
+                  src={item.image} 
+                  alt={item.title} 
+                  fill
+                  sizes="100vw"
+                  className="object-cover object-top scale-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase font-semibold border border-white/10">
+                  ✦ 0{i + 1} // {item.title}
                 </div>
               </div>
 

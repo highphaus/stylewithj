@@ -1,280 +1,195 @@
 'use client';
-
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent, MotionValue } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
 import { useSiteData } from '@/lib/use-site-data';
 
-interface DefaultServiceItem {
-  name: string;
-  category: string;
-  desc: string;
-  image: string;
-  href: string;
+const allServices = [
+  { 
+    num: "01",
+    category: "Style Discovery",
+    name: "Personal Styling", 
+    desc: "Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.",
+    image: "/images/includes/IMG_0271.JPG.jpeg"
+  },
+  { 
+    num: "02",
+    category: "Closet Evolution",
+    name: "Wardrobe Styling", 
+    desc: "Make your existing wardrobe work harder. Rediscover forgotten pieces, create fresh outfit combinations, identify what's missing, and build a versatile closet.",
+    image: "/images/includes/IMG_1406.JPG.jpeg"
+  },
+  { 
+    num: "03",
+    category: "Intentional Shopping",
+    name: "Personal Shopping", 
+    desc: "Shop with intention through curated recommendations tailored to your style, lifestyle, and budget. Spend less time searching and more time finding what works.",
+    image: "/images/includes/IMG_1423.JPG.jpeg"
+  },
+  { 
+    num: "04",
+    category: "Event & Celebration",
+    name: "Occasion Styling", 
+    desc: "Tell us where you're going, and we'll help you figure out what to wear. From weddings and parties to date nights and celebrations, curate the perfect look.",
+    image: "/images/includes/IMG_1754.JPG.jpeg"
+  },
+  { 
+    num: "05",
+    category: "Professional Identity",
+    name: "Workwear Styling", 
+    desc: "Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important executive presentations.",
+    image: "/images/includes/IMG_8863.JPG.jpeg"
+  }
+];
+
+interface CardProps {
+  item: typeof allServices[0];
+  index: number;
+  total: number;
+  scrollYProgress: MotionValue<number>;
+}
+
+function ServiceCard({ item, index, total, scrollYProgress }: CardProps) {
+  const { openLightbox } = useLightbox();
+  const activeTotal = total - 1;
+  const isLastCard = index === total - 1;
+  
+  const start = index / activeTotal;
+  const end = (index + 1) / activeTotal;
+  const hold = start + (end - start) * 0.65;
+
+  const x = useTransform(
+    scrollYProgress,
+    isLastCard 
+      ? [0, 1] 
+      : [0, start, hold, end],
+    isLastCard
+      ? ["0%", "0%"]
+      : ["0%", "0%", "0%", "-105%"]
+  );
+
+  const scale = useTransform(
+    scrollYProgress,
+    isLastCard
+      ? [0, 1]
+      : [0, start, hold, end],
+    isLastCard
+      ? [1, 1]
+      : [1, 1, 1, 0.96]
+  );
+
+  return (
+    <motion.div 
+      style={{ x, scale, zIndex: total - index }}
+      className="absolute inset-0 w-full h-full bg-[#EFECE6] will-change-transform border-l border-black/10"
+    >
+      <div 
+        onClick={() => openLightbox(item.image, item.name)}
+        className="relative w-full h-full bg-[#EFECE6] overflow-hidden cursor-pointer group"
+        title="Click to view image"
+      >
+        <Image 
+          src={item.image} 
+          alt={item.name} 
+          fill
+          className="object-cover object-top scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
+          priority={index === 0}
+          unoptimized
+        />
+      </div>
+    </motion.div>
+  );
 }
 
 interface ServicesGridProps {
   hideButton?: boolean;
 }
 
-const allServices: DefaultServiceItem[] = [
-  {
-    name: "Executive & Signature Styling",
-    category: "Full Image Strategy",
-    desc: "Complete wardrobe transformation for high-profile individuals, executives, and leaders needing authentic commanding presence.",
-    image: "/images/includes/IMG_0271.JPG.jpeg",
-    href: "/services?service=executive",
-  },
-  {
-    name: "Occasion & Event Styling",
-    category: "Specialized Curation",
-    desc: "Exquisite styling for red carpets, galas, weddings, photo shoots, and high-visibility public appearances.",
-    image: "/images/CIT09345.jpg",
-    href: "/services?service=occasion",
-  },
-  {
-    name: "Capsule Wardrobe Architecture",
-    category: "Wardrobe System",
-    desc: "Decluttering, organizing, and building a streamlined, versatile capsule wardrobe aligned with your daily lifestyle.",
-    image: "/images/includes/IMG_1406.JPG.jpeg",
-    href: "/services?service=capsule",
-  },
-  {
-    name: "Personal Shopping & Sourcing",
-    category: "VIP Procurement",
-    desc: "Exclusive access to rare luxury pieces, custom garments, and curated collections tailored precisely to your proportions.",
-    image: "/images/includes/IMG_3112.JPG.jpeg",
-    href: "/services?service=sourcing",
-  },
-];
-
-export default function ServicesGrid({ hideButton }: ServicesGridProps = {}) {
+export default function ServicesGrid({ hideButton = false }: ServicesGridProps) {
+  const targetRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const { openLightbox } = useLightbox();
   const { services: dynamicServices } = useSiteData();
-  
-  const servicesList = dynamicServices && dynamicServices.length > 0
-    ? dynamicServices.map((s, idx) => ({
-        name: s.name,
-        category: s.category,
-        desc: s.desc,
-        image: s.image,
-        href: `/services?service=${s.id || idx}`,
-      }))
-    : allServices;
+  const servicesList = dynamicServices.length > 0 ? dynamicServices : allServices;
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+  });
 
-  // ── AUTOMATIC CYCLE ON DESKTOP ──
-  useEffect(() => {
-    if (isHovering) {
-      setProgress(0);
-      return;
-    }
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 70,
+    damping: 26,
+    restDelta: 0.001
+  });
 
-    const intervalTime = 50;
-    const totalDuration = 6000;
-    const increment = (intervalTime / totalDuration) * 100;
-
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setActiveIndex((curr) => (curr + 1) % servicesList.length);
-          return 0;
-        }
-        return prev + increment;
-      });
-    }, intervalTime);
-
-    return () => clearInterval(timer);
-  }, [isHovering, activeIndex, servicesList.length]);
-
-  const handleMouseEnter = (index: number) => {
-    setActiveIndex(index);
-    setIsHovering(true);
-    setProgress(0);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-  };
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+    const idx = Math.min(
+      servicesList.length - 1,
+      Math.max(0, Math.floor(latest * servicesList.length))
+    );
+    setActiveIndex(idx);
+  });
 
   const currentService = servicesList[activeIndex] || servicesList[0];
 
   return (
-    <section id="services" className="w-full bg-[#FAF9F6] border-b border-black/15 overflow-hidden">
+    <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
       
-      {/* ─────────────────────────────────────────────────────────────────
-          1. DESKTOP SINGLE-SCREEN LAYOUT (lg:flex) — MATCHES WHO WE ACCOMPANY
-          ───────────────────────────────────────────────────────────────── */}
-      <div className="hidden lg:flex w-full min-h-screen relative overflow-hidden bg-[#FAF9F6]">
-        
-        {/* Left Column: Full-Bleed Pinned Image Box */}
-        <div 
-          onClick={() => openLightbox(currentService.image, currentService.name)}
-          className="w-7/12 h-screen sticky top-0 border-r border-black/10 overflow-hidden bg-[#EFECE6] cursor-pointer group"
-          title="Click to view image"
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <Image 
-                src={currentService.image} 
-                alt={currentService.name} 
-                fill
-                className="object-cover object-top opacity-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
-                priority
-                unoptimized
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-              
-              <div className="absolute bottom-8 left-8 bg-black/80 backdrop-blur-md text-white/90 px-4 py-2 text-[9px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10">
-                ✦ 0{activeIndex + 1} // {currentService.name}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Right Column: Index Stack & Active Item Details */}
-        <div 
-          className="w-5/12 flex flex-col justify-between p-10 lg:p-14 xl:p-16 z-10 bg-[#FAF9F6]"
-          onMouseLeave={handleMouseLeave}
-        >
-          {/* Header */}
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
-            </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A]">
-              What We Do
-            </h2>
-          </div>
-
-          {/* Links stack with writing text under active item */}
-          <div className="flex flex-col gap-2 my-auto w-full">
-            {servicesList.map((item, i) => {
-              const isActive = activeIndex === i;
-
-              return (
-                <Link
-                  key={i}
-                  href={item.href}
-                  onMouseEnter={() => handleMouseEnter(i)}
-                  className="w-full text-left flex flex-col group py-4 relative outline-none border-b border-black/[0.08] last:border-b-0"
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <h3 className={`text-xs sm:text-sm tracking-[0.2em] uppercase transition-all duration-300 truncate ${
-                      isActive ? 'text-[#1A1A1A] translate-x-1 font-bold' : 'text-black/50 group-hover:text-black/85 font-light'
-                    }`}>
-                      {item.name}
-                    </h3>
-
-                    <div className={`w-[6px] h-[6px] rounded-full transition-all duration-300 border flex-shrink-0 ${
-                      isActive ? 'bg-[#1A1A1A] scale-125 border-[#1A1A1A]' : 'bg-transparent border-black/20 group-hover:border-black/40'
-                    }`} />
-                  </div>
-
-                  {/* ACTIVE ITEM WRITING TEXT */}
-                  {isActive && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
-                      className="mt-2.5 flex flex-col gap-2"
-                    >
-                      <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/50 font-bold">
-                        {item.category}
-                      </span>
-
-                      <p className="font-sans text-xs sm:text-sm text-black/80 font-light leading-relaxed max-w-md">
-                        {item.desc}
-                      </p>
-
-                      <div className="w-full h-[1px] bg-black/10 mt-1 overflow-hidden">
-                        <motion.div
-                          className="h-full bg-[#1A1A1A]"
-                          style={{ width: `${isHovering ? 0 : progress}%` }}
-                          transition={{ ease: 'linear' }}
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* ─────────────────────────────────────────────────────────────────
-          2. MOBILE & SMALLER DEVICE LAYOUT (lg:hidden) — STACKED CARD-BY-CARD
-          ───────────────────────────────────────────────────────────────── */}
-      <div className="flex flex-col lg:hidden w-full bg-[#FAF9F6]">
+      {/* ── MOBILE / SMALL DEVICE LAYOUT (FULL SCREEN EDGE-TO-EDGE COVER IMAGES WITH NO DEAD SPACE) ── */}
+      <div className="block lg:hidden bg-[#FAF9F6] w-full overflow-hidden">
         {/* Header */}
-        <div className="px-6 pt-8 pb-6 border-b border-black/10 bg-[#FAF9F6]">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
-          </div>
-          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A]">
+        <div className="px-6 pt-16 pb-8 border-b border-black/10 bg-[#FAF9F6]">
+          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A] mb-1">
             What We Do
           </h2>
         </div>
 
-        {/* Stacked Images Down-by-Down */}
+        {/* Stacked Images Down-by-Down with 100% Full-Bleed Screen Coverage */}
         <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
-          {servicesList.map((item, i) => (
-            <div key={i} className="flex flex-col bg-[#FAF9F6] pb-10">
+          {servicesList.map((item) => (
+            <div key={item.num} className="w-full flex flex-col pb-8">
               
-              {/* 1. Full-Bleed Portrait Cover Image */}
+              {/* FULL BLEED CINEMATIC COVER IMAGE (0 SIDE MARGINS / DEAD SPACE, HERO STYLE) */}
               <div 
                 onClick={() => openLightbox(item.image, item.name)}
-                className="relative w-full h-[75vh] min-h-[440px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
-                title={`Click to view ${item.name}`}
+                className="relative w-full h-[85vh] min-h-[480px] bg-[#0D0D0D] overflow-hidden cursor-pointer group"
+                title="Click to view image"
               >
                 <Image 
                   src={item.image} 
                   alt={item.name} 
                   fill
-                  sizes="100vw"
-                  className="object-cover object-top scale-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 text-[8px] tracking-[0.25em] font-mono uppercase font-semibold border border-white/10">
-                  ✦ 0{i + 1} // {item.name}
+                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
+                  ✦ {item.num} // {item.category}
                 </div>
               </div>
 
-              {/* 2. All Writings & Details DIRECTLY UNDER the Image */}
-              <div className="px-6 pt-6 flex flex-col gap-3">
-                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold">
+              {/* CAPTION DIRECTLY UNDER THE IMAGE */}
+              <div className="px-6 pt-6 flex flex-col gap-2.5">
+                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
                   {item.category}
                 </span>
 
-                <h3 className="font-sans text-xl sm:text-2xl tracking-[0.12em] uppercase font-bold text-[#1A1A1A]">
+                <h3 className="font-serif text-2xl font-light tracking-wide text-[#1A1A1A] uppercase">
                   {item.name}
                 </h3>
 
-                <p className="font-sans text-sm text-black/80 font-light leading-relaxed">
+                <p className="font-sans text-xs sm:text-sm text-black/75 font-light leading-relaxed max-w-lg">
                   {item.desc}
                 </p>
 
-                <div className="pt-3 flex items-center gap-3">
-                  <Link
-                    href={item.href}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-xs"
+                <div className="pt-2">
+                  <a 
+                    href="/services" 
+                    className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium"
                   >
-                    Explore Details →
-                  </Link>
+                    Explore Service Details →
+                  </a>
                 </div>
               </div>
 
@@ -283,6 +198,88 @@ export default function ServicesGrid({ hideButton }: ServicesGridProps = {}) {
         </div>
       </div>
 
-    </section>
+      {/* ── DESKTOP STICKY HORIZONTAL FLIGHT SCROLL SECTION ── */}
+      <section ref={targetRef} className="hidden lg:block relative h-[480vh] bg-[#FAF9F6]">
+        
+        {/* STICKY CONTAINER VIEWPORT */}
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+          
+          {/* ── SOLID TEXT PANEL (Left Column on Desktop) ── */}
+          <div className="
+            absolute top-0 left-0 bottom-0 z-50 bg-[#FAF9F6] flex flex-col justify-between
+            w-[540px] px-20 py-20 border-r border-black/10 pointer-events-auto overflow-y-auto
+          ">
+            <div>
+              <h2 className="font-serif text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-4">
+                What We Do
+              </h2>
+
+              {/* Dynamic Active Service Details directly under "What We Do" */}
+              <motion.div 
+                key={activeIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="pt-6 border-t border-black/10 flex flex-col gap-3"
+              >
+                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/50 block font-semibold">
+                  {currentService.category}
+                </span>
+
+                <h3 className="font-serif text-3xl font-light tracking-wide text-[#1A1A1A] uppercase">
+                  {currentService.name}
+                </h3>
+
+                <p className="font-sans text-sm text-black/75 font-light leading-relaxed max-w-md">
+                  {currentService.desc}
+                </p>
+
+                <div className="pt-2">
+                  <a 
+                    href="/services" 
+                    className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium"
+                  >
+                    Explore Service Details →
+                  </a>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* ── CARD PORTRAIT CANVAS FIELD (Right Column on Desktop) ── */}
+          <div className="w-full h-full relative z-20 pl-[540px]">
+            <div className="relative w-full h-full overflow-hidden bg-[#FAF9F6]">
+              
+              {servicesList.map((item, i) => (
+                <ServiceCard 
+                  key={i} 
+                  item={item} 
+                  index={i} 
+                  total={servicesList.length} 
+                  scrollYProgress={smoothProgress}
+                />
+              ))}
+
+            </div>
+          </div>
+
+          {/* Unified Floating Skip Button */}
+          {!hideButton && (
+            <div className="absolute bottom-6 right-6 z-30">
+              <button
+                onClick={() => {
+                  document.getElementById('horizon')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-black/85 hover:bg-black text-white text-[9px] tracking-[0.2em] uppercase font-light rounded-full border border-white/10 shadow-lg transition-all duration-300 hover:scale-105"
+              >
+                Skip ↓
+              </button>
+            </div>
+          )}
+
+        </div>
+      </section>
+
+    </div>
   );
 }
