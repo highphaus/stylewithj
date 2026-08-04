@@ -133,12 +133,15 @@ export default function AudienceGrid() {
 
         {/* Right Column: Index Stack & Active Item Writing */}
         <div 
-          className="w-5/12 flex flex-col justify-between p-12 lg:p-16 xl:p-20 z-10 bg-[#FAF9F6]"
+          className="w-5/12 flex flex-col justify-between p-10 lg:p-14 xl:p-16 z-10 bg-[#FAF9F6]"
           onMouseLeave={handleMouseLeave}
         >
           {/* Header */}
           <div>
-            <h2 className="font-sans text-3xl lg:text-4xl font-light tracking-tight text-[#1A1A1A]">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
+            </div>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A]">
               Who We Accompany
             </h2>
           </div>
@@ -200,8 +203,11 @@ export default function AudienceGrid() {
           ───────────────────────────────────────────────────────────────── */}
       <div className="flex flex-col lg:hidden w-full bg-[#FAF9F6]">
         
-        {/* Section Header */}
-        <div className="px-6 pt-10 pb-6 border-b border-black/10 bg-[#FAF9F6]">
+        {/* Section Header (BALANCED TYPOGRAPHY SIGNATURE) */}
+        <div className="px-6 pt-8 pb-6 border-b border-black/10 bg-[#FAF9F6]">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
+          </div>
           <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A]">
             Who We Accompany
           </h2>
