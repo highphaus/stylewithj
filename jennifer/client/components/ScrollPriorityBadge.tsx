@@ -19,21 +19,16 @@ export default function ScrollPriorityBadge({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Reference the parent image container element
     const parentEl = badgeRef.current?.parentElement;
     if (!parentEl) return;
 
+    // Lightweight single-threshold observer for maximum scroll performance
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // When the target image is prioritized in the viewport (threshold 45%)
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
+        setIsVisible(entry.isIntersecting && entry.intersectionRatio >= 0.35);
       },
       {
-        threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+        threshold: 0.35,
       }
     );
 
@@ -45,10 +40,10 @@ export default function ScrollPriorityBadge({
     <div
       ref={badgeRef}
       onClick={onClick}
-      className={`absolute bottom-4 left-4 z-30 bg-black/90 backdrop-blur-md text-white px-3.5 py-1.5 rounded-full border border-white/30 text-[9px] font-mono tracking-[0.2em] uppercase flex items-center gap-1.5 shadow-2xl transition-all duration-500 ease-out transform ${
+      className={`absolute bottom-4 left-4 z-30 bg-black/90 text-white px-3.5 py-1.5 rounded-full border border-white/30 text-[9px] font-mono tracking-[0.2em] uppercase flex items-center gap-1.5 shadow-xl transition-all duration-300 ease-out transform transform-gpu ${
         isVisible
           ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
-          : 'opacity-0 translate-y-3 scale-90 pointer-events-none'
+          : 'opacity-0 translate-y-2 scale-95 pointer-events-none'
       } ${className}`}
     >
       <span>{text}</span>

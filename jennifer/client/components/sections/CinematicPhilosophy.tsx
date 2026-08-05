@@ -45,7 +45,7 @@ export default function CinematicPhilosophy() {
           className="relative w-full h-[100dvh] min-h-[500px] bg-[#0D0D0D] overflow-hidden cursor-pointer group"
           title="Click to view image"
         >
-          <motion.div style={{ scale: imageScale }} className="w-full h-full relative">
+          <div className="w-full h-full relative">
             <Image
               src={imageSrc} 
               alt="Style with J Philosophy"
@@ -58,7 +58,7 @@ export default function CinematicPhilosophy() {
             <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
               ✦ PHILOSOPHY SILHOUETTE
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* 3. BODY TEXT, QUOTE & CTA BELOW THE IMAGE */}
