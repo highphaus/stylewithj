@@ -75,8 +75,8 @@ export default function LookbookGrid() {
           </div>
         </div>
 
-        {/* ── CATEGORY FILTER TABS ── */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        {/* ── SINGLE LINE CATEGORY FILTER TABS ── */}
+        <div className="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar scrollbar-none pb-2 border-b border-black/10">
           {filterCategories.map((cat) => {
             const isActive = activeFilter === cat.tag;
             return (
@@ -86,7 +86,7 @@ export default function LookbookGrid() {
                   setActiveFilter(cat.tag);
                   setActiveSpotlightIdx(0);
                 }}
-                className={`px-4 py-2 text-[9px] sm:text-[10px] tracking-[0.25em] uppercase font-mono border transition-all duration-300 rounded-xs ${
+                className={`px-4 py-2 text-[9px] sm:text-[10px] tracking-[0.25em] uppercase font-mono border transition-all duration-300 rounded-xs flex-shrink-0 whitespace-nowrap cursor-pointer ${
                   isActive 
                     ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-sm font-semibold' 
                     : 'bg-[#EFECE6]/50 text-black/65 border-black/10 hover:border-black/30 hover:text-black'

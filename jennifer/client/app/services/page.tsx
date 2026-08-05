@@ -226,8 +226,8 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           </h2>
         </div>
 
-        {/* MOBILE LAYOUT: ZERO SPACE BETWEEN CLEAN IMAGES */}
-        <div className="flex flex-col lg:hidden divide-y divide-black/10">
+        {/* MOBILE LAYOUT: 100% FULL BLEED IMAGES TOUCHING LEFT AND RIGHT PHONE EDGES WITH ZERO MARGIN */}
+        <div className="flex flex-col lg:hidden divide-y divide-black/10 -mx-6 sm:-mx-12">
           {servicesList.map((svc) => (
             <div
               key={svc.num}
