@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'Jennifer (J)' }],
   creator: 'Style with J',
   metadataBase: new URL('https://stylewithj.com'),
+  alternates: {
+    canonical: 'https://stylewithj.com',
+  },
   openGraph: {
     title: 'Personal Stylist & Image Consultant in Bangalore | Style with J',
     description: 'Elevate your personal image with Bangalore’s top personal stylist and image consultant. Tailored wardrobe audits, executive styling, and personal shopping.',
