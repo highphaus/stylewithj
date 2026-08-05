@@ -21,27 +21,27 @@ export default function GalleryGrid() {
     <div className="w-full bg-[#FAF9F6] text-[#1A1A1A] pb-20 sm:pb-32">
       
       {/* ── HEADER BUCKET ── */}
-      <header className="px-6 md:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10 pb-10 pt-16 sm:pt-24">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <header className="px-6 md:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10 pb-8 sm:pb-10 pt-12 sm:pt-20 lg:pt-24">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
           <div>
-            <h1 className="font-serif text-4xl sm:text-6xl font-light tracking-tight leading-none text-[#1A1A1A]">
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-none text-[#1A1A1A]">
               Lookbook
             </h1>
           </div>
           <div className="max-w-xs text-left md:text-right">
-            <p className="font-serif text-xs italic text-black/60 leading-relaxed font-light">
+            <p className="font-serif text-xs sm:text-sm italic text-black/60 leading-relaxed font-light">
               A visual archive cataloging Western wear, resort silhouettes, and curated editorial looks styled by Jennifer.
             </p>
           </div>
         </div>
 
-        {/* ── SINGLE LINE RESPONSIVE FILTER TABS ── */}
-        <div className="flex flex-nowrap items-center gap-2 mt-6 pb-3 overflow-x-auto no-scrollbar scrollbar-none border-b border-black/10">
+        {/* ── DEVICE RESPONSIVE FILTER TABS ── */}
+        <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2.5 mt-6 pb-3 overflow-x-auto no-scrollbar scrollbar-none border-b border-black/10">
           {(['all', 'western', 'evening', 'resort', 'bespoke'] as const).map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-4 py-2 text-[9px] tracking-[0.25em] uppercase font-mono transition-all duration-300 border rounded-xs flex-shrink-0 whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 lg:px-5 lg:py-2.5 text-[8px] sm:text-[9px] lg:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-mono transition-all duration-300 border rounded-xs flex-shrink-0 whitespace-nowrap cursor-pointer ${
                 filter === cat 
                   ? 'bg-black text-white border-black font-semibold shadow-xs' 
                   : 'bg-white text-black/60 border-black/10 hover:border-black hover:text-black font-medium'
