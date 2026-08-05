@@ -86,42 +86,12 @@ export default function SplitScroll() {
           </h3>
         </div>
 
-        {/* Categories Stack: Writing -> Explore Button -> Full-Bleed Hero Cover Image */}
+        {/* Categories Stack: Full-Bleed Cover Image FIRST -> Writing & Details DIRECTLY UNDER Image */}
         <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
           {horizonCategoryItems.map((look, idx) => (
-            <div key={look.id} className="flex flex-col bg-[#FAF9F6]">
+            <div key={look.id} className="flex flex-col bg-[#FAF9F6] pb-8">
               
-              {/* Category Writing & Title */}
-              <div className="px-6 pt-8 pb-6 flex flex-col gap-2 bg-[#FAF9F6]">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[9px] text-black/40 font-bold">/0{idx + 1}</span>
-                  <h4 className="font-serif text-xl sm:text-2xl font-light tracking-tight text-[#1A1A1A]">
-                    {look.title}
-                  </h4>
-                </div>
-
-                <p className="font-sans text-xs text-black/75 font-light leading-relaxed mb-3">
-                  {look.caption}
-                </p>
-
-                <div className="flex items-center gap-4">
-                  <Link
-                    href="/categories"
-                    className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold"
-                  >
-                    Explore All Categories →
-                  </Link>
-
-                  <Link
-                    href="/connect"
-                    className="px-3.5 py-1.5 bg-[#1A1A1A] text-white text-[8px] tracking-[0.2em] font-mono uppercase font-semibold rounded-xs shadow-xs"
-                  >
-                    Book Session
-                  </Link>
-                </div>
-              </div>
-
-              {/* 100% FULL BLEED ZERO-GAP HERO STYLE COVER IMAGE RIGHT AFTER WRITING */}
+              {/* 1. 100% FULL BLEED COVER IMAGE FIRST (TOUCHING DIVIDING LINE DIRECTLY WITH 0 GAP) */}
               <div 
                 onClick={() => openLightbox(look.src, look.title)}
                 className="relative w-full h-[85vh] min-h-[480px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
@@ -136,8 +106,38 @@ export default function SplitScroll() {
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
-                  ✦ {look.title}
+                <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
+                  ✦ 0{idx + 1} // {look.title}
+                </div>
+              </div>
+
+              {/* 2. Category Writing & Title DIRECTLY UNDER EACH IMAGE */}
+              <div className="px-6 pt-6 flex flex-col gap-2.5 bg-[#FAF9F6]">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] text-black/40 font-bold">/0{idx + 1}</span>
+                  <h4 className="font-serif text-xl sm:text-2xl font-light tracking-tight text-[#1A1A1A]">
+                    {look.title}
+                  </h4>
+                </div>
+
+                <p className="font-sans text-xs text-black/75 font-light leading-relaxed mb-1">
+                  {look.caption}
+                </p>
+
+                <div className="flex items-center gap-4 pt-1">
+                  <Link
+                    href="/categories"
+                    className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold"
+                  >
+                    Explore All Categories →
+                  </Link>
+
+                  <Link
+                    href="/connect"
+                    className="px-3.5 py-1.5 bg-[#1A1A1A] text-white text-[8px] tracking-[0.2em] font-mono uppercase font-semibold rounded-xs shadow-xs"
+                  >
+                    Book Session
+                  </Link>
                 </div>
               </div>
 
