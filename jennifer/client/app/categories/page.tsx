@@ -178,9 +178,14 @@ export default function CategoriesPage() {
                   className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-700 ease-out"
                 />
                 {/* Overlay label */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end justify-between">
                   <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-bold text-white/90">
                     {cat.title}
+                  </span>
+                  {/* Mobile Click & View Badge */}
+                  <span className="font-mono text-[8px] tracking-[0.15em] uppercase text-white bg-black/80 px-2.5 py-1 rounded-full border border-white/20 sm:hidden flex items-center gap-1">
+                    <span>Click & View</span>
+                    <span className="text-[9px]">👁</span>
                   </span>
                 </div>
                 <div className="absolute top-3 right-3 font-mono text-[9px] font-bold text-white/70 bg-black/25 backdrop-blur-sm px-2 py-1">
