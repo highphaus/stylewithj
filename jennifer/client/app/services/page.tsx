@@ -342,21 +342,22 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {categories.map((cat) => (
             <div 
               key={cat.label} 
-              className="bg-[#EFECE6] p-5 sm:p-8 border border-black/5 flex flex-col gap-4 shadow-xs rounded-xs hover:border-black/20 transition-all"
+              className="bg-[#EFECE6] p-5 sm:p-6 lg:p-8 border border-black/10 flex flex-col gap-4 shadow-xs rounded-xs hover:border-black/30 transition-all h-full"
             >
-              <div className="border-b border-black/10 pb-3">
-                <h3 className="font-sans text-xs tracking-[0.25em] uppercase font-bold text-[#1A1A1A]">
+              <div className="border-b border-black/10 pb-3 flex items-center justify-between">
+                <h3 className="font-sans text-[11px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold text-[#1A1A1A]">
                   {cat.label}
                 </h3>
+                <span className="font-mono text-[9px] text-black/40 font-semibold">({cat.items.length})</span>
               </div>
-              <div className="flex flex-col gap-2.5">
+              <div className={cat.items.length > 5 ? "grid grid-cols-2 sm:grid-cols-1 gap-2.5" : "flex flex-col gap-2.5"}>
                 {cat.items.map((item) => (
-                  <span key={item} className="font-sans text-[11px] sm:text-xs tracking-wide text-[#1A1A1A]/80 font-light flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-black/30 flex-shrink-0" />
+                  <span key={item} className="font-sans text-[10px] sm:text-xs tracking-wide text-[#1A1A1A]/85 font-light flex items-center gap-2">
+                    <span className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-black/35 flex-shrink-0" />
                     {item}
                   </span>
                 ))}
