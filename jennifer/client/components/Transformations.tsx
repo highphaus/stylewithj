@@ -117,11 +117,11 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                 Transformations
               </h2>
             )}
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
+            <div className="flex items-center gap-3 overflow-hidden max-w-full">
+              <span className="hidden sm:inline-block font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold flex-shrink-0">
                 ✦ CASE {currentItem.id}
               </span>
-              <h3 className="font-serif text-sm sm:text-xl lg:text-2xl font-light text-black tracking-wide uppercase">
+              <h3 className="font-serif text-xs sm:text-xl lg:text-2xl font-light text-black tracking-wide uppercase whitespace-nowrap truncate">
                 {currentItem.client}
               </h3>
             </div>

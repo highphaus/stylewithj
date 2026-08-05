@@ -219,9 +219,6 @@ export default function AudienceGrid() {
       <div className="flex flex-col lg:hidden w-full bg-[#FAF9F6] overflow-hidden">
         {/* Section Heading */}
         <div className="px-6 pt-12 pb-6 border-b border-black/10 bg-[#FAF9F6]">
-          <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 font-semibold block mb-2">
-            ✦ WHO WE ACCOMPANY
-          </span>
           <h2 className="font-serif text-2xl lg:text-3xl font-light tracking-tight text-[#1A1A1A]">
             Who We Accompany
           </h2>
