@@ -160,6 +160,8 @@ const jsonLdSchema = {
   ],
 };
 
+import NetworkStatusListener from '@/components/NetworkStatusListener';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${manrope.className} ${manrope.variable} overflow-x-clip w-full max-w-[100vw]`}>
@@ -175,6 +177,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-[#FAF9F6] text-[#1A1A1A] antialiased selection:bg-black selection:text-white min-h-screen overflow-x-clip relative w-full max-w-[100vw]">
         <LightboxProvider>
+          <NetworkStatusListener />
           {children}
         </LightboxProvider>
       </body>
