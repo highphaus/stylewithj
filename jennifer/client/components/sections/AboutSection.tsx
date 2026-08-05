@@ -74,10 +74,6 @@ export default function AboutSection() {
                 className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
                 unoptimized
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
-                ✦ {img.title}
-              </div>
             </div>
           ))}
         </div>

@@ -1,5 +1,5 @@
 'use client';
-import React, { Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
@@ -125,6 +125,11 @@ const categories = [
 
 export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }) {
   const { openLightbox } = useLightbox();
+  const [expandedMobileServices, setExpandedMobileServices] = useState<Record<string, boolean>>({});
+
+  const toggleMobileService = (num: string) => {
+    setExpandedMobileServices((prev: Record<string, boolean>) => ({ ...prev, [num]: !prev[num] }));
+  };
 
   return (
     <div className={isEmbedded ? "" : "min-h-screen bg-[#FAF9F6] text-[#1A1A1A]"}>
@@ -210,7 +215,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
         </div>
       </section>
 
-      {/* ── DETAILED SERVICES BREAKDOWN (FULL BLEED COVER IMAGE FIRST -> WRITINGS DIRECTLY UNDER ON MOBILE) ── */}
+      {/* ── DETAILED SERVICES BREAKDOWN (SECTION HEADING + CLEAN PICTURES WITHOUT CAPTIONS ON TOP) ── */}
       <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16">
         <div className="border-t border-[#1A1A1A]/10 pt-16 mb-12">
           <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2 font-semibold">
@@ -221,18 +226,50 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           </h2>
         </div>
 
-        <div className="flex flex-col divide-y divide-[#1A1A1A]/10">
+        {/* MOBILE LAYOUT: ZERO SPACE BETWEEN CLEAN IMAGES */}
+        <div className="flex flex-col lg:hidden divide-y divide-black/10">
           {servicesList.map((svc) => (
             <div
               key={svc.num}
-              className="group flex flex-col lg:grid lg:grid-cols-12 gap-8 py-12 lg:py-16 hover:bg-[#F5F3EF] -mx-6 sm:-mx-12 px-6 sm:px-12 transition-colors duration-300 items-center"
+              onClick={() => openLightbox(svc.image, svc.title, {
+                num: svc.num,
+                category: svc.category,
+                story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
+                concept: svc.title,
+                fabric: svc.points.join(' • ')
+              })}
+              className="relative w-full h-[100dvh] min-h-[500px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+              title="Click to view writing & details"
             >
-              {/* 1. FULL BLEED COVER IMAGE FIRST ON MOBILE */}
-              <div className="w-full lg:col-span-5 order-1 lg:order-2 flex items-center justify-center">
+              <Image
+                src={svc.image}
+                alt={svc.title}
+                fill
+                className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* DESKTOP LAYOUT (lg:flex) */}
+        <div className="hidden lg:flex flex-col divide-y divide-[#1A1A1A]/10">
+          {servicesList.map((svc) => (
+            <div
+              key={svc.num}
+              className="group grid grid-cols-12 gap-8 py-16 hover:bg-[#F5F3EF] -mx-12 px-12 transition-colors duration-300 items-center"
+            >
+              {/* COVER IMAGE */}
+              <div className="col-span-5 order-2 flex items-center justify-center">
                 <div 
-                  onClick={() => openLightbox(svc.image, svc.title)}
-                  className="relative w-full h-[85vh] sm:h-auto sm:aspect-[3/4] min-h-[480px] overflow-hidden bg-[#0D0D0D] border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
-                  title="Click to view image"
+                  onClick={() => openLightbox(svc.image, svc.title, {
+                    num: svc.num,
+                    category: svc.category,
+                    story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
+                    concept: svc.title,
+                    fabric: svc.points.join(' • ')
+                  })}
+                  className="relative w-full h-[700px] min-h-[520px] aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
+                  title="Click to view image details"
                 >
                   <Image
                     src={svc.image}
@@ -247,15 +284,15 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                 </div>
               </div>
 
-              {/* 2. ALL WRITINGS & DETAILS DIRECTLY UNDER THE IMAGE ON MOBILE */}
-              <div className="w-full lg:col-span-7 order-2 lg:order-1 flex flex-col justify-center gap-4 pt-2 lg:pt-0">
+              {/* WRITINGS & DETAILS */}
+              <div className="col-span-7 order-1 flex flex-col justify-center gap-4">
                 <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
                   {svc.category}
                 </span>
 
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-3">
                   <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/40">/{svc.num}</span>
-                  <h3 className="font-serif text-2xl sm:text-4xl font-light tracking-wide text-[#1A1A1A] uppercase">
+                  <h3 className="font-serif text-4xl font-light tracking-wide text-[#1A1A1A] uppercase">
                     {svc.title}
                   </h3>
                 </div>
@@ -269,7 +306,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                   <span className="text-[9px] tracking-[0.3em] uppercase font-sans text-black/50 block mb-3 font-semibold">
                     Key Highlights:
                   </span>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <ul className="grid grid-cols-2 gap-2.5">
                     {svc.points.map((pt, i) => (
                       <li key={i} className="flex items-center gap-2.5 text-xs font-sans text-black/80 font-light bg-white/70 p-2.5 border border-black/5 rounded-xs">
                         <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />

@@ -56,6 +56,7 @@ const AUTO_DELAY = 4000;
 
 export default function AudienceGrid() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [expandedAudienceIdx, setExpandedAudienceIdx] = useState<number | null>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [progress, setProgress] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -214,99 +215,44 @@ export default function AudienceGrid() {
         </div>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────────
-          2. MOBILE & TABLET LAYOUT (lg:hidden)
-          ───────────────────────────────────────────────────────────────── */}
-      <div 
-        className="flex flex-col lg:hidden w-full bg-[#FAF9F6]"
-        onMouseLeave={handleMouseLeave}
-      >
-        {/* Step A: Header block at the top */}
-        <div className="p-6 sm:p-12 border-b border-black/10">
-          <h2 className="font-serif text-2xl sm:text-3xl font-light tracking-tight text-[#1A1A1A] whitespace-nowrap">
+      {/* ── MOBILE / SMALL DEVICE LAYOUT (SECTION HEADING + CLEAN PICTURES WITHOUT CAPTIONS ON TOP) ── */}
+      <div className="flex flex-col lg:hidden w-full bg-[#FAF9F6] overflow-hidden">
+        {/* Section Heading */}
+        <div className="px-6 pt-12 pb-6 border-b border-black/10 bg-[#FAF9F6]">
+          <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 font-semibold block mb-2">
+            ✦ WHO WE ACCOMPANY
+          </span>
+          <h2 className="font-serif text-3xl font-light tracking-tight text-[#1A1A1A]">
             Who We Accompany
           </h2>
         </div>
 
-        {/* Step B: 100% Clean Image projection block IN THE MIDDLE (Click to open Lightbox) */}
-        <div 
-          onClick={() => openLightbox(audiencesList[activeIndex]?.image || '', audiencesList[activeIndex]?.title || '')}
-          className="w-full h-[100dvh] relative border-b border-black/10 overflow-hidden bg-[#EFECE6] cursor-pointer"
-          title="Click to view image"
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
-              transition={{ duration: 0.5 }}
-              className="absolute inset-0 w-full h-full"
+        {/* 100% Zero-Space Stacked Clean Cover Images */}
+        <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
+          {audiencesList.map((item, i) => (
+            <div 
+              key={i}
+              onClick={() => openLightbox(item.image, item.title, {
+                num: `0${i + 1}`,
+                category: 'Who We Accompany',
+                concept: item.title,
+                story: item.desc
+              })}
+              className="relative w-full h-[100dvh] min-h-[500px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+              title="Click to view writing & details"
             >
               <Image 
-                src={audiencesList[activeIndex]?.image || ''} 
-                alt={audiencesList[activeIndex]?.title || ''} 
+                src={item.image} 
+                alt={item.title} 
                 fill
-                className="object-cover object-top opacity-100"
-                priority
+                className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
                 unoptimized
               />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Step C: Index stack links with writing text below the image */}
-        <div className="p-6 sm:p-12 flex flex-col gap-1 w-full bg-[#FAF9F6]">
-          {audiencesList.map((item, i) => {
-            const isActive = activeIndex === i;
-
-            return (
-              <button
-                key={i}
-                onClick={() => handleMouseEnter(i)}
-                className="w-full text-left flex flex-col py-3.5 outline-none border-b border-black/[0.06] last:border-b-0"
-              >
-                <div className="flex items-center justify-between w-full">
-                  <h3 className={`text-xs tracking-[0.15em] uppercase transition-all duration-300 truncate ${
-                    isActive ? 'text-[#1A1A1A] font-bold translate-x-1' : 'text-black/50'
-                  }`}>
-                    {item.title}
-                  </h3>
-
-                  <div className={`w-[5px] h-[5px] rounded-full transition-all duration-300 border flex-shrink-0 ${
-                    isActive ? 'bg-[#1A1A1A] border-[#1A1A1A] scale-110' : 'bg-transparent border-black/20'
-                  }`} />
-                </div>
-
-                {/* WRITING TEXT IN TEXT SECTION */}
-                {isActive && (
-                  <div className="mt-2 flex flex-col gap-2.5">
-                    <p className="font-sans text-xs text-black/80 font-light italic leading-relaxed">
-                      “{item.desc}”
-                    </p>
-
-                    <Link
-                      href="/connect"
-                      className="self-start inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-[8px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black/80 transition-all rounded-xs shadow-xs"
-                    >
-                      Book Consultation →
-                    </Link>
-
-                    <div className="w-full h-[1px] bg-black/10 mt-1 overflow-hidden">
-                      <motion.div
-                        className="h-full bg-[#1A1A1A]"
-                        style={{ width: `${isHovering ? 0 : progress}%` }}
-                        transition={{ ease: 'linear' }}
-                      />
-                    </div>
-                  </div>
-                )}
-              </button>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
 
     </section>
   );
-}
+}

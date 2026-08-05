@@ -220,13 +220,6 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                       ›
                     </button>
                   )}
-
-                  <div className="absolute bottom-4 left-4 bg-black/75 backdrop-blur-md text-white/80 px-3 py-1 text-[8px] tracking-[0.3em] font-mono uppercase rounded-xs border border-white/10 flex items-center gap-2">
-                    <span>✦ SWIPE / CLICK TO NAVIGATE</span>
-                    {currentIdx !== -1 && (
-                      <span className="text-white/50">({currentIdx + 1}/{allGalleryLooks.length})</span>
-                    )}
-                  </div>
                 </div>
 
                 {/* ── RIGHT COLUMN: SEPARATE STORY & STYLING DETAILS PANEL ── */}

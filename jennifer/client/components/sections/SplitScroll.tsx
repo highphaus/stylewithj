@@ -56,6 +56,7 @@ const horizonCategoryItems: CategoryLookItem[] = [
 export default function SplitScroll() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>(null);
   const { openLightbox } = useLightbox();
 
   const { scrollYProgress } = useScroll({
@@ -76,75 +77,43 @@ export default function SplitScroll() {
   return (
     <section ref={sectionRef} id="horizon" className="w-full bg-[#FAF9F6] overflow-clip border-t border-black/15">
       
-      {/* ── MOBILE / SMALL DEVICE LAYOUT (WRITING FIRST -> EXPLORE BUTTON -> HERO IMAGE BETWEEN EACH CATEGORY) ── */}
-      <div className="block md:hidden w-full bg-[#FAF9F6]">
-        
-        {/* Top Section Header */}
-        <div className="px-6 pt-8 pb-6 border-b border-black/10 bg-[#FAF9F6]">
-          <h3 className="font-serif text-3xl font-light tracking-tight text-[#1A1A1A]">
+      {/* ── MOBILE / SMALL DEVICE LAYOUT (SECTION HEADING + CLEAN PICTURES WITHOUT CAPTIONS ON TOP) ── */}
+      <div className="block md:hidden w-full bg-[#FAF9F6] border-b border-black/10 overflow-hidden">
+        {/* Section Heading */}
+        <div className="px-6 pt-12 pb-6 border-b border-black/10 bg-[#FAF9F6]">
+          <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 font-semibold block mb-2">
+            ✦ CATEGORY SILHOUETTES
+          </span>
+          <h2 className="font-serif text-3xl font-light tracking-tight text-[#1A1A1A]">
             Category Silhouettes
-          </h3>
+          </h2>
         </div>
 
-        {/* Categories Stack: Full-Bleed Cover Image FIRST -> Writing & Details DIRECTLY UNDER Image */}
+        {/* 100% Zero-Space Stacked Clean Cover Images */}
         <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
           {horizonCategoryItems.map((look, idx) => (
-            <div key={look.id} className="flex flex-col bg-[#FAF9F6] pb-8">
-              
-              {/* 1. 100% FULL BLEED COVER IMAGE FIRST (TOUCHING DIVIDING LINE DIRECTLY WITH 0 GAP) */}
-              <div 
-                onClick={() => openLightbox(look.src, look.title)}
-                className="relative w-full h-[85vh] min-h-[480px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
-                title={`Click to view ${look.title}`}
-              >
-                <Image
-                  src={look.src}
-                  alt={look.title}
-                  fill
-                  sizes="100vw"
-                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
-                  ✦ 0{idx + 1} // {look.title}
-                </div>
-              </div>
-
-              {/* 2. Category Writing & Title DIRECTLY UNDER EACH IMAGE */}
-              <div className="px-6 pt-6 flex flex-col gap-2.5 bg-[#FAF9F6]">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[9px] text-black/40 font-bold">/0{idx + 1}</span>
-                  <h4 className="font-serif text-xl sm:text-2xl font-light tracking-tight text-[#1A1A1A]">
-                    {look.title}
-                  </h4>
-                </div>
-
-                <p className="font-sans text-xs text-black/75 font-light leading-relaxed mb-1">
-                  {look.caption}
-                </p>
-
-                <div className="flex items-center gap-4 pt-1">
-                  <Link
-                    href="/categories"
-                    className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 transition-all font-semibold"
-                  >
-                    Explore All Categories →
-                  </Link>
-
-                  <Link
-                    href="/connect"
-                    className="px-3.5 py-1.5 bg-[#1A1A1A] text-white text-[8px] tracking-[0.2em] font-mono uppercase font-semibold rounded-xs shadow-xs"
-                  >
-                    Book Session
-                  </Link>
-                </div>
-              </div>
-
+            <div 
+              key={look.id}
+              onClick={() => openLightbox(look.src, look.title, {
+                num: `0${idx + 1}`,
+                category: 'Category Silhouette',
+                concept: look.title,
+                story: look.caption
+              })}
+              className="relative w-full h-[100dvh] min-h-[500px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+              title="Click to view writing & details"
+            >
+              <Image
+                src={look.src}
+                alt={look.title}
+                fill
+                sizes="100vw"
+                className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                unoptimized
+              />
             </div>
           ))}
         </div>
-
       </div>
 
       {/* ── DESKTOP / TABLET SPLIT STICKY SCROLL LAYOUT (md:flex) ── */}

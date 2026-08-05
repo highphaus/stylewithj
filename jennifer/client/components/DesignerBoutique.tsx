@@ -1,75 +1,126 @@
-// jennifer/client/components/DesignerBoutique.tsx
+'use client';
+
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useLightbox } from '@/components/ImageLightbox';
+
 export default function DesignerBoutique() {
+  const { openLightbox } = useLightbox();
+
   const products = [
     {
+      num: '01',
       name: "The 'J' Monogram Tote",
       category: "Leather Goods",
       price: "₹2,10,000",
-      img: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=600&q=80"
+      img: "/images/includes/IMG_0330.JPG.jpeg"
     },
     {
+      num: '02',
       name: "Silk Organza Trench",
       category: "Ready to Wear",
       price: "₹3,60,000",
-      img: "https://images.unsplash.com/photo-1550614000-4b95dd2475a9?auto=format&fit=crop&w=600&q=80"
+      img: "/images/includes/IMG_8857.JPG.jpeg"
     },
     {
-      name: "Structural Cuff Bracelet",
+      num: '03',
+      name: "Structural Cuff Ensemble",
       category: "Fine Jewelry",
       price: "₹1,50,000",
-      img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=600&q=80"
+      img: "/images/includes/IMG_9158.JPG.jpeg"
     },
     {
-      name: "Leather Architectural Boots",
-      category: "Footwear",
-      price: "₹1,25,000",
-      img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=80"
+      num: '04',
+      name: "Architectural Silk Drape",
+      category: "Couture",
+      price: "₹2,85,000",
+      img: "/images/includes/IMG_3119.JPG.jpeg"
     }
   ];
 
   return (
-    <section className="py-24 bg-white border-t border-[#E0D9CE]/60">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section className="py-20 sm:py-32 bg-[#FAF9F6] border-t border-black/15 text-[#1A1A1A]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20">
         
-        <div className="flex flex-col items-center text-center mb-16">
-          <span className="text-[10px] font-bold tracking-[0.3em] text-[#6B5E56] uppercase block mb-3">La Boutique</span>
-          <h2 className="text-3xl sm:text-4xl font-serif text-[#332922] font-light">Signature Pieces</h2>
-          <p className="mt-4 text-sm text-[#6B5E56] max-w-lg">
-            A curated selection of our iconic silhouettes, available directly from our New Delhi atelier.
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16 pb-8 border-b border-black/10">
+          <div>
+            <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-3 font-semibold">
+              ✦ LA BOUTIQUE
+            </span>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight leading-tight">
+              Signature Pieces
+            </h2>
+          </div>
+          <p className="font-serif text-sm sm:text-base text-black/60 font-light italic leading-relaxed max-w-md">
+            A curated selection of iconic silhouettes, available directly from our New Delhi atelier.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((item, idx) => (
-            <div key={idx} className="group cursor-pointer">
-              <div className="bg-[#F7F5F0] aspect-[3/4] mb-4 relative overflow-hidden flex items-center justify-center p-6 border border-[#E0D9CE]/40 group-hover:border-[#332922]/20 transition-colors">
-                <img 
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {products.map((item) => (
+            <div 
+              key={item.num} 
+              className="group flex flex-col bg-[#FAF8F3] border border-black/10 hover:border-black/30 transition-all duration-500 overflow-hidden rounded-xs shadow-xs"
+            >
+              <div 
+                onClick={() => openLightbox(item.img, `${item.name} (${item.category})`)}
+                className="relative aspect-[3/4] overflow-hidden bg-[#0D0D0D] cursor-pointer"
+                title="Click to view image"
+              >
+                <Image 
                   src={item.img} 
                   alt={item.name} 
-                  className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-700"
+                  fill
+                  className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                  unoptimized
                 />
-                <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center">
-                  <button className="bg-[#332922] text-white text-[9px] font-bold tracking-widest uppercase px-6 py-3 w-full hover:bg-[#5D4037] transition-colors">
-                    Add to Bag
-                  </button>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute top-3 right-3 font-mono text-[9px] font-bold text-white bg-black/60 backdrop-blur-sm px-2 py-1 border border-white/10 rounded-xs">
+                  /{item.num}
+                </div>
+                <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="block text-center bg-black/85 text-white text-[8px] font-mono tracking-[0.2em] uppercase py-2 backdrop-blur-md rounded-xs border border-white/10">
+                    Click to View Details
+                  </span>
                 </div>
               </div>
-              <div className="text-center">
-                <span className="text-[9px] font-mono tracking-widest text-[#6B5E56] uppercase block mb-1">{item.category}</span>
-                <h4 className="font-serif text-lg text-[#332922] mb-1">{item.name}</h4>
-                <p className="text-xs text-[#6B5E56]">{item.price}</p>
+
+              <div className="p-5 flex flex-col flex-1 justify-between gap-3 text-left">
+                <div>
+                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/40 font-bold block mb-1">
+                    {item.category}
+                  </span>
+                  <h4 className="font-serif text-lg text-[#1A1A1A] font-light leading-snug group-hover:text-black/70 transition-colors">
+                    {item.name}
+                  </h4>
+                </div>
+
+                <div className="pt-3 border-t border-black/10 flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold text-black">{item.price}</span>
+                  <Link
+                    href="/connect"
+                    className="font-mono text-[9px] tracking-[0.2em] uppercase font-semibold text-black hover:opacity-60 transition-opacity"
+                  >
+                    Inquire →
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
         <div className="mt-16 text-center">
-          <button className="text-[10px] font-bold tracking-widest uppercase text-[#332922] border-b border-[#332922] pb-1 hover:text-[#6B5E56] hover:border-[#6B5E56] transition-colors">
-            Shop The Full Collection &rarr;
-          </button>
+          <Link 
+            href="/connect"
+            className="font-mono text-[10px] tracking-[0.25em] uppercase font-semibold text-[#1A1A1A] border-b border-black pb-1 hover:text-black/60 hover:border-black/60 transition-colors inline-block"
+          >
+            Inquire For Atelier Boutique Curations →
+          </Link>
         </div>
 
       </div>
     </section>
   );
 }
+

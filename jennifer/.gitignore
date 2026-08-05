@@ -4,3 +4,4 @@
 *.pptx
 *.pdf
 *.HEIC
+.env.local

@@ -109,6 +109,7 @@ interface ServicesGridProps {
 export default function ServicesGrid({ hideButton = false }: ServicesGridProps) {
   const targetRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [expandedMobileId, setExpandedMobileId] = useState<string | null>(null);
   const { openLightbox } = useLightbox();
   const { services: dynamicServices } = useSiteData();
   const servicesList = dynamicServices.length > 0 ? dynamicServices : allServices;
@@ -136,63 +137,39 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   return (
     <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
       
-      {/* ── MOBILE / SMALL DEVICE LAYOUT (FULL SCREEN EDGE-TO-EDGE COVER IMAGES WITH NO DEAD SPACE) ── */}
+      {/* ── MOBILE / SMALL DEVICE LAYOUT (SECTION HEADING + CLEAN PICTURES WITHOUT CAPTIONS ON TOP) ── */}
       <div className="block lg:hidden bg-[#FAF9F6] w-full overflow-hidden">
-        {/* Header */}
-        <div className="px-6 pt-16 pb-8 border-b border-black/10 bg-[#FAF9F6]">
-          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A] mb-1">
+        {/* Section Heading */}
+        <div className="px-6 pt-12 pb-6 border-b border-black/10 bg-[#FAF9F6]">
+          <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 font-semibold block mb-2">
+            ✦ WHAT WE DO
+          </span>
+          <h2 className="font-serif text-3xl font-light tracking-tight text-[#1A1A1A]">
             What We Do
           </h2>
         </div>
 
-        {/* Stacked Images Down-by-Down with 100% Full-Bleed Screen Coverage */}
+        {/* 100% Zero-Space Stacked Clean Cover Images */}
         <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
           {servicesList.map((item) => (
-            <div key={item.num} className="w-full flex flex-col pb-8">
-              
-              {/* FULL BLEED CINEMATIC COVER IMAGE (0 SIDE MARGINS / DEAD SPACE, HERO STYLE) */}
-              <div 
-                onClick={() => openLightbox(item.image, item.name)}
-                className="relative w-full h-[85vh] min-h-[480px] bg-[#0D0D0D] overflow-hidden cursor-pointer group"
-                title="Click to view image"
-              >
-                <Image 
-                  src={item.image} 
-                  alt={item.name} 
-                  fill
-                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
-                  ✦ {item.num} // {item.category}
-                </div>
-              </div>
-
-              {/* CAPTION DIRECTLY UNDER THE IMAGE */}
-              <div className="px-6 pt-6 flex flex-col gap-2.5">
-                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
-                  {item.category}
-                </span>
-
-                <h3 className="font-serif text-2xl font-light tracking-wide text-[#1A1A1A] uppercase">
-                  {item.name}
-                </h3>
-
-                <p className="font-sans text-xs sm:text-sm text-black/75 font-light leading-relaxed max-w-lg">
-                  {item.desc}
-                </p>
-
-                <div className="pt-2">
-                  <a 
-                    href="/services" 
-                    className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium"
-                  >
-                    Explore Service Details →
-                  </a>
-                </div>
-              </div>
-
+            <div 
+              key={item.num}
+              onClick={() => openLightbox(item.image, item.name, {
+                num: item.num,
+                category: item.category,
+                story: item.desc,
+                concept: item.name
+              })}
+              className="relative w-full h-[100dvh] min-h-[500px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+              title="Click to view writing & details"
+            >
+              <Image 
+                src={item.image} 
+                alt={item.name} 
+                fill
+                className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                unoptimized
+              />
             </div>
           ))}
         </div>

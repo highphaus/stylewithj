@@ -1,45 +1,73 @@
-// jennifer/client/components/DesignerProfile.tsx
+'use client';
+
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useLightbox } from '@/components/ImageLightbox';
+
 export default function DesignerProfile() {
+  const { openLightbox } = useLightbox();
+
   return (
-    <section className="py-24 bg-white border-t border-[#E0D9CE]/60">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+    <section className="py-20 sm:py-32 bg-[#FAF9F6] border-t border-black/15 text-[#1A1A1A]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         
         {/* Left Side: Editorial Image Block */}
         <div className="lg:col-span-5 relative">
-          <div className="absolute inset-0 bg-[#E0D9CE] transform translate-x-4 translate-y-4 rounded-2xl -z-10" />
-          <img
-            src="https://images.unsplash.com/photo-1509319117193-57bab727e09d?auto=format&fit=crop&w=600&q=80"
-            alt="Designer Profile"
-            className="w-full h-[500px] object-cover rounded-2xl shadow-md transition-all duration-700"
-          />
+          <div 
+            onClick={() => openLightbox('/images/includes/IMG_0267.JPG.jpeg', 'Designer Ethos & Atelier Legacy')}
+            className="relative w-full h-[85vh] sm:h-[600px] lg:h-[700px] bg-[#0D0D0D] overflow-hidden rounded-xs border border-black/10 shadow-md cursor-pointer group"
+            title="Click to view image"
+          >
+            <Image
+              src="/images/includes/IMG_0267.JPG.jpeg"
+              alt="Designer Profile"
+              fill
+              className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+          </div>
         </div>
 
+        {/* Right Side: Ethos Details */}
         <div className="lg:col-span-7 space-y-6">
-          <span className="text-[10px] font-bold tracking-[0.3em] text-[#6B5E56] uppercase block">The Designer Ethos</span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#332922] font-light leading-snug">
+          <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block font-semibold">
+            ✦ THE DESIGNER ETHOS
+          </span>
+          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] leading-tight tracking-tight">
             &ldquo;Bridal couture is the physical manifestation of cultural legacy and internal grace.&rdquo;
           </h2>
-          <div className="h-[1px] w-12 bg-[#332922] my-4" />
-          <p className="text-sm text-[#6B5E56] leading-relaxed font-normal">
-            With over a decade navigating the weaving clusters of Banaras and Kanchipuram, Jennifer founded the Atelier around a single rule: Indian fashion should be a modern architectural revival of ancient textiles.
+          <div className="h-[1px] w-12 bg-black/30 my-4" />
+          <p className="font-sans text-xs sm:text-sm text-black/80 leading-relaxed font-light">
+            With over a decade navigating the weaving clusters of Banaras and Kanchipuram, Jennifer founded the Atelier around a single rule: fashion should be a modern architectural revival of ancient textiles.
           </p>
-          <p className="text-sm text-[#6B5E56] leading-relaxed font-normal">
-            By merging the structural discipline of modern silhouettes with the intricate decadence of Zardosi and Chikankari, her brides don’t just look polished, they enter spaces with an anchored, unshakeable royal aura.
+          <p className="font-sans text-xs sm:text-sm text-black/80 leading-relaxed font-light">
+            By merging the structural discipline of modern silhouettes with the intricate decadence of Zardosi and Chikankari, her clients don’t just look polished—they enter spaces with an anchored, unshakeable royal aura.
           </p>
           
-          <div className="pt-4 grid grid-cols-2 gap-6 text-[#332922]">
+          <div className="pt-6 border-t border-black/10 grid grid-cols-2 gap-6 text-[#1A1A1A]">
             <div>
-              <h4 className="font-serif font-bold text-lg">Banaras & Kanchipuram</h4>
-              <p className="text-[10px] text-[#6B5E56] uppercase tracking-wider mt-1">Handloom Sourcing Networks</p>
+              <h4 className="font-serif font-light text-xl text-black">Banaras & Kanchipuram</h4>
+              <p className="font-mono text-[9px] text-black/50 uppercase tracking-wider mt-1 font-semibold">Handloom Sourcing Networks</p>
             </div>
             <div>
-              <h4 className="font-serif font-bold text-lg">Bespoke Heritage</h4>
-              <p className="text-[10px] text-[#6B5E56] uppercase tracking-wider mt-1">Zero Mass Manufacture</p>
+              <h4 className="font-serif font-light text-xl text-black">Bespoke Heritage</h4>
+              <p className="font-mono text-[9px] text-black/50 uppercase tracking-wider mt-1 font-semibold">Zero Mass Manufacture</p>
             </div>
+          </div>
+
+          <div className="pt-4">
+            <Link
+              href="/connect"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#1A1A1A] text-white text-[9px] font-mono tracking-[0.25em] uppercase hover:bg-black transition-all rounded-xs shadow-sm"
+            >
+              Book Personal Styling →
+            </Link>
           </div>
         </div>
 
       </div>
     </section>
   );
-}
+}

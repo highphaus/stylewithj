@@ -51,10 +51,7 @@ export default function Home() {
         <div id="testimonials" />
         <InfiniteMarquee />
 
-
-
-
-        {/* --- All remaining sections --- */}
+        {/* 7. Tactile Wall */}
         <LookbookHorizon />
        
         {/* ── 8. BLOG SECTION ── */}

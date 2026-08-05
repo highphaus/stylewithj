@@ -1,53 +1,61 @@
 'use client';
+
 import React from 'react';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useLightbox } from '@/components/ImageLightbox';
 
 export default function GallerySection() {
+  const { openLightbox } = useLightbox();
+
   const images = [
-    "/images/includes/IMG_0333.JPG.jpeg",
-    "/images/includes/IMG_1418.JPG.jpeg",
-    "/images/includes/IMG_1756.JPG.jpeg"
+    { src: "/images/includes/IMG_0333.JPG.jpeg", title: "Atelier Editorial Look 01" },
+    { src: "/images/includes/IMG_1418.JPG.jpeg", title: "Atelier Editorial Look 02" },
+    { src: "/images/includes/IMG_1756.JPG.jpeg", title: "Atelier Editorial Look 03" }
   ];
 
   return (
-    <section className="w-full bg-white text-thalina-text py-24 lg:py-32 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8"
-        >
-          <h2 className="font-sans text-4xl md:text-5xl lg:text-[50px] font-light tracking-tight">
-            Our Work
-          </h2>
-          <Link href="/lookbook" className="relative group inline-block text-lg font-sans font-light">
-            <span>View Full Gallery</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-thalina-text transition-all duration-300 group-hover:w-full"></span>
+    <section className="w-full bg-[#FAF9F6] text-[#1A1A1A] py-20 sm:py-32 border-t border-black/15 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20">
+        
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 sm:mb-16 gap-6 pb-8 border-b border-black/10">
+          <div>
+            <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-3 font-semibold">
+              ✦ EDITORIAL ARCHIVE
+            </span>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight leading-tight">
+              Our Work
+            </h2>
+          </div>
+          <Link 
+            href="/lookbook" 
+            className="font-mono text-[9px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium"
+          >
+            View Full Gallery →
           </Link>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-12">
-          {images.map((src, idx) => (
-            <motion.div 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {images.map((img, idx) => (
+            <div 
               key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: idx * 0.2 }}
-              className="relative w-full h-[100dvh] md:h-auto md:aspect-[3/4] overflow-hidden group cursor-pointer bg-[#EFECE6] border border-black/10 rounded-xs"
+              onClick={() => openLightbox(img.src, img.title)}
+              className="relative w-full h-[85vh] md:h-[600px] lg:h-[700px] overflow-hidden group cursor-pointer bg-[#0D0D0D] border border-black/10 rounded-xs shadow-md"
+              title="Click to view image"
             >
-              <img 
-                src={src} 
-                alt={`Gallery image ${idx + 1}`} 
-                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-700 ease-out"
+              <Image 
+                src={img.src} 
+                alt={img.title}
+                fill
+                className="object-cover object-top group-hover:scale-[1.03] transition-all duration-700 ease-out"
+                unoptimized
               />
-            </motion.div>
+            </div>
           ))}
         </div>
+
       </div>
     </section>
   );
 }
+
