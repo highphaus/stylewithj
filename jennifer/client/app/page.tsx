@@ -63,7 +63,7 @@ export default function Home() {
               <span className="font-sans text-[10px] tracking-[0.4em] text-black/50 block mb-3 uppercase font-semibold">
                 ✦ BLOG
               </span>
-              <h3 className="font-serif text-3xl sm:text-5xl font-light tracking-tight leading-tight mb-4 text-[#1A1A1A]">
+              <h3 className="font-serif text-2xl sm:text-5xl font-light tracking-tight leading-tight mb-4 text-[#1A1A1A]">
                 Style, decoded.
               </h3>
               <p className="font-sans text-xs sm:text-sm text-black/65 leading-relaxed font-light mb-6 max-w-sm">
@@ -91,7 +91,7 @@ export default function Home() {
                   {/* Image Frame (Click to View Lightbox) */}
                   <div 
                     onClick={() => openLightbox(article.image, article.title)}
-                    className="relative w-full sm:w-32 h-[70vh] sm:h-auto sm:aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 cursor-pointer rounded-xs flex-shrink-0"
+                    className="relative w-full sm:w-32 h-[280px] sm:h-auto sm:aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 cursor-pointer rounded-xs flex-shrink-0"
                     title="Click to view image"
                   >
                     <img
@@ -110,7 +110,7 @@ export default function Home() {
                         <div className="w-1 h-1 rounded-full bg-black/20" />
                         <span className="font-sans text-[8px] tracking-[0.2em] uppercase text-black/50 font-semibold">{article.category}</span>
                       </div>
-                      <h4 className="font-serif text-xl sm:text-xl text-black font-light leading-snug group-hover:text-black/70 transition-colors">
+                      <h4 className="font-serif text-base sm:text-xl text-black font-light leading-snug group-hover:text-black/70 transition-colors">
                         {article.title}
                       </h4>
                     </div>
@@ -143,7 +143,7 @@ export default function Home() {
               <span className="text-[8px] sm:text-[9px] tracking-[0.4em] sm:tracking-[0.5em] uppercase text-black/50 font-sans block mb-2 sm:mb-3 font-semibold">
                 READY TO FIND YOUR STYLE?
               </span>
-              <h3 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1A1A1A] leading-tight">
+              <h3 className="font-serif text-xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1A1A1A] leading-tight">
                 Let's create a wardrobe that feels as good as it looks.
               </h3>
             </div>

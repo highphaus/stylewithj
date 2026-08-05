@@ -152,11 +152,11 @@ export default function Navigation() {
       </nav>
 
       {/* ── DYNAMIC SINGLE BUTTON CONTROLLER (Menu Badge / Hide Trigger) ── */}
-      <div className="fixed right-4 sm:right-6 top-[18px] z-50 flex items-center h-[52px]">
+      <div className="fixed right-3.5 sm:right-6 top-[16px] sm:top-[18px] z-50 flex items-center h-[44px] sm:h-[52px]">
         <button
           onClick={handleToggle}
           className={[
-            'group flex items-center justify-center gap-3 px-5 py-3 rounded-full border transition-all duration-500 ease-out shadow-sm',
+            'group flex items-center justify-center gap-2 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-3 rounded-full border transition-all duration-500 ease-out shadow-sm',
             isButtonActive 
               ? `bg-[#FAF9F6]/90 border-black/10 text-[#1A1A1A] hover:border-black/30` 
               : 'bg-black/90 hover:bg-black border-white/10 text-white shadow-2xl hover:scale-105'
@@ -164,23 +164,23 @@ export default function Navigation() {
         >
           {isButtonActive ? (
             /* "Hide" morph structure when navigation bar is visible */
-            <div className="flex items-center gap-2">
-              <span className="font-sans text-[9px] tracking-[0.35em] uppercase font-light text-[#1A1A1A]/70 group-hover:text-black">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="font-sans text-[8px] sm:text-[9px] tracking-[0.25em] sm:tracking-[0.35em] uppercase font-light text-[#1A1A1A]/70 group-hover:text-black">
                 Hide
               </span>
-              <span className="font-sans text-xs font-light text-[#1A1A1A]/70 group-hover:text-black transition-transform duration-500 group-hover:rotate-90 inline-block">
+              <span className="font-sans text-[10px] sm:text-xs font-light text-[#1A1A1A]/70 group-hover:text-black transition-transform duration-500 group-hover:rotate-90 inline-block">
                 ✕
               </span>
             </div>
           ) : (
             /* "Menu" morph structure when navigation bar is hidden */
-            <div className="flex items-center gap-2.5">
-              <div className="flex flex-col gap-[4px] w-4">
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
+              <div className="flex flex-col gap-[3px] sm:gap-[4px] w-3.5 sm:w-4">
                 <span className="w-full h-[1px] bg-white transition-transform duration-300 group-hover:scale-x-75 group-hover:-translate-x-0.5" />
                 <span className="w-full h-[1px] bg-white transition-transform duration-300 group-hover:translate-x-0.5" />
                 <span className="w-full h-[1px] bg-white transition-transform duration-300 group-hover:scale-x-50 group-hover:-translate-x-1" />
               </div>
-              <span className="font-sans text-[9px] tracking-[0.35em] uppercase font-light pl-0.5">
+              <span className="font-sans text-[8px] sm:text-[9px] tracking-[0.25em] sm:tracking-[0.35em] uppercase font-light pl-0.5">
                 Menu
               </span>
             </div>

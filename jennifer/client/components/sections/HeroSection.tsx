@@ -54,7 +54,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-serif font-light leading-[1.15] tracking-wide mb-6"
+            className="text-2xl sm:text-5xl md:text-6xl font-serif font-light leading-[1.15] tracking-wide mb-6"
           >
             {hero.titleLine1} <br />
             {hero.titleLine2} <br />
@@ -72,7 +72,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-sm sm:text-base font-light text-white/70 max-w-[280px] sm:max-w-xs leading-relaxed mb-10 tracking-wide"
+            className="text-xs sm:text-base font-light text-white/70 max-w-[280px] sm:max-w-xs leading-relaxed mb-10 tracking-wide"
           >
             {hero.subtitleLine1} <br />
             {hero.subtitleLine2}

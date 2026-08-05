@@ -42,7 +42,7 @@ export default function AboutSection() {
             <div className="w-8 h-[1px] bg-[#1A1A1A]/30" />
           </div>
           
-          <h2 className="text-3xl font-serif font-light leading-[1.15] tracking-tight text-[#1A1A1A] mb-3">
+          <h2 className="text-2xl sm:text-3xl font-serif font-light leading-[1.15] tracking-tight text-[#1A1A1A] mb-3">
             {about.titleLine1 || "Hi, I'm J."} <br />
             <span className="italic font-normal text-black/80">{about.titleLine2 || "I style stories."}</span>
           </h2>

@@ -47,9 +47,10 @@ const transformationData = [
 interface TransformationsProps {
   hideButton?: boolean;
   isStatic?: boolean;
+  hideHeading?: boolean;
 }
 
-export default function Transformations({ hideButton = false }: TransformationsProps) {
+export default function Transformations({ hideButton = false, hideHeading = false }: TransformationsProps) {
   const { openLightbox } = useLightbox();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -111,24 +112,31 @@ export default function Transformations({ hideButton = false }: TransformationsP
         {/* Section Header with Case Eyebrow, Main Title, Client Subtitle, and Interactive Case Selectors */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pt-6 sm:pt-10 pb-2 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
           <div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight">
-              Transformations
-            </h2>
-            <h3 className="font-serif text-base sm:text-xl font-light text-black/70 tracking-tight uppercase mt-1">
-              {currentItem.client}
-            </h3>
+            {!hideHeading && (
+              <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight mb-1">
+                Transformations
+              </h2>
+            )}
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
+                ✦ CASE {currentItem.id}
+              </span>
+              <h3 className="font-serif text-sm sm:text-xl lg:text-2xl font-light text-black tracking-wide uppercase">
+                {currentItem.client}
+              </h3>
+            </div>
           </div>
 
           {/* Case Navigation Tabs & Auto Progress Indicator */}
           <div className="flex flex-col gap-2 items-start md:items-end">
-            <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto pb-1 sm:pb-0">
+            <div className="flex items-center gap-1.5 sm:gap-4 overflow-x-auto pb-1 sm:pb-0 max-w-full">
               {transformationData.map((item, idx) => {
                 const isActive = activeIndex === idx;
                 return (
                   <button
                     key={item.id}
                     onClick={() => handleSelectCase(idx)}
-                    className={`px-3 py-1.5 text-[9px] tracking-[0.2em] uppercase font-mono transition-all rounded-xs border cursor-pointer ${
+                    className={`px-2 py-1 sm:px-3 sm:py-1.5 text-[7.5px] sm:text-[9px] tracking-[0.1em] sm:tracking-[0.2em] uppercase font-mono transition-all rounded-xs border cursor-pointer whitespace-nowrap flex-shrink-0 ${
                       isActive 
                         ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs' 
                         : 'bg-transparent text-black/50 border-black/10 hover:border-black/30 hover:text-black/80 font-semibold'
@@ -168,7 +176,7 @@ export default function Transformations({ hideButton = false }: TransformationsP
           >
             {/* FULL-BLEED 100% WIDTH CANVAS (0 GAP TOUCHING LEFT AND RIGHT SIDES) */}
             <div className="w-full overflow-hidden">
-              <div className="grid grid-cols-2 gap-0 w-full h-[75vh] min-h-[480px] sm:min-h-[600px] border-y border-black/15 overflow-hidden">
+              <div className="grid grid-cols-2 gap-0 w-full h-[65vh] min-h-[380px] sm:min-h-[580px] border-y border-black/15 overflow-hidden">
                 
                 {/* BEFORE FRAME (TOUCHES LEFT EDGE) */}
                 <div 
@@ -216,19 +224,19 @@ export default function Transformations({ hideButton = false }: TransformationsP
             </div>
 
             {/* Subtext Bar: Narrative & Specs Underneath */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#EFECE6] p-6 border border-black/10 rounded-xs shadow-xs max-w-7xl mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-5rem)]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#EFECE6] p-5 sm:p-6 border border-black/10 rounded-xs shadow-xs max-w-7xl mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-5rem)]">
               <div className="flex flex-col gap-1 max-w-2xl">
-                <p className="font-serif text-sm sm:text-base italic font-light text-black/85 leading-relaxed">
+                <p className="font-serif text-xs sm:text-base italic font-light text-black/85 leading-relaxed">
                   "{currentItem.concept}"
                 </p>
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/40 font-bold mr-1">
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="font-mono text-[8.5px] sm:text-[9px] tracking-[0.2em] uppercase text-black/40 font-bold mr-1">
                     SPECS:
                   </span>
                   {currentItem.specs.map((spec, i) => (
                     <span 
                       key={i} 
-                      className="font-mono text-[9px] tracking-wide text-black/75 bg-white/70 px-2.5 py-0.5 rounded-xs border border-black/5"
+                      className="font-mono text-[8.5px] sm:text-[9px] tracking-wide text-black/75 bg-white/70 px-2.5 py-0.5 rounded-xs border border-black/5"
                     >
                       {spec}
                     </span>
@@ -238,10 +246,10 @@ export default function Transformations({ hideButton = false }: TransformationsP
 
               <div className="flex items-center gap-3 self-end sm:self-auto flex-shrink-0">
                 <Link
-                  href="/transformations"
-                  className="tracking-[0.25em] text-[9px] uppercase font-mono font-semibold text-white bg-[#1A1A1A] hover:bg-black transition-all py-3 px-6 shadow-xs rounded-xs cursor-pointer"
+                  href={hideButton ? "/connect" : "/transformations"}
+                  className="tracking-[0.2em] sm:tracking-[0.25em] text-[8.5px] sm:text-[9px] uppercase font-mono font-semibold text-white bg-[#1A1A1A] hover:bg-black transition-all py-2.5 px-5 sm:py-3 sm:px-6 shadow-xs rounded-xs cursor-pointer"
                 >
-                  Explore Transformation Details →
+                  {hideButton ? "Book Session →" : "Explore Details →"}
                 </Link>
               </div>
             </div>

@@ -47,12 +47,7 @@ const categoryData = [
 
 export default function CategoriesPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [expandedMobileWriting, setExpandedMobileWriting] = useState<Record<string, boolean>>({});
   const { openLightbox } = useLightbox();
-
-  const toggleWriting = (id: string) => {
-    setExpandedMobileWriting((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
@@ -103,69 +98,51 @@ export default function CategoriesPage() {
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 min-h-[380px] sm:min-h-[480px]">
               
-              {/* Left: Text Content (Hidden by default on mobile unless clicked) */}
-              <div className="flex flex-col justify-between p-7 sm:p-12 order-2 sm:order-1">
+              {/* Left: Text Content */}
+              <div className="flex flex-col justify-between p-6 sm:p-12 order-2 sm:order-1">
                 <div>
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
                     <span className="font-mono text-[10px] font-bold text-black/40">/{categoryData[0].num}</span>
                     <span className="font-sans text-[9px] tracking-[0.35em] uppercase font-bold text-black/60 border border-black/15 px-3 py-1">
                       {categoryData[0].title}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between sm:block mb-2 sm:mb-4">
-                    <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-light text-black leading-snug">
-                      {categoryData[0].headline}
-                    </h2>
-                    
-                    {/* Mobile click to view writing toggle */}
-                    <button
-                      onClick={() => toggleWriting('cat-01')}
-                      className="sm:hidden px-3 py-1.5 bg-[#1A1A1A] text-white text-[8px] font-mono uppercase tracking-[0.2em] rounded-xs flex-shrink-0"
-                    >
-                      {expandedMobileWriting['cat-01'] ? 'Hide Writing ↑' : 'View Writing ↓'}
-                    </button>
-                  </div>
+                  <h2 className="font-serif text-lg sm:text-3xl lg:text-4xl font-light text-black leading-snug mb-3">
+                    {categoryData[0].headline}
+                  </h2>
 
-                  {/* WRITING BODY & ITEMS (Hidden on mobile by default unless expandedMobileWriting['cat-01'] is true) */}
-                  <div className={`${expandedMobileWriting['cat-01'] ? 'block' : 'hidden sm:block'} transition-all`}>
-                    <p className="font-sans text-xs sm:text-sm text-black/65 font-light leading-relaxed mb-6 max-w-sm">
-                      {categoryData[0].desc}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {categoryData[0].items.map((item, idx) => (
-                        <span
-                          key={idx}
-                          className="text-[10px] font-sans bg-white/70 border border-black/10 px-3 py-1.5 text-black/75 font-light"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
+                  <p className="font-sans text-xs sm:text-sm text-black/65 font-light leading-relaxed mb-4 sm:mb-6 max-w-sm">
+                    {categoryData[0].desc}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    {categoryData[0].items.map((item, idx) => (
+                      <span
+                        key={idx}
+                        className="text-[9px] sm:text-[10px] font-sans bg-white/70 border border-black/10 px-2.5 py-1 text-black/75 font-light"
+                      >
+                        {item}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-black/10 flex items-center gap-6">
+                <div className="mt-6 pt-5 border-t border-black/10 flex items-center justify-between sm:justify-start gap-4 sm:gap-6">
                   <Link href="/services" className="font-sans text-[10px] tracking-[0.2em] uppercase font-semibold text-black hover:opacity-60 flex items-center gap-2 transition-opacity">
                     Explore Services <span>→</span>
                   </Link>
-                  <Link href="/connect" className="font-sans text-[10px] tracking-[0.2em] uppercase font-light text-black/50 hover:text-black transition-colors">
+                  <Link href="/connect" className="font-sans text-[10px] tracking-[0.2em] uppercase font-light text-black/60 hover:text-black transition-colors px-3 py-1.5 bg-black/5 rounded-xs sm:bg-transparent sm:p-0">
                     Book a Session
                   </Link>
                 </div>
               </div>
 
-              {/* Right: Image - Hero Style Cover on Mobile */}
+              {/* Right: Image Cover */}
               <div 
-                onClick={() => {
-                  if (window.innerWidth < 640) {
-                    toggleWriting('cat-01');
-                  } else {
-                    openLightbox(categoryData[0].image, categoryData[0].headline);
-                  }
-                }}
-                className="relative w-full h-[75vh] sm:h-full min-h-[400px] overflow-hidden order-1 sm:order-2 cursor-pointer bg-[#0D0D0D]"
-                title="Click to view writing / details"
+                onClick={() => openLightbox(categoryData[0].image, categoryData[0].headline)}
+                className="relative w-full h-[280px] sm:h-full min-h-[280px] sm:min-h-[400px] overflow-hidden order-1 sm:order-2 cursor-pointer bg-[#0D0D0D]"
+                title="Click to view image in high-res"
               >
                 <Image
                   src={categoryData[0].image}
@@ -173,10 +150,7 @@ export default function CategoriesPage() {
                   fill
                   className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                <div className="sm:hidden absolute top-4 right-4 bg-black/80 backdrop-blur-md text-white px-3 py-1 text-[8px] font-mono tracking-[0.2em] uppercase border border-white/10 rounded-xs">
-                  {expandedMobileWriting['cat-01'] ? 'Writing Open ▲' : 'Click to View Writing ▼'}
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               </div>
 
             </div>
@@ -185,103 +159,82 @@ export default function CategoriesPage() {
 
         {/* Three smaller cards below */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 mb-16">
-          {categoryData.slice(1).map((cat) => {
-            const catKey = `cat-${cat.num}`;
-            const isWritingOpen = !!expandedMobileWriting[catKey];
-            return (
-              <div
-                key={cat.num}
-                className="group flex flex-col overflow-hidden border border-black/10 hover:border-black/30 transition-all duration-300"
-                style={{ background: cat.color }}
+          {categoryData.slice(1).map((cat) => (
+            <div
+              key={cat.num}
+              className="group flex flex-col overflow-hidden border border-black/10 hover:border-black/30 transition-all duration-300"
+              style={{ background: cat.color }}
+            >
+              {/* Image Cover */}
+              <div 
+                onClick={() => openLightbox(cat.num === '02' ? '/images/CIT09345.jpg' : cat.image, cat.headline)}
+                className="relative w-full h-[260px] sm:h-auto sm:aspect-[4/5] min-h-[260px] overflow-hidden cursor-pointer bg-[#0D0D0D]"
+                title="Click to view image in high-res"
               >
-                {/* Image - Hero Style Cover on Mobile */}
-                <div 
-                  onClick={() => {
-                    if (window.innerWidth < 640) {
-                      toggleWriting(catKey);
-                    } else {
-                      openLightbox(cat.num === '02' ? '/images/CIT09345.jpg' : cat.image, cat.headline);
-                    }
-                  }}
-                  className="relative w-full h-[75vh] sm:h-auto sm:aspect-[4/5] min-h-[400px] overflow-hidden cursor-pointer bg-[#0D0D0D]"
-                  title="Click to view writing / details"
-                >
-                  <Image
-                    src={cat.num === '02' ? '/images/CIT09345.jpg' : cat.image}
-                    alt={cat.title}
-                    fill
-                    className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-700 ease-out"
-                  />
-                  {/* Overlay label */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                    <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-bold text-white/90">
-                      {cat.title}
-                    </span>
-                  </div>
-                  <div className="absolute top-3 right-3 font-mono text-[9px] font-bold text-white/70 bg-black/25 backdrop-blur-sm px-2 py-1">
-                    /{cat.num}
-                  </div>
-                  <div className="sm:hidden absolute top-3 left-3 bg-black/80 backdrop-blur-md text-white px-2.5 py-1 text-[8px] font-mono tracking-[0.2em] uppercase border border-white/10 rounded-xs">
-                    {isWritingOpen ? 'Writing Open ▲' : 'Click to View Writing ▼'}
-                  </div>
+                <Image
+                  src={cat.num === '02' ? '/images/CIT09345.jpg' : cat.image}
+                  alt={cat.title}
+                  fill
+                  className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                />
+                {/* Overlay label */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
+                  <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-bold text-white/90">
+                    {cat.title}
+                  </span>
                 </div>
-
-                {/* Content */}
-                <div className="flex flex-col flex-1 p-5 sm:p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-serif text-lg sm:text-xl font-light text-black leading-snug">
-                      {cat.headline}
-                    </h3>
-                    <button
-                      onClick={() => toggleWriting(catKey)}
-                      className="sm:hidden px-2.5 py-1 bg-[#1A1A1A] text-white text-[8px] font-mono uppercase tracking-[0.15em] rounded-xs flex-shrink-0"
-                    >
-                      {isWritingOpen ? 'Hide ↑' : 'Writing ↓'}
-                    </button>
-                  </div>
-
-                  <div className={`${isWritingOpen ? 'block' : 'hidden sm:block'}`}>
-                    <p className="font-sans text-xs text-black/60 font-light leading-relaxed mb-4">
-                      {cat.desc}
-                    </p>
-
-                    {/* Pill chips */}
-                    <div className="border-t border-black/10 pt-4">
-                      <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-semibold block mb-2.5">
-                        Includes:
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {cat.items.map((item, idx) => (
-                          <span
-                            key={idx}
-                            className="text-[9px] sm:text-[10px] font-sans bg-white/70 border border-black/10 px-2.5 py-1 text-black/70 font-light"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Card footer */}
-                  <div className="mt-5 pt-4 border-t border-black/10 flex justify-between items-center">
-                    <Link
-                      href="/services"
-                      className="font-sans text-[9px] tracking-[0.2em] uppercase font-semibold text-black hover:opacity-60 transition-opacity flex items-center gap-1.5"
-                    >
-                      Details <span className="text-xs">→</span>
-                    </Link>
-                    <Link
-                      href="/connect"
-                      className="px-4 py-1.5 bg-black text-white text-[8px] tracking-[0.2em] uppercase font-light hover:bg-black/75 transition-colors"
-                    >
-                      Book
-                    </Link>
-                  </div>
+                <div className="absolute top-3 right-3 font-mono text-[9px] font-bold text-white/70 bg-black/25 backdrop-blur-sm px-2 py-1">
+                  /{cat.num}
                 </div>
               </div>
-            );
-          })}
+
+              {/* Content */}
+              <div className="flex flex-col flex-1 p-5 sm:p-6 justify-between">
+                <div>
+                  <h3 className="font-serif text-base sm:text-xl font-light text-black leading-snug mb-2">
+                    {cat.headline}
+                  </h3>
+
+                  <p className="font-sans text-xs text-black/60 font-light leading-relaxed mb-4">
+                    {cat.desc}
+                  </p>
+
+                  {/* Pill chips */}
+                  <div className="border-t border-black/10 pt-3">
+                    <span className="text-[8px] tracking-[0.3em] uppercase text-black/40 font-semibold block mb-2">
+                      Includes:
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {cat.items.map((item, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[9px] sm:text-[10px] font-sans bg-white/70 border border-black/10 px-2.5 py-1 text-black/70 font-light"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card footer */}
+                <div className="mt-5 pt-4 border-t border-black/10 flex justify-between items-center">
+                  <Link
+                    href="/services"
+                    className="font-sans text-[9px] tracking-[0.2em] uppercase font-semibold text-black hover:opacity-60 transition-opacity flex items-center gap-1.5"
+                  >
+                    Details <span className="text-xs">→</span>
+                  </Link>
+                  <Link
+                    href="/connect"
+                    className="px-4 py-1.5 bg-black text-white text-[8px] tracking-[0.2em] uppercase font-light hover:bg-black/75 transition-colors rounded-xs shadow-xs"
+                  >
+                    Book
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* ── ETHNIC STYLING FEATURED CURATION (CLIENT CATEGORY SHOWCASE) ── */}

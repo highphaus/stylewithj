@@ -33,7 +33,7 @@ export default function CinematicPhilosophy() {
             ✦ OUR PHILOSOPHY
           </span>
           
-          <h2 className="font-serif text-3xl font-light text-[#1A1A1A] leading-[1.15] tracking-tight">
+          <h2 className="font-serif text-2xl lg:text-5xl font-light text-[#1A1A1A] leading-[1.15] tracking-tight">
             Style should never <br />
             <span className="italic font-normal text-black/75">feel like a costume.</span>
           </h2>

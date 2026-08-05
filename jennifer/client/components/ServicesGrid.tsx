@@ -144,7 +144,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
           <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 font-semibold block mb-2">
             ✦ WHAT WE DO
           </span>
-          <h2 className="font-serif text-3xl font-light tracking-tight text-[#1A1A1A]">
+          <h2 className="font-serif text-2xl lg:text-3xl font-light tracking-tight text-[#1A1A1A]">
             What We Do
           </h2>
         </div>
