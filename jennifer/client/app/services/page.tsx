@@ -149,26 +149,26 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
             Style that feels like you.
           </h1>
 
-          <div className="mt-4 space-y-4 text-base sm:text-lg font-sans font-light text-black/75 leading-relaxed">
+          <div className="mt-4 space-y-4 text-xs sm:text-base lg:text-lg font-sans font-light text-black/75 leading-relaxed">
             <p>
               We believe personal style isn't about following every trend or constantly buying something new. It's about understanding what makes you feel confident, comfortable, and completely yourself.
             </p>
             
             {/* Highlighted Core Commitment Card */}
-            <div className="mt-6 p-6 sm:p-8 bg-[#EFECE6] border-l-4 border-[#1A1A1A] rounded-xs shadow-xs">
-              <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-black/50 block mb-2 font-bold">
+            <div className="mt-6 p-5 sm:p-8 bg-[#EFECE6] border-l-4 border-[#1A1A1A] rounded-xs shadow-xs">
+              <span className="font-sans text-[8px] sm:text-[9px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-black/50 block mb-2 font-bold">
                 OUR CORE COMMITMENT
               </span>
-              <p className="font-serif text-lg sm:text-2xl font-light italic text-[#1A1A1A] leading-snug">
+              <p className="font-serif text-base sm:text-xl lg:text-2xl font-light italic text-[#1A1A1A] leading-snug">
                 "At Style with J, we help you discover your personal style, create looks that work for your real life, and build a wardrobe that works for you."
               </p>
             </div>
 
-            {/* Categories Page Link Button */}
+            {/* Categories Page Link Button Box */}
             <div className="pt-4 flex flex-wrap items-center gap-4">
               <Link
                 href="/categories"
-                className="inline-flex items-center gap-3 px-6 py-3 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-light hover:bg-black transition-all shadow-md rounded-xs"
+                className="inline-flex items-center justify-center gap-3 px-5 py-3 sm:px-6 sm:py-3.5 bg-[#1A1A1A] text-white text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-mono font-medium hover:bg-black transition-all shadow-md rounded-xs w-full sm:w-auto text-center"
               >
                 Explore Styling Categories
                 <span className="text-xs">→</span>
@@ -179,30 +179,30 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
       </section>
 
       {/* ── 3 PILLARS ── */}
-      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16">
-        <div className="mb-12">
-          <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2">
+      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-12 sm:py-16">
+        <div className="mb-8 sm:mb-12">
+          <span className="text-[8px] sm:text-[9px] tracking-[0.4em] sm:tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-2 font-semibold">
             OUR APPROACH
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A1A]">
+          <h2 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A]">
             Three Pillars of Great Style
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {pillars.map((p) => (
-            <div key={p.num} className="bg-[#FAF8F3] p-8 lg:p-10 flex flex-col justify-between gap-6 border border-black/10 hover:border-black/30 transition-all rounded-xs shadow-xs">
+            <div key={p.num} className="bg-[#FAF8F3] p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-5 sm:gap-6 border border-black/10 hover:border-black/30 transition-all rounded-xs shadow-xs">
               <div>
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-4 mb-4 sm:mb-6">
                   <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/50">{p.num}</span>
                   <div className="flex-1 h-[1px] bg-[#1A1A1A]/10" />
                 </div>
                 
-                <h3 className="font-sans text-xs tracking-[0.3em] uppercase text-[#1A1A1A]/70 font-semibold mb-3">
+                <h3 className="font-sans text-[10px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-[#1A1A1A]/70 font-semibold mb-2 sm:mb-3">
                   {p.title}
                 </h3>
                 
-                <p className="font-serif text-xl sm:text-2xl font-light leading-snug text-[#1A1A1A] mb-4">
+                <p className="font-serif text-lg sm:text-xl lg:text-2xl font-light leading-snug text-[#1A1A1A] mb-3 sm:mb-4">
                   {p.headline}
                 </p>
                 
