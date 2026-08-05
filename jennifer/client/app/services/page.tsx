@@ -254,7 +254,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
               <div className="px-6 sm:px-8 py-8 bg-[#FAF8F3] flex flex-col gap-4 border-b border-black/10">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
-                    ✦ {svc.num} // {svc.category}
+                    ✦ SERVICE {svc.num}
                   </span>
                   <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40 bg-white px-2.5 py-1 border border-black/10 rounded-xs font-semibold">
                     SERVICE DETAILS
@@ -289,7 +289,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                   <button
                     onClick={() => openLightbox(svc.image, svc.title, {
                       num: svc.num,
-                      category: svc.category,
+                      category: 'Our Services',
                       story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
                       concept: svc.title,
                       fabric: svc.points.join(' • ')
@@ -324,7 +324,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                 <div 
                   onClick={() => openLightbox(svc.image, svc.title, {
                     num: svc.num,
-                    category: svc.category,
+                    category: 'Our Services',
                     story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
                     concept: svc.title,
                     fabric: svc.points.join(' • ')
@@ -340,7 +340,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
                   <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
-                    ✦ {svc.num} // {svc.category}
+                    ✦ SERVICE {svc.num}
                   </div>
                 </div>
               </div>
@@ -348,7 +348,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
               {/* WRITINGS & DETAILS */}
               <div className="col-span-7 order-1 flex flex-col justify-center gap-4">
                 <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
-                  {svc.category}
+                  ✦ SERVICE {svc.num}
                 </span>
 
                 <div className="flex items-center gap-3">

@@ -200,7 +200,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                 className="pt-6 border-t border-black/10 flex flex-col gap-3"
               >
                 <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/50 block font-semibold">
-                  {currentService.category}
+                  ✦ SERVICE {currentService.num}
                 </span>
 
                 <h3 className="font-serif text-3xl font-light tracking-wide text-[#1A1A1A] uppercase">
