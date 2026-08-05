@@ -368,22 +368,22 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
       </section>
 
       {/* ── READY TO FIND YOUR STYLE CTA ── */}
-      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16">
-        <div className="border-t border-[#1A1A1A]/10 pt-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 bg-[#EFECE6] p-10 sm:p-14 border border-black/5 rounded-xs">
-          <div>
-            <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-2 font-semibold">
+      <section className="max-w-7xl mx-auto px-4 sm:px-12 lg:px-20 py-12 sm:py-20">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 sm:gap-10 bg-[#EFECE6] p-6 sm:p-12 lg:p-14 border border-black/10 shadow-xs rounded-xs">
+          <div className="text-left max-w-xl">
+            <span className="text-[8px] sm:text-[9px] tracking-[0.4em] sm:tracking-[0.5em] uppercase font-semibold text-[#1A1A1A]/50 font-sans block mb-2">
               READY TO FIND YOUR STYLE?
             </span>
-            <h3 className="font-serif text-2xl sm:text-4xl font-light tracking-wide text-black">
+            <h3 className="font-serif text-2xl sm:text-4xl font-light tracking-tight text-[#1A1A1A] leading-tight">
               Let's create a wardrobe that feels as good as it looks.
             </h3>
           </div>
           <Link
             href="/connect"
-            className="group flex items-center gap-6 px-8 py-4 bg-[#1A1A1A] text-white text-[10px] tracking-[0.3em] uppercase font-light hover:bg-black transition-all shadow-lg flex-shrink-0 rounded-xs"
+            className="group flex items-center justify-center gap-4 px-6 sm:px-8 py-3.5 sm:py-4 bg-[#1A1A1A] hover:bg-black text-white text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-mono font-medium transition-all shadow-md flex-shrink-0 w-full md:w-auto rounded-xs cursor-pointer border border-white/10"
           >
             Start Your Style Journey
-            <span className="transform group-hover:translate-x-2 transition-transform text-sm">→</span>
+            <span className="transform group-hover:translate-x-1.5 transition-transform text-xs sm:text-sm">→</span>
           </Link>
         </div>
       </section>

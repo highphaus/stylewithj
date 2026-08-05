@@ -93,10 +93,10 @@ export default function CinematicPhilosophy() {
             </h3>
             <Link
               href="/connect"
-              className="group inline-flex items-center gap-4 px-6 py-3 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-light hover:bg-black transition-all shadow-md mt-1"
+              className="group flex items-center justify-center gap-3 px-6 py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-[9px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-mono font-medium transition-all shadow-md mt-1 w-full sm:w-auto rounded-xs cursor-pointer border border-white/10"
             >
               Start Your Style Journey
-              <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+              <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
             </Link>
           </div>
         </div>
@@ -152,10 +152,10 @@ export default function CinematicPhilosophy() {
               </h3>
               <Link
                 href="/connect"
-                className="group inline-flex items-center gap-4 px-6 py-3 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-light hover:bg-black transition-all shadow-md mt-2"
+                className="group inline-flex items-center gap-3 px-7 py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-[9px] tracking-[0.25em] uppercase font-mono font-medium transition-all shadow-md mt-2 rounded-xs cursor-pointer border border-white/10"
               >
                 Start Your Style Journey
-                <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+                <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
               </Link>
             </div>
           </div>
