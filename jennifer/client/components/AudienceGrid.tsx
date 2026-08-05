@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
+import ScrollPriorityBadge from '@/components/ScrollPriorityBadge';
 
 const audiences = [
   { 
@@ -245,11 +246,8 @@ export default function AudienceGrid() {
                 className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
                 unoptimized
               />
-              {/* Bottom-Left Corner "Click & View" Badge on Mobile */}
-              <div className="absolute bottom-4 left-4 z-10 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-full border border-white/20 text-[9px] font-mono tracking-[0.2em] uppercase flex items-center gap-1.5 shadow-lg active:scale-95 transition-all pointer-events-none">
-                <span>Click & View</span>
-                <span className="text-[10px]">👁</span>
-              </div>
+              {/* Scroll-Priority "Click & View" Pop-Up Badge on Mobile */}
+              <ScrollPriorityBadge />
             </div>
           ))}
         </div>

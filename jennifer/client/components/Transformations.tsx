@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
+import ScrollPriorityBadge from '@/components/ScrollPriorityBadge';
 
 const transformationData = [
   {
@@ -194,11 +195,8 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                   <div className="absolute top-4 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
                     BEFORE
                   </div>
-                  {/* Mobile Always-Visible Click & View Button */}
-                  <div className="absolute bottom-3 left-3 sm:left-6 z-20 bg-black/90 text-white px-3 py-1.5 rounded-full border border-white/30 text-[8px] sm:text-[9px] font-mono tracking-[0.2em] uppercase flex items-center gap-1 shadow-lg sm:hidden">
-                    <span>Click & View</span>
-                    <span className="text-[9px]">👁</span>
-                  </div>
+                  {/* Scroll-Priority "Click & View" Pop-Up Badge on Mobile */}
+                  <ScrollPriorityBadge className="sm:hidden" />
                   <div className="absolute bottom-4 left-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>
@@ -220,11 +218,8 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                   <div className="absolute top-4 right-6 bg-black text-white px-3.5 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
                     AFTER
                   </div>
-                  {/* Mobile Always-Visible Click & View Button */}
-                  <div className="absolute bottom-3 left-3 sm:right-6 z-20 bg-black/90 text-white px-3 py-1.5 rounded-full border border-white/30 text-[8px] sm:text-[9px] font-mono tracking-[0.2em] uppercase flex items-center gap-1 shadow-lg sm:hidden">
-                    <span>Click & View</span>
-                    <span className="text-[9px]">👁</span>
-                  </div>
+                  {/* Scroll-Priority "Click & View" Pop-Up Badge on Mobile */}
+                  <ScrollPriorityBadge className="sm:hidden" />
                   <div className="absolute bottom-4 right-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>
