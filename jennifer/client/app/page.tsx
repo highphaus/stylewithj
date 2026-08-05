@@ -74,22 +74,22 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Right articles list - Mobile: Compact Responsive Cards / Desktop: Sleek List */}
+            {/* Right articles list - Mobile & Desktop: Clickable Cards */}
             <div className="col-span-12 lg:col-span-7 flex flex-col gap-3.5 sm:gap-6 w-full min-w-0">
               {[
-                { num: '01', title: '7 Styling Rules That Will Instantly Elevate Your Everyday Looks', category: 'The Style Edit', image: '/images/includes/IMG_0330.JPG.jpeg' },
-                { num: '02', title: "You Don't Need More Clothes. You Need Better Outfits.", category: 'The Wardrobe Edit', image: '/images/includes/IMG_8857.JPG.jpeg' },
-                { num: '03', title: 'How to Look Expensive Without Spending a Fortune', category: 'The Expensive Edit', image: '/images/includes/IMG_9158.JPG.jpeg' }
+                { num: '01', title: '7 Styling Rules That Will Instantly Elevate Your Everyday Looks', category: 'The Style Edit', image: '/images/includes/IMG_0330.JPG.jpeg', slug: 'beyond-hoodies-tech-lead-executive-wardrobe-bangalore' },
+                { num: '02', title: "You Don't Need More Clothes. You Need Better Outfits.", category: 'The Wardrobe Edit', image: '/images/includes/IMG_8857.JPG.jpeg', slug: '15-piece-workwear-capsule-wardrobe-bangalore-professionals' },
+                { num: '03', title: 'How to Look Expensive Without Spending a Fortune', category: 'The Expensive Edit', image: '/images/includes/IMG_9158.JPG.jpeg', slug: 'how-to-dress-for-bangalore-weather-year-round-style-guide' }
               ].map((article) => (
-                <div
+                <Link
                   key={article.num}
-                  className="group flex flex-row items-center sm:items-stretch gap-3 sm:gap-6 p-3 sm:p-5 border border-black/10 bg-white/70 hover:bg-[#EFECE6]/40 transition-all duration-500 rounded-xs shadow-xs w-full min-w-0 overflow-hidden"
+                  href={`/journal/${article.slug}`}
+                  className="group flex flex-row items-center sm:items-stretch gap-3 sm:gap-6 p-3 sm:p-5 border border-black/10 bg-white/70 hover:bg-[#EFECE6]/40 transition-all duration-500 rounded-xs shadow-xs w-full min-w-0 overflow-hidden cursor-pointer"
                 >
-                  {/* Image Frame (Click to View Lightbox) */}
+                  {/* Image Frame */}
                   <div 
-                    onClick={() => openLightbox(article.image, article.title)}
-                    className="relative w-20 h-20 sm:w-36 sm:h-auto aspect-square sm:aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 cursor-pointer rounded-xs flex-shrink-0"
-                    title="Click to view image"
+                    className="relative w-20 h-20 sm:w-36 sm:h-auto aspect-square sm:aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 rounded-xs flex-shrink-0"
+                    title="Click to read article"
                   >
                     <img
                       src={article.image}
@@ -113,21 +113,26 @@ export default function Home() {
                     </div>
 
                     <div className="pt-1.5 flex items-center justify-between border-t border-black/5 min-w-0">
-                      <Link
-                        href="/journal"
-                        className="font-mono text-[8px] sm:text-[9px] tracking-[0.15em] sm:tracking-[0.2em] uppercase text-black font-semibold hover:opacity-60 transition-opacity truncate"
+                      <span
+                        className="font-mono text-[8px] sm:text-[9px] tracking-[0.15em] sm:tracking-[0.2em] uppercase text-black font-semibold group-hover:opacity-60 transition-opacity truncate"
                       >
                         Read Article →
-                      </Link>
+                      </span>
                       <button
-                        onClick={() => openLightbox(article.image, article.title)}
-                        className="font-mono text-[8px] sm:text-[9px] text-black/40 hover:text-black uppercase flex-shrink-0 ml-2"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          openLightbox(article.image, article.title);
+                        }}
+                        className="font-mono text-[8px] sm:text-[9px] text-black/40 hover:text-black uppercase flex-shrink-0 ml-2 z-10"
+                        title="Zoom image"
                       >
                         Expand
                       </button>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
