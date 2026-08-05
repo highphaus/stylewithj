@@ -34,11 +34,12 @@ const servicesList = [
     num: '01',
     category: 'Style Discovery',
     title: 'Personal Styling',
+    pricing: 'Starting from ₹5,000',
     summary: 'Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.',
     points: [
-      'Discover your personal style',
+      'Discover your personal style & signature silhouette',
       'Understand what silhouettes, colours, and fits work for you',
-      'Create outfits that suit your personality and lifestyle',
+      'Create outfits that suit your personality and Bangalore lifestyle',
       'Feel comfortable and confident in what you wear',
     ],
     image: '/images/includes/IMG_0271.JPG.jpeg',
@@ -46,56 +47,58 @@ const servicesList = [
   {
     num: '02',
     category: 'Closet Evolution',
-    title: 'Wardrobe Styling',
-    summary: 'Make your existing wardrobe work harder. We\'ll help you rediscover pieces you\'ve forgotten, create fresh outfit combinations, identify what\'s missing, and make your wardrobe feel new again.',
+    title: 'Wardrobe Styling & Audit',
+    pricing: 'Starting from ₹7,500',
+    summary: 'Make your existing wardrobe work harder. We\'ll help you audit pieces, create fresh outfit combinations, identify what\'s missing, and build a versatile capsule closet.',
     points: [
-      'Comprehensive wardrobe assessment',
+      'Comprehensive wardrobe audit & assessment',
       'Identifying what works and what doesn\'t',
-      'Styling existing pieces in new ways',
+      'Styling existing pieces in 5+ new ways',
       'Creating multiple looks from the same wardrobe',
-      'Building an intentional, versatile closet',
+      'Building an intentional, versatile capsule closet',
     ],
     image: '/images/includes/IMG_1406.JPG.jpeg',
   },
   {
     num: '03',
     category: 'Intentional Shopping',
-    title: 'Personal Shopping',
-    summary: 'Shop with intention through curated recommendations that fit your personal style, lifestyle, needs, and budget, so you spend less time searching and more time finding pieces that truly work for you.',
+    title: 'Personal Shopping Bangalore',
+    pricing: 'Starting from ₹10,000',
+    summary: 'Shop with intention through curated itineraries in Indiranagar boutiques, Commercial Street markets, or luxury malls tailored to your style and budget.',
     points: [
-      'Personalised shopping recommendations',
-      'Curated pieces based on individual style',
-      'Shopping according to budget',
+      'Personalised shopping itineraries & recommendations',
+      'Curated pieces based on individual body proportions',
+      'Shopping according to exact budget parameters',
       'Avoiding unnecessary impulse purchases',
-      'Finding pieces that complement your wardrobe',
+      'Finding handloom & modern pieces that complement your closet',
     ],
     image: '/images/includes/IMG_1423.JPG.jpeg',
   },
   {
     num: '04',
     category: 'Event & Celebration',
-    title: 'Occasion Styling',
-    summary: 'Tell us where you\'re going, and we\'ll help you figure out what to wear. From celebrations to casual outings, we curate the perfect look for every event.',
+    title: 'Occasion & Bridal Styling',
+    pricing: 'Starting from ₹12,500',
+    summary: 'Tell us where you\'re going, and we\'ll help you figure out what to wear. From Bangalore garden weddings and bridal trousseau curations to dates and galas.',
     points: [
-      'Weddings: Bridesmaids & ethnic styling',
-      'Parties',
-      'Date nights',
-      'Vacations',
-      'Birthdays',
-      'Special events',
-      'Casual styling',
+      'Weddings: Bridal trousseau & bridesmaid curations',
+      'Garden wedding guest & cocktail drapes',
+      'Date nights & anniversary dinners',
+      'Vacations & resort wardrobes',
+      'Special milestone events',
     ],
     image: '/images/includes/IMG_1754.JPG.jpeg',
   },
   {
     num: '05',
     category: 'Professional Identity',
-    title: 'Workwear Styling',
-    summary: 'Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important meetings and first impressions, we\'ll help you dress for the way you want to show up.',
+    title: 'Workwear & Tech Leadership Styling',
+    pricing: 'Starting from ₹15,000',
+    summary: 'Build an executive work wardrobe that feels polished, confident, comfortable, and authentically yours. Tailored for Bangalore tech leads, founders, and corporate directors.',
     points: [
-      'Office wardrobe & everyday executive dressing',
-      'Business casual & elevated professional looks',
-      'Corporate dressing & key presentations',
+      'Executive workwear & smart casual leadership dressing',
+      'Business casual & elevated professional looks for tech hubs',
+      'Corporate dressing for key investor pitch meetings',
       'Important meetings & first impressions',
     ],
     image: '/images/includes/IMG_8863.JPG.jpeg',
@@ -256,8 +259,8 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                   <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
                     ✦ SERVICE {svc.num}
                   </span>
-                  <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40 bg-white px-2.5 py-1 border border-black/10 rounded-xs font-semibold">
-                    SERVICE DETAILS
+                  <span className="font-mono text-[8px] tracking-[0.15em] uppercase text-black/70 bg-[#EFECE6] px-2.5 py-1 border border-black/10 rounded-xs font-semibold">
+                    {svc.pricing}
                   </span>
                 </div>
 
@@ -347,9 +350,14 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
 
               {/* WRITINGS & DETAILS */}
               <div className="col-span-7 order-1 flex flex-col justify-center gap-4">
-                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
-                  ✦ SERVICE {svc.num}
-                </span>
+                <div className="flex items-center justify-between max-w-xl">
+                  <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
+                    ✦ SERVICE {svc.num}
+                  </span>
+                  <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-black/70 bg-[#EFECE6] px-3 py-1 border border-black/10 rounded-xs font-semibold">
+                    {svc.pricing}
+                  </span>
+                </div>
 
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/40">/{svc.num}</span>
