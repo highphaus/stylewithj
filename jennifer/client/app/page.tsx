@@ -54,70 +54,83 @@ export default function Home() {
         {/* 7. Tactile Wall */}
         <LookbookHorizon />
        
-        {/* ── 8. BLOG SECTION ── */}
-        <section className="bg-[#FAF9F6] border-t border-black/5 py-24 sm:py-32 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+        {/* ── 8. BLOG SECTION (STYLE DECODED) ── */}
+        <section className="bg-[#FAF9F6] border-t border-black/15 py-16 sm:py-32 px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
+            
             {/* Left intro box */}
-            <div className="col-span-12 lg:col-span-5 text-left flex flex-col justify-center items-start">
-              <span className="font-sans text-[10px] tracking-[0.4em] text-black/45 block mb-4 uppercase font-semibold">
+            <div className="col-span-12 lg:col-span-5 text-left flex flex-col justify-center items-start border-b lg:border-b-0 pb-8 lg:pb-0 border-black/10">
+              <span className="font-sans text-[10px] tracking-[0.4em] text-black/50 block mb-3 uppercase font-semibold">
                 ✦ BLOG
               </span>
               <h3 className="font-serif text-3xl sm:text-5xl font-light tracking-tight leading-tight mb-4 text-[#1A1A1A]">
                 Style, decoded.
               </h3>
-              <p className="font-sans text-xs sm:text-sm text-black/55 leading-relaxed font-light mb-8 max-w-sm">
+              <p className="font-sans text-xs sm:text-sm text-black/65 leading-relaxed font-light mb-6 max-w-sm">
                 A space for styling advice, wardrobe inspiration, smart shopping, and everything in between.
               </p>
               <Link
                 href="/journal"
-                className="font-mono text-[9px] tracking-[0.25em] text-black hover:text-black/60 uppercase border-b border-black pb-1 transition-colors"
+                className="font-mono text-[9px] tracking-[0.25em] text-black hover:text-black/60 uppercase border-b border-black pb-1 transition-colors font-semibold"
               >
                 Explore the Blog →
               </Link>
             </div>
 
-            {/* Right articles list with pictures */}
-            <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
+            {/* Right articles list - Mobile: Full-Width Editorial Cover Cards / Desktop: Sleek List */}
+            <div className="col-span-12 lg:col-span-7 flex flex-col gap-8 sm:gap-6">
               {[
                 { num: '01', title: '7 Styling Rules That Will Instantly Elevate Your Everyday Looks', category: 'The Style Edit', image: '/images/includes/IMG_0330.JPG.jpeg' },
                 { num: '02', title: "You Don't Need More Clothes. You Need Better Outfits.", category: 'The Wardrobe Edit', image: '/images/includes/IMG_8857.JPG.jpeg' },
                 { num: '03', title: 'How to Look Expensive Without Spending a Fortune', category: 'The Expensive Edit', image: '/images/includes/IMG_9158.JPG.jpeg' }
               ].map((article) => (
-                <Link
+                <div
                   key={article.num}
-                  href="/journal"
-                  className="group flex gap-5 items-center p-4 border border-black/5 hover:border-black/20 bg-white/50 hover:bg-[#EFECE6]/30 transition-all duration-500 rounded-sm shadow-[0_4px_25px_rgba(0,0,0,0.01)]"
+                  className="group flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-5 border border-black/10 bg-white/70 hover:bg-[#EFECE6]/40 transition-all duration-500 rounded-xs shadow-xs"
                 >
-                  {/* Small Editorial Image Frame (Click to Pick) */}
+                  {/* Image Frame (Click to View Lightbox) */}
                   <div 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      openLightbox(article.image, article.title);
-                    }}
-                    className="relative w-20 sm:w-24 aspect-[3/4] overflow-hidden bg-[#EFECE6] flex-shrink-0 border border-black/5 cursor-pointer z-10"
+                    onClick={() => openLightbox(article.image, article.title)}
+                    className="relative w-full sm:w-32 h-[70vh] sm:h-auto sm:aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 cursor-pointer rounded-xs flex-shrink-0"
                     title="Click to view image"
                   >
                     <img
                       src={article.image}
                       alt={article.title}
-                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
                       draggable="false"
                     />
                   </div>
 
-                  {/* Text details */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-mono text-[9px] text-black/35 group-hover:text-black">/{article.num}</span>
-                      <div className="w-1 h-1 rounded-full bg-black/15" />
-                      <span className="font-sans text-[8px] tracking-[0.2em] uppercase text-black/40 font-semibold">{article.category}</span>
+                  {/* Details */}
+                  <div className="flex-1 flex flex-col justify-between gap-3 pt-2 sm:pt-0">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-mono text-[9px] text-black/40 font-bold">/{article.num}</span>
+                        <div className="w-1 h-1 rounded-full bg-black/20" />
+                        <span className="font-sans text-[8px] tracking-[0.2em] uppercase text-black/50 font-semibold">{article.category}</span>
+                      </div>
+                      <h4 className="font-serif text-xl sm:text-xl text-black font-light leading-snug group-hover:text-black/70 transition-colors">
+                        {article.title}
+                      </h4>
                     </div>
-                    <h4 className="font-serif text-base sm:text-lg text-black/85 group-hover:text-black transition-colors leading-snug font-light">
-                      {article.title}
-                    </h4>
+
+                    <div className="pt-2 flex items-center justify-between border-t border-black/5">
+                      <Link
+                        href="/journal"
+                        className="font-mono text-[9px] tracking-[0.2em] uppercase text-black font-semibold hover:opacity-60 transition-opacity"
+                      >
+                        Read Article →
+                      </Link>
+                      <button
+                        onClick={() => openLightbox(article.image, article.title)}
+                        className="font-mono text-[9px] text-black/40 hover:text-black uppercase"
+                      >
+                        Zoom 🔍
+                      </button>
+                    </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
