@@ -226,27 +226,88 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           </h2>
         </div>
 
-        {/* MOBILE LAYOUT: 100% FULL BLEED IMAGES TOUCHING LEFT AND RIGHT PHONE EDGES WITH ZERO MARGIN */}
-        <div className="flex flex-col lg:hidden divide-y divide-black/10 -mx-6 sm:-mx-12">
+        {/* MOBILE LAYOUT: FULL-BLEED IMAGES WITH IN-DEPTH DETAILS BETWEEN EACH IMAGE */}
+        <div className="flex flex-col lg:hidden divide-y divide-black/15 -mx-6 sm:-mx-12">
           {servicesList.map((svc) => (
-            <div
-              key={svc.num}
-              onClick={() => openLightbox(svc.image, svc.title, {
-                num: svc.num,
-                category: svc.category,
-                story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
-                concept: svc.title,
-                fabric: svc.points.join(' • ')
-              })}
-              className="relative w-full h-[100dvh] min-h-[500px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
-              title="Click to view writing & details"
-            >
-              <Image
-                src={svc.image}
-                alt={svc.title}
-                fill
-                className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-              />
+            <div key={svc.num} className="flex flex-col bg-[#FAF9F6]">
+              {/* Full Bleed Image (Touch Left & Right Edges) */}
+              <div
+                onClick={() => openLightbox(svc.image, svc.title, {
+                  num: svc.num,
+                  category: svc.category,
+                  story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
+                  concept: svc.title,
+                  fabric: svc.points.join(' • ')
+                })}
+                className="relative w-full h-[70vh] min-h-[420px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+                title="Click to view image in high-res"
+              >
+                <Image
+                  src={svc.image}
+                  alt={svc.title}
+                  fill
+                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                />
+              </div>
+
+              {/* Service Detailed Writing Panel Between/Under the Image */}
+              <div className="px-6 sm:px-8 py-8 bg-[#FAF8F3] flex flex-col gap-4 border-b border-black/10">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
+                    ✦ {svc.num} // {svc.category}
+                  </span>
+                  <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40 bg-white px-2.5 py-1 border border-black/10 rounded-xs font-semibold">
+                    SERVICE DETAILS
+                  </span>
+                </div>
+
+                <h3 className="font-serif text-2xl sm:text-3xl font-light text-[#1A1A1A]">
+                  {svc.title}
+                </h3>
+
+                <p className="font-sans text-xs sm:text-sm font-light text-black/80 leading-relaxed">
+                  {svc.summary}
+                </p>
+
+                {/* Key Points Checklist */}
+                <div className="pt-3 border-t border-black/10 flex flex-col gap-2.5">
+                  <span className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">
+                    WHAT THIS INCLUDES:
+                  </span>
+                  <div className="flex flex-col gap-2">
+                    {svc.points.map((pt, pIdx) => (
+                      <div key={pIdx} className="flex items-start gap-2.5 font-sans text-xs text-black/85 font-light leading-snug">
+                        <span className="w-1.5 h-1.5 rounded-full bg-black/40 mt-1 flex-shrink-0" />
+                        <span>{pt}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Interactive Action Buttons */}
+                <div className="pt-4 flex items-center justify-between border-t border-black/10 gap-4">
+                  <button
+                    onClick={() => openLightbox(svc.image, svc.title, {
+                      num: svc.num,
+                      category: svc.category,
+                      story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
+                      concept: svc.title,
+                      fabric: svc.points.join(' • ')
+                    })}
+                    className="font-mono text-[9px] tracking-[0.2em] uppercase text-black font-semibold hover:opacity-70 transition-opacity"
+                  >
+                    View Lightbox 🔍
+                  </button>
+
+                  <Link
+                    href="/connect"
+                    className="px-4 py-2 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[8px] tracking-[0.25em] uppercase font-semibold rounded-xs shadow-xs transition-colors"
+                  >
+                    Book Session →
+                  </Link>
+                </div>
+              </div>
+
             </div>
           ))}
         </div>
