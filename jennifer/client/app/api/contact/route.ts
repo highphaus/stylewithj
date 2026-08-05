@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { firstName, lastName, email, service, message, locationText, coords } = body;
+    const { firstName, lastName, email, phone, service, message, locationText, coords } = body;
 
     if (!firstName || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     // Retrieve and sanitize credentials from process.env
     const emailUser = (process.env.EMAIL_USER || process.env.SMTP_USER || 'muhammedsyam.dev@gmail.com').trim();
     const rawPass = process.env.EMAIL_PASS || process.env.SMTP_PASS || '';
-    const emailPass = rawPass.replace(/\s+/g, '').trim(); // Remove spaces from Google App Password
+    const emailPass = rawPass.replace(/\s+/g, '').trim();
 
     console.log(`[Nodemailer Route] Attempting email dispatch for ${emailUser}... Pass configured: ${Boolean(emailPass)}`);
 
@@ -29,6 +29,12 @@ export async function POST(req: Request) {
     });
 
     const formattedLocation = locationText || 'Location not provided';
+    const formattedPhone = phone || 'Phone not provided';
+
+    // Construct Google Maps link if coordinates are present
+    const googleMapsUrl = coords && coords.lat && coords.lng 
+      ? `https://www.google.com/maps?q=${coords.lat},${coords.lng}`
+      : null;
 
     const htmlContent = `
       <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #FAF9F6; border: 1px solid #1A1A1A1A; padding: 32px; color: #1A1A1A;">
@@ -41,8 +47,12 @@ export async function POST(req: Request) {
 
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px;">
           <tr>
-            <td style="padding: 8px 0; font-weight: bold; width: 140px; color: #444;">Client Name:</td>
-            <td style="padding: 8px 0; color: #1A1A1A;">${firstName} ${lastName || ''}</td>
+            <td style="padding: 8px 0; font-weight: bold; width: 150px; color: #444;">Client Name:</td>
+            <td style="padding: 8px 0; color: #1A1A1A; font-weight: 500;">${firstName} ${lastName || ''}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold; color: #444;">Phone Number:</td>
+            <td style="padding: 8px 0; color: #1A1A1A; font-weight: bold;"><a href="tel:${formattedPhone}" style="color: #1A1A1A; text-decoration: underline;">${formattedPhone}</a></td>
           </tr>
           <tr>
             <td style="padding: 8px 0; font-weight: bold; color: #444;">Email Address:</td>
@@ -58,8 +68,20 @@ export async function POST(req: Request) {
           </tr>
           ${coords ? `
           <tr>
-            <td style="padding: 8px 0; font-weight: bold; color: #444;">Coordinates:</td>
-            <td style="padding: 8px 0; color: #111; font-family: monospace; font-size: 12px;">Lat: ${coords.lat}, Lng: ${coords.lng}</td>
+            <td style="padding: 8px 0; font-weight: bold; color: #444;">GPS Coordinates:</td>
+            <td style="padding: 8px 0; color: #111; font-family: monospace; font-size: 12px;">
+              Latitude: ${coords.lat.toFixed(5)}°, Longitude: ${coords.lng.toFixed(5)}°
+            </td>
+          </tr>
+          ` : ''}
+          ${googleMapsUrl ? `
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold; color: #444;">Google Maps Link:</td>
+            <td style="padding: 8px 0;">
+              <a href="${googleMapsUrl}" target="_blank" style="display: inline-block; background-color: #1A1A1A; color: #FFFFFF; padding: 6px 12px; font-size: 11px; font-family: monospace; text-transform: uppercase; text-decoration: none; border-radius: 2px;">
+                📍 View Exact Location on Google Maps →
+              </a>
+            </td>
           </tr>
           ` : ''}
         </table>
@@ -71,7 +93,7 @@ export async function POST(req: Request) {
           </p>
         </div>
 
-        <div style="border-top: 1px solid #1A1A1A22; pt-16; padding-top: 16px; font-size: 10px; font-family: monospace; color: #888; text-transform: uppercase; letter-spacing: 0.2em;">
+        <div style="border-top: 1px solid #1A1A1A22; padding-top: 16px; font-size: 10px; font-family: monospace; color: #888; text-transform: uppercase; letter-spacing: 0.2em;">
           Transmitted via Style with J Atelier Portal • Priority Response Requested
         </div>
       </div>
@@ -82,8 +104,8 @@ export async function POST(req: Request) {
         from: `"Style with J Atelier" <${emailUser}>`,
         to: recipientEmail,
         replyTo: email,
-        subject: `✦ NEW ATELIER INQUIRY: ${firstName} ${lastName || ''} (${service || 'General'})`,
-        text: `New Client Consultation Request\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nService: ${service}\nLocation: ${formattedLocation}\n\nMessage:\n${message}`,
+        subject: `✦ NEW ATELIER INQUIRY: ${firstName} ${lastName || ''} (${formattedPhone})`,
+        text: `New Client Consultation Request\n\nName: ${firstName} ${lastName}\nPhone: ${formattedPhone}\nEmail: ${email}\nService: ${service}\nLocation: ${formattedLocation}\nGPS: ${coords ? `${coords.lat}, ${coords.lng}` : 'N/A'}\nGoogle Maps: ${googleMapsUrl || 'N/A'}\n\nMessage:\n${message}`,
         html: htmlContent,
       });
       console.log(`[Nodemailer Success] Sent email to ${recipientEmail}, MessageId: ${info.messageId}`);

@@ -8,6 +8,7 @@ export function ConnectContent() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [service, setService] = useState('');
   const [message, setMessage] = useState('');
 
@@ -30,25 +31,34 @@ export function ConnectContent() {
           setCoords({ lat, lng });
 
           try {
-            // Reverse geocode via free open reverse geocoding API
+            // Reverse geocode via BigDataCloud & Nominatim
             const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
             const data = await res.json();
-            const city = data.city || data.locality || data.principalSubdivision || 'Local Region';
-            const country = data.countryName || '';
-            const locName = `${city}${country ? `, ${country}` : ''}`;
+            const city = data.city || data.locality || data.principalSubdivision || 'Bangalore';
+            const country = data.countryName || 'India';
+            const locName = `${city}, ${country}`;
 
-            setLocationText(`📍 Priority Location: ${locName} (${lat.toFixed(3)}°, ${lng.toFixed(3)}°)`);
+            setLocationText(`📍 Priority Location: ${locName} (${lat.toFixed(4)}°, ${lng.toFixed(4)}°)`);
             setLocationStatus('success');
           } catch {
-            setLocationText(`📍 Priority Location Coordinates: ${lat.toFixed(3)}° N, ${lng.toFixed(3)}° E`);
-            setLocationStatus('success');
+            try {
+              const resNom = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+              const nomData = await resNom.json();
+              const nomLoc = nomData.address?.city || nomData.address?.town || nomData.address?.state || 'Local Area';
+              setLocationText(`📍 Priority Location: ${nomLoc} (${lat.toFixed(4)}°, ${lng.toFixed(4)}°)`);
+              setLocationStatus('success');
+            } catch {
+              setLocationText(`📍 Location Coordinates: ${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`);
+              setLocationStatus('success');
+            }
           }
         },
-        () => {
-          setLocationText('📍 Priority Location: Region-Based Dispatch (Location permission optional)');
+        (error) => {
+          console.warn('Geolocation denied or failed:', error.message);
+          setLocationText('📍 Location: Region-Based Dispatch (Location permission optional)');
           setLocationStatus('permission_denied');
         },
-        { timeout: 8000, enableHighAccuracy: true }
+        { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
       );
     } else {
       setLocationText('📍 Location: Concierge Regional Service');
@@ -69,6 +79,7 @@ export function ConnectContent() {
           firstName,
           lastName,
           email,
+          phone,
           service,
           message,
           locationText,
@@ -92,8 +103,8 @@ export function ConnectContent() {
   }
 
   return (
-    <main className="pt-32 sm:pt-40 pb-20 sm:pb-28 px-6 lg:px-12 max-w-[1000px] mx-auto">
-      <div className="text-center mb-12 sm:mb-16">
+    <main className="pt-32 sm:pt-40 pb-20 sm:pb-28 px-4 sm:px-8 max-w-[1000px] mx-auto">
+      <div className="text-center mb-10 sm:mb-16">
         <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-3 font-semibold">
           ✦ ATELIER CONSULTATION
         </span>
@@ -108,30 +119,53 @@ export function ConnectContent() {
         {/* Dynamic Location Badge */}
         <div className="mb-8 p-3.5 bg-[#EFECE6] border-l-2 border-[#1A1A1A] text-[9px] sm:text-[10px] font-mono tracking-wider text-black/75 flex items-center justify-between flex-wrap gap-2 rounded-xs">
           <span>{locationText}</span>
-          <span className="text-[8px] uppercase font-bold text-black/50 px-2 py-0.5 bg-white/80 rounded-xs">
-            Fast Response Service
+          <span className="text-[8px] uppercase font-bold text-black/60 px-2.5 py-1 bg-white rounded-xs border border-black/10">
+            {locationStatus === 'success' ? 'GPS Active 📍' : 'Location Optional'}
           </span>
         </div>
 
         <h2 className="font-serif text-2xl sm:text-3xl font-light mb-8 text-[#1A1A1A]">Send Us a Message</h2>
 
         {submitted ? (
-          <div className="p-8 bg-[#EFECE6] border border-black/15 text-center flex flex-col items-center gap-4 rounded-xs">
-            <span className="text-2xl">✦</span>
-            <h3 className="font-serif text-2xl font-light text-[#1A1A1A]">Inquiry Transmitted via Nodemailer</h3>
-            <p className="font-sans text-xs text-black/75 max-w-md leading-relaxed">
-              Thank you, <strong className="font-semibold">{firstName}</strong>! Your inquiry and location context ({locationText.replace('📍 ', '')}) have been transmitted directly to <strong className="font-semibold">muhammedsyam.dev@gmail.com</strong>. Jennifer will respond shortly for priority service.
+          <div className="p-8 sm:p-12 bg-[#EFECE6] border-2 border-black text-center flex flex-col items-center gap-5 rounded-xs shadow-md">
+            <div className="w-14 h-14 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-2xl shadow-sm">
+              ✓
+            </div>
+
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/50 font-bold">
+              CONFIRMATION RECEIPT
+            </span>
+
+            <h3 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A]">
+              Message Sent Successfully!
+            </h3>
+
+            <p className="font-sans text-xs sm:text-sm text-black/80 max-w-lg leading-relaxed font-light">
+              Thank you, <strong className="font-semibold text-black">{firstName}</strong>! Your consultation request, contact details, and location context have been transmitted directly to Jennifer at <strong className="font-semibold text-black">muhammedsyam.dev@gmail.com</strong>.
             </p>
+
+            <div className="p-4 bg-white/90 border border-black/10 text-left w-full max-w-md font-mono text-[9px] text-black/80 rounded-xs space-y-1.5 shadow-xs">
+              <p><strong>Client Name:</strong> {firstName} {lastName}</p>
+              <p><strong>Phone Number:</strong> {phone}</p>
+              <p><strong>Email Address:</strong> {email}</p>
+              <p><strong>Selected Service:</strong> {service || 'General Inquiry'}</p>
+              <p><strong>Detected Location:</strong> {locationText.replace('📍 ', '')}</p>
+              {coords && (
+                <p><strong>GPS Coordinates:</strong> {coords.lat.toFixed(4)}°, {coords.lng.toFixed(4)}°</p>
+              )}
+            </div>
+
             <button
               onClick={() => {
                 setSubmitted(false);
                 setFirstName('');
                 setLastName('');
                 setEmail('');
+                setPhone('');
                 setMessage('');
                 setService('');
               }}
-              className="mt-4 px-6 py-2.5 bg-black text-white text-[9px] font-mono uppercase tracking-[0.2em] cursor-pointer"
+              className="mt-2 px-8 py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-[9px] font-mono uppercase tracking-[0.25em] font-semibold cursor-pointer rounded-xs transition-colors shadow-sm"
             >
               Send Another Inquiry
             </button>
@@ -167,15 +201,29 @@ export function ConnectContent() {
               </div>
             </div>
             
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Email *</label>
-              <input 
-                type="email" 
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" 
-                required 
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="flex flex-col gap-2">
+                <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Email *</label>
+                <input 
+                  type="email" 
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" 
+                  required 
+                />
+              </div>
+              
+              <div className="flex flex-col gap-2">
+                <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Phone Number *</label>
+                <input 
+                  type="tel" 
+                  value={phone}
+                  placeholder="+91 98765 43210"
+                  onChange={e => setPhone(e.target.value)}
+                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" 
+                  required 
+                />
+              </div>
             </div>
 
             {/* HIGH-FASHION DESIGNER VIBE DROPDOWN HEADING */}
@@ -216,7 +264,7 @@ export function ConnectContent() {
               disabled={isSubmitting}
               className="w-full sm:w-auto self-start px-10 py-4 bg-black text-white font-sans text-xs font-medium uppercase tracking-[0.25em] hover:bg-black/85 transition-colors shadow-sm rounded-xs cursor-pointer disabled:opacity-50"
             >
-              {isSubmitting ? 'Transmitting Email...' : 'Submit →'}
+              {isSubmitting ? 'Transmitting Email...' : 'Submit Message →'}
             </button>
           </form>
         )}
