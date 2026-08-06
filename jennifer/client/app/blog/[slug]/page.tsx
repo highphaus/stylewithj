@@ -16,17 +16,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) return { title: 'Article Not Found | Style with J' };
 
+  const canonicalUrl = `https://stylewithj.com/blog/${post.slug}`;
+
   return {
-    title: `${post.metaTitle} | Style with J`,
+    title: post.metaTitle,
     description: post.metaDescription,
     keywords: post.keywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
+      url: canonicalUrl,
       type: 'article',
       publishedTime: post.publishDate,
       authors: [post.author],
-      images: [{ url: post.coverImage }],
+      images: [
+        {
+          url: `https://stylewithj.com${post.coverImage}`,
+          width: 1200,
+          height: 630,
+          alt: post.coverImageAlt || post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.metaTitle,
+      description: post.metaDescription,
+      images: [`https://stylewithj.com${post.coverImage}`],
     },
   };
 }
@@ -47,11 +66,16 @@ export default async function BlogPostPage({ params }: Props) {
 
   // Related articles from same category or fallback
   const relatedPosts = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const articleUrl = `https://stylewithj.com/blog/${post.slug}`;
 
-  // Article JSON-LD Schema
+  // Schema.org BlogPosting Structured Data
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': articleUrl,
+    },
     headline: post.title,
     description: post.metaDescription,
     image: `https://stylewithj.com${post.coverImage}`,
@@ -118,7 +142,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="relative w-full h-[450px] sm:h-[550px] bg-[#0D0D0D] border border-black/10 overflow-hidden mb-12 rounded-xs shadow-md">
             <Image
               src={post.coverImage}
-              alt={post.title}
+              alt={post.coverImageAlt || post.title}
               fill
               priority
               className="object-cover object-top"
@@ -198,7 +222,7 @@ export default async function BlogPostPage({ params }: Props) {
             </Link>
           </div>
 
-          {/* Internal Links to Core Services */}
+          {/* Internal Links to Core Services & Journal Articles */}
           <div className="mt-10 pt-6 border-t border-black/10 flex flex-wrap items-center justify-between gap-4 text-xs font-sans text-black/60">
             <div className="flex flex-wrap items-center gap-4">
               <span className="font-semibold text-black">Explore Services:</span>
@@ -208,26 +232,13 @@ export default async function BlogPostPage({ params }: Props) {
               <Link href="/services" className="hover:text-black border-b border-black/20 pb-0.5">Occasion Styling</Link>
             </div>
           </div>
-
-          {/* Keywords Tag Cloud */}
-          <div className="mt-8 pt-6 border-t border-black/5 flex flex-wrap gap-2">
-            <span className="font-mono text-[9px] text-black/40 font-bold uppercase mr-2">Target Keywords:</span>
-            {post.keywords.map((kw, i) => (
-              <span key={i} className="text-[9px] font-mono bg-[#EFECE6] px-2.5 py-1 rounded-xs text-black/60">
-                #{kw}
-              </span>
-            ))}
-          </div>
         </article>
 
         {/* ── RELATED ARTICLES ── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-12 lg:px-20 mt-20 pt-16 border-t border-black/10">
           <div className="mb-8">
-            <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 font-semibold block mb-2">
-              MORE FROM THE JOURNAL
-            </span>
             <h2 className="font-serif text-2xl sm:text-4xl font-light text-black">
-              Related Style Guides
+              More From The Journal
             </h2>
           </div>
 
@@ -241,7 +252,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <div className="relative aspect-[4/3] bg-[#0D0D0D] overflow-hidden">
                   <Image
                     src={rel.coverImage}
-                    alt={rel.title}
+                    alt={rel.coverImageAlt || rel.title}
                     fill
                     className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />

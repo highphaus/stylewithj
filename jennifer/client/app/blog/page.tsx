@@ -202,14 +202,9 @@ export default function JournalPage() {
                         <span>Read Article</span>
                         <span>→</span>
                       </Link>
-
-                      <div className="flex items-center gap-1">
-                        {post.keywords.slice(0, 2).map((tag, i) => (
-                          <span key={i} className="font-mono text-[7.5px] text-black/40 uppercase bg-black/5 px-1.5 py-0.5 rounded-xs">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                      <span className="font-mono text-[8px] text-black/40 uppercase font-semibold">
+                        {post.readTime}
+                      </span>
                     </div>
                   </div>
                 </article>
