@@ -235,7 +235,7 @@ export default function LookbookGrid() {
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                     <span className="bg-black/90 text-white px-5 py-2.5 text-[9px] tracking-[0.25em] uppercase font-mono font-semibold border border-white/20 shadow-xl rounded-xs">
-                      🔍 Click for High-Res View
+                      Tap to View
                     </span>
                   </div>
                 </motion.div>

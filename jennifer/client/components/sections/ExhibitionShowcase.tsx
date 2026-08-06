@@ -66,7 +66,7 @@ export default function ExhibitionShowcase() {
               />
               <div className="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-500 flex items-center justify-center">
                 <span className="text-white text-[10px] tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500 border border-white/40 px-4 py-2 backdrop-blur-[2px]">
-                  View Fragment
+                  Tap to View
                 </span>
               </div>
             </div>

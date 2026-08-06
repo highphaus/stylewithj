@@ -78,7 +78,7 @@ export default function DesignerBoutique() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="block text-center bg-black/85 text-white text-[8px] font-mono tracking-[0.2em] uppercase py-2 backdrop-blur-md rounded-xs border border-white/10">
-                    Click to View Details
+                    Tap to View
                   </span>
                 </div>
               </div>

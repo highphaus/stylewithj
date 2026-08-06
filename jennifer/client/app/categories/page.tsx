@@ -127,12 +127,9 @@ export default function CategoriesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
                   
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+                  <div className="absolute bottom-4 left-4 pointer-events-none">
                     <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-white bg-black/85 px-3 py-1.5 rounded-xs border border-white/20">
                       Tap to View
-                    </span>
-                    <span className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-white/80 bg-black/50 px-2.5 py-1 backdrop-blur-sm rounded-xs">
-                      {activeHeroCategory.subtitle}
                     </span>
                   </div>
                 </motion.div>
@@ -271,12 +268,9 @@ export default function CategoriesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                  <div className="absolute bottom-4 left-4 pointer-events-none">
                     <span className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-white bg-black/80 px-3 py-1.5 rounded-xs border border-white/20">
                       Tap to View
-                    </span>
-                    <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-white/80 bg-black/50 px-2.5 py-1 backdrop-blur-sm">
-                      {cat.subtitle}
                     </span>
                   </div>
                 </div>
