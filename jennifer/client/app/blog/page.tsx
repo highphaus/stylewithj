@@ -90,7 +90,7 @@ export default function JournalPage() {
 
           <div className="flex items-center justify-between text-xs font-mono text-black/50">
             <span>Showing {filteredPosts.length} Styling Guides</span>
-            <span className="text-[10px] uppercase font-bold text-black/40">Bangalore Styling Journal</span>
+            <span className="text-[10px] uppercase font-bold text-black/40">Style with J</span>
           </div>
         </section>
 
