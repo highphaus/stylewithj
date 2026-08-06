@@ -9,20 +9,19 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'Personal Stylist & Image Consultant in Bangalore | Style with J',
-  description: 'Premier Personal Stylist & Image Consultant in Bangalore. Specializing in executive workwear, wardrobe audits, personal shopping, and bridal trousseau styling in Indiranagar, Koramangala & Whitefield.',
+  title: 'Personal Stylist | Style with J',
+  description: 'Premier Personal Stylist & Image Consultant. Tailored wardrobe audits, executive workwear, personal shopping, and bridal trousseau styling in Bangalore & virtually worldwide.',
   keywords: [
-    'personal stylist in bangalore',
-    'best personal stylist bangalore',
+    'personal stylist',
+    'personal stylist bangalore',
+    'style with j',
     'personal shopper in bangalore',
     'image consultant bangalore',
     'wardrobe stylist bangalore',
     'executive image consultant bangalore',
     'workwear capsule wardrobe bangalore',
     'bridal personal stylist bangalore',
-    'fashion consultant near me',
     'virtual wardrobe consultant',
-    'tech executive style bangalore',
   ],
   authors: [{ name: 'Jennifer (J)' }],
   creator: 'Style with J',
@@ -31,20 +30,32 @@ export const metadata: Metadata = {
     canonical: 'https://stylewithj.com',
   },
   openGraph: {
-    title: 'Personal Stylist & Image Consultant in Bangalore | Style with J',
-    description: 'Elevate your personal image with Bangalore’s top personal stylist and image consultant. Tailored wardrobe audits, executive styling, and personal shopping.',
+    title: 'Personal Stylist | Style with J',
+    description: 'Premier Personal Stylist & Image Consultant. Tailored wardrobe audits, executive workwear, personal shopping, and bridal trousseau styling in Bangalore & virtually worldwide.',
     url: 'https://stylewithj.com',
     siteName: 'Style with J',
     locale: 'en_IN',
     type: 'website',
     images: [
       {
-        url: '/images/hero/hero%20image%20desktop.png',
+        url: 'https://stylewithj.com/images/style%20with%20j.png',
         width: 1200,
         height: 630,
-        alt: 'Style with J - Personal Stylist Bangalore',
+        alt: 'Personal Stylist | Style with J',
+      },
+      {
+        url: 'https://stylewithj.com/images/includes/IMG_8863.JPG.jpeg',
+        width: 1200,
+        height: 630,
+        alt: 'Personal Stylist | Style with J Workwear',
       },
     ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Personal Stylist | Style with J',
+    description: 'Premier Personal Stylist & Image Consultant. Tailored wardrobe audits, executive workwear, personal shopping, and bridal trousseau styling.',
+    images: ['https://stylewithj.com/images/style%20with%20j.png'],
   },
   robots: {
     index: true,
