@@ -169,12 +169,12 @@ export default function CategoriesPage() {
                 <span className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/40 font-bold">
                   SWITCH SILHOUETTE PILLAR:
                 </span>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-nowrap overflow-x-auto no-scrollbar sm:grid sm:grid-cols-2 gap-2 -mx-2 px-2 sm:mx-0 sm:px-0 py-1">
                   {categoryData.map((cat, idx) => (
                     <button
                       key={cat.id}
                       onClick={() => setActiveStageIdx(idx)}
-                      className={`p-2.5 text-left font-mono text-[8.5px] tracking-[0.12em] uppercase transition-all rounded-xs border cursor-pointer truncate ${
+                      className={`p-2.5 text-left font-mono text-[8.5px] tracking-[0.12em] uppercase transition-all rounded-xs border cursor-pointer shrink-0 whitespace-nowrap sm:whitespace-normal sm:truncate ${
                         activeStageIdx === idx
                           ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
                           : 'bg-white text-black/70 border-black/15 hover:border-black/40 hover:text-black font-medium'
@@ -208,11 +208,11 @@ export default function CategoriesPage() {
 
       {/* ── 4. CATEGORY SELECTOR TOOLBAR ── */}
       <main className="px-4 sm:px-10 lg:px-16 max-w-7xl mx-auto py-8 sm:py-12">
-        <div className="mb-12 pb-6 border-b border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="mb-8 sm:mb-12 pb-5 border-b border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="w-full sm:w-auto flex items-center gap-2 overflow-x-auto no-scrollbar flex-nowrap -mx-4 px-4 sm:mx-0 sm:px-0 py-1">
             <button
               onClick={() => setSelectedTab('all')}
-              className={`px-4 py-2.5 sm:px-3.5 sm:py-2 text-[9px] sm:text-[9.5px] tracking-[0.15em] uppercase font-mono transition-all rounded-xs border cursor-pointer shrink-0 whitespace-nowrap active:scale-95 ${
+              className={`px-3.5 py-2 text-[9px] sm:text-[9.5px] tracking-[0.15em] uppercase font-mono transition-all rounded-xs border cursor-pointer shrink-0 whitespace-nowrap active:scale-95 ${
                 selectedTab === 'all'
                   ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
                   : 'bg-white text-black/75 border-black/15 hover:border-black/40 hover:text-black font-medium'
@@ -226,7 +226,7 @@ export default function CategoriesPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedTab(cat.id)}
-                  className={`px-4 py-2.5 sm:px-3.5 sm:py-2 text-[9px] sm:text-[9.5px] tracking-[0.15em] uppercase font-mono transition-all rounded-xs border cursor-pointer shrink-0 whitespace-nowrap active:scale-95 ${
+                  className={`px-3.5 py-2 text-[9px] sm:text-[9.5px] tracking-[0.15em] uppercase font-mono transition-all rounded-xs border cursor-pointer shrink-0 whitespace-nowrap active:scale-95 ${
                     isActive
                       ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
                       : 'bg-white text-black/75 border-black/15 hover:border-black/40 hover:text-black font-medium'
@@ -237,7 +237,7 @@ export default function CategoriesPage() {
               );
             })}
           </div>
-          <span className="font-mono text-xs text-black/50 font-bold">
+          <span className="font-mono text-xs text-black/50 font-bold hidden sm:inline-block">
             Style with J
           </span>
         </div>
