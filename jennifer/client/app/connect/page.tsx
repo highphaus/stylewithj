@@ -106,7 +106,7 @@ export function ConnectContent() {
     <main className="pt-32 sm:pt-40 pb-20 sm:pb-28 px-4 sm:px-8 max-w-[1000px] mx-auto">
       <div className="text-center mb-10 sm:mb-16">
         <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-3 font-semibold">
-          ✦ ATELIER CONSULTATION
+          ✦ STYLING CONSULTATION
         </span>
         <h1 className="font-serif text-4xl sm:text-6xl font-light tracking-tight text-[#1A1A1A]">
           Let's Connect
@@ -218,9 +218,9 @@ export function ConnectContent() {
                 <input 
                   type="tel" 
                   value={phone}
-                  placeholder="+91 98765 43210"
+                  placeholder="Enter your phone number (e.g., +91 98765 43210)"
                   onChange={e => setPhone(e.target.value)}
-                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" 
+                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/35" 
                   required 
                 />
               </div>
@@ -237,7 +237,7 @@ export function ConnectContent() {
                 className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors text-black/90 cursor-pointer"
                 required
               >
-                <option value="" disabled className="bg-[#FAF8F3] text-black/50">Choose Your Desired Atelier Curation...</option>
+                <option value="" disabled className="bg-[#FAF8F3] text-black/50">Choose Your Desired Styling Service...</option>
                 <option value="Personal Styling" className="bg-[#FAF8F3] text-black">Personal Styling</option>
                 <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling</option>
                 <option value="Personal Shopping" className="bg-[#FAF8F3] text-black">Personal Shopping</option>

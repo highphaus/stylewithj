@@ -94,17 +94,17 @@ export async function POST(req: Request) {
         </div>
 
         <div style="border-top: 1px solid #1A1A1A22; padding-top: 16px; font-size: 10px; font-family: monospace; color: #888; text-transform: uppercase; letter-spacing: 0.2em;">
-          Transmitted via Style with J Atelier Portal • Priority Response Requested
+          Transmitted via Style with J • Priority Response Requested
         </div>
       </div>
     `;
 
     if (emailPass) {
       const info = await transporter.sendMail({
-        from: `"Style with J Atelier" <${emailUser}>`,
+        from: `"Style with J" <${emailUser}>`,
         to: recipientEmail,
         replyTo: email,
-        subject: `✦ NEW ATELIER INQUIRY: ${firstName} ${lastName || ''} (${formattedPhone})`,
+        subject: `✦ NEW STYLING INQUIRY: ${firstName} ${lastName || ''} (${formattedPhone})`,
         text: `New Client Consultation Request\n\nName: ${firstName} ${lastName}\nPhone: ${formattedPhone}\nEmail: ${email}\nService: ${service}\nLocation: ${formattedLocation}\nGPS: ${coords ? `${coords.lat}, ${coords.lng}` : 'N/A'}\nGoogle Maps: ${googleMapsUrl || 'N/A'}\n\nMessage:\n${message}`,
         html: htmlContent,
       });
