@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
-import { BLOG_POSTS, BlogPost } from '@/lib/blog-data';
+import { BLOG_POSTS } from '@/lib/blog-data';
 
 const categories = [
   { label: 'ALL GUIDES', value: 'all' },
@@ -37,70 +37,23 @@ export default function JournalPage() {
       <Navigation />
 
       {/* ── 1. TYPOGRAPHIC PURE HEADER ── */}
-      <header className="pt-32 sm:pt-40 pb-10 sm:pb-16 px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
+      <header className="pt-32 sm:pt-40 pb-8 sm:pb-12 px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto border-b border-black/10">
         <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-2 sm:mb-3 font-semibold">
-          ✦ STYLING LEDGER & JOURNAL
+          ✦ STYLING JOURNAL
         </span>
         <h1 className="font-serif text-3xl sm:text-6xl lg:text-7xl font-light tracking-tight leading-none text-black">
           Style, decoded.
         </h1>
-        <p className="font-serif text-sm sm:text-xl lg:text-2xl text-black/60 font-light italic leading-relaxed mt-3 sm:mt-6 max-w-3xl">
+        <p className="font-serif text-sm sm:text-xl lg:text-2xl text-black/60 font-light italic leading-relaxed mt-3 sm:mt-5 max-w-3xl">
           Curated styling advice, Bangalore weather guides, executive workwear, local shopping itineraries, and trousseau edits.
         </p>
       </header>
 
-      <main className="px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto py-10 sm:py-16">
+      <main className="px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto py-8 sm:py-12">
         
-        {/* ── 2. FEATURED ARTICLE BANNER ── */}
-        <section className="mb-14 sm:mb-20">
-          <div className="bg-[#EFECE6] border border-black/10 rounded-xs overflow-hidden shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-0">
-            <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[440px] bg-[#0D0D0D]">
-              <Image
-                src={featuredPost.coverImage}
-                alt={featuredPost.title}
-                fill
-                priority
-                className="object-cover object-top"
-                unoptimized
-              />
-              <div className="absolute top-4 left-4 bg-black/80 text-white font-mono text-[8px] tracking-[0.25em] uppercase font-semibold px-3 py-1 backdrop-blur-sm">
-                FEATURED STYLE GUIDE
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col justify-between gap-6">
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-[9px] text-black/50 font-bold uppercase">{featuredPost.category}</span>
-                  <span className="text-black/30">•</span>
-                  <span className="font-mono text-[9px] text-black/40">{featuredPost.readTime}</span>
-                </div>
-
-                <h2 className="font-serif text-2xl sm:text-3xl font-light text-black leading-snug mb-3">
-                  {featuredPost.title}
-                </h2>
-
-                <p className="font-sans text-xs sm:text-sm text-black/70 font-light leading-relaxed mb-4">
-                  {featuredPost.excerpt}
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-black/10 flex items-center justify-between">
-                <Link
-                  href={`/journal/${featuredPost.slug}`}
-                  className="inline-flex items-center gap-2 px-5 py-3 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-xs"
-                >
-                  Read Full Guide →
-                </Link>
-                <span className="font-mono text-[8.5px] text-black/40">Bangalore, IN</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── 3. SEARCH & CATEGORY FILTER BAR ── */}
-        <section className="mb-10 pt-6 border-t border-black/10">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+        {/* ── 2. CATEGORY FILTERS & SEARCH BAR (AT THE VERY TOP) ── */}
+        <section className="mb-10 pb-6 border-b border-black/10">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
             {/* Category Filter Pills */}
             <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-2 md:pb-0">
               {categories.map((cat) => {
@@ -112,7 +65,7 @@ export default function JournalPage() {
                     className={`px-3.5 py-2 text-[8.5px] sm:text-[9px] tracking-[0.15em] uppercase font-mono transition-all rounded-xs border cursor-pointer whitespace-nowrap ${
                       isActive
                         ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
-                        : 'bg-white text-black/60 border-black/10 hover:border-black/30 hover:text-black font-medium'
+                        : 'bg-white text-black/70 border-black/15 hover:border-black/40 hover:text-black font-medium'
                     }`}
                   >
                     {cat.label}
@@ -128,16 +81,65 @@ export default function JournalPage() {
                 placeholder="Search guide or topic..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white border border-black/15 px-3.5 py-2 text-xs font-sans text-black placeholder:text-black/40 focus:outline-none focus:border-black rounded-xs"
+                className="w-full bg-white border border-black/15 px-3.5 py-2 text-xs font-sans text-black placeholder:text-black/40 focus:outline-none focus:border-black rounded-xs shadow-xs"
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs font-mono text-black/45 pb-4 border-b border-black/10">
-            <span>Showing {filteredPosts.length} Guides</span>
-            <span>SEO Content Ledger // Style with J</span>
+          <div className="flex items-center justify-between text-xs font-mono text-black/50">
+            <span>Showing {filteredPosts.length} Styling Guides</span>
+            <span className="text-[10px] uppercase font-bold text-black/40">Bangalore Styling Journal</span>
           </div>
         </section>
+
+        {/* ── 3. FEATURED ARTICLE BANNER ── */}
+        {selectedCategory === 'all' && !searchQuery && (
+          <section className="mb-14 sm:mb-16">
+            <div className="bg-[#EFECE6] border border-black/10 rounded-xs overflow-hidden shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-0">
+              <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[440px] bg-[#0D0D0D]">
+                <Image
+                  src={featuredPost.coverImage}
+                  alt={featuredPost.title}
+                  fill
+                  priority
+                  className="object-cover object-top"
+                  unoptimized
+                />
+                <div className="absolute top-4 left-4 bg-black/80 text-white font-mono text-[8px] tracking-[0.25em] uppercase font-semibold px-3 py-1 backdrop-blur-sm">
+                  FEATURED STYLE GUIDE
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col justify-between gap-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="font-mono text-[9px] text-black/50 font-bold uppercase">{featuredPost.category}</span>
+                    <span className="text-black/30">•</span>
+                    <span className="font-mono text-[9px] text-black/40">{featuredPost.readTime}</span>
+                  </div>
+
+                  <h2 className="font-serif text-2xl sm:text-3xl font-light text-black leading-snug mb-3">
+                    {featuredPost.title}
+                  </h2>
+
+                  <p className="font-sans text-xs sm:text-sm text-black/70 font-light leading-relaxed mb-4">
+                    {featuredPost.excerpt}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-black/10 flex items-center justify-between">
+                  <Link
+                    href={`/journal/${featuredPost.slug}`}
+                    className="inline-flex items-center gap-2 px-5 py-3 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-xs"
+                  >
+                    Read Full Guide →
+                  </Link>
+                  <span className="font-mono text-[8.5px] text-black/40">Bangalore, IN</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── 4. ARTICLES GRID ── */}
         <section className="mb-20">
@@ -146,7 +148,7 @@ export default function JournalPage() {
               <p className="font-serif text-lg text-black/60 italic">No articles found matching your criteria.</p>
               <button
                 onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
-                className="mt-4 font-mono text-[9px] tracking-[0.2em] uppercase text-black font-semibold border-b border-black pb-0.5"
+                className="mt-4 font-mono text-[9px] tracking-[0.2em] uppercase text-black font-semibold border-b border-black pb-0.5 cursor-pointer"
               >
                 Reset Filters
               </button>
@@ -171,15 +173,15 @@ export default function JournalPage() {
                     </div>
                   </Link>
 
-                  <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
+                  <div className="p-6 flex-1 flex flex-col justify-between gap-4">
                     <div>
-                      <div className="flex items-center gap-2 mb-2 font-mono text-[8.5px] text-black/45">
-                        <span>{post.publishDate}</span>
-                        <span>•</span>
-                        <span>{post.readTime}</span>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-mono text-[8.5px] text-black/40">{post.readTime}</span>
+                        <span className="text-black/20">•</span>
+                        <span className="font-mono text-[8.5px] text-black/40">{post.publishDate}</span>
                       </div>
 
-                      <h3 className="font-serif text-lg sm:text-xl font-light text-black leading-snug mb-2 group-hover:text-black/70 transition-colors">
+                      <h3 className="font-serif text-xl text-black font-light leading-snug group-hover:text-black/70 transition-colors mb-2">
                         <Link href={`/journal/${post.slug}`}>
                           {post.title}
                         </Link>
@@ -193,17 +195,19 @@ export default function JournalPage() {
                     <div className="pt-4 border-t border-black/10 flex items-center justify-between">
                       <Link
                         href={`/journal/${post.slug}`}
-                        className="font-mono text-[9px] tracking-[0.2em] uppercase text-black font-semibold hover:opacity-60 transition-opacity flex items-center gap-1.5"
+                        className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-black font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1"
                       >
-                        Read Guide <span className="text-xs">→</span>
+                        <span>Read Article</span>
+                        <span>→</span>
                       </Link>
 
-                      <Link
-                        href="/connect"
-                        className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40 hover:text-black transition-colors"
-                      >
-                        Book Session
-                      </Link>
+                      <div className="flex items-center gap-1">
+                        {post.keywords.slice(0, 2).map((tag, i) => (
+                          <span key={i} className="font-mono text-[7.5px] text-black/40 uppercase bg-black/5 px-1.5 py-0.5 rounded-xs">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -212,26 +216,6 @@ export default function JournalPage() {
           )}
         </section>
 
-        {/* ── 5. BOTTOM CLIENT OFFER BANNER ── */}
-        <section className="bg-[#EFECE6] p-8 sm:p-12 border border-black/10 rounded-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="max-w-xl">
-            <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-black/50 font-semibold block mb-2">
-              BANGALORE PERSONAL STYLING
-            </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-light text-black leading-snug">
-              Ready to curate a wardrobe that fits your lifestyle?
-            </h3>
-            <p className="font-sans text-xs sm:text-sm text-black/70 font-light leading-relaxed mt-2">
-              Book a Style Discovery session with J today in Bangalore or virtually worldwide.
-            </p>
-          </div>
-          <Link
-            href="/connect"
-            className="px-6 py-3.5 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9px] tracking-[0.25em] uppercase font-semibold transition-colors shadow-sm rounded-xs flex-shrink-0"
-          >
-            Book Discovery Session →
-          </Link>
-        </section>
       </main>
 
       <AtelierFooter />
