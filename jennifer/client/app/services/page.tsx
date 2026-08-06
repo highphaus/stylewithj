@@ -360,7 +360,6 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/40">/{svc.num}</span>
                   <h3 className="font-serif text-4xl font-light tracking-wide text-[#1A1A1A] uppercase">
                     {svc.title}
                   </h3>

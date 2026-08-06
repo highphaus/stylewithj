@@ -10,8 +10,8 @@ interface ScrollPriorityBadgeProps {
 }
 
 export default function ScrollPriorityBadge({
-  text = 'Click & View',
-  icon = '👁',
+  text = 'Tap to View',
+  icon = '',
   onClick,
   className = '',
 }: ScrollPriorityBadgeProps) {
@@ -47,7 +47,7 @@ export default function ScrollPriorityBadge({
       } ${className}`}
     >
       <span>{text}</span>
-      <span className="text-[10px]">{icon}</span>
+      {icon && <span className="text-[10px]">{icon}</span>}
     </div>
   );
 }

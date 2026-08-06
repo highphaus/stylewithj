@@ -82,7 +82,7 @@ export default function LookPage() {
               <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
               {/* Look number badge */}
               <div className="absolute top-6 left-6 bg-black/75 backdrop-blur-md text-white px-3 py-1 text-[8px] tracking-[0.3em] font-mono uppercase border border-white/10 rounded-xs">
-                LOOK /{look.num}
+                LOOK {look.num}
               </div>
             </div>
 
@@ -93,7 +93,7 @@ export default function LookPage() {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between pb-5 border-b border-black/10">
                   <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/45 font-bold">
-                    /{look.num} OF {String(looks.length).padStart(2, '0')}
+                    LOOK {look.num} OF {String(looks.length).padStart(2, '0')}
                   </span>
                   <span className="px-3 py-1 bg-[#1A1A1A] text-white text-[8px] tracking-[0.2em] font-mono uppercase font-semibold rounded-xs">
                     {look.category}

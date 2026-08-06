@@ -54,24 +54,26 @@ export default function JournalPage() {
         {/* ── 2. CATEGORY FILTERS & SEARCH BAR (AT THE VERY TOP) ── */}
         <section className="mb-10 pb-6 border-b border-black/10">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-2 md:pb-0">
-              {categories.map((cat) => {
-                const isActive = selectedCategory === cat.value;
-                return (
-                  <button
-                    key={cat.value}
-                    onClick={() => setSelectedCategory(cat.value)}
-                    className={`px-3.5 py-2 text-[8.5px] sm:text-[9px] tracking-[0.15em] uppercase font-mono transition-all rounded-xs border cursor-pointer whitespace-nowrap ${
-                      isActive
-                        ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
-                        : 'bg-white text-black/70 border-black/15 hover:border-black/40 hover:text-black font-medium'
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                );
-              })}
+            {/* Responsive Category Filter Pills: Smooth Horizontal Track on Mobile, Wrap on Desktop */}
+            <div className="w-full md:w-auto overflow-hidden">
+              <div className="flex flex-nowrap md:flex-wrap items-center gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+                {categories.map((cat) => {
+                  const isActive = selectedCategory === cat.value;
+                  return (
+                    <button
+                      key={cat.value}
+                      onClick={() => setSelectedCategory(cat.value)}
+                      className={`px-4 py-2.5 md:px-3.5 md:py-2 text-[9px] sm:text-[9.5px] tracking-[0.12em] uppercase font-mono transition-all rounded-xs border cursor-pointer shrink-0 whitespace-nowrap active:scale-95 touch-manipulation ${
+                        isActive
+                          ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
+                          : 'bg-white text-black/80 border-black/15 hover:border-black/40 hover:text-black font-medium'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Search Input */}
@@ -81,7 +83,7 @@ export default function JournalPage() {
                 placeholder="Search guide or topic..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white border border-black/15 px-3.5 py-2 text-xs font-sans text-black placeholder:text-black/40 focus:outline-none focus:border-black rounded-xs shadow-xs"
+                className="w-full bg-white border border-black/15 px-3.5 py-2.5 md:py-2 text-xs font-sans text-black placeholder:text-black/40 focus:outline-none focus:border-black rounded-xs shadow-xs"
               />
             </div>
           </div>
@@ -129,7 +131,7 @@ export default function JournalPage() {
 
                 <div className="pt-4 border-t border-black/10 flex items-center justify-between">
                   <Link
-                    href={`/journal/${featuredPost.slug}`}
+                    href={`/blog/${featuredPost.slug}`}
                     className="inline-flex items-center gap-2 px-5 py-3 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-xs"
                   >
                     Read Full Guide →
@@ -160,7 +162,7 @@ export default function JournalPage() {
                   key={post.slug}
                   className="group flex flex-col bg-white border border-black/10 hover:border-black/30 transition-all duration-300 rounded-xs overflow-hidden shadow-xs hover:shadow-md"
                 >
-                  <Link href={`/journal/${post.slug}`} className="relative aspect-[16/10] bg-[#0D0D0D] overflow-hidden block">
+                  <Link href={`/blog/${post.slug}`} className="relative aspect-[16/10] bg-[#0D0D0D] overflow-hidden block">
                     <Image
                       src={post.coverImage}
                       alt={post.title}
@@ -182,7 +184,7 @@ export default function JournalPage() {
                       </div>
 
                       <h3 className="font-serif text-xl text-black font-light leading-snug group-hover:text-black/70 transition-colors mb-2">
-                        <Link href={`/journal/${post.slug}`}>
+                        <Link href={`/blog/${post.slug}`}>
                           {post.title}
                         </Link>
                       </h3>
@@ -194,7 +196,7 @@ export default function JournalPage() {
 
                     <div className="pt-4 border-t border-black/10 flex items-center justify-between">
                       <Link
-                        href={`/journal/${post.slug}`}
+                        href={`/blog/${post.slug}`}
                         className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-black font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1"
                       >
                         <span>Read Article</span>

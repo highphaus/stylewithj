@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLightbox } from '@/components/ImageLightbox';
-import ScrollPriorityBadge from '@/components/ScrollPriorityBadge';
 
 const transformationData = [
   {
@@ -14,7 +13,7 @@ const transformationData = [
     concept: "Deconstructing traditional constraints into structural drop-shoulder lines and deep tonal textures.",
     beforeImg: "/images/Before.jpeg",
     afterImg: "/images/After.jpeg",
-    specs: ["Canvas Alteration // Drop Line", "Heavy Matte Crepe Fabrics", "Palette // Pale Bone Tone"]
+    specs: ["Canvas Alteration · Drop Line", "Heavy Matte Crepe Fabrics", "Palette · Pale Bone Tone"]
   },
   {
     id: "02",
@@ -23,7 +22,7 @@ const transformationData = [
     concept: "Restructuring upper-torso proportions using monolithic wool structures and raw minimalist layering.",
     beforeImg: "/images/img09.jpeg",
     afterImg: "/images/img10.jpeg",
-    specs: ["Proportion Stance // Broadened", "Felted Wool Framework", "Palette // Deep Umber Ash"]
+    specs: ["Proportion Stance · Broadened", "Felted Wool Framework", "Palette · Deep Umber Ash"]
   },
   {
     id: "03",
@@ -32,7 +31,7 @@ const transformationData = [
     concept: "Curating presence through fluid architectural drapery, asymmetric necklines, and clean geometric lines.",
     beforeImg: "/images/img11.jpeg",
     afterImg: "/images/img12.jpeg",
-    specs: ["Fluid Geometric Draping", "Raw Spun Silk Composites", "Palette // True Charcoal Black"]
+    specs: ["Fluid Geometric Draping", "Raw Spun Silk Composites", "Palette · True Charcoal Black"]
   },
   {
     id: "04",
@@ -41,7 +40,7 @@ const transformationData = [
     concept: "A dramatic shift to curated minimalism, blending structured structural drops with historic tailored lines.",
     beforeImg: "/images/img13.jpeg",
     afterImg: "/images/img14.jpeg",
-    specs: ["Asymmetric Hem Disruption", "Technical Linen Matrix", "Palette // Slate Graphite"]
+    specs: ["Asymmetric Hem Disruption", "Technical Linen Matrix", "Palette · Slate Graphite"]
   }
 ];
 
@@ -195,8 +194,6 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                   <div className="absolute top-4 left-6 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
                     BEFORE
                   </div>
-                  {/* Scroll-Priority "Click & View" Pop-Up Badge on Mobile */}
-                  <ScrollPriorityBadge className="sm:hidden" />
                   <div className="absolute bottom-4 left-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>
@@ -218,8 +215,6 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                   <div className="absolute top-4 right-6 bg-black text-white px-3.5 py-1 text-[8px] sm:text-[9px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
                     AFTER
                   </div>
-                  {/* Scroll-Priority "Click & View" Pop-Up Badge on Mobile */}
-                  <ScrollPriorityBadge className="sm:hidden" />
                   <div className="absolute bottom-4 right-6 bg-black/80 backdrop-blur-md text-white/90 px-3.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                     ✦ CLICK TO EXPAND
                   </div>

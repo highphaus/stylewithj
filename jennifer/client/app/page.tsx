@@ -55,19 +55,19 @@ export default function Home() {
         <LookbookHorizon />
        
         {/* ── 8. BLOG SECTION (STYLE DECODED) ── */}
-        <section className="bg-[#FAF9F6] border-t border-black/15 py-12 sm:py-32 px-4 sm:px-12 lg:px-20 max-w-7xl mx-auto overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20 w-full min-w-0">
+        <section className="bg-[#FAF9F6] border-t border-black/15 py-8 sm:py-32 px-2.5 sm:px-12 lg:px-20 max-w-7xl mx-auto overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-20 w-full min-w-0">
             
             {/* Left intro box */}
-            <div className="col-span-12 lg:col-span-5 text-left flex flex-col justify-center items-start border-b lg:border-b-0 pb-6 lg:pb-0 border-black/10">
-              <h3 className="font-serif text-2xl sm:text-5xl font-light tracking-tight leading-tight mb-4 text-[#1A1A1A]">
+            <div className="col-span-12 lg:col-span-5 text-left flex flex-col justify-center items-start border-b lg:border-b-0 pb-4 lg:pb-0 border-black/10 px-1 sm:px-0">
+              <h3 className="font-serif text-2xl sm:text-5xl font-light tracking-tight leading-tight mb-2 sm:mb-4 text-[#1A1A1A]">
                 Style, decoded.
               </h3>
-              <p className="font-sans text-xs sm:text-sm text-black/65 leading-relaxed font-light mb-6 max-w-sm">
+              <p className="font-sans text-xs sm:text-sm text-black/65 leading-relaxed font-light mb-4 sm:mb-6 max-w-sm">
                 A space for styling advice, wardrobe inspiration, smart shopping, and everything in between.
               </p>
               <Link
-                href="/journal"
+                href="/blog"
                 className="font-mono text-[9px] tracking-[0.25em] text-black hover:text-black/60 uppercase border-b border-black pb-1 transition-colors font-semibold"
               >
                 Explore the Blog →
@@ -75,7 +75,7 @@ export default function Home() {
             </div>
 
             {/* Right articles list - Mobile & Desktop: Clickable Cards */}
-            <div className="col-span-12 lg:col-span-7 flex flex-col gap-3.5 sm:gap-6 w-full min-w-0">
+            <div className="col-span-12 lg:col-span-7 flex flex-col gap-3 sm:gap-6 w-full min-w-0">
               {[
                 { num: '01', title: '7 Styling Rules That Will Instantly Elevate Your Everyday Looks', category: 'The Style Edit', image: '/images/includes/IMG_0330.JPG.jpeg', slug: 'beyond-hoodies-tech-lead-executive-wardrobe-bangalore' },
                 { num: '02', title: "You Don't Need More Clothes. You Need Better Outfits.", category: 'The Wardrobe Edit', image: '/images/includes/IMG_8857.JPG.jpeg', slug: '15-piece-workwear-capsule-wardrobe-bangalore-professionals' },
@@ -83,8 +83,8 @@ export default function Home() {
               ].map((article) => (
                 <Link
                   key={article.num}
-                  href={`/journal/${article.slug}`}
-                  className="group flex flex-row items-center sm:items-stretch gap-3 sm:gap-6 p-3 sm:p-5 border border-black/10 bg-white/70 hover:bg-[#EFECE6]/40 transition-all duration-500 rounded-xs shadow-xs w-full min-w-0 overflow-hidden cursor-pointer"
+                  href={`/blog/${article.slug}`}
+                  className="group flex flex-row items-center sm:items-stretch gap-2.5 sm:gap-6 p-2.5 sm:p-5 border border-black/10 bg-white/70 hover:bg-[#EFECE6]/40 transition-all duration-500 rounded-xs shadow-xs w-full min-w-0 overflow-hidden cursor-pointer"
                 >
                   {/* Image Frame */}
                   <div 
@@ -103,8 +103,6 @@ export default function Home() {
                   <div className="flex-1 min-w-0 flex flex-col justify-between gap-1.5 py-0.5 overflow-hidden">
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 mb-1 min-w-0">
-                        <span className="font-mono text-[9px] text-black/40 font-bold flex-shrink-0">/{article.num}</span>
-                        <div className="w-1 h-1 rounded-full bg-black/20 flex-shrink-0" />
                         <span className="font-sans text-[8px] tracking-[0.15em] uppercase text-black/50 font-semibold truncate">{article.category}</span>
                       </div>
                       <h4 className="font-serif text-xs sm:text-lg lg:text-xl text-black font-light leading-snug group-hover:text-black/70 transition-colors line-clamp-2">

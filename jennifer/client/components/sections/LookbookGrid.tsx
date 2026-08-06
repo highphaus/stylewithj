@@ -148,10 +148,7 @@ export default function LookbookGrid() {
 
                     {/* Look Metadata & Drawer Toggle */}
                     <div className="p-6 flex flex-col gap-4 bg-[#FAF9F6]">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px] tracking-[0.2em] text-black/40 font-bold">
-                          /{look.num}
-                        </span>
+                      <div className="flex items-center justify-end">
                         <span className="font-mono text-[9px] tracking-[0.2em] text-black/50 uppercase font-semibold">
                           {look.concept}
                         </span>
@@ -249,9 +246,6 @@ export default function LookbookGrid() {
             <div className="lg:col-span-6 flex flex-col justify-between h-full gap-8">
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/50 font-bold">
-                    /{spotlightLook.num}
-                  </span>
                   <span className="px-3 py-1 bg-black text-white font-mono text-[8px] tracking-[0.25em] uppercase font-semibold rounded-xs">
                     {spotlightLook.category}
                   </span>

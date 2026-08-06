@@ -62,9 +62,6 @@ export default function BespokeServices() {
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute top-4 left-4 font-mono text-[9px] font-bold text-white bg-black/75 backdrop-blur-sm px-2.5 py-1 border border-white/10 rounded-xs">
-                  /{svc.num}
-                </div>
               </div>
               <div className="p-6 sm:p-8 flex flex-col flex-1 justify-between gap-6">
                 <div>

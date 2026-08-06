@@ -55,10 +55,7 @@ export default function SilhouetteMatrix() {
               className="p-8 sm:p-10 bg-[#FAF8F3] border border-black/10 hover:border-black/40 hover:bg-[#1A1A1A] hover:text-white group transition-all duration-500 ease-out rounded-xs shadow-xs flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="font-mono text-[9px] text-black/40 group-hover:text-white/50 font-bold">
-                    /{item.num}
-                  </span>
+                <div className="flex items-center justify-end mb-6">
                   <span className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 group-hover:text-white/70 bg-white/70 group-hover:bg-white/10 px-2.5 py-1 border border-black/5 group-hover:border-white/10 rounded-xs">
                     {item.badge}
                   </span>

@@ -89,10 +89,10 @@ export default async function BlogPostPage({ params }: Props) {
         <article className="max-w-4xl mx-auto px-4 sm:px-8">
           <div className="mb-6 flex flex-wrap items-center gap-3">
             <Link
-              href="/journal"
+              href="/blog"
               className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/50 hover:text-black font-semibold border-b border-black/20 pb-0.5"
             >
-              ← Back to Journal
+              ← Back to Blog
             </Link>
             <span className="text-black/30">•</span>
             <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/60 bg-[#EFECE6] px-2.5 py-1 rounded-xs font-semibold">
@@ -235,7 +235,7 @@ export default async function BlogPostPage({ params }: Props) {
             {relatedPosts.map((rel) => (
               <Link
                 key={rel.slug}
-                href={`/journal/${rel.slug}`}
+                href={`/blog/${rel.slug}`}
                 className="group flex flex-col bg-white border border-black/10 overflow-hidden hover:shadow-md transition-all duration-300 rounded-xs"
               >
                 <div className="relative aspect-[4/3] bg-[#0D0D0D] overflow-hidden">

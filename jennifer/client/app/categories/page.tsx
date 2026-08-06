@@ -102,7 +102,6 @@ export default function CategoriesPage() {
               <div className="flex flex-col justify-between p-6 sm:p-12 order-2 sm:order-1">
                 <div>
                   <div className="flex items-center justify-between mb-3 sm:mb-4">
-                    <span className="font-mono text-[10px] font-bold text-black/40">/{categoryData[0].num}</span>
                     <span className="font-sans text-[9px] tracking-[0.35em] uppercase font-bold text-black/60 border border-black/15 px-3 py-1">
                       {categoryData[0].title}
                     </span>
@@ -182,14 +181,10 @@ export default function CategoriesPage() {
                   <span className="font-sans text-[9px] tracking-[0.3em] uppercase font-bold text-white/90">
                     {cat.title}
                   </span>
-                  {/* Mobile Click & View Badge */}
+                  {/* Mobile Tap to View Badge */}
                   <span className="font-mono text-[8px] tracking-[0.15em] uppercase text-white bg-black/80 px-2.5 py-1 rounded-full border border-white/20 sm:hidden flex items-center gap-1">
-                    <span>Click & View</span>
-                    <span className="text-[9px]">👁</span>
+                    <span>Tap to View</span>
                   </span>
-                </div>
-                <div className="absolute top-3 right-3 font-mono text-[9px] font-bold text-white/70 bg-black/25 backdrop-blur-sm px-2 py-1">
-                  /{cat.num}
                 </div>
               </div>
 

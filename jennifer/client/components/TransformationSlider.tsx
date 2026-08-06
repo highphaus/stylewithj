@@ -43,7 +43,7 @@ export default function TransformationSlider() {
         
         <div className="lg:col-span-5 space-y-4 text-left">
           <span className="text-[10px] tracking-[0.5em] font-light text-black/40 uppercase block mb-4">
-            04 // STRUCTURAL CASE STUDIES
+            ✦ STRUCTURAL CASE STUDIES
           </span>
           <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight text-[#1A1A1A] leading-[1.1] mb-4">
             Visual Structural <span className="italic text-black/30">Changes</span>

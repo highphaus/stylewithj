@@ -76,9 +76,6 @@ export default function DesignerBoutique() {
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute top-3 right-3 font-mono text-[9px] font-bold text-white bg-black/60 backdrop-blur-sm px-2 py-1 border border-white/10 rounded-xs">
-                  /{item.num}
-                </div>
                 <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="block text-center bg-black/85 text-white text-[8px] font-mono tracking-[0.2em] uppercase py-2 backdrop-blur-md rounded-xs border border-white/10">
                     Click to View Details

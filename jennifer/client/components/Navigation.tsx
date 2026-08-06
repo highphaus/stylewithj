@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { label: 'Categories',         href: '/categories'},
   { label: 'Lookbook',           href: '/lookbook'  },
   { label: 'Transformations',    href: '/transformations' },
-  { label: 'Blog',               href: '/journal'         },
+  { label: 'Blog',               href: '/blog'            },
   { label: 'Connect',            href: '/connect'         },
 ];
 
