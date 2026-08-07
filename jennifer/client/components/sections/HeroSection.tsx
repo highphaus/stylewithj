@@ -18,8 +18,8 @@ export default function HeroSection() {
           alt="Style with J — Hero Desktop"
           fill
           priority
-          style={{ objectPosition: 'center 0%' }}
-          className="object-cover opacity-100 hidden md:block transition-all duration-700"
+          style={{ objectPosition: 'center center' }}
+          className="object-cover object-center opacity-100 hidden md:block transition-all duration-700"
           unoptimized
         />
         {/* Mobile / Small Device Hero Image */}
