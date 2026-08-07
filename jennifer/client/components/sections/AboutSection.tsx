@@ -65,7 +65,7 @@ export default function AboutSection() {
             <div
               key={idx}
               onClick={() => openLightbox(img.src, img.alt)}
-              className="relative w-full h-[110dvh] min-h-[580px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
+              className="relative w-full h-[100dvh] min-h-[500px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
               title={`Click to view ${img.alt}`}
             >
               <Image
