@@ -8,32 +8,32 @@ export default function HeroSection() {
   const { hero } = useSiteData();
 
   return (
-    <section className="relative w-full h-screen bg-[#111] text-white overflow-hidden flex items-center">
+    <section className="relative w-full min-h-[120vh] sm:min-h-[130vh] lg:min-h-[140vh] bg-[#111] text-white overflow-hidden flex items-center py-24 sm:py-32">
       
       {/* 1. BACKGROUND FULL COVER CINEMATIC LAYER WITH RESPONSIVE DEVICE IMAGES */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-[#0c0c0c]">
-        {/* Desktop Hero Image: 100% Full Un-cropped View */}
+        {/* Desktop Hero Image */}
         <Image
           src={hero.desktopImage || "/images/hero/hero image desktop.png"}
           alt="Style with J — Hero Desktop"
           fill
           priority
-          style={{ objectPosition: 'center center' }}
-          className="object-contain object-center opacity-100 hidden md:block transition-all duration-700 py-4 px-6 lg:px-12"
+          style={{ objectPosition: 'center 0%' }}
+          className="object-cover opacity-100 hidden md:block transition-all duration-700"
           unoptimized
         />
-        {/* Mobile / Small Device Hero Image: 100% Full Un-cropped View */}
+        {/* Mobile / Small Device Hero Image */}
         <Image
           src={hero.mobileImage || "/images/hero/hero image.jpeg"}
           alt="Style with J — Hero Mobile"
           fill
           priority
-          style={{ objectPosition: 'center center' }}
-          className="object-contain object-center opacity-100 block md:hidden transition-all duration-700 p-4"
+          style={{ objectPosition: 'center 0%' }}
+          className="object-cover opacity-100 block md:hidden transition-all duration-700"
           unoptimized
         />
         {/* Minimal subtle text contrast overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0c0c0c]/90 via-[#0c0c0c]/40 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none" />
       </div>
 
       {/* 2. MAIN HERO CONTENT */}
