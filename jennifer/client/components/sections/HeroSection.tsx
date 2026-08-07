@@ -22,14 +22,14 @@ export default function HeroSection() {
           className="object-cover object-bottom opacity-100 hidden md:block transition-all duration-700"
           unoptimized
         />
-        {/* Mobile / Small Device Hero Image */}
+        {/* Mobile / Small Device Hero Image: Full Un-cropped Image View */}
         <Image
           src={hero.mobileImage || "/images/hero/hero image.jpeg"}
           alt="Style with J — Hero Mobile"
           fill
           priority
-          style={{ objectPosition: 'center bottom' }}
-          className="object-cover object-bottom opacity-100 block md:hidden transition-all duration-700"
+          style={{ objectPosition: 'center center' }}
+          className="object-contain object-center opacity-100 block md:hidden transition-all duration-700"
           unoptimized
         />
         {/* Minimal subtle text contrast overlay */}
