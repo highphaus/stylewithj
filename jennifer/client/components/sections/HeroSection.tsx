@@ -36,8 +36,8 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none" />
       </div>
 
-      {/* 2. MAIN HERO CONTENT */}
-      <div className="w-full max-w-[1440px] mx-auto px-8 lg:px-24 flex justify-between items-center z-10 mt-12">
+      {/* 2. MAIN HERO CONTENT - Shifted upward on desktop */}
+      <div className="w-full max-w-[1440px] mx-auto px-8 lg:px-24 flex justify-between items-center z-10 mt-0 md:-mt-32 lg:-mt-44">
         
         {/* Left Side: Typography & CTA */}
         <div className="max-w-xl flex flex-col items-start text-left">
