@@ -103,7 +103,7 @@ export default function Navigation() {
             className="flex-shrink-0 flex items-center hover:opacity-75 transition-opacity duration-300"
           >
             <Image
-              src="/images/style with j.png"
+              src="/logo/style with j.png"
               alt="Style With J"
               width={240}
               height={70}

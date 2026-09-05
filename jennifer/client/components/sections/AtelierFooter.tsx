@@ -13,7 +13,7 @@ export default function AtelierFooter() {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-10 pb-10 sm:pb-16 border-b border-white/10">
           <div className="w-full sm:w-auto flex justify-between items-center sm:block">
             <Image
-              src="/images/style with j.png"
+              src="/logo/style with j.png"
               alt="Style With J"
               width={160}
               height={50}

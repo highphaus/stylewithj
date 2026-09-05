@@ -79,7 +79,7 @@ const jsonLdSchema = {
       name: 'Style with J',
       alternateName: ['Style with J Bangalore', 'Style with J Personal Stylist'],
       url: 'https://stylewithj.com',
-      logo: 'https://stylewithj.com/images/style%20with%20j.png',
+      logo: 'https://stylewithj.com/logo/style%20with%20j.png',
       image: 'https://stylewithj.com/images/hero/hero%20image%20desktop.png',
       description: 'Premier Personal Stylist, Wardrobe Audit, Personal Shopper, and Corporate Image Consultant in Bangalore. Specialized in executive workwear, capsule wardrobes, and bridal trousseau styling.',
       telephone: '+919000000000',
