@@ -28,7 +28,7 @@ export default function ContactSection() {
               
               <div>
                 <h3 className="font-medium mb-4">Contact</h3>
-                <p>info@stylewithj.com<br />+91 98765 43210</p>
+                <p>jennifer@stylewithj.in<br />+91 98765 43210</p>
               </div>
               
               <div>

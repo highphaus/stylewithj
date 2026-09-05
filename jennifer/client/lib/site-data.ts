@@ -129,7 +129,7 @@ export const seedMeetContent: MeetContentData = {
 export const seedContactContent: ContactContentData = {
   heading: "Let's Connect",
   address: "DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070",
-  email: "info@stylewithj.com",
+  email: "jennifer@stylewithj.in",
   phone: "+91 98765 43210",
   hours: "Mon - Fri: 9am - 6pm\nSat: 10am - 4pm\nSun: Closed",
 };

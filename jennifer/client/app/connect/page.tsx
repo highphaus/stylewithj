@@ -284,7 +284,7 @@ export function ConnectContent() {
           <div className="bg-[#FAF8F3] border border-black/10 p-6 sm:p-8 rounded-sm">
             <h3 className="font-serif text-lg font-normal mb-3 text-[#1A1A1A]">Contact</h3>
             <p className="leading-relaxed text-sm text-black/75">
-              <a href="mailto:info@stylewithj.com" className="hover:text-black hover:underline transition-colors block">info@stylewithj.com</a>
+              <a href="mailto:jennifer@stylewithj.in" className="hover:text-black hover:underline transition-colors block">jennifer@stylewithj.in</a>
               <a href="tel:+919876543210" className="hover:text-black transition-colors block mt-1">+91 98765 43210</a>
             </p>
           </div>

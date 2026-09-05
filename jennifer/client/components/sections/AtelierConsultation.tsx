@@ -152,7 +152,7 @@ export default function AtelierConsultation() {
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <a
-                    href={`mailto:studio@slook.com?subject=Bespoke Commission Intake Request&body=Archetype: ${config.archetype}%0AMaterial: ${config.material}%0APipeline: ${config.pipeline}`}
+                    href={`mailto:jennifer@stylewithj.in?subject=Bespoke Commission Intake Request&body=Archetype: ${config.archetype}%0AMaterial: ${config.material}%0APipeline: ${config.pipeline}`}
                     className="font-mono text-[10px] uppercase tracking-[0.3em] bg-black text-white text-center px-6 py-4 hover:bg-neutral-800 transition-all"
                   >
                     Transmit Specs to Atelier ↗

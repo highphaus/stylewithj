@@ -24,12 +24,12 @@ export default function AtelierFooter() {
           <div className="w-full sm:w-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 sm:gap-8 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
             <div className="flex flex-col gap-0.5">
               <span className="text-[8px] uppercase tracking-[0.3em] text-white/40 font-mono">DIRECT INQUIRIES</span>
-              <a href="mailto:info@stylewithj.com" className="text-xs sm:text-sm font-sans font-light text-white/90 hover:text-white transition-colors">
-                info@stylewithj.com
+              <a href="mailto:jennifer@stylewithj.in" className="text-xs sm:text-sm font-sans font-light text-white/90 hover:text-white transition-colors">
+                jennifer@stylewithj.in
               </a>
             </div>
             <Link 
-              href="mailto:info@stylewithj.com" 
+              href="mailto:jennifer@stylewithj.in" 
               className="w-full sm:w-auto border border-white/20 text-center px-5 py-3 text-[9px] uppercase tracking-[0.25em] font-medium hover:bg-white hover:text-black transition-all duration-300 rounded-xs"
             >
               Initiate Inquiry ↗
@@ -91,7 +91,7 @@ export default function AtelierFooter() {
               </a>
 
               <a 
-                href="mailto:info@stylewithj.com" 
+                href="mailto:jennifer@stylewithj.in" 
                 className="flex items-center gap-2 hover:text-white transition-colors group"
               >
                 <svg className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">

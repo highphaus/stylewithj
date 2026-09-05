@@ -17,7 +17,7 @@ export default function DiscoveryCall() {
               DLF Emporio, Vasant Kunj<br />
               New Delhi, Delhi 110070<br />
               +91 11 4609 8200<br />
-              hello@stylewithj.com
+              jennifer@stylewithj.in
             </p>
           </div>
           <div className="flex flex-col items-center md:items-start">
