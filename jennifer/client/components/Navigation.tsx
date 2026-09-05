@@ -107,7 +107,7 @@ export default function Navigation() {
               alt="Style With J"
               width={240}
               height={70}
-              className={`w-[140px] md:w-[190px] h-auto object-contain transition-all duration-300 ${isLight ? '' : 'invert'}`}
+              className={`w-[100px] sm:w-[120px] md:w-[140px] h-auto object-contain transition-all duration-300 ${isLight ? '' : 'invert'}`}
               priority
               unoptimized
             />
