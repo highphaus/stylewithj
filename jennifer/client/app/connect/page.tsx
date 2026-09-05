@@ -61,8 +61,10 @@ export function ConnectContent() {
         { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
       );
     } else {
-      setLocationText('📍 Location: Concierge Regional Service');
-      setLocationStatus('error');
+      Promise.resolve().then(() => {
+        setLocationText('📍 Location: Concierge Regional Service');
+        setLocationStatus('error');
+      });
     }
   }, []);
 
@@ -89,14 +91,15 @@ export function ConnectContent() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to send inquiry');
+        throw new Error(data.error || 'Failed to send enquiry');
       }
 
       setSubmitted(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Submission error:', err);
-      // Fallback submit so user experience is smooth
-      setSubmitted(true);
+      const errMsg = err instanceof Error ? err.message : 'Failed to send enquiry. Please try again.';
+      setErrorMessage(errMsg);
+      setSubmitted(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -109,7 +112,7 @@ export function ConnectContent() {
           ✦ STYLING CONSULTATION
         </span>
         <h1 className="font-serif text-4xl sm:text-6xl font-light tracking-tight text-[#1A1A1A]">
-          Let's Connect
+          Let&apos;s Connect
         </h1>
       </div>
       
@@ -141,7 +144,7 @@ export function ConnectContent() {
             </h3>
 
             <p className="font-sans text-xs sm:text-sm text-black/80 max-w-lg leading-relaxed font-light">
-              Thank you, <strong className="font-semibold text-black">{firstName}</strong>! Your consultation request, contact details, and location context have been transmitted directly to Jennifer at <strong className="font-semibold text-black">muhammedsyam.dev@gmail.com</strong>.
+              Thank you, <strong className="font-semibold text-black">{firstName}</strong>! Your consultation request, contact details, and location context have been transmitted directly to Jennifer at <strong className="font-semibold text-black">jennifer@stylewithj.in</strong>.
             </p>
 
             <div className="p-4 bg-white/90 border border-black/10 text-left w-full max-w-md font-mono text-[9px] text-black/80 rounded-xs space-y-1.5 shadow-xs">

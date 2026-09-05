@@ -9,13 +9,15 @@ export default function BookingModal() {
   const [service, setService] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
 
     try {
-      await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -27,9 +29,21 @@ export default function BookingModal() {
           locationText: 'Modal Direct Submission'
         })
       });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to submit consultation request');
+      }
+
       setSubmitted(true);
-    } catch {
-      setSubmitted(true);
+      setFirstName('');
+      setEmail('');
+      setPhone('');
+      setService('');
+    } catch (err: unknown) {
+      console.error('Modal submission error:', err);
+      const errMsg = err instanceof Error ? err.message : 'Failed to send consultation request. Please try again.';
+      setErrorMessage(errMsg);
+      setSubmitted(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -42,7 +56,10 @@ export default function BookingModal() {
         <div className="bg-[#FAF8F3] rounded-sm max-w-md w-full p-8 relative shadow-2xl border border-black/10 text-[#1A1A1A]">
           <label 
             htmlFor="booking-toggle" 
-            onClick={() => setSubmitted(false)}
+            onClick={() => {
+              setSubmitted(false);
+              setErrorMessage('');
+            }}
             className="absolute top-4 right-5 text-2xl font-light cursor-pointer text-black hover:opacity-60"
           >
             &times;
@@ -52,18 +69,19 @@ export default function BookingModal() {
             ✦ ATELIER APPOINTMENT
           </span>
           <h3 className="font-serif text-2xl text-black mb-1 font-light">Request Consultation</h3>
-          <p className="text-xs text-black/70 mb-6 font-light">Let's map out your bespoke wardrobe consultation timeline.</p>
+          <p className="text-xs text-black/70 mb-6 font-light">Let&apos;s map out your bespoke wardrobe consultation timeline.</p>
           
           {submitted ? (
             <div className="p-6 bg-[#EFECE6] border border-black/15 text-center flex flex-col items-center gap-3 rounded-xs">
               <span className="text-xl">✓</span>
               <h4 className="font-serif text-xl font-light text-black">Message Sent Successfully!</h4>
               <p className="text-xs text-black/75 font-sans leading-relaxed font-light">
-                Thank you, <strong className="font-semibold">{firstName}</strong>! Your consultation request has been sent to Jennifer at <strong className="font-semibold">muhammedsyam.dev@gmail.com</strong>.
+                Thank you! Your consultation request has been sent directly to Jennifer at <strong className="font-semibold">jennifer@stylewithj.in</strong>.
               </p>
               <button 
                 onClick={() => {
                   setSubmitted(false);
+                  setErrorMessage('');
                   const checker = document.getElementById('booking-toggle') as HTMLInputElement;
                   if (checker) checker.checked = false;
                 }} 
@@ -74,6 +92,11 @@ export default function BookingModal() {
             </div>
           ) : (
             <form onSubmit={handleSubmission} className="space-y-4 font-sans text-xs">
+              {errorMessage && (
+                <div className="p-3 bg-red-100 border border-red-300 text-red-800 text-xs font-mono rounded-xs">
+                  {errorMessage}
+                </div>
+              )}
               <div>
                 <input 
                   type="text" 
