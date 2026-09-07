@@ -22,8 +22,8 @@ const portfolioData: Project[] = [
     scope: 'Sculpted Architectural Bodice & Silk Veil',
     year: '2025',
     images: [
-      '/images/img04.jpeg',
-      '/images/img05.jpeg'
+      '/images/includes/IMG_0283.JPG.jpeg',
+      '/images/includes/IMG_0332.JPG.jpeg'
     ]
   },
   {
@@ -33,8 +33,8 @@ const portfolioData: Project[] = [
     scope: 'Asymmetric Pleated Organza & Tailored Outerwear',
     year: '2025',
     images: [
-      '/images/img06.jpeg',
-      '/images/img07.jpeg'
+      '/images/includes/IMG_8863.JPG.jpeg',
+      '/images/includes/IMG_8846.JPG.jpeg'
     ]
   },
   {
@@ -44,8 +44,8 @@ const portfolioData: Project[] = [
     scope: 'Minimalist Ready-To-Wear Structural Framework',
     year: '2026',
     images: [
-      '/images/img08.jpeg',
-      '/images/img09.jpeg'
+      '/images/includes/IMG_1406.JPG.jpeg',
+      '/images/includes/IMG_1423.JPG.jpeg'
     ]
   }
 ];

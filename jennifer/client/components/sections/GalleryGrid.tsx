@@ -8,14 +8,14 @@ import { useLooks } from '@/lib/use-looks';
 import { useLightbox } from '@/components/ImageLightbox';
 
 export default function GalleryGrid() {
-  const [filter, setFilter] = useState<'all' | 'western' | 'evening' | 'resort' | 'bespoke'>('all');
+  const [filter, setFilter] = useState<'all' | 'western' | 'evening' | 'resort' | 'bridal' | 'bespoke'>('all');
   const { looks, isLoaded } = useLooks();
   const { openLightbox } = useLightbox();
   const router = useRouter();
 
   const filteredItems = filter === 'all'
     ? looks
-    : looks.filter(item => item.tag.toLowerCase() === filter.toLowerCase());
+    : looks.filter(item => item.tag.toLowerCase() === filter.toLowerCase() || (filter === 'bridal' && (item.tag.toLowerCase() === 'bridal' || item.category.toLowerCase().includes('wedding'))));
 
   return (
     <div className="w-full bg-[#FAF9F6] text-[#1A1A1A] pb-20 sm:pb-32">
@@ -30,14 +30,14 @@ export default function GalleryGrid() {
           </div>
           <div className="max-w-xs text-left md:text-right">
             <p className="font-serif text-xs sm:text-sm italic text-black/60 leading-relaxed font-light">
-              A visual archive cataloging Western wear, resort silhouettes, and curated editorial looks styled by Jennifer.
+              A visual archive cataloging Western wear, resort silhouettes, bridal trousseaus, and curated editorial looks styled by Jennifer.
             </p>
           </div>
         </div>
 
         {/* ── DEVICE RESPONSIVE FILTER TABS ── */}
         <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2.5 mt-6 pb-3 overflow-x-auto no-scrollbar scrollbar-none border-b border-black/10">
-          {(['all', 'western', 'evening', 'resort', 'bespoke'] as const).map((cat) => (
+          {(['all', 'western', 'evening', 'resort', 'bridal', 'bespoke'] as const).map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}

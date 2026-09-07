@@ -35,7 +35,7 @@ export default function DesignerBoutique() {
       name: "Architectural Silk Drape",
       category: "Couture",
       price: "₹2,85,000",
-      img: "/images/includes/IMG_3119.JPG.jpeg"
+      img: "/images/includes/IMG_3112.JPG.jpeg"
     }
   ];
 

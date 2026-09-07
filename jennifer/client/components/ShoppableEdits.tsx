@@ -1,9 +1,9 @@
 // jennifer/client/components/ShoppableEdits.tsx
 export default function ShoppableEdits() {
   const CURRENT_TRENDS = [
-    { name: "Asymmetric Structured Blazers", source: "Parisian Line", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" },
-    { name: "Raw Linen Draped Layers", source: "Atelier Resort Look", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" },
-    { name: "Monochromatic Silk Separates", source: "Metropolitan Uniform", img: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=400&q=80" }
+    { name: "Asymmetric Structured Blazers", source: "Parisian Line", img: "/images/includes/IMG_0274.JPG.jpeg" },
+    { name: "Raw Linen Draped Layers", source: "Atelier Resort Look", img: "/images/includes/IMG_5314.JPG.jpeg" },
+    { name: "Monochromatic Silk Separates", source: "Metropolitan Uniform", img: "/images/includes/IMG_8820.JPG.jpeg" }
   ];
 
   return (

@@ -6,7 +6,7 @@ import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 import { useSiteData } from '@/lib/use-site-data';
 
-export function AboutContent() {
+function AboutContent() {
   const { about } = useSiteData();
 
   return (
@@ -37,7 +37,7 @@ export function AboutContent() {
           <div className="lg:col-span-5 relative lg:sticky lg:top-28">
             <div className="relative w-full h-[85vh] sm:h-auto sm:aspect-[3/4] min-h-[480px] bg-[#0D0D0D] overflow-hidden shadow-2xl border border-black/5 rounded-xs">
               <Image
-                src={about.creativeDirectorImage || "/images/includes/IMG_0267.JPG.jpeg"}
+                src={about.creativeDirectorImage || "/images/includes/IMG_0332.JPG.jpeg"}
                 alt={`${about.creativeDirectorName}, ${about.creativeDirectorTitle}`}
                 fill
                 priority
@@ -102,7 +102,7 @@ export function AboutContent() {
                 href="/services"
                 className="group inline-flex items-center gap-6 px-8 py-4 bg-[#1A1A1A] text-white text-[10px] tracking-[0.3em] uppercase font-light hover:bg-black transition-all shadow-md"
               >
-                Explore What We Do
+                Explore Our Services
                 <span className="transform group-hover:translate-x-2 transition-transform text-sm">→</span>
               </Link>
             </div>

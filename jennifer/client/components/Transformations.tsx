@@ -20,17 +20,17 @@ const transformationData = [
     client: "THE MODERN PATRIARCH",
     demographic: "MALE SILHOUETTE SYSTEM",
     concept: "Restructuring upper-torso proportions using monolithic wool structures and raw minimalist layering.",
-    beforeImg: "/images/img09.jpeg",
-    afterImg: "/images/img10.jpeg",
-    specs: ["Proportion Stance · Broadened", "Felted Wool Framework", "Palette · Deep Umber Ash"]
+    beforeImg: "/images/includes/IMG_8820.JPG.jpeg",
+    afterImg: "/images/includes/IMG_8863.JPG.jpeg",
+    specs: ["Canvas Alteration · Drop Line", "Heavy Matte Crepe Fabrics", "Palette · Pale Bone Tone"]
   },
   {
     id: "03",
     client: "THE VISUAL LEGACY FIELD",
     demographic: "FEMALE SILHOUETTE SYSTEM",
     concept: "Curating presence through fluid architectural drapery, asymmetric necklines, and clean geometric lines.",
-    beforeImg: "/images/img11.jpeg",
-    afterImg: "/images/img12.jpeg",
+    beforeImg: "/images/includes/IMG_0270.JPG.jpeg",
+    afterImg: "/images/includes/IMG_0271.JPG.jpeg",
     specs: ["Fluid Geometric Draping", "Raw Spun Silk Composites", "Palette · True Charcoal Black"]
   },
   {
@@ -38,8 +38,8 @@ const transformationData = [
     client: "CULTURAL AVANT-GARDE LENS",
     demographic: "MALE SILHOUETTE SYSTEM",
     concept: "A dramatic shift to curated minimalism, blending structured structural drops with historic tailored lines.",
-    beforeImg: "/images/img13.jpeg",
-    afterImg: "/images/img14.jpeg",
+    beforeImg: "/images/includes/IMG_8777.JPG.jpeg",
+    afterImg: "/images/includes/IMG_8771.JPG.jpeg",
     specs: ["Asymmetric Hem Disruption", "Technical Linen Matrix", "Palette · Slate Graphite"]
   }
 ];

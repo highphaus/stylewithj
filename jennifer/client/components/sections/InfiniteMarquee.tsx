@@ -6,17 +6,17 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 const fullLooks = [
-  '/images/img17.jpeg',
-  '/images/img18.jpeg',
-  '/images/img19.jpeg',
-  '/images/img20.jpeg',
+  '/images/includes/IMG_0283.JPG.jpeg',
+  '/images/includes/IMG_0332.JPG.jpeg',
+  '/images/includes/IMG_8863.JPG.jpeg',
+  '/images/includes/IMG_8846.JPG.jpeg',
 ];
 
 const detailTextures = [
-  '/images/img21.jpeg',
-  '/images/img22.jpeg',
-  '/images/img23.jpeg',
-  '/images/img24.jpeg',
+  '/images/includes/IMG_1406.JPG.jpeg',
+  '/images/includes/IMG_1423.JPG.jpeg',
+  '/images/includes/IMG_1754.JPG.jpeg',
+  '/images/includes/IMG_8881.JPG.jpeg',
 ];
 
 export default function InfiniteMarquee() {

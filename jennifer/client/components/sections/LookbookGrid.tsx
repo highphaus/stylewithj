@@ -11,6 +11,7 @@ const filterCategories = [
   { label: 'WESTERN', tag: 'WESTERN' },
   { label: 'EVENING', tag: 'EVENING' },
   { label: 'RESORT', tag: 'RESORT' },
+  { label: 'BRIDAL & OCCASIONS', tag: 'BRIDAL' },
   { label: 'BESPOKE', tag: 'BESPOKE' },
 ];
 
@@ -28,7 +29,7 @@ export default function LookbookGrid() {
 
   const filteredLooks = activeFilter === 'ALL' 
     ? looks 
-    : looks.filter(look => look.tag === activeFilter);
+    : looks.filter(look => look.tag === activeFilter || (activeFilter === 'BRIDAL' && (look.tag === 'BRIDAL' || look.category.includes('WEDDING'))));
 
   const spotlightLook = filteredLooks[activeSpotlightIdx] || filteredLooks[0] || looks[0];
 

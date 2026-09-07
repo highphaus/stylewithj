@@ -30,7 +30,6 @@ export default function JournalPage() {
     return matchesCategory && matchesSearch;
   });
 
-  const featuredPost = BLOG_POSTS[0];
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
@@ -94,54 +93,7 @@ export default function JournalPage() {
           </div>
         </section>
 
-        {/* ── 3. FEATURED ARTICLE BANNER ── */}
-        {selectedCategory === 'all' && !searchQuery && (
-          <section className="mb-14 sm:mb-16">
-            <div className="bg-[#EFECE6] border border-black/10 rounded-xs overflow-hidden shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-0">
-              <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[440px] bg-[#0D0D0D]">
-                <Image
-                  src={featuredPost.coverImage}
-                  alt={featuredPost.title}
-                  fill
-                  priority
-                  className="object-cover object-top"
-                  unoptimized
-                />
-                <div className="absolute top-4 left-4 bg-black/80 text-white font-mono text-[8px] tracking-[0.25em] uppercase font-semibold px-3 py-1 backdrop-blur-sm">
-                  FEATURED STYLE GUIDE
-                </div>
-              </div>
 
-              <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col justify-between gap-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="font-mono text-[9px] text-black/50 font-bold uppercase">{featuredPost.category}</span>
-                    <span className="text-black/30">•</span>
-                    <span className="font-mono text-[9px] text-black/40">{featuredPost.readTime}</span>
-                  </div>
-
-                  <h2 className="font-serif text-2xl sm:text-3xl font-light text-black leading-snug mb-3">
-                    {featuredPost.title}
-                  </h2>
-
-                  <p className="font-sans text-xs sm:text-sm text-black/70 font-light leading-relaxed mb-4">
-                    {featuredPost.excerpt}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-black/10 flex items-center justify-between">
-                  <Link
-                    href={`/blog/${featuredPost.slug}`}
-                    className="inline-flex items-center gap-2 px-5 py-3 bg-[#1A1A1A] text-white text-[9px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-xs"
-                  >
-                    Read Full Guide →
-                  </Link>
-                  <span className="font-mono text-[8.5px] text-black/40">Bangalore, IN</span>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* ── 4. ARTICLES GRID ── */}
         <section className="mb-20">

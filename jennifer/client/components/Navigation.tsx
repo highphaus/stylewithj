@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 
 const NAV_LINKS = [
   { label: 'About Me',           href: '/about'     },
-  { label: 'What We Do',         href: '/services'  },
+  { label: 'Our Services',       href: '/services'  },
   { label: 'Categories',         href: '/categories'},
   { label: 'Lookbook',           href: '/lookbook'  },
   { label: 'Transformations',    href: '/transformations' },
@@ -107,7 +107,7 @@ export default function Navigation() {
               alt="Style With J"
               width={240}
               height={70}
-              className={`w-[100px] sm:w-[120px] md:w-[140px] h-auto object-contain transition-all duration-300 ${isLight ? '' : 'invert'}`}
+              className={`w-[75px] sm:w-[90px] md:w-[105px] h-auto object-contain transition-all duration-300 ${isLight ? '' : 'invert'}`}
               priority
               unoptimized
             />

@@ -15,7 +15,13 @@ export function useLooks() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        setLooks(JSON.parse(stored));
+        const parsed: Look[] = JSON.parse(stored);
+        if (parsed.length < seedLooks.length) {
+          setLooks(seedLooks);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(seedLooks));
+        } else {
+          setLooks(parsed);
+        }
       } else {
         setLooks(seedLooks);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(seedLooks));

@@ -68,7 +68,7 @@ export default function NarrativeHeader() {
           className="absolute inset-0 w-full h-full bg-neutral-900 z-10 transition-all duration-150 ease-out"
         >
           <Image
-            src="/images/img24.jpeg"
+            src="/images/includes/IMG_0283.JPG.jpeg"
             alt="Muted Avant-Garde Campaign Canvas"
             fill
             priority

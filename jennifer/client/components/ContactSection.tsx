@@ -48,7 +48,7 @@ export default function ContactSection() {
           >
             {/* For a true map, you'd use an iframe or map component. Using a sleek image as placeholder for now. */}
             <img 
-              src="/images/img21.jpeg" 
+              src="/images/includes/IMG_0267.JPG.jpeg" 
               alt="Studio Location" 
               className="absolute inset-0 w-full h-full object-cover"
             />

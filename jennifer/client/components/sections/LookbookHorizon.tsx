@@ -7,17 +7,17 @@ import Image from 'next/image';
 import { useLightbox } from '@/components/ImageLightbox';
 
 const deepArchiveCollection = [
-  { id: 1, src: '/images/img06.jpeg', left: '6%', top: '10%', size: 'w-[120px] sm:w-[170px] md:w-[240px]' },
-  { id: 2, src: '/images/img07.jpeg', left: '32%', top: '4%', size: 'w-[100px] sm:w-[140px] md:w-[200px]' },
-  { id: 3, src: '/images/img08.jpeg', left: '58%', top: '8%', size: 'w-[130px] sm:w-[180px] md:w-[260px]' },
-  { id: 4, src: '/images/img09.jpeg', left: '78%', top: '6%', size: 'w-[95px] sm:w-[130px] md:w-[180px]' },
-  { id: 5, src: '/images/img10.jpeg', left: '4%', top: '44%', size: 'w-[140px] sm:w-[190px] md:w-[280px]' },
-  { id: 6, src: '/images/img11.jpeg', left: '26%', top: '36%', size: 'w-[120px] sm:w-[170px] md:w-[250px]' },
-  { id: 7, src: '/images/img12.jpeg', left: '50%', top: '48%', size: 'w-[110px] sm:w-[150px] md:w-[220px]' },
-  { id: 8, src: '/images/img13.jpeg', left: '72%', top: '38%', size: 'w-[130px] sm:w-[180px] md:w-[270px]' },
-  { id: 9, src: '/images/img14.jpeg', left: '16%', top: '68%', size: 'w-[100px] sm:w-[140px] md:w-[210px]' },
-  { id: 10, src: '/images/img15.jpeg', left: '40%', top: '72%', size: 'w-[140px] sm:w-[190px] md:w-[290px]' },
-  { id: 11, src: '/images/img16.jpeg', left: '64%', top: '66%', size: 'w-[110px] sm:w-[155px] md:w-[230px]' },
+  { id: 1, src: '/images/includes/IMG_0283.JPG.jpeg', left: '6%', top: '10%', size: 'w-[120px] sm:w-[170px] md:w-[240px]' },
+  { id: 2, src: '/images/includes/IMG_0332.JPG.jpeg', left: '32%', top: '4%', size: 'w-[100px] sm:w-[140px] md:w-[200px]' },
+  { id: 3, src: '/images/includes/IMG_8863.JPG.jpeg', left: '58%', top: '8%', size: 'w-[130px] sm:w-[180px] md:w-[260px]' },
+  { id: 4, src: '/images/includes/IMG_8846.JPG.jpeg', left: '78%', top: '6%', size: 'w-[95px] sm:w-[130px] md:w-[180px]' },
+  { id: 5, src: '/images/includes/IMG_1406.JPG.jpeg', left: '4%', top: '44%', size: 'w-[140px] sm:w-[190px] md:w-[280px]' },
+  { id: 6, src: '/images/includes/IMG_1423.JPG.jpeg', left: '26%', top: '36%', size: 'w-[120px] sm:w-[170px] md:w-[250px]' },
+  { id: 7, src: '/images/includes/IMG_1754.JPG.jpeg', left: '50%', top: '48%', size: 'w-[110px] sm:w-[150px] md:w-[220px]' },
+  { id: 8, src: '/images/includes/IMG_8881.JPG.jpeg', left: '72%', top: '38%', size: 'w-[130px] sm:w-[180px] md:w-[270px]' },
+  { id: 9, src: '/images/includes/IMG_9051.JPG.jpeg', left: '16%', top: '68%', size: 'w-[100px] sm:w-[140px] md:w-[210px]' },
+  { id: 10, src: '/images/includes/IMG_3112.JPG.jpeg', left: '40%', top: '72%', size: 'w-[140px] sm:w-[190px] md:w-[290px]' },
+  { id: 11, src: '/images/includes/IMG_9135.JPG.jpeg', left: '64%', top: '66%', size: 'w-[110px] sm:w-[155px] md:w-[230px]' },
 ];
 
 function TactileCard({ 

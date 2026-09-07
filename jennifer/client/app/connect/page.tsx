@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 
-export function ConnectContent() {
+function ConnectContent() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

@@ -7,32 +7,32 @@ import Image from 'next/image';
 
 interface VideoLook {
   id: string;
-  tag: string;
+  category: string;
   title: string;
   thumbnail: string;
   conceptUrl: string;
 }
 
-const exhibitionLooks: VideoLook[] = [
+const exhibitionItems: VideoLook[] = [
   {
-    id: 'moment-1',
-    tag: '#GLVPS // THE GRAND ENTRANCE',
-    title: 'Ethereal Illusion Bodice & Veil Scale',
-    thumbnail: '/images/img29.jpeg',
-    conceptUrl: '/images/img30.jpeg'
+    id: '01',
+    title: 'THE MONOLITHIC FRAME',
+    category: 'RETROSPECTIVE // 2025',
+    thumbnail: '/images/includes/IMG_0283.JPG.jpeg',
+    conceptUrl: '/images/includes/IMG_0332.JPG.jpeg'
   },
   {
-    id: 'moment-2',
-    tag: '#GLVPS // THE ATELIER REVEAL',
-    title: 'Sculpted Corsetry & Hand-Placed Applique',
-    thumbnail: '/images/img31.jpeg',
-    conceptUrl: '/images/img01.jpeg'
+    id: '02',
+    title: 'THE FLUID CONTOUR',
+    category: 'ARCHIVAL // 2026',
+    thumbnail: '/images/includes/IMG_8863.JPG.jpeg',
+    conceptUrl: '/images/includes/IMG_8846.JPG.jpeg'
   }
 ];
 
 export default function ExhibitionShowcase() {
   const [activeMedia, setActiveMedia] = useState<string | null>(null);
-  const activeItem = exhibitionLooks.find(look => look.id === activeMedia);
+  const activeItem = exhibitionItems.find(look => look.id === activeMedia);
 
   return (
     <section className="px-6 md:px-16 py-32 max-w-7xl mx-auto bg-[#FAF9F6]">
@@ -49,7 +49,7 @@ export default function ExhibitionShowcase() {
 
       {/* Asymmetric Exhibition Columns */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
-        {exhibitionLooks.map((look, index) => (
+        {exhibitionItems.map((look, index) => (
           <div 
             key={look.id}
             className={`w-full flex flex-col cursor-pointer ${index % 2 === 1 ? 'md:mt-24' : ''}`}
@@ -74,7 +74,7 @@ export default function ExhibitionShowcase() {
             {/* Typography Frame Subtext */}
             <div className="flex flex-col gap-1.5">
               <span className="font-mono text-[9px] tracking-[0.25em] text-neutral-400">
-                {look.tag}
+                {look.category}
               </span>
               <h4 className="font-serif text-xl font-light tracking-wide text-[#1A1A1A]">
                 {look.title}
@@ -104,7 +104,7 @@ export default function ExhibitionShowcase() {
               {/* Top Control Bar */}
               <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent text-white">
                 <span className="font-mono text-[10px] tracking-widest opacity-60">
-                  {activeItem.tag}
+                  {activeItem.category}
                 </span>
                 <button className="text-xs uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">
                   Close

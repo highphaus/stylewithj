@@ -8,7 +8,7 @@ export default function HeroSection() {
   const { hero } = useSiteData();
 
   return (
-    <section className="relative w-full min-h-[120vh] sm:min-h-[130vh] lg:min-h-[140vh] bg-[#111] text-white overflow-hidden flex items-center py-24 sm:py-32">
+    <section className="sticky top-0 w-full h-[100dvh] min-h-[650px] bg-[#111] text-white overflow-hidden flex items-center pt-20 pb-8 z-0">
       
       {/* 1. BACKGROUND FULL COVER CINEMATIC LAYER WITH RESPONSIVE DEVICE IMAGES */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-[#0c0c0c]">
@@ -18,7 +18,7 @@ export default function HeroSection() {
           alt="Style with J — Hero Desktop"
           fill
           priority
-          style={{ objectPosition: 'center 0%' }}
+          style={{ objectPosition: 'center center' }}
           className="object-cover opacity-100 hidden md:block transition-all duration-700"
           unoptimized
         />
@@ -28,16 +28,16 @@ export default function HeroSection() {
           alt="Style with J — Hero Mobile"
           fill
           priority
-          style={{ objectPosition: 'center 0%' }}
+          style={{ objectPosition: 'center center' }}
           className="object-cover opacity-100 block md:hidden transition-all duration-700"
           unoptimized
         />
         {/* Minimal subtle text contrast overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/10 pointer-events-none" />
       </div>
 
-      {/* 2. MAIN HERO CONTENT - Shifted upward on desktop */}
-      <div className="w-full max-w-[1440px] mx-auto px-8 lg:px-24 flex justify-between items-center z-10 mt-0 md:-mt-32 lg:-mt-44">
+      {/* 2. MAIN HERO CONTENT */}
+      <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-8 lg:px-24 flex justify-between items-center z-10">
         
         {/* Left Side: Typography & CTA */}
         <div className="max-w-xl flex flex-col items-start text-left">
@@ -90,21 +90,18 @@ export default function HeroSection() {
           </motion.a>
         </div>
 
-        {/* Right Side: Editorial Callout Line */}
-        <div className="hidden md:flex flex-col items-start border-l border-white/20 pl-6 py-2 max-w-[150px]">
+        {/* Right Side: Editorial Callout Line with slow smooth entrance animation */}
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="hidden md:flex flex-col items-start border-l border-white/20 pl-6 py-2 max-w-[150px]"
+        >
           <p className="text-[10px] tracking-[0.2em] uppercase font-light leading-relaxed text-white/80">
             {hero.sideText}
           </p>
-        </div>
+        </motion.div>
 
-      </div>
-
-      {/* 4. BOTTOM BOTTOM CENTERED SCROLL INDICATOR */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center gap-3">
-        <span className="text-[9px] tracking-[0.3em] uppercase font-light text-white/40">
-          Scroll
-        </span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-white/40 to-transparent animate-pulse" />
       </div>
 
     </section>

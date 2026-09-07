@@ -126,7 +126,7 @@ const categories = [
 
 // ── COMPONENT ────────────────────────────────────────────────────────────────
 
-export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }) {
+function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }) {
   const { openLightbox } = useLightbox();
   const [expandedMobileServices, setExpandedMobileServices] = useState<Record<string, boolean>>({});
 
@@ -144,7 +144,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
           <div className="flex items-center gap-3">
             <span className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A]" />
             <span className="text-[10px] tracking-[0.4em] uppercase font-light text-black/50 font-sans font-semibold">
-              WHAT WE DO
+              OUR SERVICES
             </span>
           </div>
 
@@ -181,44 +181,7 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
         </div>
       </section>
 
-      {/* ── 3 PILLARS ── */}
-      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-12 sm:py-16">
-        <div className="mb-8 sm:mb-12">
-          <span className="text-[8px] sm:text-[9px] tracking-[0.4em] sm:tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-2 font-semibold">
-            OUR APPROACH
-          </span>
-          <h2 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A]">
-            Three Pillars of Great Style
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-          {pillars.map((p) => (
-            <div key={p.num} className="bg-[#FAF8F3] p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-5 sm:gap-6 border border-black/10 hover:border-black/30 transition-all rounded-xs shadow-xs">
-              <div>
-                <div className="flex items-center gap-4 mb-4 sm:mb-6">
-                  <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/50">{p.num}</span>
-                  <div className="flex-1 h-[1px] bg-[#1A1A1A]/10" />
-                </div>
-                
-                <h3 className="font-sans text-[10px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-[#1A1A1A]/70 font-semibold mb-2 sm:mb-3">
-                  {p.title}
-                </h3>
-                
-                <p className="font-serif text-lg sm:text-xl lg:text-2xl font-light leading-snug text-[#1A1A1A] mb-3 sm:mb-4">
-                  {p.headline}
-                </p>
-                
-                <p className="font-sans text-xs sm:text-sm font-light text-[#1A1A1A]/80 leading-relaxed">
-                  {p.body}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── DETAILED SERVICES BREAKDOWN (SECTION HEADING + CLEAN PICTURES WITHOUT CAPTIONS ON TOP) ── */}
+      {/* ── DETAILED SERVICES BREAKDOWN (FIRST SECTION AT TOP) ── */}
       <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16">
         <div className="border-t border-[#1A1A1A]/10 pt-16 mb-12">
           <span className="text-[9px] tracking-[0.5em] uppercase font-light text-[#1A1A1A]/40 font-sans block mb-2 font-semibold">
@@ -394,6 +357,43 @@ export function ServicesContent({ isEmbedded = false }: { isEmbedded?: boolean }
                 </div>
               </div>
 
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 3 PILLARS (PLACED BELOW OUR SERVICES) ── */}
+      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-12 sm:py-16 border-t border-[#1A1A1A]/10">
+        <div className="mb-8 sm:mb-12">
+          <span className="text-[8px] sm:text-[9px] tracking-[0.4em] sm:tracking-[0.5em] uppercase font-light text-[#1A1A1A]/50 font-sans block mb-2 font-semibold">
+            OUR APPROACH
+          </span>
+          <h2 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A]">
+            Three Pillars of Great Style
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          {pillars.map((p) => (
+            <div key={p.num} className="bg-[#FAF8F3] p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-5 sm:gap-6 border border-black/10 hover:border-black/30 transition-all rounded-xs shadow-xs">
+              <div>
+                <div className="flex items-center gap-4 mb-4 sm:mb-6">
+                  <span className="font-mono text-xs tracking-widest text-[#1A1A1A]/50">{p.num}</span>
+                  <div className="flex-1 h-[1px] bg-[#1A1A1A]/10" />
+                </div>
+                
+                <h3 className="font-sans text-[10px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-[#1A1A1A]/70 font-semibold mb-2 sm:mb-3">
+                  {p.title}
+                </h3>
+                
+                <p className="font-serif text-lg sm:text-xl lg:text-2xl font-light leading-snug text-[#1A1A1A] mb-3 sm:mb-4">
+                  {p.headline}
+                </p>
+                
+                <p className="font-sans text-xs sm:text-sm font-light text-[#1A1A1A]/80 leading-relaxed">
+                  {p.body}
+                </p>
+              </div>
             </div>
           ))}
         </div>

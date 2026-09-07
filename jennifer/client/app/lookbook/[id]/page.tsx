@@ -14,7 +14,9 @@ function getLooks(): Look[] {
   if (typeof window === 'undefined') return seedLooks;
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : seedLooks;
+    if (!stored) return seedLooks;
+    const parsed = JSON.parse(stored);
+    return parsed.length < seedLooks.length ? seedLooks : parsed;
   } catch {
     return seedLooks;
   }

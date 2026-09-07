@@ -8,7 +8,7 @@ export default function AboutSection() {
   const { about } = useSiteData();
   const { openLightbox } = useLightbox();
 
-  const imageSrc = about.creativeDirectorImage || "/images/img22.jpeg";
+  const imageSrc = about.creativeDirectorImage || "/images/includes/IMG_0332.JPG.jpeg";
 
   return (
     <section id="about-legacy" className="flex flex-col lg:flex-row w-full min-h-screen bg-[#FAF9F6] text-[#1A1A1A] border-b border-black/5 overflow-hidden m-0 p-0">

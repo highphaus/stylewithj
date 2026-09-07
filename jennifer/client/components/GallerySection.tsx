@@ -11,7 +11,7 @@ export default function GallerySection() {
   const images = [
     { src: "/images/includes/IMG_0333.JPG.jpeg", title: "Atelier Editorial Look 01" },
     { src: "/images/includes/IMG_1418.JPG.jpeg", title: "Atelier Editorial Look 02" },
-    { src: "/images/includes/IMG_1756.JPG.jpeg", title: "Atelier Editorial Look 03" }
+    { src: "/images/includes/IMG_3112.JPG.jpeg", title: "Atelier Editorial Look 03" }
   ];
 
   return (

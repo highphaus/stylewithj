@@ -61,7 +61,7 @@ export default function TransformationSlider() {
         >
           {/* Before Image Layer */}
           <div className="absolute inset-0">
-            <img src="/images/img15.jpeg" alt="Before lookbook profile" className="w-full h-full object-cover object-center grayscale-[20%]" draggable="false" />
+            <img src="/images/Before.jpeg" alt="Before lookbook profile" className="w-full h-full object-cover object-center grayscale-[20%]" draggable="false" />
             <div className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-white/90 backdrop-blur-sm text-black font-sans text-[8px] sm:text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 shadow-sm">
               Baseline Outline
             </div>
@@ -70,7 +70,7 @@ export default function TransformationSlider() {
           {/* After Image Layer (Controlled via width percentage) */}
           <div className="absolute inset-0 overflow-hidden shadow-[20px_0_40px_rgba(0,0,0,0.1)]" style={{ width: `${sliderPos}%` }}>
             <div className="relative h-full" style={{ width: containerWidth }}>
-              <img src="/images/img16.jpeg" alt="After lookbook profile" className="absolute inset-0 w-full h-full object-cover object-center" draggable="false" />
+              <img src="/images/After.jpeg" alt="After lookbook profile" className="absolute inset-0 w-full h-full object-cover object-center" draggable="false" />
               <div className="absolute top-4 right-4 sm:top-6 sm:right-6 bg-black text-white font-sans text-[8px] sm:text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 whitespace-nowrap z-10 shadow-sm">
                 Bespoke Curation
               </div>

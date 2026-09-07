@@ -112,7 +112,7 @@ export const seedAboutContent: AboutContentData = {
   storyParagraph3: "As I explored my own style, I learned what made me feel comfortable, confident, and like the best version of myself. That journey led me to start styling friends and people around me, helping them discover what truly suited them.",
   creativeDirectorTitle: "CREATIVE DIRECTOR",
   creativeDirectorName: "Jennifer",
-  creativeDirectorImage: "/images/includes/IMG_0267.JPG.jpeg",
+  creativeDirectorImage: "/images/includes/IMG_0332.JPG.jpeg",
 };
 
 export const seedMeetContent: MeetContentData = {

@@ -20,27 +20,27 @@ const fabricPresets: FabricPreset[] = [
     id: 'fab-1',
     name: 'Architectural Organza',
     composition: '100% Silk Gazar Filament',
-    weight: '42 gsm // Heavy Structural Hold',
-    description: 'Engineered with extreme tensile memory to retain geometric shapes and sharp, volumetric silhouettes away from the physical silhouette frame.',
-    imageUrl: '/images/img01.jpeg',
+    weight: '280 gsm // High-Frequency Fluidity',
+    description: 'High-frequency fluidity with minimal structural resistance. Responds dynamically to movement.',
+    imageUrl: '/images/includes/IMG_0283.JPG.jpeg',
     blurStyle: 'contrast-[1.15] brightness-[1.05]'
   },
   {
     id: 'fab-2',
-    name: 'Fluid Liquid Crepe',
-    composition: 'Rayon Viscose Matte Twill',
-    weight: '280 gsm // Kinetic Low-Bias Drop',
-    description: 'A heavy, bias-cut structural drape that cascades down coordinates like water, tracing physical posture with high-velocity kinetic drop paths.',
-    imageUrl: '/images/img02.jpeg',
+    name: 'Felted Heavy Wool',
+    composition: 'Rigid Monolithic Form',
+    weight: '620 gsm // Structural Integrity',
+    description: 'Structural integrity that locks shoulder stance and preserves architectural outline.',
+    imageUrl: '/images/includes/IMG_8863.JPG.jpeg',
     blurStyle: 'brightness-[0.85] contrast-[0.95]'
   },
   {
     id: 'fab-3',
-    name: 'Raw Technical Canvas',
-    composition: 'Unbleached Flax Flax-Hemp Matrix',
-    weight: '410 gsm // Architectural Sculpt',
-    description: 'The raw foundation of pattern engineering. Rigid, tactile structural weave showing industrial cross-hatching, perfect for structural baselines.',
-    imageUrl: '/images/img03.jpeg',
+    name: 'Raw Technical Linen',
+    composition: 'Sculpted Organic Drop',
+    weight: '340 gsm // Controlled Geometric Folds',
+    description: 'Balanced elasticity offering natural breathability and controlled geometric folds.',
+    imageUrl: '/images/includes/IMG_1406.JPG.jpeg',
     blurStyle: 'contrast-[1.05] saturate-[0.8]'
   }
 ];

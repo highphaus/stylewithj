@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const EXCLUSIVE_PIECES = [
-  { id: 1, src: '/images/img29.jpeg', title: 'SILHOUETTE 01', subtitle: 'The Architectural Drape' },
-  { id: 2, src: '/images/img30.jpeg', title: 'SILHOUETTE 02', subtitle: 'Fluid Mechanics' },
-  { id: 3, src: '/images/img31.jpeg', title: 'SILHOUETTE 03', subtitle: 'Structured Chaos' },
-  { id: 4, src: '/images/img24.jpeg', title: 'SILHOUETTE 04', subtitle: 'Midnight Geometry' },
+  { id: 1, src: '/images/includes/IMG_0283.JPG.jpeg', title: 'SILHOUETTE 01', subtitle: 'The Architectural Drape' },
+  { id: 2, src: '/images/includes/IMG_0332.JPG.jpeg', title: 'SILHOUETTE 02', subtitle: 'Fluid Mechanics' },
+  { id: 3, src: '/images/includes/IMG_8863.JPG.jpeg', title: 'SILHOUETTE 03', subtitle: 'Structured Chaos' },
+  { id: 4, src: '/images/includes/IMG_8846.JPG.jpeg', title: 'SILHOUETTE 04', subtitle: 'Midnight Geometry' },
 ];
 
 export default function AvantGardeShowcase() {
