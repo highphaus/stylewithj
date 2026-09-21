@@ -98,6 +98,7 @@ export default function AdminPage() {
   const [tempAbout, setTempAbout] = useState(about);
   const [tempMeet, setTempMeet] = useState(meet);
   const [tempContact, setTempContact] = useState(contact);
+  const [heroPreviewDevice, setHeroPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
 
   useEffect(() => {
     const stored = sessionStorage.getItem('swj_admin');
@@ -507,50 +508,250 @@ export default function AdminPage() {
 
         {/* ── 1. HERO SECTION EDIT FORM ── */}
         {activeTab === 'hero' && (
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            updateHero(tempHero);
-            showToast();
-          }} className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6">
-            <div>
-              <h2 className="font-serif text-2xl font-light">Hero Section Content</h2>
-              <p className="font-sans text-xs text-black/50 mt-1">Manage all headlines, imagery, and CTAs on the main Hero banner</p>
+          <div className="flex flex-col gap-8">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              updateHero(tempHero);
+              showToast();
+            }} className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6">
+              <div>
+                <h2 className="font-serif text-2xl font-light">Hero Section Content & Layout</h2>
+                <p className="font-sans text-xs text-black/50 mt-1">
+                  Manage all headlines, imagery, image vertical lift/positioning on larger devices, and CTAs.
+                </p>
+              </div>
+
+              {/* Desktop Image & Vertical Lift Controls */}
+              <div className="flex flex-col gap-3 p-5 bg-[#F7F5F0] border border-black/10 rounded-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 font-bold">
+                    1. DESKTOP HERO IMAGE & VERTICAL LIFT
+                  </span>
+                  <span className="font-mono text-[9px] text-black/40">Large Screens / PC</span>
+                </div>
+
+                <ImageUploadField
+                  image={tempHero.desktopImage}
+                  onImageChange={img => setTempHero(p => ({ ...p, desktopImage: img }))}
+                />
+
+                {/* Vertical Lift Settings */}
+                <div className="flex flex-col gap-2 mt-2 pt-3 border-t border-black/10">
+                  <label className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-black/60 font-bold">
+                    Desktop Image Vertical Lift / Position (Fixes bottom cut-off on bigger screens)
+                  </label>
+                  <p className="font-sans text-[11px] text-black/50">
+                    Lifting the image shifts the photograph upward inside the viewport so the bottom of the saree, chair base, and floor remain fully visible.
+                  </p>
+                  
+                  {/* Presets */}
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {[
+                      { label: 'Balanced Lift (center 50%) — Recommended', val: 'center 50%' },
+                      { label: 'Extra Lift (center 55%)', val: 'center 55%' },
+                      { label: 'High Lift (center 65%)', val: 'center 65%' },
+                      { label: 'Subtle Lift (center 40%)', val: 'center 40%' },
+                      { label: 'Top Pinned (center 0%)', val: 'center 0%' },
+                    ].map(preset => (
+                      <button
+                        key={preset.val}
+                        type="button"
+                        onClick={() => setTempHero(p => ({ ...p, desktopImagePosition: preset.val }))}
+                        className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-wider rounded-xs border transition-colors ${
+                          (tempHero.desktopImagePosition || 'center 50%') === preset.val
+                            ? 'bg-black text-white border-black'
+                            : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Custom Input */}
+                  <div className="flex items-center gap-3 mt-2">
+                    <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40">Custom CSS Position:</span>
+                    <input
+                      type="text"
+                      value={tempHero.desktopImagePosition || 'center 50%'}
+                      onChange={e => setTempHero(p => ({ ...p, desktopImagePosition: e.target.value }))}
+                      placeholder="e.g. center 50%"
+                      className="w-48 px-3 py-1.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Image & Position */}
+              <div className="flex flex-col gap-3 p-5 bg-[#F7F5F0] border border-black/10 rounded-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 font-bold">
+                    2. MOBILE HERO IMAGE & ALIGNMENT
+                  </span>
+                  <span className="font-mono text-[9px] text-black/40">Mobile Viewport</span>
+                </div>
+
+                <ImageUploadField
+                  image={tempHero.mobileImage}
+                  onImageChange={img => setTempHero(p => ({ ...p, mobileImage: img }))}
+                />
+
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-2 pt-3 border-t border-black/10">
+                  <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/50 font-bold">
+                    Mobile Image Alignment:
+                  </span>
+                  <div className="flex gap-2">
+                    {['center 15%', 'center 25%', 'center 50%'].map(val => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => setTempHero(p => ({ ...p, mobileImagePosition: val }))}
+                        className={`px-3 py-1 text-[9px] font-mono uppercase tracking-wider rounded-xs border transition-colors ${
+                          (tempHero.mobileImagePosition || 'center 15%') === val
+                            ? 'bg-black text-white border-black'
+                            : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                        }`}
+                      >
+                        {val}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <FormField label="Eyebrow Sub-tag" value={tempHero.eyebrow} onChange={v => setTempHero(p => ({ ...p, eyebrow: v }))} required />
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <FormField label="Title Line 1" value={tempHero.titleLine1} onChange={v => setTempHero(p => ({ ...p, titleLine1: v }))} required />
+                <FormField label="Title Line 2" value={tempHero.titleLine2} onChange={v => setTempHero(p => ({ ...p, titleLine2: v }))} required />
+                <FormField label="Title Italic Emphasis" value={tempHero.titleItalic} onChange={v => setTempHero(p => ({ ...p, titleItalic: v }))} required />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField label="Subtitle Line 1" value={tempHero.subtitleLine1} onChange={v => setTempHero(p => ({ ...p, subtitleLine1: v }))} required />
+                <FormField label="Subtitle Line 2" value={tempHero.subtitleLine2} onChange={v => setTempHero(p => ({ ...p, subtitleLine2: v }))} required />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField label="CTA Button Text" value={tempHero.ctaText} onChange={v => setTempHero(p => ({ ...p, ctaText: v }))} required />
+                <FormField label="CTA Destination URL" value={tempHero.ctaUrl} onChange={v => setTempHero(p => ({ ...p, ctaUrl: v }))} required />
+              </div>
+
+              <FormField label="Side Editorial Text" value={tempHero.sideText} onChange={v => setTempHero(p => ({ ...p, sideText: v }))} required />
+
+              <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md hover:bg-black/90 transition-all">
+                Save Hero Changes →
+              </button>
+            </form>
+
+            {/* Live Interactive Hero Section Preview */}
+            <div className="flex flex-col gap-4 bg-white border border-black/10 p-6 sm:p-8 rounded-xs shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-black/10">
+                <div>
+                  <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold block">
+                    ✦ REAL-TIME HERO SECTION PREVIEW
+                  </span>
+                  <h3 className="font-serif text-lg font-light text-[#1A1A1A]">
+                    Left-Middle Placement, Refined Font Size & Lifted Image Preview
+                  </h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setHeroPreviewDevice('desktop')}
+                    className={`px-3.5 py-1.5 text-[9px] font-mono uppercase tracking-wider rounded-xs transition-all ${
+                      heroPreviewDevice === 'desktop'
+                        ? 'bg-black text-white shadow-sm'
+                        : 'bg-[#F2EFE9] text-black/70 border border-black/15 hover:text-black'
+                    }`}
+                  >
+                    🖥 Desktop View
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHeroPreviewDevice('mobile')}
+                    className={`px-3.5 py-1.5 text-[9px] font-mono uppercase tracking-wider rounded-xs transition-all ${
+                      heroPreviewDevice === 'mobile'
+                        ? 'bg-black text-white shadow-sm'
+                        : 'bg-[#F2EFE9] text-black/70 border border-black/15 hover:text-black'
+                    }`}
+                  >
+                    📱 Mobile View
+                  </button>
+                </div>
+              </div>
+
+              {/* Simulated Container */}
+              <div className="w-full flex justify-center py-2 bg-[#FAF9F6]">
+                <div
+                  className={`relative w-full overflow-hidden rounded-xs border border-black/20 shadow-lg text-white flex flex-col justify-center items-start transition-all duration-500 ${
+                    heroPreviewDevice === 'mobile'
+                      ? 'max-w-[360px] h-[580px] p-6'
+                      : 'max-w-4xl h-[460px] p-8 sm:p-12'
+                  }`}
+                  style={{ backgroundColor: '#111' }}
+                >
+                  {/* Background Image with Dynamic Lift */}
+                  <img
+                    src={
+                      heroPreviewDevice === 'desktop'
+                        ? (tempHero.desktopImage || "/images/hero/hero image desktop.png")
+                        : (tempHero.mobileImage || "/images/hero/hero image.jpeg")
+                    }
+                    alt="Hero Live Preview"
+                    className="absolute inset-0 w-full h-full object-cover transition-all duration-500 pointer-events-none"
+                    style={{
+                      objectPosition:
+                        heroPreviewDevice === 'desktop'
+                          ? (tempHero.desktopImagePosition || 'center 50%')
+                          : (tempHero.mobileImagePosition || 'center 15%'),
+                    }}
+                  />
+
+                  {/* Overlays matching the production site */}
+                  {heroPreviewDevice === 'desktop' ? (
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-black/10 pointer-events-none" />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/25 pointer-events-none" />
+                  )}
+
+                  {/* Left-Middle Hero Writing */}
+                  <div className="relative z-10 max-w-sm flex flex-col items-start text-left">
+                    <span className="text-[8px] sm:text-[9.5px] tracking-[0.35em] uppercase text-white/70 mb-1.5 block font-mono font-medium">
+                      {tempHero.eyebrow}
+                    </span>
+
+                    <h1 className="text-xl sm:text-3xl font-serif font-light leading-[1.18] tracking-wide mb-2">
+                      {tempHero.titleLine1} <br />
+                      {tempHero.titleLine2} <br />
+                      <span className="italic font-normal">{tempHero.titleItalic}</span>
+                    </h1>
+
+                    <div className="w-8 sm:w-10 h-[1px] bg-white/30 mb-2 sm:mb-2.5" />
+
+                    <p className="text-[10px] sm:text-xs font-light text-white/80 leading-relaxed mb-3 sm:mb-4 max-w-[240px] tracking-wide">
+                      {tempHero.subtitleLine1} <br />
+                      {tempHero.subtitleLine2}
+                    </p>
+
+                    <div className="inline-flex items-center justify-between gap-6 px-4 py-2 border border-white/40 bg-black/40 text-[9px] tracking-[0.25em] uppercase font-mono text-white rounded-xs shadow-md">
+                      <span>{tempHero.ctaText || "Connect"}</span>
+                      <span>→</span>
+                    </div>
+                  </div>
+
+                  {/* Side text for desktop preview */}
+                  {heroPreviewDevice === 'desktop' && (
+                    <div className="absolute right-8 bottom-8 hidden sm:flex flex-col items-start border-l border-white/20 pl-4 py-1 max-w-[120px] z-10">
+                      <p className="text-[8px] tracking-[0.2em] uppercase font-light leading-relaxed text-white/80">
+                        {tempHero.sideText}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-
-            <ImageUploadField
-              image={tempHero.desktopImage}
-              onImageChange={img => setTempHero(p => ({ ...p, desktopImage: img }))}
-            />
-
-            <ImageUploadField
-              image={tempHero.mobileImage}
-              onImageChange={img => setTempHero(p => ({ ...p, mobileImage: img }))}
-            />
-
-            <FormField label="Eyebrow Sub-tag" value={tempHero.eyebrow} onChange={v => setTempHero(p => ({ ...p, eyebrow: v }))} required />
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <FormField label="Title Line 1" value={tempHero.titleLine1} onChange={v => setTempHero(p => ({ ...p, titleLine1: v }))} required />
-              <FormField label="Title Line 2" value={tempHero.titleLine2} onChange={v => setTempHero(p => ({ ...p, titleLine2: v }))} required />
-              <FormField label="Title Italic Emphasis" value={tempHero.titleItalic} onChange={v => setTempHero(p => ({ ...p, titleItalic: v }))} required />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="Subtitle Line 1" value={tempHero.subtitleLine1} onChange={v => setTempHero(p => ({ ...p, subtitleLine1: v }))} required />
-              <FormField label="Subtitle Line 2" value={tempHero.subtitleLine2} onChange={v => setTempHero(p => ({ ...p, subtitleLine2: v }))} required />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="CTA Button Text" value={tempHero.ctaText} onChange={v => setTempHero(p => ({ ...p, ctaText: v }))} required />
-              <FormField label="CTA Destination URL" value={tempHero.ctaUrl} onChange={v => setTempHero(p => ({ ...p, ctaUrl: v }))} required />
-            </div>
-
-            <FormField label="Side Editorial Text" value={tempHero.sideText} onChange={v => setTempHero(p => ({ ...p, sideText: v }))} required />
-
-            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md">
-              Save Hero Changes →
-            </button>
-          </form>
+          </div>
         )}
 
         {/* ── 2. ABOUT SECTION EDIT FORM ── */}

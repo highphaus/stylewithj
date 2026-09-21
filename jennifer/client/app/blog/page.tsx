@@ -30,7 +30,6 @@ export default function JournalPage() {
     return matchesCategory && matchesSearch;
   });
 
-
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
       <Navigation />
@@ -93,9 +92,7 @@ export default function JournalPage() {
           </div>
         </section>
 
-
-
-        {/* ── 4. ARTICLES GRID ── */}
+        {/* ── 3. ARTICLES GRID ── */}
         <section className="mb-20">
           {filteredPosts.length === 0 ? (
             <div className="py-16 text-center bg-[#EFECE6] border border-black/10 rounded-xs">
@@ -120,7 +117,8 @@ export default function JournalPage() {
                       alt={post.title}
                       fill
                       className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
-                      unoptimized
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      loading="lazy"
                     />
                     <div className="absolute top-3 left-3 bg-black/80 text-white font-mono text-[8px] tracking-[0.2em] uppercase px-2.5 py-1 backdrop-blur-sm">
                       {post.category}

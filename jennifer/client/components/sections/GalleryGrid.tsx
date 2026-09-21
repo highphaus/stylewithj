@@ -62,7 +62,7 @@ export default function GalleryGrid() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 sm:gap-6 lg:gap-8 divide-y divide-black/10 sm:divide-y-0">
             <AnimatePresence mode="popLayout">
-              {filteredItems.map((item) => (
+              {filteredItems.map((item, index) => (
                 <motion.div
                   key={item.id}
                   layout
@@ -88,7 +88,7 @@ export default function GalleryGrid() {
                     fill
                     className="object-cover object-top group-hover:scale-105 transition-transform duration-[2500ms] ease-out"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    unoptimized
+                    loading={index < 2 ? "eager" : "lazy"}
                   />
                 </motion.div>
               ))}

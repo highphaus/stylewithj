@@ -120,7 +120,7 @@ export default function BookingModal() {
               <div>
                 <input 
                   type="tel" 
-                  placeholder="Enter your phone number (e.g., +91 98765 43210) *" 
+                  placeholder="Enter your phone number (e.g., +91 80783 41747) *" 
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                   required 

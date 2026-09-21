@@ -1,16 +1,42 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 
 function ConnectContent() {
+  const searchParams = useSearchParams();
+  const serviceParam = searchParams.get('service');
+  const bookingParam = searchParams.get('booking');
+  const inquiryParam = searchParams.get('inquiry');
+  const isMakeover = bookingParam === 'makeover' || serviceParam === 'Full Transformation';
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [service, setService] = useState('');
-  const [message, setMessage] = useState('');
+  const [service, setService] = useState(
+    serviceParam || (bookingParam === 'makeover' ? 'Full Transformation' : '')
+  );
+  const [message, setMessage] = useState(
+    inquiryParam || (isMakeover ? 'I would like to book a Complete Style Makeover consultation with Jennifer.' : '')
+  );
+
+  // Sync with searchParams if they change
+  useEffect(() => {
+    if (serviceParam) {
+      setService(serviceParam);
+    } else if (bookingParam === 'makeover') {
+      setService('Full Transformation');
+    }
+
+    if (inquiryParam) {
+      setMessage(inquiryParam);
+    } else if (bookingParam === 'makeover' || serviceParam === 'Full Transformation') {
+      setMessage((prev) => prev || 'I would like to book a Complete Style Makeover consultation with Jennifer.');
+    }
+  }, [serviceParam, bookingParam, inquiryParam]);
 
   // Location detection state
   const [locationStatus, setLocationStatus] = useState<'detecting' | 'success' | 'permission_denied' | 'error'>('detecting');
@@ -31,40 +57,32 @@ function ConnectContent() {
           setCoords({ lat, lng });
 
           try {
-            // Reverse geocode via BigDataCloud & Nominatim
-            const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2500);
+            const res = await fetch(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`,
+              { signal: controller.signal }
+            );
+            clearTimeout(timeoutId);
             const data = await res.json();
-            const city = data.city || data.locality || data.principalSubdivision || 'Bangalore';
+            const city = data.city || data.locality || data.principalSubdivision || 'Local Area';
             const country = data.countryName || 'India';
-            const locName = `${city}, ${country}`;
-
-            setLocationText(`📍 Priority Location: ${locName} (${lat.toFixed(4)}°, ${lng.toFixed(4)}°)`);
+            setLocationText(`📍 Priority Location: ${city}, ${country}`);
             setLocationStatus('success');
           } catch {
-            try {
-              const resNom = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-              const nomData = await resNom.json();
-              const nomLoc = nomData.address?.city || nomData.address?.town || nomData.address?.state || 'Local Area';
-              setLocationText(`📍 Priority Location: ${nomLoc} (${lat.toFixed(4)}°, ${lng.toFixed(4)}°)`);
-              setLocationStatus('success');
-            } catch {
-              setLocationText(`📍 Location Coordinates: ${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`);
-              setLocationStatus('success');
-            }
+            setLocationText(`📍 Location Coordinates: ${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`);
+            setLocationStatus('success');
           }
         },
         (error) => {
-          console.warn('Geolocation denied or failed:', error.message);
-          setLocationText('📍 Location: Region-Based Dispatch (Location permission optional)');
+          setLocationText('📍 Location: Regional Concierge (Optional)');
           setLocationStatus('permission_denied');
         },
-        { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
+        { timeout: 3000, enableHighAccuracy: false, maximumAge: 300000 }
       );
     } else {
-      Promise.resolve().then(() => {
-        setLocationText('📍 Location: Concierge Regional Service');
-        setLocationStatus('error');
-      });
+      setLocationText('📍 Location: Concierge Regional Service');
+      setLocationStatus('error');
     }
   }, []);
 
@@ -117,8 +135,29 @@ function ConnectContent() {
       </div>
       
       {/* ── SEND MESSAGE SECTION ── */}
-      <div className="w-full bg-[#FAF8F3] border border-black/10 p-6 sm:p-12 shadow-[0_10px_35px_rgba(0,0,0,0.02)] rounded-sm mb-16 relative">
+      <div id="book-makeover" className="w-full bg-[#FAF8F3] border border-black/10 p-6 sm:p-12 shadow-[0_10px_35px_rgba(0,0,0,0.02)] rounded-sm mb-16 relative scroll-mt-28">
         
+        {/* VIP Makeover Reservation Banner */}
+        {isMakeover && (
+          <div className="mb-8 p-5 sm:p-6 bg-[#1A1A1A] text-white rounded-xs border border-white/10 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1.5 max-w-xl">
+              <div className="flex items-center gap-2 font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.3em] uppercase text-emerald-400 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                MAKEOVER PRIORITY RESERVATION ACTIVE
+              </div>
+              <h3 className="font-serif text-xl sm:text-2xl font-light text-white leading-snug">
+                Complete Style Makeover Package Selected
+              </h3>
+              <p className="font-sans text-xs text-white/75 font-light leading-relaxed">
+                Your 1-on-1 wardrobe and silhouette transformation is ready to be scheduled. Complete the form below, and Jennifer will contact you directly to confirm your consultation timeline.
+              </p>
+            </div>
+            <div className="px-3.5 py-2 bg-white/10 border border-white/15 rounded-xs font-mono text-[9px] uppercase tracking-wider text-white/90 flex-shrink-0">
+              ✦ Direct Atelier Dispatch
+            </div>
+          </div>
+        )}
+
         {/* Dynamic Location Badge */}
         <div className="mb-8 p-3.5 bg-[#EFECE6] border-l-2 border-[#1A1A1A] text-[9px] sm:text-[10px] font-mono tracking-wider text-black/75 flex items-center justify-between flex-wrap gap-2 rounded-xs">
           <span>{locationText}</span>
@@ -221,7 +260,7 @@ function ConnectContent() {
                 <input 
                   type="tel" 
                   value={phone}
-                  placeholder="Enter your phone number (e.g., +91 98765 43210)"
+                  placeholder="Enter your phone number (e.g., +91 80783 41747)"
                   onChange={e => setPhone(e.target.value)}
                   className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/35" 
                   required 
@@ -285,7 +324,7 @@ function ConnectContent() {
             <h3 className="font-serif text-lg font-normal mb-3 text-[#1A1A1A]">Contact</h3>
             <p className="leading-relaxed text-sm text-black/75">
               <a href="mailto:jennifer@stylewithj.in" className="hover:text-black hover:underline transition-colors block">jennifer@stylewithj.in</a>
-              <a href="tel:+919876543210" className="hover:text-black transition-colors block mt-1">+91 98765 43210</a>
+              <a href="tel:+918078341747" className="hover:text-black transition-colors block mt-1">+91 80783 41747</a>
             </p>
           </div>
           
@@ -304,7 +343,15 @@ export default function ConnectPage() {
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
       <Navigation />
-      <ConnectContent />
+      <Suspense fallback={
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/40 animate-pulse">
+            Loading Concierge Form...
+          </div>
+        </div>
+      }>
+        <ConnectContent />
+      </Suspense>
       <AtelierFooter />
     </div>
   );

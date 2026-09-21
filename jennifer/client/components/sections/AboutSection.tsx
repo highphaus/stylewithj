@@ -73,7 +73,8 @@ export default function AboutSection() {
                 alt={img.alt}
                 fill
                 className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                unoptimized
+                sizes="(max-width: 640px) 100vw, 50vw"
+                loading="lazy"
               />
               {/* Scroll-Priority "Click & View" Pop-Up Badge on Mobile */}
               <ScrollPriorityBadge />
@@ -150,7 +151,7 @@ export default function AboutSection() {
                   fill
                   className="object-cover object-top sm:object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  unoptimized
+                  loading="lazy"
                 />
               </div>
             ))}

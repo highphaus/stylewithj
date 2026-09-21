@@ -16,7 +16,7 @@ export default function DiscoveryCall() {
             <p className="font-sans text-gray-400 font-light leading-loose text-center md:text-left">
               DLF Emporio, Vasant Kunj<br />
               New Delhi, Delhi 110070<br />
-              +91 11 4609 8200<br />
+              <a href="tel:+918078341747" className="hover:underline">+91 80783 41747</a><br />
               jennifer@stylewithj.in
             </p>
           </div>

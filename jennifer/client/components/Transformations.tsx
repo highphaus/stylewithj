@@ -8,15 +8,6 @@ import { useLightbox } from '@/components/ImageLightbox';
 const transformationData = [
   {
     id: "01",
-    client: "THE EXECUTIVE ARCHITECT",
-    demographic: "FEMALE SILHOUETTE SYSTEM",
-    concept: "Deconstructing traditional constraints into structural drop-shoulder lines and deep tonal textures.",
-    beforeImg: "/images/Before.jpeg",
-    afterImg: "/images/After.jpeg",
-    specs: ["Canvas Alteration · Drop Line", "Heavy Matte Crepe Fabrics", "Palette · Pale Bone Tone"]
-  },
-  {
-    id: "02",
     client: "THE MODERN PATRIARCH",
     demographic: "MALE SILHOUETTE SYSTEM",
     concept: "Restructuring upper-torso proportions using monolithic wool structures and raw minimalist layering.",
@@ -25,16 +16,7 @@ const transformationData = [
     specs: ["Canvas Alteration · Drop Line", "Heavy Matte Crepe Fabrics", "Palette · Pale Bone Tone"]
   },
   {
-    id: "03",
-    client: "THE VISUAL LEGACY FIELD",
-    demographic: "FEMALE SILHOUETTE SYSTEM",
-    concept: "Curating presence through fluid architectural drapery, asymmetric necklines, and clean geometric lines.",
-    beforeImg: "/images/includes/IMG_0270.JPG.jpeg",
-    afterImg: "/images/includes/IMG_0271.JPG.jpeg",
-    specs: ["Fluid Geometric Draping", "Raw Spun Silk Composites", "Palette · True Charcoal Black"]
-  },
-  {
-    id: "04",
+    id: "02",
     client: "CULTURAL AVANT-GARDE LENS",
     demographic: "MALE SILHOUETTE SYSTEM",
     concept: "A dramatic shift to curated minimalism, blending structured structural drops with historic tailored lines.",
@@ -54,36 +36,17 @@ export default function Transformations({ hideButton = false, hideHeading = fals
   const { openLightbox } = useLightbox();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
-  const [progress, setProgress] = useState(0);
 
-  // ── AUTOMATIC SEAMLESS CROSSFADE CYCLE (NO VISIBLE HORIZONTAL SLIDE) ──
+  // ── AUTOMATIC SEAMLESS CROSSFADE CYCLE (ROTATES EVERY 7 SECONDS, PAUSES ON HOVER) ──
   useEffect(() => {
-    if (isHovering) {
-      setProgress(0);
-      return;
-    }
-
-    const intervalTime = 50; 
-    const totalDuration = 6000; // 6 seconds per case
-    const increment = (intervalTime / totalDuration) * 100;
+    if (isHovering) return;
 
     const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setActiveIndex((curr) => (curr + 1) % transformationData.length);
-          return 0;
-        }
-        return prev + increment;
-      });
-    }, intervalTime);
+      setActiveIndex((curr) => (curr + 1) % transformationData.length);
+    }, 7000); // 7s generous duration for Before/After viewing
 
     return () => clearInterval(timer);
-  }, [isHovering, activeIndex]);
-
-  const handleSelectCase = (index: number) => {
-    setActiveIndex(index);
-    setProgress(0);
-  };
+  }, [isHovering]);
 
   const handleOpenLightbox = (imgSrc: string, clientName: string, label: string, currentItem: typeof transformationData[0]) => {
     openLightbox(imgSrc, `${clientName} (${label})`, {
@@ -109,58 +72,31 @@ export default function Transformations({ hideButton = false, hideHeading = fals
         onMouseLeave={() => setIsHovering(false)}
       >
         
-        {/* Section Header with Case Eyebrow, Main Title, Client Subtitle, and Interactive Case Selectors */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pt-6 sm:pt-10 pb-2 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
+        {/* Section Header with Main Title, Client Subtitle, and Explore More CTA Button */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pt-6 sm:pt-10 pb-2 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
           <div>
             {!hideHeading && (
               <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#1A1A1A] tracking-tight mb-1">
                 Transformations
               </h2>
             )}
-            <div className="flex items-center gap-3 overflow-hidden max-w-full">
-              <span className="hidden sm:inline-block font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold flex-shrink-0">
-                ✦ CASE {currentItem.id}
-              </span>
-              <h3 className="font-serif text-xs sm:text-xl lg:text-2xl font-light text-black tracking-wide uppercase whitespace-nowrap truncate">
+            <div className="flex items-center gap-2.5 overflow-hidden max-w-full pt-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
+              <h3 className="font-mono text-[10px] sm:text-xs lg:text-sm tracking-[0.22em] text-black/65 uppercase font-medium whitespace-nowrap truncate">
                 {currentItem.client}
               </h3>
             </div>
           </div>
 
-          {/* Case Navigation Tabs & Auto Progress Indicator */}
-          <div className="flex flex-col gap-2 items-start md:items-end">
-            <div className="flex items-center gap-1.5 sm:gap-4 overflow-x-auto pb-1 sm:pb-0 max-w-full">
-              {transformationData.map((item, idx) => {
-                const isActive = activeIndex === idx;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleSelectCase(idx)}
-                    className={`px-2 py-1 sm:px-3 sm:py-1.5 text-[7.5px] sm:text-[9px] tracking-[0.1em] sm:tracking-[0.2em] uppercase font-mono transition-all rounded-xs border cursor-pointer whitespace-nowrap flex-shrink-0 ${
-                      isActive 
-                        ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs' 
-                        : 'bg-transparent text-black/50 border-black/10 hover:border-black/30 hover:text-black/80 font-semibold'
-                    }`}
-                  >
-                    CASE 0{idx + 1}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Seamless Auto Progress Line */}
-            <div className="w-full sm:w-48 flex items-center gap-2 mt-1">
-              <span className="text-[8px] font-mono text-black/40 uppercase tracking-widest whitespace-nowrap">
-                CYCLE 0{activeIndex + 1}/0{transformationData.length}
-              </span>
-              <div className="w-full h-[2px] bg-black/10 overflow-hidden rounded-full">
-                <motion.div
-                  className="h-full bg-[#1A1A1A]"
-                  style={{ width: `${isHovering ? 0 : progress}%` }}
-                  transition={{ ease: 'linear' }}
-                />
-              </div>
-            </div>
+          {/* CTA Button to Explore More */}
+          <div>
+            <Link
+              href="/transformations"
+              className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-[9.5px] xl:text-[10px] tracking-[0.22em] uppercase font-mono font-medium transition-all duration-300 shadow-sm hover:shadow-md rounded-xs border border-white/10 active:scale-98"
+            >
+              <span>Explore More</span>
+              <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
+            </Link>
           </div>
         </div>
 

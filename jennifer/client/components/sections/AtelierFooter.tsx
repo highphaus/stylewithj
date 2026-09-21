@@ -3,11 +3,22 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import BookMakeoverCTA from '@/components/BookMakeoverCTA';
 
-export default function AtelierFooter() {
+interface AtelierFooterProps {
+  hideCta?: boolean;
+}
+
+export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
+  const pathname = usePathname();
+  const shouldShowCta = !hideCta && pathname !== '/connect' && !pathname?.startsWith('/admin');
+
   return (
-    <footer className="bg-[#0D0D0C] text-white pt-14 sm:pt-24 pb-10 sm:pb-12">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12">
+    <>
+      {shouldShowCta && <BookMakeoverCTA sourcePage={pathname || undefined} />}
+      <footer className="bg-[#0D0D0C] text-white pt-14 sm:pt-24 pb-10 sm:pb-12">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12">
         
         {/* Top Branding Bar */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-10 pb-10 sm:pb-16 border-b border-white/10">
@@ -28,12 +39,7 @@ export default function AtelierFooter() {
                 jennifer@stylewithj.in
               </a>
             </div>
-            <Link 
-              href="mailto:jennifer@stylewithj.in" 
-              className="w-full sm:w-auto border border-white/20 text-center px-5 py-3 text-[9px] uppercase tracking-[0.25em] font-medium hover:bg-white hover:text-black transition-all duration-300 rounded-xs"
-            >
-              Initiate Inquiry ↗
-            </Link>
+
           </div>
         </div>
 
@@ -56,7 +62,7 @@ export default function AtelierFooter() {
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-4 font-mono font-medium">Explore</h4>
             <ul className="flex flex-col gap-2.5 text-white/60 font-light text-xs">
-              <li><Link href="/services#categories" className="hover:text-white transition-colors">Categories</Link></li>
+              <li><Link href="/categories" className="hover:text-white transition-colors">Categories</Link></li>
               <li><Link href="/journal" className="hover:text-white transition-colors">Blog</Link></li>
               <li><Link href="/insights" className="hover:text-white transition-colors">Insights</Link></li>
               <li><Link href="/programs" className="hover:text-white transition-colors">Programs</Link></li>
@@ -99,6 +105,16 @@ export default function AtelierFooter() {
                 </svg>
                 <span>Email</span>
               </a>
+
+              <a 
+                href="tel:+918078341747" 
+                className="flex items-center gap-2 hover:text-white transition-colors group"
+              >
+                <svg className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.828-1.41-5.11-3.692-6.52-6.52l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                </svg>
+                <span>+91 80783 41747</span>
+              </a>
             </div>
           </div>
 
@@ -115,5 +131,6 @@ export default function AtelierFooter() {
 
       </div>
     </footer>
+    </>
   );
 }

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
+import AtelierFooter from '@/components/sections/AtelierFooter';
 import { Look, seedLooks } from '@/lib/looks-data';
 
 const STORAGE_KEY = 'swj_looks';
@@ -76,9 +77,8 @@ export default function LookPage() {
                 src={look.image}
                 alt={look.title}
                 fill
-                className="object-cover object-top"
+                sizes="(max-width: 1024px) 100vw, 60vw"
                 priority
-                unoptimized
               />
               {/* Subtle gradient overlay at bottom */}
               <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
@@ -137,7 +137,7 @@ export default function LookPage() {
               <div className="flex flex-col gap-5 pt-10 mt-10 border-t border-black/10">
                 {/* CTA */}
                 <Link
-                  href="/connect"
+                  href={`/connect?service=Occasion+Styling&inquiry=${encodeURIComponent(`Inquiry about Look #${look.id}: ${look.title}`)}#book-makeover`}
                   className="group flex items-center justify-between w-full px-6 py-4 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all rounded-xs shadow-md"
                 >
                   <span>Inquire About This Look</span>
@@ -185,6 +185,8 @@ export default function LookPage() {
           </div>
         </motion.main>
       </AnimatePresence>
+
+      <AtelierFooter />
     </div>
   );
 }

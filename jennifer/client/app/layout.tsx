@@ -1,11 +1,18 @@
 import type { Metadata } from 'next';
-import { Manrope } from 'next/font/google';
+import { Manrope, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { LightboxProvider } from '@/components/ImageLightbox';
 
 const manrope = Manrope({ 
   subsets: ['latin'], 
-  variable: '--font-manrope' 
+  variable: '--font-manrope',
+  display: 'swap' 
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap'
 });
 
 export const metadata: Metadata = {
@@ -82,7 +89,7 @@ const jsonLdSchema = {
       logo: 'https://stylewithj.com/logo/style%20with%20j.png',
       image: 'https://stylewithj.com/images/hero/hero%20image%20desktop.png',
       description: 'Premier Personal Stylist, Wardrobe Audit, Personal Shopper, and Corporate Image Consultant in Bangalore. Specialized in executive workwear, capsule wardrobes, and bridal trousseau styling.',
-      telephone: '+919000000000',
+      telephone: '+918078341747',
       priceRange: '₹5,000 - ₹50,000',
       address: {
         '@type': 'PostalAddress',
@@ -175,7 +182,7 @@ import NetworkStatusListener from '@/components/NetworkStatusListener';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${manrope.className} ${manrope.variable} overflow-x-clip w-full max-w-[100vw]`}>
+    <html lang="en" className={`${manrope.className} ${manrope.variable} ${playfair.variable} overflow-x-clip w-full max-w-[100vw]`}>
       <head>
         <link
           rel="stylesheet"

@@ -12,6 +12,7 @@ export interface Look {
   story: string;
   occasion: string;
   image: string;
+  images?: string[];
 }
 
 export const seedLooks: Look[] = [
@@ -26,6 +27,11 @@ export const seedLooks: Look[] = [
     story: 'A striking polka dot slip dress tailored with fluid drape, paired with lace-up heels and a sleek shoulder bag. The staircase setting amplifies the elongated silhouette — an editorial moment rooted in effortless movement.',
     occasion: 'Contemporary Workwear, Dinners & Daily Elegance',
     image: '/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg',
+    images: [
+      '/images/includes/B4A2A5F7-FFA5-4B7A-9B0F-5EA8653D623E.JPG.jpeg',
+      '/images/includes/4A4BFA10-7C54-4FB2-B0DC-ED4B72A94B00.JPG.jpeg',
+      '/images/includes/052F83BA-6047-49C8-9BBF-37C6FFE2C106.JPG.jpeg',
+    ],
   },
   {
     id: 'look-02',
@@ -38,6 +44,11 @@ export const seedLooks: Look[] = [
     story: 'Strapless corset peplum gown offering razor-sharp posture for luxury evening affairs and red carpet moments. The clean poolside backdrop accentuates the structural silhouette — form without compromise.',
     occasion: 'Galas, High Fashion Affairs & Red Carpet Events',
     image: '/images/includes/IMG_8709.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8709.JPG.jpeg',
+      '/images/includes/IMG_8777.JPG.jpeg',
+      '/images/includes/IMG_8694.JPG.jpeg',
+    ],
   },
   {
     id: 'look-03',
@@ -50,6 +61,11 @@ export const seedLooks: Look[] = [
     story: 'Clean white halter dress accessorized with an artisanal brown leather disc waist belt in open golden fields. The natural landscape grounds the look in warmth and intentionality.',
     occasion: 'Contemporary Workwear, Dinners & Daily Elegance',
     image: '/images/includes/IMG_9051.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_9051.JPG.jpeg',
+      '/images/includes/IMG_8881.JPG.jpeg',
+      '/images/includes/IMG_8857.JPG.jpeg',
+    ],
   },
   {
     id: 'look-04',
@@ -62,6 +78,11 @@ export const seedLooks: Look[] = [
     story: 'Deep backless halter maxi silhouette capturing effortless movement against open sea horizons. Every detail — the fabric, the cut, the stance — speaks to destination dressing at its most refined.',
     occasion: 'Vacation Edits, Coastal Resort & Romantic Dates',
     image: '/images/includes/IMG_3112.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_3112.JPG.jpeg',
+      '/images/includes/IMG_3119.JPG.jpeg',
+      '/images/includes/IMG_8863.JPG.jpeg',
+    ],
   },
   {
     id: 'look-05',
@@ -74,6 +95,11 @@ export const seedLooks: Look[] = [
     story: 'Soft white floral midi dress paired with rustic leather boots and relaxed lakeside styling. A romantic edit that bridges bohemian freedom with considered personal expression.',
     occasion: 'Vacation Edits, Coastal Resort & Romantic Dates',
     image: '/images/includes/IMG_9135.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_9135.JPG.jpeg',
+      '/images/includes/IMG_9140.JPG.jpeg',
+      '/images/includes/IMG_9158.JPG.jpeg',
+    ],
   },
   {
     id: 'look-06',
@@ -86,6 +112,11 @@ export const seedLooks: Look[] = [
     story: 'Sleek off-shoulder dark navy column dress featuring ruched waist detailing, statement gold cuffs, and dark sunglasses. A high-fashion silhouette built for the woman who commands every room she enters.',
     occasion: 'Galas, High Fashion Affairs & Red Carpet Events',
     image: '/images/includes/IMG_8826.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8826.JPG.jpeg',
+      '/images/includes/IMG_8820.JPG.jpeg',
+      '/images/includes/IMG_1754.JPG.jpeg',
+    ],
   },
   {
     id: 'look-07',
@@ -98,6 +129,11 @@ export const seedLooks: Look[] = [
     story: 'Bespoke tailoring built around natural shoulder drops and waist-accentuating architectural cuts. This is the essence of the Jennifer method — understanding your body\'s natural lines and dressing to honour them.',
     occasion: 'Bespoke Consultation & Personal Image Transformation',
     image: '/images/includes/IMG_0267.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_0267.JPG.jpeg',
+      '/images/includes/IMG_0269.JPG.jpeg',
+      '/images/includes/IMG_0270.JPG.jpeg',
+    ],
   },
   {
     id: 'look-08',
@@ -110,6 +146,11 @@ export const seedLooks: Look[] = [
     story: 'Intentional holiday capsule edit designed for effortless transition from afternoon beachside to evening dining. The pleated drape captures air and light — movement as architecture.',
     occasion: 'Vacation Edits, Coastal Resort & Romantic Dates',
     image: '/images/includes/IMG_8771.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8771.JPG.jpeg',
+      '/images/includes/IMG_8236.JPG.jpeg',
+      '/images/includes/IMG_8271.JPG.jpeg',
+    ],
   },
   {
     id: 'look-09',
@@ -122,6 +163,11 @@ export const seedLooks: Look[] = [
     story: 'Precision-tailored structural bodice built for luxury evening affairs and red carpet moments.',
     occasion: 'Galas & High-Fashion Events',
     image: '/images/includes/IMG_0263.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_0263.JPG.jpeg',
+      '/images/includes/IMG_0283.JPG.jpeg',
+      '/images/includes/IMG_0271.JPG.jpeg',
+    ],
   },
   {
     id: 'look-10',
@@ -134,6 +180,11 @@ export const seedLooks: Look[] = [
     story: 'Effortless resort capsule curation capturing light and movement for destination travel.',
     occasion: 'Vacation Edits & Coastal Resort',
     image: '/images/includes/IMG_0274.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_0274.JPG.jpeg',
+      '/images/includes/IMG_0271.JPG.jpeg',
+      '/images/includes/IMG_8861.JPG.jpeg',
+    ],
   },
   {
     id: 'look-11',
@@ -145,7 +196,12 @@ export const seedLooks: Look[] = [
     fabric: 'Italian Unstructured Wool & Fine Cotton',
     story: 'Tailored executive workwear built for Bangalore tech leads, directors, and pitch meetings.',
     occasion: 'Corporate Boardrooms & Investor Pitches',
-    image: '/images/includes/IMG_0320.JPG.jpeg',
+    image: '/images/includes/DSC04682.jpg',
+    images: [
+      '/images/includes/DSC04682.jpg',
+      '/images/includes/DSC04633.jpg',
+      '/images/includes/IMG_7202.JPG.jpeg',
+    ],
   },
   {
     id: 'look-12',
@@ -157,7 +213,12 @@ export const seedLooks: Look[] = [
     fabric: 'Kanjeevaram Silk & Zari Weave',
     story: 'Luminous occasion curation designed for Bangalore garden weddings and celebratory evenings.',
     occasion: 'Bridal Trousseau & Milestone Celebrations',
-    image: '/images/includes/IMG_0333.JPG.jpeg',
+    image: '/images/includes/CIT09345.jpg',
+    images: [
+      '/images/includes/CIT09345.jpg',
+      '/images/includes/DSC07159.jpg',
+      '/images/includes/IMG_5321.JPG.jpeg',
+    ],
   },
   {
     id: 'look-13',
@@ -169,7 +230,12 @@ export const seedLooks: Look[] = [
     fabric: 'Treated Gabardine & Brushed Cotton',
     story: 'A sleek, climate-smart outer layer designed for daily commutes and executive presence.',
     occasion: 'Daily Elegance & Smart Workwear',
-    image: '/images/includes/IMG_1418.JPG.jpeg',
+    image: '/images/includes/IMG_7136.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_7136.JPG.jpeg',
+      '/images/includes/IMG_7135.JPG.jpeg',
+      '/images/includes/IMG_7202.JPG.jpeg',
+    ],
   },
   {
     id: 'look-14',
@@ -182,6 +248,11 @@ export const seedLooks: Look[] = [
     story: 'Elevated everyday look blending comfort with refined personal style.',
     occasion: 'Weekend Edits & Casual Meetings',
     image: '/images/includes/IMG_4485.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_4485.JPG.jpeg',
+      '/images/includes/IMG_9051.JPG.jpeg',
+      '/images/includes/4A4BFA10-7C54-4FB2-B0DC-ED4B72A94B00.JPG.jpeg',
+    ],
   },
   {
     id: 'look-15',
@@ -194,6 +265,11 @@ export const seedLooks: Look[] = [
     story: 'Light, fluid drape designed for outdoor garden wedding receptions and afternoon celebrations.',
     occasion: 'Wedding Guest & Cocktail Receptions',
     image: '/images/includes/IMG_5314.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_5314.JPG.jpeg',
+      '/images/includes/IMG_5315.JPG.jpeg',
+      '/images/includes/DSC07159.jpg',
+    ],
   },
   {
     id: 'look-16',

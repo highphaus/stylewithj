@@ -37,7 +37,15 @@ export function useSiteData() {
   useEffect(() => {
     try {
       const storedHero = localStorage.getItem(HERO_KEY);
-      if (storedHero) setHero(JSON.parse(storedHero));
+      if (storedHero) {
+        const parsed = JSON.parse(storedHero);
+        setHero({
+          ...seedHeroContent,
+          ...parsed,
+          desktopImagePosition: parsed.desktopImagePosition || seedHeroContent.desktopImagePosition || 'center 50%',
+          mobileImagePosition: parsed.mobileImagePosition || seedHeroContent.mobileImagePosition || 'center 15%',
+        });
+      }
 
       const storedAbout = localStorage.getItem(ABOUT_KEY);
       if (storedAbout) setAbout(JSON.parse(storedAbout));

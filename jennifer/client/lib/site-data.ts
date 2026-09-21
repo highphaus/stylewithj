@@ -13,6 +13,8 @@ export interface HeroContent {
   desktopImage: string;
   mobileImage: string;
   sideText: string;
+  desktopImagePosition?: string;
+  mobileImagePosition?: string;
 }
 
 export interface AboutContentData {
@@ -99,6 +101,8 @@ export const seedHeroContent: HeroContent = {
   desktopImage: "/images/hero/hero image desktop.png",
   mobileImage: "/images/hero/hero image.jpeg",
   sideText: "Editorial approach. Personal touch.",
+  desktopImagePosition: "center 50%",
+  mobileImagePosition: "center 15%",
 };
 
 export const seedAboutContent: AboutContentData = {
@@ -130,7 +134,7 @@ export const seedContactContent: ContactContentData = {
   heading: "Let's Connect",
   address: "DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070",
   email: "jennifer@stylewithj.in",
-  phone: "+91 98765 43210",
+  phone: "+91 80783 41747",
   hours: "Mon - Fri: 9am - 6pm\nSat: 10am - 4pm\nSun: Closed",
 };
 
@@ -176,7 +180,7 @@ export const seedServices: ServiceItem[] = [
     category: "Closet Evolution",
     name: "Wardrobe Styling", 
     desc: "Make your existing wardrobe work harder. Rediscover forgotten pieces, create fresh outfit combinations, identify what's missing, and build a versatile closet.",
-    image: "/images/includes/IMG_1406.JPG.jpeg"
+    image: "/images/includes/DSC04682.jpg"
   },
   { 
     id: "service-03",
@@ -184,7 +188,7 @@ export const seedServices: ServiceItem[] = [
     category: "Intentional Shopping",
     name: "Personal Shopping", 
     desc: "Shop with intention through curated recommendations tailored to your style, lifestyle, and budget. Spend less time searching and more time finding what works.",
-    image: "/images/includes/IMG_1423.JPG.jpeg"
+    image: "/images/includes/IMG_9135.JPG.jpeg"
   },
   { 
     id: "service-04",
