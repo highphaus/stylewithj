@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, MotionValue } from 'framer-motion';
 import { useSiteData } from '@/lib/use-site-data';
 
 interface ServiceDefinition {
@@ -85,17 +85,78 @@ const allServices: ServiceDefinition[] = [
   }
 ];
 
+interface DesktopCardProps {
+  item: ServiceDefinition;
+  index: number;
+  total: number;
+  scrollYProgress: MotionValue<number>;
+  onSelectService: (item: ServiceDefinition) => void;
+}
+
+function DesktopServiceCard({ item, index, total, scrollYProgress, onSelectService }: DesktopCardProps) {
+  const activeTotal = total - 1;
+  const isLastCard = index === total - 1;
+  
+  const start = index / activeTotal;
+  const end = (index + 1) / activeTotal;
+  const hold = isLastCard ? 1 : start + (end - start) * 0.65;
+
+  const inputRange = isLastCard 
+    ? [0, 1]
+    : [0, Math.max(0.01, hold), end, 1];
+
+  const outputX = isLastCard
+    ? ["0%", "0%"]
+    : ["0%", "0%", "-105%", "-105%"];
+
+  const outputScale = isLastCard
+    ? [1, 1]
+    : [1, 1, 0.96, 0.96];
+
+  const x = useTransform(scrollYProgress, inputRange, outputX);
+  const scale = useTransform(scrollYProgress, inputRange, outputScale);
+
+  return (
+    <motion.div 
+      style={{ x, scale, zIndex: total - index }}
+      className="absolute inset-0 w-full h-full bg-[#FAF9F6] will-change-transform border-l border-black/10"
+    >
+      <div 
+        onClick={() => onSelectService(item)}
+        className="relative w-full h-full bg-[#EFECE6] overflow-hidden cursor-pointer group"
+      >
+        <Image 
+          src={item.image} 
+          alt={item.name} 
+          fill
+          unoptimized
+          className="object-cover object-center scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
+          sizes="50vw"
+          priority={index <= 1}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
 interface ServicesGridProps {
   hideButton?: boolean;
 }
 
 export default function ServicesGrid({ hideButton = false }: ServicesGridProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const [isPaused, setIsPaused] = useState(false);
+  // Desktop state
+  const targetRef = useRef<HTMLDivElement>(null);
+  const [activeDesktopIndex, setActiveDesktopIndex] = useState(0);
+
+  // Mobile state (Auto carousel)
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const [mobileDirection, setMobileDirection] = useState(1);
+  const [isMobilePaused, setIsMobilePaused] = useState(false);
+  const mobileTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Shared modal state
   const [selectedService, setSelectedService] = useState<ServiceDefinition | null>(null);
   const { services: dynamicServices } = useSiteData();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const servicesList: ServiceDefinition[] = dynamicServices.length > 0 
     ? dynamicServices.map((ds, idx) => {
@@ -110,37 +171,63 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
   const total = servicesList.length;
 
-  const handleNext = () => {
-    setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % total);
+  // ── DESKTOP SCROLL PROGRESS ──
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end end"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 220,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+    let idx = 0;
+    if (latest >= 0.88) idx = 4;
+    else if (latest >= 0.65) idx = 3;
+    else if (latest >= 0.40) idx = 2;
+    else if (latest >= 0.18) idx = 1;
+    else idx = 0;
+
+    setActiveDesktopIndex(idx);
+  });
+
+  // ── MOBILE AUTO-CAROUSEL CONTROLS ──
+  const handleMobileNext = () => {
+    setMobileDirection(1);
+    setMobileIndex((prev) => (prev + 1) % total);
   };
 
-  const handlePrev = () => {
-    setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + total) % total);
+  const handleMobilePrev = () => {
+    setMobileDirection(-1);
+    setMobileIndex((prev) => (prev - 1 + total) % total);
   };
 
-  const handleSelect = (index: number) => {
-    setDirection(index > currentIndex ? 1 : -1);
-    setCurrentIndex(index);
+  const handleMobileSelect = (index: number) => {
+    setMobileDirection(index > mobileIndex ? 1 : -1);
+    setMobileIndex(index);
   };
 
-  // Auto movement carousel timer (every 4.5 seconds)
+  // Auto carousel effect for mobile (4.5s interval)
   useEffect(() => {
-    if (isPaused || selectedService !== null) return;
+    if (isMobilePaused || selectedService !== null) return;
 
-    timerRef.current = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prev) => (prev + 1) % total);
+    mobileTimerRef.current = setInterval(() => {
+      setMobileDirection(1);
+      setMobileIndex((prev) => (prev + 1) % total);
     }, 4500);
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (mobileTimerRef.current) clearInterval(mobileTimerRef.current);
     };
-  }, [isPaused, selectedService, total]);
+  }, [isMobilePaused, selectedService, total]);
 
-  const currentService = servicesList[currentIndex] || servicesList[0];
+  const currentDesktopService = servicesList[activeDesktopIndex] || servicesList[0];
+  const currentMobileService = servicesList[mobileIndex] || servicesList[0];
 
+  // Modal navigation
   const currentModalIndex = selectedService 
     ? servicesList.findIndex(s => s.num === selectedService.num)
     : -1;
@@ -157,8 +244,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
     }
   };
 
-  // Animation variants for smooth auto-sliding
-  const slideVariants = {
+  const mobileSlideVariants = {
     enter: (dir: number) => ({
       x: dir > 0 ? 50 : -50,
       opacity: 0
@@ -174,198 +260,275 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   };
 
   return (
-    <section 
-      id="services" 
-      className="relative w-full bg-[#FAF9F6] border-b border-black/15 py-12 sm:py-16 md:py-20 overflow-hidden select-none"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
-    >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12">
-        
-        {/* ── SECTION HEADER ── */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 md:pb-10 border-b border-black/10 gap-4">
-          <div className="flex flex-col items-start text-left">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-[#1A1A1A] leading-tight text-left">
-              Our Services
-            </h2>
-            <div className="flex items-center gap-2 mt-2 text-left">
-              <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
-              <p className="font-mono text-[9.5px] sm:text-[11px] tracking-[0.22em] uppercase text-black/60 font-medium">
-                Personal Styling & Image Consulting
-              </p>
+    <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
+      
+      {/* ═══════════════════════════════════════════════════════════════════
+          1. LAPTOP / DESKTOP VIEW (lg+): ORIGINAL FLIGHT SCROLL ANIMATION
+         ═══════════════════════════════════════════════════════════════════ */}
+      <div className="hidden lg:block">
+        <section ref={targetRef} className="relative h-[320vh] xl:h-[340vh] bg-[#FAF9F6]">
+          <div className="sticky top-0 h-screen h-[100svh] w-full overflow-hidden flex flex-row items-center bg-[#FAF9F6]">
+            
+            {/* DESKTOP FIXED LEFT EDITORIAL PANEL */}
+            <div className="
+              absolute top-0 left-0 bottom-0 z-50 bg-[#FAF9F6] flex flex-col justify-start
+              w-[480px] xl:w-[540px] px-12 xl:px-20 pt-16 xl:pt-20 border-r border-black/10 pointer-events-auto
+            ">
+              <div>
+                <h2 className="font-serif text-5xl xl:text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-2">
+                  Our Services
+                </h2>
+                <div className="flex items-center gap-2.5 mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
+                  <p className="font-mono text-[10px] xl:text-[11px] tracking-[0.22em] uppercase text-black/60 font-medium">
+                    Personal Styling & Image Consulting
+                  </p>
+                </div>
+
+                {/* Dynamic Active Service Details */}
+                <div className="pt-6 border-t border-black/10">
+                  <AnimatePresence mode="wait">
+                    <motion.div 
+                      key={activeDesktopIndex}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -12 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="flex flex-col gap-4"
+                    >
+                      <span className="font-mono text-[9.5px] xl:text-[10px] tracking-[0.35em] uppercase text-black/50 font-semibold block">
+                        ✦ SERVICE {currentDesktopService.num} · {currentDesktopService.category}
+                      </span>
+
+                      <h3 className="font-serif text-2xl xl:text-3xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-snug">
+                        {currentDesktopService.name}
+                      </h3>
+
+                      <p className="font-sans text-xs xl:text-sm text-black/75 font-light leading-relaxed max-w-md">
+                        {currentDesktopService.desc}
+                      </p>
+
+                      <div className="pt-3">
+                        <button 
+                          type="button"
+                          onClick={() => setSelectedService(currentDesktopService)}
+                          className="inline-flex items-center gap-2 font-mono text-[9.5px] xl:text-[10px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium group cursor-pointer"
+                        >
+                          <span>Explore Service Details</span>
+                          <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+            </div>
+
+            {/* DESKTOP RIGHT CARD CANVAS FIELD */}
+            <div className="w-full relative z-20 flex-1 h-full min-h-0 pl-[480px] xl:pl-[540px] overflow-hidden">
+              <div className="relative w-full h-full overflow-hidden bg-[#FAF9F6]">
+                {servicesList.map((item, i) => (
+                  <DesktopServiceCard 
+                    key={i} 
+                    item={item} 
+                    index={i} 
+                    total={servicesList.length} 
+                    scrollYProgress={smoothProgress}
+                    onSelectService={(selected) => setSelectedService(selected)}
+                  />
+                ))}
+
+                {!hideButton && (
+                  <div className="absolute top-4 right-4 z-30">
+                    <button
+                      onClick={() => {
+                        const target = document.getElementById('transformations') || document.getElementById('horizon');
+                        target?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="flex items-center gap-1 px-3.5 py-1.5 bg-black/85 hover:bg-black text-white text-[9px] tracking-[0.2em] uppercase font-light rounded-full border border-white/10 shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
+                    >
+                      Skip ↓
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          2. SMALLER DEVICE VIEW (< lg): AUTO-MOVEMENT CAROUSEL
+             (Landscape image + Service Name & details, NO timer line)
+         ═══════════════════════════════════════════════════════════════════ */}
+      <div 
+        className="lg:hidden relative w-full bg-[#FAF9F6] py-10 sm:py-14 select-none"
+        onMouseEnter={() => setIsMobilePaused(true)}
+        onMouseLeave={() => setIsMobilePaused(false)}
+        onTouchStart={() => setIsMobilePaused(true)}
+        onTouchEnd={() => setTimeout(() => setIsMobilePaused(false), 2000)}
+      >
+        <div className="px-5 sm:px-8">
+          
+          {/* MOBILE HEADER BAR */}
+          <div className="flex items-end justify-between pb-6 border-b border-black/10 gap-3">
+            <div className="flex flex-col items-start text-left">
+              <h2 className="font-serif text-2xl sm:text-3xl font-light tracking-tight text-[#1A1A1A] leading-tight text-left">
+                Our Services
+              </h2>
+              <div className="flex items-center gap-1.5 mt-1.5 text-left">
+                <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
+                <p className="font-mono text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-black/60 font-medium">
+                  Personal Styling & Image Consulting
+                </p>
+              </div>
+            </div>
+
+            {/* Mobile Controls: Index & Arrows */}
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              <div className="font-mono text-[11px] text-black/50">
+                <span className="text-[#1A1A1A] font-bold">{String(mobileIndex + 1).padStart(2, '0')}</span>
+                <span>/</span>
+                <span>{String(total).padStart(2, '0')}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handleMobilePrev}
+                  className="w-8 h-8 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer"
+                  aria-label="Previous Service"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={handleMobileNext}
+                  className="w-8 h-8 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer"
+                  aria-label="Next Service"
+                >
+                  →
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Carousel Controls */}
-          <div className="flex items-center gap-4 self-start md:self-end">
-            <div className="flex items-center gap-2 font-mono text-xs text-black/50">
-              <span className="text-[#1A1A1A] font-bold tracking-widest">{String(currentIndex + 1).padStart(2, '0')}</span>
-              <span>/</span>
-              <span className="tracking-widest">{String(total).padStart(2, '0')}</span>
-            </div>
-
-            {/* Arrow Buttons */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handlePrev}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center transition-all cursor-pointer text-sm"
-                aria-label="Previous Service"
+          {/* MOBILE CAROUSEL CARD */}
+          <div className="pt-6">
+            <AnimatePresence mode="wait" custom={mobileDirection}>
+              <motion.div
+                key={mobileIndex}
+                custom={mobileDirection}
+                variants={mobileSlideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.15}
+                onDragEnd={(_, { offset }) => {
+                  if (offset.x < -40) handleMobileNext();
+                  else if (offset.x > 40) handleMobilePrev();
+                }}
+                className="flex flex-col gap-4 cursor-grab active:cursor-grabbing"
               >
-                ←
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center transition-all cursor-pointer text-sm"
-                aria-label="Next Service"
-              >
-                →
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* ── AUTO MOVEMENT CAROUSEL CONTENT ── */}
-        <div className="pt-8 md:pt-12">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={currentIndex}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.15}
-              onDragEnd={(_, { offset }) => {
-                if (offset.x < -40) handleNext();
-                else if (offset.x > 40) handlePrev();
-              }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center cursor-grab active:cursor-grabbing"
-            >
-              
-              {/* ── LANDSCAPE IMAGE CONTAINER ── */}
-              <div className="lg:col-span-7 order-1 lg:order-2">
+                {/* Landscape Image */}
                 <div 
-                  onClick={() => setSelectedService(currentService)}
-                  className="relative w-full aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 group cursor-pointer shadow-sm"
+                  onClick={() => setSelectedService(currentMobileService)}
+                  className="relative w-full aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 cursor-pointer shadow-xs"
                 >
                   <Image 
-                    src={currentService.image} 
-                    alt={currentService.name} 
+                    src={currentMobileService.image} 
+                    alt={currentMobileService.name} 
                     fill
                     unoptimized
                     priority
-                    className="object-cover object-center scale-100 group-hover:scale-105 transition-transform duration-700 ease-out"
-                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    className="object-cover object-center"
+                    sizes="100vw"
                   />
-                  
-                  {/* Category Pill Tag Overlay */}
-                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 bg-[#FAF9F6]/90 backdrop-blur-xs px-3 py-1 border border-black/10 rounded-xs">
-                    <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-black/80 font-bold">
-                      ✦ {currentService.num} · {currentService.category}
+                  <div className="absolute top-2.5 left-2.5 bg-[#FAF9F6]/90 backdrop-blur-xs px-2.5 py-0.5 border border-black/10 rounded-xs">
+                    <span className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-black/80 font-bold">
+                      ✦ {currentMobileService.num} · {currentMobileService.category}
                     </span>
                   </div>
                 </div>
-              </div>
 
-              {/* ── SERVICE DETAILS & NAME ── */}
-              <div className="lg:col-span-5 order-2 lg:order-1 flex flex-col items-start text-left gap-4 sm:gap-5">
-                
-                {/* Micro Category Tag */}
-                <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-black/50 font-bold">
-                  ✦ SERVICE {currentService.num} · {currentService.category}
-                </span>
-
-                {/* Bold Service Name */}
-                <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-snug text-left">
-                  {currentService.name}
-                </h3>
-
-                {/* Description */}
-                <p className="font-sans text-sm sm:text-base text-black/75 font-light leading-relaxed text-left">
-                  {currentService.desc}
-                </p>
-
-                {/* Action Links */}
-                <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedService(currentService)}
-                    className="inline-flex items-center gap-2 font-mono text-[10.5px] sm:text-[11px] tracking-[0.22em] text-[#1A1A1A] hover:text-black uppercase font-semibold border-b-2 border-black pb-1 transition-all cursor-pointer group"
-                  >
-                    <span>Explore Service Details</span>
-                    <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
-                  </button>
-
-                  <Link
-                    href="/connect"
-                    className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-[10.5px] tracking-[0.2em] text-black/60 hover:text-black uppercase font-medium transition-colors"
-                  >
-                    <span>Book Consultation</span>
-                    <span>↗</span>
-                  </Link>
-                </div>
-
-              </div>
-
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* ── CAROUSEL PROGRESS & QUICK NAV TABS ── */}
-        <div className="mt-10 sm:mt-14 pt-6 border-t border-black/10">
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
-            {servicesList.map((svc, idx) => {
-              const isActive = idx === currentIndex;
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => handleSelect(idx)}
-                  className={`flex flex-col items-start text-left p-2.5 sm:p-3 rounded-xs transition-all cursor-pointer ${
-                    isActive 
-                      ? 'bg-[#EFECE6] border-l-2 border-black' 
-                      : 'hover:bg-black/5 opacity-60 hover:opacity-100'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full mb-1">
-                    <span className="font-mono text-[9px] tracking-widest font-bold text-black/60">
-                      {svc.num}
-                    </span>
-                    {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-black flex-shrink-0" />
-                    )}
-                  </div>
-                  <span className="font-serif text-xs sm:text-sm font-semibold text-[#1A1A1A] line-clamp-1">
-                    {svc.name}
+                {/* Service Name & Details */}
+                <div className="flex flex-col items-start text-left gap-2 w-full">
+                  <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/50 font-bold">
+                    ✦ SERVICE {currentMobileService.num}
                   </span>
 
-                  {/* Active Auto-Timer Progress Bar Line */}
-                  {isActive && !isPaused && (
-                    <div className="w-full h-0.5 bg-black/10 mt-2 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: '0%' }}
-                        animate={{ width: '100%' }}
-                        transition={{ duration: 4.5, ease: 'linear' }}
-                        className="h-full bg-black"
-                      />
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-tight text-left">
+                    {currentMobileService.name}
+                  </h3>
 
+                  <p className="font-sans text-xs sm:text-sm text-black/75 font-light leading-relaxed text-left">
+                    {currentMobileService.desc}
+                  </p>
+
+                  <div className="pt-1.5 flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedService(currentMobileService)}
+                      className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.22em] text-[#1A1A1A] hover:text-black uppercase font-semibold border-b border-black pb-0.5 transition-all cursor-pointer group"
+                    >
+                      <span>Explore Service Details</span>
+                      <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+                    </button>
+                    <Link
+                      href="/connect"
+                      className="inline-flex items-center gap-1 font-mono text-[9.5px] tracking-[0.2em] text-black/60 hover:text-black uppercase font-medium"
+                    >
+                      <span>Book Consultation</span>
+                      <span>↗</span>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* MOBILE QUICK NAV TABS (Without any animated timer line) */}
+          <div className="mt-6 pt-4 border-t border-black/10">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              {servicesList.map((svc, idx) => {
+                const isActive = idx === mobileIndex;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleMobileSelect(idx)}
+                    className={`flex flex-col items-start text-left p-2 rounded-xs transition-all cursor-pointer ${
+                      isActive 
+                        ? 'bg-[#EFECE6] border-l-2 border-black' 
+                        : 'hover:bg-black/5 opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full mb-0.5">
+                      <span className="font-mono text-[8.5px] tracking-widest font-bold text-black/60">
+                        {svc.num}
+                      </span>
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-black flex-shrink-0" />
+                      )}
+                    </div>
+                    <span className="font-serif text-[11px] sm:text-xs font-semibold text-[#1A1A1A] line-clamp-1">
+                      {svc.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      {/* ── LUXURY SERVICE DETAILS MODAL ── */}
+      {/* ═══════════════════════════════════════════════════════════════════
+          3. SHARED LUXURY SERVICE DETAILS MODAL
+         ═══════════════════════════════════════════════════════════════════ */}
       <AnimatePresence>
         {selectedService && (
           <motion.div 
@@ -384,7 +547,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-xl bg-[#FAF9F6] text-[#1A1A1A] rounded-xs border border-white/20 shadow-2xl overflow-hidden cursor-default my-auto max-h-[90vh] flex flex-col"
             >
-              {/* Top Modal Header */}
+              {/* Modal Header */}
               <div className="p-4 sm:p-5 border-b border-black/10 flex items-center justify-between bg-[#FAF8F3]">
                 <div className="flex items-center gap-2.5">
                   <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
@@ -405,19 +568,16 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
               {/* Modal Body */}
               <div className="p-5 sm:p-7 overflow-y-auto flex flex-col gap-5">
-                {/* Service Title */}
                 <div className="border-b border-black/10 pb-4">
                   <h3 className="font-serif text-2xl sm:text-3xl font-light tracking-wide text-[#1A1A1A] uppercase">
                     {selectedService.name}
                   </h3>
                 </div>
 
-                {/* Narrative Description */}
                 <p className="font-sans text-xs sm:text-sm text-black/80 font-light leading-relaxed border-l-2 border-black/25 pl-4 py-1">
                   {selectedService.desc}
                 </p>
 
-                {/* Points / Highlights */}
                 {selectedService.points && selectedService.points.length > 0 && (
                   <div className="bg-[#EFECE6] p-4 sm:p-5 rounded-xs border border-black/5 flex flex-col gap-2.5">
                     <span className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/50 font-bold">
@@ -434,7 +594,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                   </div>
                 )}
 
-                {/* Service Switcher Prev / Next */}
+                {/* Switcher Prev / Next */}
                 <div className="flex items-center justify-between pt-2 border-t border-black/10">
                   <button
                     onClick={handleModalPrev}
@@ -461,7 +621,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                   </button>
                 </div>
 
-                {/* CTA Action Buttons */}
+                {/* Actions */}
                 <div className="pt-1 flex flex-col sm:flex-row items-center gap-3">
                   <Link
                     href="/connect"
@@ -485,6 +645,6 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
         )}
       </AnimatePresence>
 
-    </section>
+    </div>
   );
 }
