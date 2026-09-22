@@ -422,11 +422,11 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                 }}
                 className="flex flex-col gap-4 cursor-grab active:cursor-grabbing"
               >
-                {/* Landscape Image */}
+                {/* Fashion Editorial Image */}
                 <div 
                   onClick={(e) => handleMobileCardClick(e, currentMobileService)}
                   onTouchStart={() => setMobileRevealed((prev) => ({ ...prev, [currentMobileService.num]: true }))}
-                  className="group/svc-img relative w-full aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 cursor-pointer shadow-xs"
+                  className="group/svc-img relative w-full aspect-[4/5] sm:aspect-[4/3] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 cursor-pointer shadow-xs"
                 >
                   <Image 
                     src={currentMobileService.image} 
@@ -434,7 +434,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                     fill
                     unoptimized
                     priority
-                    className="object-cover object-center"
+                    className="object-cover object-top"
                   />
                   {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
                   <div
