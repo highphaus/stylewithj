@@ -490,39 +490,6 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
             </AnimatePresence>
           </div>
 
-          {/* MOBILE QUICK NAV TABS (Without any animated timer line) */}
-          <div className="mt-6 pt-4 border-t border-black/10">
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-              {servicesList.map((svc, idx) => {
-                const isActive = idx === mobileIndex;
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleMobileSelect(idx)}
-                    className={`flex flex-col items-start text-left p-2 rounded-xs transition-all cursor-pointer ${
-                      isActive 
-                        ? 'bg-[#EFECE6] border-l-2 border-black' 
-                        : 'hover:bg-black/5 opacity-60 hover:opacity-100'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between w-full mb-0.5">
-                      <span className="font-mono text-[8.5px] tracking-widest font-bold text-black/60">
-                        {svc.num}
-                      </span>
-                      {isActive && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-black flex-shrink-0" />
-                      )}
-                    </div>
-                    <span className="font-serif text-[11px] sm:text-xs font-semibold text-[#1A1A1A] line-clamp-1">
-                      {svc.name}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
         </div>
       </div>
 
