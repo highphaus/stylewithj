@@ -72,7 +72,7 @@ export default function Transformations({ hideButton = false, hideHeading = fals
         onMouseLeave={() => setIsHovering(false)}
       >
         
-        {/* Section Header with Main Title, Client Subtitle, and Explore More CTA Button */}
+        {/* Section Header with Main Title and Client Subtitle */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pt-6 sm:pt-10 pb-2 max-w-7xl mx-auto w-full px-4 sm:px-10 lg:px-16">
           <div>
             {!hideHeading && (
@@ -86,17 +86,6 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                 {currentItem.client}
               </h3>
             </div>
-          </div>
-
-          {/* CTA Button to Explore More */}
-          <div>
-            <Link
-              href="/transformations"
-              className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-[9.5px] xl:text-[10px] tracking-[0.22em] uppercase font-mono font-medium transition-all duration-300 shadow-sm hover:shadow-md rounded-xs border border-white/10 active:scale-98"
-            >
-              <span>Explore More</span>
-              <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
-            </Link>
           </div>
         </div>
 

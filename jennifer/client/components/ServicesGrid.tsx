@@ -138,9 +138,10 @@ function ServiceCard({ item, index, total, scrollYProgress, onSelectService }: C
           src={item.image} 
           alt={item.name} 
           fill
+          unoptimized
           className="object-cover object-center scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority={index === 0}
+          sizes="50vw"
+          priority={index <= 1}
         />
       </div>
     </motion.div>
@@ -159,10 +160,14 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   const { services: dynamicServices } = useSiteData();
   
   const servicesList: ServiceDefinition[] = dynamicServices.length > 0 
-    ? dynamicServices.map((ds, idx) => ({
-        ...allServices[idx % allServices.length],
-        ...ds
-      }))
+    ? dynamicServices.map((ds, idx) => {
+        const fallback = allServices[idx % allServices.length];
+        return {
+          ...fallback,
+          ...ds,
+          image: ds.image && ds.image.trim() !== '' ? ds.image : fallback.image
+        };
+      })
     : allServices;
 
   // Accurately measure scroll progress strictly while the section is sticky
@@ -210,89 +215,92 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   return (
     <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
       
-      {/* ── MOBILE / SMALL DEVICE LAYOUT ── */}
-      <div className="block lg:hidden bg-[#FAF9F6] w-full overflow-hidden">
-        
-        {/* Section Heading: "Our Services" */}
-        <div className="px-6 pt-12 pb-6 border-b border-black/10 bg-[#FAF9F6] flex items-end justify-between">
-          <h2 className="font-serif text-3xl sm:text-4xl font-light tracking-tight text-[#1A1A1A]">
+      {/* ── MOBILE & TABLET DOWN-BY-DOWN VERTICAL LIST (< lg, NO SCROLL FLIGHT ANIMATION) ── */}
+      <section className="lg:hidden w-full bg-[#FAF9F6] pt-8 pb-14">
+        {/* Top Header Bar: Left-Aligned with Subheading */}
+        <div className="px-5 sm:px-8 mb-6 flex flex-col items-start text-left">
+          <h2 className="font-serif text-2xl sm:text-3xl font-light tracking-tight text-[#1A1A1A] leading-tight text-left">
             Our Services
           </h2>
-          <Link 
-            href="/services" 
-            className="font-mono text-[9.5px] tracking-[0.2em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-0.5 font-medium"
-          >
-            All Services →
-          </Link>
+          <div className="flex items-center gap-2 mt-1.5 text-left">
+            <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
+            <p className="font-mono text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-black/60 font-medium">
+              Personal Styling & Image Consulting
+            </p>
+          </div>
         </div>
 
-        {/* Vertical Stack: Clean Images with 'Tap the picture' on left bottom side */}
-        <div className="flex flex-col bg-[#FAF9F6] divide-y divide-black/10">
-          {servicesList.map((item) => (
-            <div 
-              key={item.num}
-              role="button"
-              tabIndex={0}
-              onClick={() => setSelectedService(item)}
-              className="relative w-full h-[75dvh] min-h-[460px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0 select-none active:scale-[0.99] transition-transform"
-              title="Tap the picture"
-            >
-              <Image 
-                src={item.image} 
-                alt={item.name} 
-                fill
-                className="object-cover object-center group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                loading="lazy"
-              />
-
-              {/* Left Bottom Side: Tap the picture */}
-              <div className="absolute bottom-5 left-5 z-10 pointer-events-none">
-                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-black/80 backdrop-blur-md text-white rounded-full border border-white/20 text-[9px] font-mono tracking-[0.2em] uppercase font-semibold shadow-xl">
-                  <span>Tap the picture</span>
-                  <span className="text-xs">↗</span>
-                </span>
+        {/* Down-by-Down Services Stack */}
+        <div className="flex flex-col divide-y divide-black/10">
+          {servicesList.map((service, idx) => (
+            <div key={service.num || idx} className="flex flex-col pt-6 pb-8 px-5 sm:px-8">
+              {/* Image Container (Portrait Format) */}
+              <div 
+                onClick={() => setSelectedService(service)}
+                className="relative w-full aspect-[3/4] bg-[#EFECE6] overflow-hidden cursor-pointer group rounded-xs border border-black/10 shadow-xs"
+              >
+                <Image 
+                  src={service.image} 
+                  alt={service.name} 
+                  fill
+                  unoptimized
+                  className="object-cover object-center scale-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  sizes="100vw"
+                  priority={idx <= 1}
+                />
               </div>
 
-              {/* Right Bottom Side: Service Number */}
-              <div className="absolute bottom-5 right-5 z-10 pointer-events-none">
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/85 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 font-bold shadow-md">
-                  {item.num}
-                </span>
+              {/* Service Writing Directly Under The Picture */}
+              <div className="pt-4 flex flex-col items-start text-left gap-1.5 w-full">
+                {/* Service Title (Bold) */}
+                <h3 className="font-serif text-lg sm:text-xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-tight text-left">
+                  {service.name}
+                </h3>
+
+                {/* Service Description */}
+                <p className="font-sans text-xs sm:text-sm text-black/75 font-light leading-relaxed text-left">
+                  {service.desc}
+                </p>
+
+                {/* Pure Word Link - No Box Button */}
+                <div className="pt-1 text-left">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedService(service)}
+                    className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] tracking-[0.22em] text-[#1A1A1A] hover:text-black uppercase font-medium transition-all cursor-pointer group"
+                  >
+                    <span>Explore Service Details</span>
+                    <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
+      </section>
 
-        {/* Bottom Navigation CTA */}
-        <div className="px-6 py-8 bg-[#FAF9F6] flex justify-center border-t border-black/10">
-          <Link 
-            href="/services" 
-            className="inline-flex items-center gap-2 font-mono text-[9.5px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium group"
-          >
-            <span>Explore All Services</span>
-            <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
-          </Link>
-        </div>
-
-      </div>
-
-      {/* ── DESKTOP STICKY HORIZONTAL FLIGHT SCROLL SECTION ── */}
-      <section ref={targetRef} className="hidden lg:block relative h-[340vh] bg-[#FAF9F6]">
+      {/* ── DESKTOP STICKY HORIZONTAL FLIGHT SCROLL SECTION (lg+) ── */}
+      <section ref={targetRef} className="hidden lg:block relative h-[320vh] sm:h-[340vh] bg-[#FAF9F6]">
         
         {/* STICKY CONTAINER VIEWPORT */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-row items-center bg-[#FAF9F6]">
           
-          {/* ── SOLID TEXT PANEL (Left Column on Desktop) ── */}
+          {/* ── DESKTOP LEFT SOLID TEXT PANEL (lg+) ── */}
           <div className="
-            absolute top-0 left-0 bottom-0 z-50 bg-[#FAF9F6] flex flex-col justify-start
-            w-[540px] px-16 xl:px-20 pt-16 xl:pt-20 border-r border-black/10 pointer-events-auto
+            flex absolute top-0 left-0 bottom-0 z-50 bg-[#FAF9F6] flex-col justify-start
+            w-[480px] xl:w-[540px] px-12 xl:px-20 pt-16 xl:pt-20 border-r border-black/10 pointer-events-auto
           ">
             <div>
               {/* Section Heading: "Our Services" (Positioned at the top of this section) */}
-              <h2 className="font-serif text-5xl xl:text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-6">
+              <h2 className="font-serif text-5xl xl:text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-2">
                 Our Services
               </h2>
+              <div className="flex items-center gap-2.5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
+                <p className="font-mono text-[10px] xl:text-[11px] tracking-[0.22em] uppercase text-black/60 font-medium">
+                  Personal Styling & Image Consulting
+                </p>
+              </div>
 
               {/* Dynamic Active Service Details directly under "Our Services" */}
               <div className="pt-6 border-t border-black/10">
@@ -309,7 +317,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                       ✦ SERVICE {currentService.num}
                     </span>
 
-                    <h3 className="font-serif text-2xl xl:text-3xl font-light tracking-wide text-[#1A1A1A] uppercase leading-snug">
+                    <h3 className="font-serif text-2xl xl:text-3xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-snug">
                       {currentService.name}
                     </h3>
 
@@ -318,13 +326,14 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                     </p>
 
                     <div className="pt-3">
-                      <Link 
-                        href="/services" 
-                        className="inline-flex items-center gap-2 font-mono text-[9.5px] xl:text-[10px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium group"
+                      <button 
+                        type="button"
+                        onClick={() => setSelectedService(currentService)}
+                        className="inline-flex items-center gap-2 font-mono text-[9.5px] xl:text-[10px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium group cursor-pointer"
                       >
                         <span>Explore Service Details</span>
                         <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
-                      </Link>
+                      </button>
                     </div>
                   </motion.div>
                 </AnimatePresence>
@@ -332,8 +341,8 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
             </div>
           </div>
 
-          {/* ── CARD PORTRAIT CANVAS FIELD (Right Column on Desktop) ── */}
-          <div className="w-full h-full relative z-20 pl-[540px]">
+          {/* ── CARD PORTRAIT CANVAS FIELD (Right on Desktop) ── */}
+          <div className="w-full relative z-20 flex-1 h-full min-h-0 pl-[480px] xl:pl-[540px] overflow-hidden">
             <div className="relative w-full h-full overflow-hidden bg-[#FAF9F6]">
               
               {servicesList.map((item, i) => (
@@ -347,23 +356,23 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                 />
               ))}
 
+              {/* Unified Floating Skip Button */}
+              {!hideButton && (
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-30">
+                  <button
+                    onClick={() => {
+                      const target = document.getElementById('transformations') || document.getElementById('horizon');
+                      target?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="flex items-center gap-1 px-3 py-1 bg-black/85 hover:bg-black text-white text-[8px] sm:text-[9px] tracking-[0.2em] uppercase font-light rounded-full border border-white/10 shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
+                  >
+                    Skip ↓
+                  </button>
+                </div>
+              )}
+
             </div>
           </div>
-
-          {/* Unified Floating Skip Button */}
-          {!hideButton && (
-            <div className="absolute bottom-6 right-6 z-30">
-              <button
-                onClick={() => {
-                  const target = document.getElementById('transformations') || document.getElementById('horizon');
-                  target?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-black/85 hover:bg-black text-white text-[9px] tracking-[0.2em] uppercase font-light rounded-full border border-white/10 shadow-lg transition-all duration-300 hover:scale-105"
-              >
-                Skip ↓
-              </button>
-            </div>
-          )}
 
         </div>
       </section>

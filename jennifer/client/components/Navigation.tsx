@@ -86,10 +86,10 @@ export default function Navigation() {
       <nav
         className={[
           'fixed top-0 left-0 right-0 z-40',
-          'transition-all duration-500 ease-in-out',
+          'transition-transform transition-opacity duration-300 ease-out',
           visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none',
-          scrolled || (isMobile && mobileMenuOpen)
-            ? 'bg-[#FAF9F6]/95 backdrop-blur-md border-b border-black/[0.04]'
+          scrolled || (isMobile && mobileMenuOpen) || !isHome
+            ? 'bg-[#FAF9F6] border-b border-black/[0.06] shadow-sm'
             : 'bg-transparent',
           isLight ? 'text-[#1A1A1A]' : 'text-white/90',
         ].join(' ')}
@@ -133,7 +133,7 @@ export default function Navigation() {
 
         {/* Mobile Dropdown Panel (Shown when navigation bar is active and visible on mobile) */}
         {isMobile && mobileMenuOpen && (
-          <div className="md:hidden w-full bg-[#FAF9F6] border-t border-black/[0.04] flex flex-col px-6 py-6 gap-3 shadow-lg">
+          <div className="md:hidden w-full bg-[#FAF9F6] border-t border-black/[0.06] flex flex-col px-6 py-6 gap-3 shadow-lg">
             {NAV_LINKS.map(({ label, href }) => (
               <Link
                 key={href}
@@ -156,10 +156,10 @@ export default function Navigation() {
         <button
           onClick={handleToggle}
           className={[
-            'group flex items-center justify-center gap-2 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-3 rounded-full border transition-all duration-500 ease-out shadow-sm',
+            'group flex items-center justify-center gap-2 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-3 rounded-full border transition-all duration-300 ease-out shadow-sm',
             isButtonActive 
-              ? `bg-[#FAF9F6]/90 border-black/10 text-[#1A1A1A] hover:border-black/30` 
-              : 'bg-black/90 hover:bg-black border-white/10 text-white shadow-2xl hover:scale-105'
+              ? 'bg-[#FAF9F6] border-black/15 text-[#1A1A1A] hover:border-black/30' 
+              : 'bg-[#1A1A1A] hover:bg-black border-white/10 text-white shadow-xl hover:scale-105'
           ].join(' ')}
         >
           {isButtonActive ? (
