@@ -1,9 +1,8 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, MotionValue } from 'framer-motion';
-import { useLightbox } from '@/components/ImageLightbox';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSiteData } from '@/lib/use-site-data';
 
 interface ServiceDefinition {
@@ -92,73 +91,18 @@ const allServices: ServiceDefinition[] = [
   }
 ];
 
-interface CardProps {
-  item: ServiceDefinition;
-  index: number;
-  total: number;
-  scrollYProgress: MotionValue<number>;
-  onSelectService: (item: ServiceDefinition) => void;
-}
-
-function ServiceCard({ item, index, total, scrollYProgress, onSelectService }: CardProps) {
-  const activeTotal = total - 1;
-  const isLastCard = index === total - 1;
-  
-  const start = index / activeTotal;
-  const end = (index + 1) / activeTotal;
-  // Comfortable hold phase: Card stays at 0% for 65% of its window, then slides smoothly to the left to reveal the next card
-  const hold = isLastCard ? 1 : start + (end - start) * 0.65;
-
-  // Strictly monotonically increasing input ranges
-  const inputRange = isLastCard 
-    ? [0, 1]
-    : [0, Math.max(0.01, hold), end, 1];
-
-  const outputX = isLastCard
-    ? ["0%", "0%"]
-    : ["0%", "0%", "-105%", "-105%"];
-
-  const outputScale = isLastCard
-    ? [1, 1]
-    : [1, 1, 0.96, 0.96];
-
-  const x = useTransform(scrollYProgress, inputRange, outputX);
-  const scale = useTransform(scrollYProgress, inputRange, outputScale);
-
-  return (
-    <motion.div 
-      style={{ x, scale, zIndex: total - index }}
-      className="absolute inset-0 w-full h-full bg-[#EFECE6] will-change-transform border-l border-black/10"
-    >
-      <div 
-        onClick={() => onSelectService(item)}
-        className="relative w-full h-full bg-[#EFECE6] overflow-hidden cursor-pointer group"
-      >
-        <Image 
-          src={item.image} 
-          alt={item.name} 
-          fill
-          unoptimized
-          className="object-cover object-center scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
-          sizes="50vw"
-          priority={index <= 1}
-        />
-      </div>
-    </motion.div>
-  );
-}
-
 interface ServicesGridProps {
   hideButton?: boolean;
 }
 
 export default function ServicesGrid({ hideButton = false }: ServicesGridProps) {
-  const targetRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
   const [selectedService, setSelectedService] = useState<ServiceDefinition | null>(null);
-  const { openLightbox } = useLightbox();
   const { services: dynamicServices } = useSiteData();
-  
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   const servicesList: ServiceDefinition[] = dynamicServices.length > 0 
     ? dynamicServices.map((ds, idx) => {
         const fallback = allServices[idx % allServices.length];
@@ -170,31 +114,38 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
       })
     : allServices;
 
-  // Accurately measure scroll progress strictly while the section is sticky
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end end"]
-  });
+  const total = servicesList.length;
 
-  // Fast, responsive spring without heavy sluggishness or delay
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 220,
-    damping: 30,
-    restDelta: 0.001
-  });
+  const handleNext = () => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % total);
+  };
 
-  useMotionValueEvent(smoothProgress, "change", (latest) => {
-    let idx = 0;
-    if (latest >= 0.88) idx = 4;
-    else if (latest >= 0.65) idx = 3;
-    else if (latest >= 0.40) idx = 2;
-    else if (latest >= 0.18) idx = 1;
-    else idx = 0;
+  const handlePrev = () => {
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
+  };
 
-    setActiveIndex(idx);
-  });
+  const handleSelect = (index: number) => {
+    setDirection(index > currentIndex ? 1 : -1);
+    setCurrentIndex(index);
+  };
 
-  const currentService = servicesList[activeIndex] || servicesList[0];
+  // Auto movement carousel timer (every 4.5 seconds)
+  useEffect(() => {
+    if (isPaused || selectedService !== null) return;
+
+    timerRef.current = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex((prev) => (prev + 1) % total);
+    }, 4500);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isPaused, selectedService, total]);
+
+  const currentService = servicesList[currentIndex] || servicesList[0];
 
   const currentModalIndex = selectedService 
     ? servicesList.findIndex(s => s.num === selectedService.num)
@@ -212,172 +163,245 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
     }
   };
 
+  // Animation variants for smooth auto-sliding
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 50 : -50,
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -50 : 50,
+      opacity: 0
+    })
+  };
+
   return (
-    <div id="services" className="relative w-full bg-[#FAF9F6] border-b border-black/15">
-      
-      {/* ── MOBILE & TABLET DOWN-BY-DOWN VERTICAL LIST (< lg, NO SCROLL FLIGHT ANIMATION) ── */}
-      <section className="lg:hidden w-full bg-[#FAF9F6] pt-8 pb-14">
-        {/* Top Header Bar: Left-Aligned with Subheading */}
-        <div className="px-5 sm:px-8 mb-6 flex flex-col items-start text-left">
-          <h2 className="font-serif text-2xl sm:text-3xl font-light tracking-tight text-[#1A1A1A] leading-tight text-left">
-            Our Services
-          </h2>
-          <div className="flex items-center gap-2 mt-1.5 text-left">
-            <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
-            <p className="font-mono text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-black/60 font-medium">
-              Personal Styling & Image Consulting
-            </p>
+    <section 
+      id="services" 
+      className="relative w-full bg-[#FAF9F6] border-b border-black/15 py-12 sm:py-16 md:py-20 overflow-hidden select-none"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12">
+        
+        {/* ── SECTION HEADER ── */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 md:pb-10 border-b border-black/10 gap-4">
+          <div className="flex flex-col items-start text-left">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-[#1A1A1A] leading-tight text-left">
+              Our Services
+            </h2>
+            <div className="flex items-center gap-2 mt-2 text-left">
+              <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
+              <p className="font-mono text-[9.5px] sm:text-[11px] tracking-[0.22em] uppercase text-black/60 font-medium">
+                Personal Styling & Image Consulting
+              </p>
+            </div>
+          </div>
+
+          {/* Carousel Controls & Status */}
+          <div className="flex items-center gap-4 self-start md:self-end">
+            <div className="flex items-center gap-2 font-mono text-xs text-black/50">
+              <span className="text-[#1A1A1A] font-bold tracking-widest">{String(currentIndex + 1).padStart(2, '0')}</span>
+              <span>/</span>
+              <span className="tracking-widest">{String(total).padStart(2, '0')}</span>
+            </div>
+
+            {/* Auto-Play status pulse */}
+            <div className="hidden sm:flex items-center gap-1.5 font-mono text-[9px] tracking-widest text-black/40 uppercase bg-black/5 px-2.5 py-1 rounded-full">
+              <span className={`w-1.5 h-1.5 rounded-full ${isPaused ? 'bg-amber-500' : 'bg-emerald-500 animate-pulse'}`} />
+              <span>{isPaused ? 'Paused' : 'Auto'}</span>
+            </div>
+
+            {/* Arrow Buttons */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center transition-all cursor-pointer text-sm"
+                aria-label="Previous Service"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center transition-all cursor-pointer text-sm"
+                aria-label="Next Service"
+              >
+                →
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Down-by-Down Services Stack */}
-        <div className="flex flex-col divide-y divide-black/10">
-          {servicesList.map((service, idx) => (
-            <div key={service.num || idx} className="flex flex-col pt-6 pb-8 px-5 sm:px-8">
-              {/* Image Container (Portrait Format) */}
-              <div 
-                onClick={() => setSelectedService(service)}
-                className="relative w-full aspect-[3/4] bg-[#EFECE6] overflow-hidden cursor-pointer group rounded-xs border border-black/10 shadow-xs"
-              >
-                <Image 
-                  src={service.image} 
-                  alt={service.name} 
-                  fill
-                  unoptimized
-                  className="object-cover object-center scale-100 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                  sizes="100vw"
-                  priority={idx <= 1}
-                />
+        {/* ── AUTO MOVEMENT CAROUSEL CONTENT ── */}
+        <div className="pt-8 md:pt-12">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={currentIndex}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.15}
+              onDragEnd={(_, { offset }) => {
+                if (offset.x < -40) handleNext();
+                else if (offset.x > 40) handlePrev();
+              }}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center cursor-grab active:cursor-grabbing"
+            >
+              
+              {/* ── LANDSCAPE IMAGE CONTAINER (Works on both mobile & desktop) ── */}
+              <div className="lg:col-span-7 order-1 lg:order-2">
+                <div 
+                  onClick={() => setSelectedService(currentService)}
+                  className="relative w-full aspect-[16/10] sm:aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 group cursor-pointer shadow-sm"
+                >
+                  <Image 
+                    src={currentService.image} 
+                    alt={currentService.name} 
+                    fill
+                    unoptimized
+                    priority
+                    className="object-cover object-center scale-100 group-hover:scale-105 transition-transform duration-700 ease-out"
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                  />
+                  
+                  {/* Category Pill Tag Overlay */}
+                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 bg-[#FAF9F6]/90 backdrop-blur-xs px-3 py-1 border border-black/10 rounded-xs">
+                    <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-black/80 font-bold">
+                      ✦ {currentService.num} · {currentService.category}
+                    </span>
+                  </div>
+
+                  {/* Hover Quick-View Hint */}
+                  <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 bg-black/80 text-white px-3 py-1 rounded-full text-[9px] font-mono tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    View Details ↗
+                  </div>
+                </div>
               </div>
 
-              {/* Service Writing Directly Under The Picture */}
-              <div className="pt-4 flex flex-col items-start text-left gap-1.5 w-full">
-                {/* Service Title (Bold) */}
-                <h3 className="font-serif text-lg sm:text-xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-tight text-left">
-                  {service.name}
+              {/* ── SERVICE DETAILS & NAME ── */}
+              <div className="lg:col-span-5 order-2 lg:order-1 flex flex-col items-start text-left gap-4 sm:gap-5">
+                
+                {/* Micro Label */}
+                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/50 font-bold">
+                  SERVICE SPECIFICATION
+                </span>
+
+                {/* Bold Service Name */}
+                <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-snug text-left">
+                  {currentService.name}
                 </h3>
 
-                {/* Service Description */}
-                <p className="font-sans text-xs sm:text-sm text-black/75 font-light leading-relaxed text-left">
-                  {service.desc}
+                {/* Pricing if available */}
+                {currentService.pricing && (
+                  <span className="font-mono text-xs text-black/70 font-semibold bg-[#EFECE6] px-3 py-1 rounded-xs border border-black/5">
+                    {currentService.pricing}
+                  </span>
+                )}
+
+                {/* Description */}
+                <p className="font-sans text-sm sm:text-base text-black/75 font-light leading-relaxed text-left">
+                  {currentService.desc}
                 </p>
 
-                {/* Pure Word Link - No Box Button */}
-                <div className="pt-1 text-left">
+                {/* Service Bullet Highlights (Visible on tablet & desktop) */}
+                {currentService.points && currentService.points.length > 0 && (
+                  <div className="w-full pt-2 flex flex-col gap-2 border-t border-black/10">
+                    {currentService.points.slice(0, 3).map((pt, idx) => (
+                      <div key={idx} className="flex items-start gap-2.5 font-sans text-xs sm:text-sm text-black/70 font-light">
+                        <span className="w-1.5 h-1.5 rounded-full bg-black/40 mt-1.5 flex-shrink-0" />
+                        <span>{pt}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Action Links */}
+                <div className="pt-3 flex flex-wrap items-center gap-4 sm:gap-6">
                   <button
                     type="button"
-                    onClick={() => setSelectedService(service)}
-                    className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] tracking-[0.22em] text-[#1A1A1A] hover:text-black uppercase font-medium transition-all cursor-pointer group"
+                    onClick={() => setSelectedService(currentService)}
+                    className="inline-flex items-center gap-2 font-mono text-[10.5px] sm:text-[11px] tracking-[0.22em] text-[#1A1A1A] hover:text-black uppercase font-semibold border-b-2 border-black pb-1 transition-all cursor-pointer group"
                   >
                     <span>Explore Service Details</span>
-                    <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+                    <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
                   </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
-      {/* ── DESKTOP STICKY HORIZONTAL FLIGHT SCROLL SECTION (lg+) ── */}
-      <section ref={targetRef} className="hidden lg:block relative h-[320vh] sm:h-[340vh] bg-[#FAF9F6]">
-        
-        {/* STICKY CONTAINER VIEWPORT */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-row items-center bg-[#FAF9F6]">
-          
-          {/* ── DESKTOP LEFT SOLID TEXT PANEL (lg+) ── */}
-          <div className="
-            flex absolute top-0 left-0 bottom-0 z-50 bg-[#FAF9F6] flex-col justify-start
-            w-[480px] xl:w-[540px] px-12 xl:px-20 pt-16 xl:pt-20 border-r border-black/10 pointer-events-auto
-          ">
-            <div>
-              {/* Section Heading: "Our Services" (Positioned at the top of this section) */}
-              <h2 className="font-serif text-5xl xl:text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-2">
-                Our Services
-              </h2>
-              <div className="flex items-center gap-2.5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
-                <p className="font-mono text-[10px] xl:text-[11px] tracking-[0.22em] uppercase text-black/60 font-medium">
-                  Personal Styling & Image Consulting
-                </p>
-              </div>
-
-              {/* Dynamic Active Service Details directly under "Our Services" */}
-              <div className="pt-6 border-t border-black/10">
-                <AnimatePresence mode="wait">
-                  <motion.div 
-                    key={activeIndex}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="flex flex-col gap-4"
+                  <Link
+                    href="/connect"
+                    className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-[10.5px] tracking-[0.2em] text-black/60 hover:text-black uppercase font-medium transition-colors"
                   >
-                    <span className="font-mono text-[9.5px] xl:text-[10px] tracking-[0.35em] uppercase text-black/50 font-semibold block">
-                      ✦ SERVICE {currentService.num}
+                    <span>Book Consultation</span>
+                    <span>↗</span>
+                  </Link>
+                </div>
+
+              </div>
+
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* ── CAROUSEL PROGRESS & QUICK NAV TABS ── */}
+        <div className="mt-10 sm:mt-14 pt-6 border-t border-black/10">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+            {servicesList.map((svc, idx) => {
+              const isActive = idx === currentIndex;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleSelect(idx)}
+                  className={`flex flex-col items-start text-left p-2.5 sm:p-3 rounded-xs transition-all cursor-pointer ${
+                    isActive 
+                      ? 'bg-[#EFECE6] border-l-2 border-black' 
+                      : 'hover:bg-black/5 opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full mb-1">
+                    <span className="font-mono text-[9px] tracking-widest font-bold text-black/60">
+                      {svc.num}
                     </span>
+                    {isActive && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-black flex-shrink-0" />
+                    )}
+                  </div>
+                  <span className="font-serif text-xs sm:text-sm font-semibold text-[#1A1A1A] line-clamp-1">
+                    {svc.name}
+                  </span>
 
-                    <h3 className="font-serif text-2xl xl:text-3xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-snug">
-                      {currentService.name}
-                    </h3>
-
-                    <p className="font-sans text-xs xl:text-sm text-black/75 font-light leading-relaxed max-w-md">
-                      {currentService.desc}
-                    </p>
-
-                    <div className="pt-3">
-                      <button 
-                        type="button"
-                        onClick={() => setSelectedService(currentService)}
-                        className="inline-flex items-center gap-2 font-mono text-[9.5px] xl:text-[10px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium group cursor-pointer"
-                      >
-                        <span>Explore Service Details</span>
-                        <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
-                      </button>
+                  {/* Active Auto-Timer Progress Bar Line */}
+                  {isActive && !isPaused && (
+                    <div className="w-full h-0.5 bg-black/10 mt-2 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: 4.5, ease: 'linear' }}
+                        className="h-full bg-black"
+                      />
                     </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
-
-          {/* ── CARD PORTRAIT CANVAS FIELD (Right on Desktop) ── */}
-          <div className="w-full relative z-20 flex-1 h-full min-h-0 pl-[480px] xl:pl-[540px] overflow-hidden">
-            <div className="relative w-full h-full overflow-hidden bg-[#FAF9F6]">
-              
-              {servicesList.map((item, i) => (
-                <ServiceCard 
-                  key={i} 
-                  item={item} 
-                  index={i} 
-                  total={servicesList.length} 
-                  scrollYProgress={smoothProgress}
-                  onSelectService={(selected) => setSelectedService(selected)}
-                />
-              ))}
-
-              {/* Unified Floating Skip Button */}
-              {!hideButton && (
-                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-30">
-                  <button
-                    onClick={() => {
-                      const target = document.getElementById('transformations') || document.getElementById('horizon');
-                      target?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className="flex items-center gap-1 px-3 py-1 bg-black/85 hover:bg-black text-white text-[8px] sm:text-[9px] tracking-[0.2em] uppercase font-light rounded-full border border-white/10 shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
-                  >
-                    Skip ↓
-                  </button>
-                </div>
-              )}
-
-            </div>
-          </div>
-
         </div>
-      </section>
 
-      {/* ── LUXURY SERVICE DETAILS MODAL (OPENS ON TAPPING PICTURE) ── */}
+      </div>
+
+      {/* ── LUXURY SERVICE DETAILS MODAL (OPENS ON TAPPING PICTURE OR "EXPLORE SERVICE DETAILS") ── */}
       <AnimatePresence>
         {selectedService && (
           <motion.div 
@@ -502,6 +526,6 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
         )}
       </AnimatePresence>
 
-    </div>
+    </section>
   );
 }
