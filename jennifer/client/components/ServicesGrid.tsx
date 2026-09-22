@@ -148,10 +148,9 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   const targetRef = useRef<HTMLDivElement>(null);
   const [activeDesktopIndex, setActiveDesktopIndex] = useState(0);
 
-  // Mobile state (Auto carousel)
+  // Mobile state (Auto scroll)
   const [mobileIndex, setMobileIndex] = useState(0);
   const [mobileDirection, setMobileDirection] = useState(1);
-  const [isMobilePaused, setIsMobilePaused] = useState(false);
   const mobileTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Shared modal state
@@ -210,19 +209,19 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
     setMobileIndex(index);
   };
 
-  // Auto carousel effect for mobile (4.5s interval)
+  // Auto scroll effect for mobile (continuous 3.5s interval, pauses only if modal is open)
   useEffect(() => {
-    if (isMobilePaused || selectedService !== null) return;
+    if (selectedService !== null) return;
 
     mobileTimerRef.current = setInterval(() => {
       setMobileDirection(1);
       setMobileIndex((prev) => (prev + 1) % total);
-    }, 4500);
+    }, 3500);
 
     return () => {
       if (mobileTimerRef.current) clearInterval(mobileTimerRef.current);
     };
-  }, [isMobilePaused, selectedService, total]);
+  }, [selectedService, total]);
 
   const currentDesktopService = servicesList[activeDesktopIndex] || servicesList[0];
   const currentMobileService = servicesList[mobileIndex] || servicesList[0];
@@ -362,13 +361,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
           2. SMALLER DEVICE VIEW (< lg): AUTO-MOVEMENT CAROUSEL
              (Landscape image + Service Name & details, NO timer line)
          ═══════════════════════════════════════════════════════════════════ */}
-      <div 
-        className="lg:hidden relative w-full bg-[#FAF9F6] py-10 sm:py-14 select-none"
-        onMouseEnter={() => setIsMobilePaused(true)}
-        onMouseLeave={() => setIsMobilePaused(false)}
-        onTouchStart={() => setIsMobilePaused(true)}
-        onTouchEnd={() => setTimeout(() => setIsMobilePaused(false), 2000)}
-      >
+      <div className="lg:hidden relative w-full bg-[#FAF9F6] py-10 sm:py-14 select-none">
         <div className="px-5 sm:px-8">
           
           {/* MOBILE HEADER BAR */}
@@ -385,31 +378,11 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               </div>
             </div>
 
-            {/* Mobile Controls: Index & Arrows */}
-            <div className="flex items-center gap-2.5 flex-shrink-0">
-              <div className="font-mono text-[11px] text-black/50">
-                <span className="text-[#1A1A1A] font-bold">{String(mobileIndex + 1).padStart(2, '0')}</span>
-                <span>/</span>
-                <span>{String(total).padStart(2, '0')}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={handleMobilePrev}
-                  className="w-8 h-8 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer"
-                  aria-label="Previous Service"
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  onClick={handleMobileNext}
-                  className="w-8 h-8 rounded-full border border-black/20 hover:border-black hover:bg-black hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer"
-                  aria-label="Next Service"
-                >
-                  →
-                </button>
-              </div>
+            {/* Mobile Index Counter */}
+            <div className="flex items-center font-mono text-[11px] text-black/50 flex-shrink-0">
+              <span className="text-[#1A1A1A] font-bold">{String(mobileIndex + 1).padStart(2, '0')}</span>
+              <span className="mx-1">/</span>
+              <span>{String(total).padStart(2, '0')}</span>
             </div>
           </div>
 
@@ -468,7 +441,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                     {currentMobileService.desc}
                   </p>
 
-                  <div className="pt-1.5 flex items-center gap-4">
+                  <div className="pt-2">
                     <button
                       type="button"
                       onClick={() => setSelectedService(currentMobileService)}
@@ -477,13 +450,6 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                       <span>Explore Service Details</span>
                       <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
                     </button>
-                    <Link
-                      href="/connect"
-                      className="inline-flex items-center gap-1 font-mono text-[9.5px] tracking-[0.2em] text-black/60 hover:text-black uppercase font-medium"
-                    >
-                      <span>Book Consultation</span>
-                      <span>↗</span>
-                    </Link>
                   </div>
                 </div>
               </motion.div>
