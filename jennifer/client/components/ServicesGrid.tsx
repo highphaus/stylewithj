@@ -11,7 +11,6 @@ interface ServiceDefinition {
   name: string;
   desc: string;
   image: string;
-  pricing?: string;
   points?: string[];
 }
 
@@ -22,7 +21,6 @@ const allServices: ServiceDefinition[] = [
     name: "Personal Styling", 
     desc: "Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.",
     image: "/images/includes/IMG_0271.JPG.jpeg",
-    pricing: "Starting from ₹5,000",
     points: [
       "Discover your personal style & signature silhouette",
       "Understand what silhouettes, colours, and fits work for you",
@@ -36,7 +34,6 @@ const allServices: ServiceDefinition[] = [
     name: "Wardrobe Styling & Audit", 
     desc: "Make your existing wardrobe work harder. Rediscover forgotten pieces, create fresh outfit combinations, identify what's missing, and build a versatile closet.",
     image: "/images/includes/DSC04682.jpg",
-    pricing: "Starting from ₹7,500",
     points: [
       "Comprehensive wardrobe audit & assessment",
       "Identifying what works and what doesn't",
@@ -51,7 +48,6 @@ const allServices: ServiceDefinition[] = [
     name: "Personal Shopping Bangalore", 
     desc: "Shop with intention through curated recommendations tailored to your style, lifestyle, and budget. Spend less time searching and more time finding what works.",
     image: "/images/includes/IMG_9135.JPG.jpeg",
-    pricing: "Starting from ₹10,000",
     points: [
       "Personalised shopping itineraries & recommendations",
       "Curated pieces based on individual body proportions",
@@ -66,7 +62,6 @@ const allServices: ServiceDefinition[] = [
     name: "Occasion & Bridal Styling", 
     desc: "Tell us where you're going, and we'll help you figure out what to wear. From weddings and parties to date nights and celebrations, curate the perfect look.",
     image: "/images/includes/IMG_1754.JPG.jpeg",
-    pricing: "Starting from ₹12,500",
     points: [
       "Weddings: Bridal trousseau & bridesmaid curations",
       "Garden wedding guest & cocktail drape outfits",
@@ -81,7 +76,6 @@ const allServices: ServiceDefinition[] = [
     name: "Workwear & Tech Leadership", 
     desc: "Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important executive presentations.",
     image: "/images/includes/IMG_8863.JPG.jpeg",
-    pricing: "Starting from ₹15,000",
     points: [
       "Executive workwear & smart casual leadership dressing",
       "Business casual & elevated professional looks for tech hubs",
@@ -204,18 +198,12 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
             </div>
           </div>
 
-          {/* Carousel Controls & Status */}
+          {/* Carousel Controls */}
           <div className="flex items-center gap-4 self-start md:self-end">
             <div className="flex items-center gap-2 font-mono text-xs text-black/50">
               <span className="text-[#1A1A1A] font-bold tracking-widest">{String(currentIndex + 1).padStart(2, '0')}</span>
               <span>/</span>
               <span className="tracking-widest">{String(total).padStart(2, '0')}</span>
-            </div>
-
-            {/* Auto-Play status pulse */}
-            <div className="hidden sm:flex items-center gap-1.5 font-mono text-[9px] tracking-widest text-black/40 uppercase bg-black/5 px-2.5 py-1 rounded-full">
-              <span className={`w-1.5 h-1.5 rounded-full ${isPaused ? 'bg-amber-500' : 'bg-emerald-500 animate-pulse'}`} />
-              <span>{isPaused ? 'Paused' : 'Auto'}</span>
             </div>
 
             {/* Arrow Buttons */}
@@ -261,11 +249,11 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center cursor-grab active:cursor-grabbing"
             >
               
-              {/* ── LANDSCAPE IMAGE CONTAINER (Works on both mobile & desktop) ── */}
+              {/* ── LANDSCAPE IMAGE CONTAINER ── */}
               <div className="lg:col-span-7 order-1 lg:order-2">
                 <div 
                   onClick={() => setSelectedService(currentService)}
-                  className="relative w-full aspect-[16/10] sm:aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 group cursor-pointer shadow-sm"
+                  className="relative w-full aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 group cursor-pointer shadow-sm"
                 >
                   <Image 
                     src={currentService.image} 
@@ -283,20 +271,15 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                       ✦ {currentService.num} · {currentService.category}
                     </span>
                   </div>
-
-                  {/* Hover Quick-View Hint */}
-                  <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 bg-black/80 text-white px-3 py-1 rounded-full text-[9px] font-mono tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    View Details ↗
-                  </div>
                 </div>
               </div>
 
               {/* ── SERVICE DETAILS & NAME ── */}
               <div className="lg:col-span-5 order-2 lg:order-1 flex flex-col items-start text-left gap-4 sm:gap-5">
                 
-                {/* Micro Label */}
-                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/50 font-bold">
-                  SERVICE SPECIFICATION
+                {/* Micro Category Tag */}
+                <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-black/50 font-bold">
+                  ✦ SERVICE {currentService.num} · {currentService.category}
                 </span>
 
                 {/* Bold Service Name */}
@@ -304,32 +287,13 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                   {currentService.name}
                 </h3>
 
-                {/* Pricing if available */}
-                {currentService.pricing && (
-                  <span className="font-mono text-xs text-black/70 font-semibold bg-[#EFECE6] px-3 py-1 rounded-xs border border-black/5">
-                    {currentService.pricing}
-                  </span>
-                )}
-
                 {/* Description */}
                 <p className="font-sans text-sm sm:text-base text-black/75 font-light leading-relaxed text-left">
                   {currentService.desc}
                 </p>
 
-                {/* Service Bullet Highlights (Visible on tablet & desktop) */}
-                {currentService.points && currentService.points.length > 0 && (
-                  <div className="w-full pt-2 flex flex-col gap-2 border-t border-black/10">
-                    {currentService.points.slice(0, 3).map((pt, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 font-sans text-xs sm:text-sm text-black/70 font-light">
-                        <span className="w-1.5 h-1.5 rounded-full bg-black/40 mt-1.5 flex-shrink-0" />
-                        <span>{pt}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
                 {/* Action Links */}
-                <div className="pt-3 flex flex-wrap items-center gap-4 sm:gap-6">
+                <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6">
                   <button
                     type="button"
                     onClick={() => setSelectedService(currentService)}
@@ -401,7 +365,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
       </div>
 
-      {/* ── LUXURY SERVICE DETAILS MODAL (OPENS ON TAPPING PICTURE OR "EXPLORE SERVICE DETAILS") ── */}
+      {/* ── LUXURY SERVICE DETAILS MODAL ── */}
       <AnimatePresence>
         {selectedService && (
           <motion.div 
@@ -441,16 +405,11 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
               {/* Modal Body */}
               <div className="p-5 sm:p-7 overflow-y-auto flex flex-col gap-5">
-                {/* Service Title and Pricing */}
-                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 border-b border-black/10 pb-4">
+                {/* Service Title */}
+                <div className="border-b border-black/10 pb-4">
                   <h3 className="font-serif text-2xl sm:text-3xl font-light tracking-wide text-[#1A1A1A] uppercase">
                     {selectedService.name}
                   </h3>
-                  {selectedService.pricing && (
-                    <span className="font-mono text-xs text-black/60 font-semibold bg-[#EFECE6] px-2.5 py-1 rounded-xs border border-black/5 self-start sm:self-auto">
-                      {selectedService.pricing}
-                    </span>
-                  )}
                 </div>
 
                 {/* Narrative Description */}

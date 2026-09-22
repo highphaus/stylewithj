@@ -34,7 +34,6 @@ export const servicesList = [
     num: '01',
     category: 'Style Discovery',
     title: 'Personal Styling',
-    pricing: 'Starting from ₹5,000',
     summary: 'Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.',
     points: [
       'Discover your personal style & signature silhouette',
@@ -48,7 +47,6 @@ export const servicesList = [
     num: '02',
     category: 'Closet Evolution',
     title: 'Wardrobe Styling & Audit',
-    pricing: 'Starting from ₹7,500',
     summary: 'Make your existing wardrobe work harder. We\'ll help you audit pieces, create fresh outfit combinations, identify what\'s missing, and build a versatile capsule closet.',
     points: [
       'Comprehensive wardrobe audit & assessment',
@@ -63,7 +61,6 @@ export const servicesList = [
     num: '03',
     category: 'Intentional Shopping',
     title: 'Personal Shopping Bangalore',
-    pricing: 'Starting from ₹10,000',
     summary: 'Shop with intention through curated itineraries in Indiranagar boutiques, Commercial Street markets, or luxury malls tailored to your style and budget.',
     points: [
       'Personalised shopping itineraries & recommendations',
@@ -78,7 +75,6 @@ export const servicesList = [
     num: '04',
     category: 'Event & Celebration',
     title: 'Occasion & Bridal Styling',
-    pricing: 'Starting from ₹12,500',
     summary: 'Tell us where you\'re going, and we\'ll help you figure out what to wear. From Bangalore garden weddings and bridal trousseau curations to dates and galas.',
     points: [
       'Weddings: Bridal trousseau & bridesmaid curations',
@@ -93,7 +89,6 @@ export const servicesList = [
     num: '05',
     category: 'Professional Identity',
     title: 'Workwear & Tech Leadership Styling',
-    pricing: 'Starting from ₹15,000',
     summary: 'Build an executive work wardrobe that feels polished, confident, comfortable, and authentically yours. Tailored for Bangalore tech leads, founders, and corporate directors.',
     points: [
       'Executive workwear & smart casual leadership dressing',
@@ -226,10 +221,7 @@ export default function ServicesContent({
               <div className="px-6 sm:px-8 py-8 bg-[#FAF8F3] flex flex-col gap-4 border-b border-black/10">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
-                    ✦ SERVICE {svc.num}
-                  </span>
-                  <span className="font-mono text-[8px] tracking-[0.15em] uppercase text-black/70 bg-[#EFECE6] px-2.5 py-1 border border-black/10 rounded-xs font-semibold">
-                    {svc.pricing}
+                    ✦ SERVICE {svc.num} · {svc.category}
                   </span>
                 </div>
 
@@ -310,10 +302,6 @@ export default function ServicesContent({
                     fill
                     className="object-cover object-top"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-xs text-[8px] tracking-[0.3em] uppercase font-mono font-semibold border border-white/10">
-                    ✦ SERVICE {svc.num}
-                  </div>
                 </div>
               </div>
 
@@ -321,10 +309,7 @@ export default function ServicesContent({
               <div className="col-span-7 order-1 flex flex-col justify-center gap-4">
                 <div className="flex items-center justify-between max-w-xl">
                   <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/45 font-bold block">
-                    ✦ SERVICE {svc.num}
-                  </span>
-                  <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-black/70 bg-[#EFECE6] px-3 py-1 border border-black/10 rounded-xs font-semibold">
-                    {svc.pricing}
+                    ✦ SERVICE {svc.num} · {svc.category}
                   </span>
                 </div>
 
