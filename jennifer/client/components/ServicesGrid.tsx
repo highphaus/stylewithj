@@ -123,16 +123,21 @@ function DesktopServiceCard({ item, index, total, scrollYProgress, onSelectServi
     >
       <div 
         onClick={() => onSelectService(item)}
-        className="relative w-full h-full bg-[#EFECE6] overflow-hidden cursor-pointer group"
+        className="group/svc-img relative w-full h-full bg-[#EFECE6] overflow-hidden cursor-pointer"
       >
         <Image 
           src={item.image} 
           alt={item.name} 
           fill
           unoptimized
-          className="object-cover object-center scale-100 group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
+          className="object-cover object-center scale-100 group-hover/svc-img:scale-[1.02] transition-transform duration-1000 ease-out"
           sizes="50vw"
           priority={index <= 1}
+        />
+        {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
+        <div
+          className="absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none opacity-100 group-hover/svc-img:opacity-0"
+          aria-hidden="true"
         />
       </div>
     </motion.div>
@@ -151,7 +156,18 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   // Mobile state (Auto scroll)
   const [mobileIndex, setMobileIndex] = useState(0);
   const [mobileDirection, setMobileDirection] = useState(1);
+  const [mobileRevealed, setMobileRevealed] = useState<Record<string, boolean>>({});
   const mobileTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMobileCardClick = (e: React.MouseEvent, svc: ServiceDefinition) => {
+    const isMouseDevice = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
+    if (!isMouseDevice && !mobileRevealed[svc.num]) {
+      e.stopPropagation();
+      setMobileRevealed((prev) => ({ ...prev, [svc.num]: true }));
+      return;
+    }
+    setSelectedService(svc);
+  };
 
   // Shared modal state
   const [selectedService, setSelectedService] = useState<ServiceDefinition | null>(null);
@@ -216,7 +232,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
     mobileTimerRef.current = setInterval(() => {
       setMobileDirection(1);
       setMobileIndex((prev) => (prev + 1) % total);
-    }, 3500);
+    }, 7000);
 
     return () => {
       if (mobileTimerRef.current) clearInterval(mobileTimerRef.current);
@@ -408,8 +424,9 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               >
                 {/* Landscape Image */}
                 <div 
-                  onClick={() => setSelectedService(currentMobileService)}
-                  className="relative w-full aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 cursor-pointer shadow-xs"
+                  onClick={(e) => handleMobileCardClick(e, currentMobileService)}
+                  onTouchStart={() => setMobileRevealed((prev) => ({ ...prev, [currentMobileService.num]: true }))}
+                  className="group/svc-img relative w-full aspect-[16/10] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 cursor-pointer shadow-xs"
                 >
                   <Image 
                     src={currentMobileService.image} 
@@ -418,20 +435,18 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                     unoptimized
                     priority
                     className="object-cover object-center"
-                    sizes="100vw"
                   />
-                  <div className="absolute top-2.5 left-2.5 bg-[#FAF9F6]/90 backdrop-blur-xs px-2.5 py-0.5 border border-black/10 rounded-xs">
-                    <span className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-black/80 font-bold">
-                      ✦ {currentMobileService.num} · {currentMobileService.category}
-                    </span>
-                  </div>
+                  {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
+                  <div
+                    className={`absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none ${
+                      mobileRevealed[currentMobileService.num] ? 'opacity-0' : 'opacity-100 group-hover/svc-img:opacity-0'
+                    }`}
+                    aria-hidden="true"
+                  />
                 </div>
 
                 {/* Service Name & Details */}
                 <div className="flex flex-col items-start text-left gap-2 w-full">
-                  <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/50 font-bold">
-                    ✦ SERVICE {currentMobileService.num}
-                  </span>
 
                   <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-tight text-left">
                     {currentMobileService.name}

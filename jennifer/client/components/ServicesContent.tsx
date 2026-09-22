@@ -130,9 +130,26 @@ export default function ServicesContent({
 }) {
   const { openLightbox } = useLightbox();
   const [expandedMobileServices, setExpandedMobileServices] = useState<Record<string, boolean>>({});
+  const [revealedServices, setRevealedServices] = useState<Record<string, boolean>>({});
 
   const toggleMobileService = (num: string) => {
     setExpandedMobileServices((prev: Record<string, boolean>) => ({ ...prev, [num]: !prev[num] }));
+  };
+
+  const handleCardImageClick = (e: React.MouseEvent, svc: typeof servicesList[0]) => {
+    const isMouseDevice = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
+    if (!isMouseDevice && !revealedServices[svc.num]) {
+      e.stopPropagation();
+      setRevealedServices((prev) => ({ ...prev, [svc.num]: true }));
+      return;
+    }
+    openLightbox(svc.image, svc.title, {
+      num: svc.num,
+      category: svc.category,
+      story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
+      concept: svc.title,
+      fabric: svc.points.join(' • ')
+    });
   };
 
   return (
@@ -167,17 +184,6 @@ export default function ServicesContent({
                 "At Style with J, we help you discover your personal style, create looks that work for your real life, and build a wardrobe that works for you."
               </p>
             </div>
-
-            {/* Categories Page Link Button Box */}
-            <div className="pt-4 flex flex-wrap items-center gap-4">
-              <Link
-                href="/categories"
-                className="inline-flex items-center justify-center gap-3 px-5 py-3 sm:px-6 sm:py-3.5 bg-[#1A1A1A] text-white text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-mono font-medium hover:bg-black transition-all shadow-md rounded-xs w-full sm:w-auto text-center"
-              >
-                Explore Styling Categories
-                <span className="text-xs">→</span>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -199,21 +205,24 @@ export default function ServicesContent({
             <div key={svc.num} className="flex flex-col bg-[#FAF9F6]">
               {/* Full Bleed Image (Touch Left & Right Edges) */}
               <div
-                onClick={() => openLightbox(svc.image, svc.title, {
-                  num: svc.num,
-                  category: svc.category,
-                  story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
-                  concept: svc.title,
-                  fabric: svc.points.join(' • ')
-                })}
-                className="relative w-full h-[70vh] min-h-[420px] bg-[#0D0D0D] overflow-hidden cursor-pointer group flex-shrink-0"
-                title="Click to view image in high-res"
+                onClick={(e) => handleCardImageClick(e, svc)}
+                onTouchStart={() => setRevealedServices((prev) => ({ ...prev, [svc.num]: true }))}
+                className="group/svc-img relative w-full h-[70vh] min-h-[420px] bg-[#0D0D0D] overflow-hidden cursor-pointer flex-shrink-0"
+                title="Tap to reveal image"
               >
                 <Image
                   src={svc.image}
                   alt={svc.title}
                   fill
-                  className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  className="object-cover object-top group-hover/svc-img:scale-[1.02] transition-transform duration-700 ease-out"
+                />
+
+                {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
+                <div
+                  className={`absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none ${
+                    revealedServices[svc.num] ? 'opacity-0' : 'opacity-100 group-hover/svc-img:opacity-0'
+                  }`}
+                  aria-hidden="true"
                 />
               </div>
 
@@ -286,14 +295,9 @@ export default function ServicesContent({
               {/* COVER IMAGE */}
               <div className="col-span-5 order-2 flex items-center justify-center">
                 <div 
-                  onClick={() => openLightbox(svc.image, svc.title, {
-                    num: svc.num,
-                    category: 'Our Services',
-                    story: `${svc.summary} — Key Highlights: ${svc.points.join(' • ')}`,
-                    concept: svc.title,
-                    fabric: svc.points.join(' • ')
-                  })}
-                  className="relative w-full h-[700px] min-h-[520px] aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
+                  onClick={(e) => handleCardImageClick(e, svc)}
+                  onTouchStart={() => setRevealedServices((prev) => ({ ...prev, [svc.num]: true }))}
+                  className="group/svc-img relative w-full h-[700px] min-h-[520px] aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
                   title="Click to view image details"
                 >
                   <Image
@@ -301,6 +305,14 @@ export default function ServicesContent({
                     alt={svc.title}
                     fill
                     className="object-cover object-top"
+                  />
+
+                  {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
+                  <div
+                    className={`absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none ${
+                      revealedServices[svc.num] ? 'opacity-0' : 'opacity-100 group-hover/svc-img:opacity-0'
+                    }`}
+                    aria-hidden="true"
                   />
                 </div>
               </div>
@@ -350,6 +362,25 @@ export default function ServicesContent({
 
             </div>
           ))}
+        </div>
+
+        {/* Explore Styling Categories under Our Services */}
+        <div className="mt-14 sm:mt-20 pt-8 sm:pt-10 border-t border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div>
+            <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold block mb-1">
+              ✦ SIGNATURE SILHOUETTES & ARCHIVE
+            </span>
+            <p className="font-sans text-xs sm:text-sm font-light text-black/75">
+              Explore our curated portfolio categorized across everyday tailoring, destination escapes, and grand celebrations.
+            </p>
+          </div>
+          <Link
+            href="/categories"
+            className="inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-[#1A1A1A] text-white text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-all shadow-md rounded-xs flex-shrink-0 w-full sm:w-auto text-center"
+          >
+            Explore Styling Categories
+            <span className="text-xs">→</span>
+          </Link>
         </div>
       </section>
 
