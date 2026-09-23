@@ -5,7 +5,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Look, seedLooks } from './looks-data';
 
-const STORAGE_KEY = 'swj_looks';
+const STORAGE_KEY = 'swj_looks_v3';
 
 export function useLooks() {
   const [looks, setLooks] = useState<Look[]>([]);

@@ -9,14 +9,14 @@ import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 import { Look, seedLooks } from '@/lib/looks-data';
 
-const STORAGE_KEY = 'swj_looks';
+const STORAGE_KEY = 'swj_looks_v3';
 
 function getLooks(): Look[] {
   if (typeof window === 'undefined') return seedLooks;
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return seedLooks;
-    const parsed = JSON.parse(stored);
+    const parsed: Look[] = JSON.parse(stored);
     return parsed.length < seedLooks.length ? seedLooks : parsed;
   } catch {
     return seedLooks;
@@ -72,18 +72,21 @@ export default function LookPage() {
           <div className="flex flex-col lg:flex-row min-h-[calc(100dvh-64px)]">
 
             {/* LEFT: FULL-BLEED IMAGE */}
-            <div className="w-full lg:w-[58%] h-[100dvh] lg:h-[calc(100dvh-64px)] relative bg-[#0D0D0D] flex-shrink-0 sticky top-16">
+            <div className="w-full lg:w-[58%] h-[75vh] sm:h-[85vh] lg:h-[calc(100dvh-64px)] relative bg-[#0D0D0D] flex-shrink-0 sticky top-16">
               <Image
                 src={look.image}
                 alt={look.title}
                 fill
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 priority
+                className="object-cover object-top"
               />
-              {/* Subtle gradient overlay at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+
+              {/* Gradient overlay at bottom for readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+
               {/* Look number badge */}
-              <div className="absolute top-6 left-6 bg-black/75 backdrop-blur-md text-white px-3 py-1 text-[8px] tracking-[0.3em] font-mono uppercase border border-white/10 rounded-xs">
+              <div className="absolute top-6 left-6 z-20 bg-black/75 backdrop-blur-md text-white px-3 py-1.5 text-[8.5px] tracking-[0.3em] font-mono uppercase border border-white/10 rounded-xs">
                 LOOK {look.num}
               </div>
             </div>

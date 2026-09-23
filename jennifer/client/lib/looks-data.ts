@@ -282,6 +282,11 @@ export const seedLooks: Look[] = [
     story: 'Captivating evening silhouette featuring gathered waist detailing and high-impact elegance.',
     occasion: 'High Fashion Dinners & Galas',
     image: '/images/includes/IMG_5315.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_5315.JPG.jpeg',
+      '/images/includes/IMG_5314.JPG.jpeg',
+      '/images/includes/IMG_5321.JPG.jpeg',
+    ],
   },
   {
     id: 'look-17',
@@ -294,6 +299,11 @@ export const seedLooks: Look[] = [
     story: 'Contemporary styling incorporating rich Indian handloom heritage into modern wardrobes.',
     occasion: 'Bespoke Style Consultations',
     image: '/images/includes/IMG_7135.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_7135.JPG.jpeg',
+      '/images/includes/IMG_7136.JPG.jpeg',
+      '/images/includes/IMG_7202.JPG.jpeg',
+    ],
   },
   {
     id: 'look-18',
@@ -306,6 +316,11 @@ export const seedLooks: Look[] = [
     story: 'Versatile corporate capsule pieces designed for seamless morning-to-evening transitions.',
     occasion: 'Corporate Workwear & Executive Meetings',
     image: '/images/includes/IMG_7136.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_7136.JPG.jpeg',
+      '/images/includes/IMG_4485.JPG.jpeg',
+      '/images/includes/IMG_7135.JPG.jpeg',
+    ],
   },
   {
     id: 'look-19',
@@ -318,6 +333,11 @@ export const seedLooks: Look[] = [
     story: 'Bespoke image transformation built around natural shoulder drops and waist-accentuating cuts.',
     occasion: 'Executive Image Transformations',
     image: '/images/includes/IMG_7202.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_7202.JPG.jpeg',
+      '/images/includes/IMG_8861.JPG.jpeg',
+      '/images/includes/IMG_8820.JPG.jpeg',
+    ],
   },
   {
     id: 'look-20',
@@ -330,6 +350,11 @@ export const seedLooks: Look[] = [
     story: 'Romantic destination edit capturing warmth, freedom, and intentional styling.',
     occasion: 'Vacation Edits & Coastal Resort',
     image: '/images/includes/IMG_8236.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8236.JPG.jpeg',
+      '/images/includes/IMG_8271.JPG.jpeg',
+      '/images/includes/IMG_9135.JPG.jpeg',
+    ],
   },
   {
     id: 'look-21',
@@ -342,6 +367,11 @@ export const seedLooks: Look[] = [
     story: 'Curated shopping edit featuring unique pieces sourced from Indiranagar boutiques.',
     occasion: 'Personal Shopping & Wardrobe Audit',
     image: '/images/includes/IMG_8271.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8271.JPG.jpeg',
+      '/images/includes/IMG_8820.JPG.jpeg',
+      '/images/includes/IMG_8236.JPG.jpeg',
+    ],
   },
   {
     id: 'look-22',
@@ -354,6 +384,11 @@ export const seedLooks: Look[] = [
     story: 'High-fashion cocktail look designed to make a memorable statement at evening celebrations.',
     occasion: 'Cocktail Parties & Red Carpet Events',
     image: '/images/includes/IMG_8694.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8694.JPG.jpeg',
+      '/images/includes/IMG_8709.JPG.jpeg',
+      '/images/includes/IMG_8777.JPG.jpeg',
+    ],
   },
   {
     id: 'look-23',
@@ -366,6 +401,11 @@ export const seedLooks: Look[] = [
     story: 'Effortless weekend style that looks expensive without feeling overdressed.',
     occasion: 'Weekend Brunch & Casual Outings',
     image: '/images/includes/IMG_8820.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8820.JPG.jpeg',
+      '/images/includes/IMG_8826.JPG.jpeg',
+      '/images/includes/IMG_8846.JPG.jpeg',
+    ],
   },
   {
     id: 'look-24',
@@ -378,6 +418,11 @@ export const seedLooks: Look[] = [
     story: 'Exquisite trousseau curation blending heritage Indian craftsmanship with modern drape techniques.',
     occasion: 'Bridal Trousseau & Wedding Festivities',
     image: '/images/includes/IMG_8835.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8835.JPG.jpeg',
+      '/images/includes/IMG_8857.JPG.jpeg',
+      '/images/includes/CIT09345.jpg',
+    ],
   },
   {
     id: 'look-25',
@@ -390,6 +435,11 @@ export const seedLooks: Look[] = [
     story: 'Polished executive outerwear designed for corporate leaders and tech directors.',
     occasion: 'Executive Image Consulting',
     image: '/images/includes/IMG_8861.JPG.jpeg',
+    images: [
+      '/images/includes/IMG_8861.JPG.jpeg',
+      '/images/includes/IMG_8863.JPG.jpeg',
+      '/images/includes/IMG_7202.JPG.jpeg',
+    ],
   },
   {
     id: 'look-26',
@@ -402,6 +452,11 @@ export const seedLooks: Look[] = [
     story: 'Pre-stitched belted saree drape designed for effortless movement at garden celebrations.',
     occasion: 'Occasion & Festive Styling',
     image: '/images/includes/DSC07159.jpg',
+    images: [
+      '/images/includes/DSC07159.jpg',
+      '/images/includes/CIT09345.jpg',
+      '/images/includes/DSC04682.jpg',
+    ],
   },
   {
     id: 'look-27',
@@ -414,6 +469,11 @@ export const seedLooks: Look[] = [
     story: 'Curated bridal ensemble for destination weddings and milestone celebrations.',
     occasion: 'Bridal Trousseau & Galas',
     image: '/images/includes/CIT09345.jpg',
+    images: [
+      '/images/includes/CIT09345.jpg',
+      '/images/includes/DSC07159.jpg',
+      '/images/includes/DSC04633.jpg',
+    ],
   },
   {
     id: 'look-28',
@@ -426,5 +486,10 @@ export const seedLooks: Look[] = [
     story: 'Breezy reception gown tailored for Bangalore outdoor wedding venues.',
     occasion: 'Wedding Guest & Garden Receptions',
     image: '/images/includes/DSC04682.jpg',
+    images: [
+      '/images/includes/DSC04682.jpg',
+      '/images/includes/DSC04633.jpg',
+      '/images/includes/CIT09345.jpg',
+    ],
   },
 ];

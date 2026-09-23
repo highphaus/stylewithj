@@ -209,20 +209,48 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
     setActiveDesktopIndex(idx);
   });
 
+  // ── DESKTOP MANUAL NAV CONTROLS ──
+  const handleDesktopPrev = () => {
+    if (activeDesktopIndex > 0 && targetRef.current) {
+      const top = targetRef.current.offsetTop + ((activeDesktopIndex - 1) / total) * targetRef.current.offsetHeight;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
+  const handleDesktopNext = () => {
+    if (activeDesktopIndex < total - 1 && targetRef.current) {
+      const top = targetRef.current.offsetTop + ((activeDesktopIndex + 1) / total) * targetRef.current.offsetHeight + 10;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
   // ── MOBILE AUTO-CAROUSEL CONTROLS ──
+  const resetMobileTimer = () => {
+    if (mobileTimerRef.current) {
+      clearInterval(mobileTimerRef.current);
+      mobileTimerRef.current = setInterval(() => {
+        setMobileDirection(1);
+        setMobileIndex((prev) => (prev + 1) % total);
+      }, 7000);
+    }
+  };
+
   const handleMobileNext = () => {
     setMobileDirection(1);
     setMobileIndex((prev) => (prev + 1) % total);
+    resetMobileTimer();
   };
 
   const handleMobilePrev = () => {
     setMobileDirection(-1);
     setMobileIndex((prev) => (prev - 1 + total) % total);
+    resetMobileTimer();
   };
 
   const handleMobileSelect = (index: number) => {
     setMobileDirection(index > mobileIndex ? 1 : -1);
     setMobileIndex(index);
+    resetMobileTimer();
   };
 
   // Auto scroll effect for mobile (continuous 3.5s interval, pauses only if modal is open)
@@ -323,7 +351,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                         {currentDesktopService.desc}
                       </p>
 
-                      <div className="pt-3">
+                      <div className="pt-3 flex items-center justify-between">
                         <button 
                           type="button"
                           onClick={() => setSelectedService(currentDesktopService)}
@@ -332,6 +360,28 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                           <span>Explore Service Details</span>
                           <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
                         </button>
+
+                        {/* Desktop Prev / Next Nav Arrows */}
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={handleDesktopPrev}
+                            disabled={activeDesktopIndex === 0}
+                            className="w-7 h-7 rounded-full border border-black/20 bg-white/80 hover:bg-black hover:text-white disabled:opacity-30 disabled:pointer-events-none text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs"
+                            aria-label="Previous Service"
+                          >
+                            ←
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleDesktopNext}
+                            disabled={activeDesktopIndex === total - 1}
+                            className="w-7 h-7 rounded-full border border-black/20 bg-white/80 hover:bg-black hover:text-white disabled:opacity-30 disabled:pointer-events-none text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs"
+                            aria-label="Next Service"
+                          >
+                            →
+                          </button>
+                        </div>
                       </div>
                     </motion.div>
                   </AnimatePresence>
@@ -394,11 +444,31 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               </div>
             </div>
 
-            {/* Mobile Index Counter */}
-            <div className="flex items-center font-mono text-[11px] text-black/50 flex-shrink-0">
-              <span className="text-[#1A1A1A] font-bold">{String(mobileIndex + 1).padStart(2, '0')}</span>
-              <span className="mx-1">/</span>
-              <span>{String(total).padStart(2, '0')}</span>
+            {/* Mobile Controls: Index & Nav Arrows */}
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              <div className="flex items-center font-mono text-[11px] text-black/50">
+                <span className="text-[#1A1A1A] font-bold">{String(mobileIndex + 1).padStart(2, '0')}</span>
+                <span className="mx-1">/</span>
+                <span>{String(total).padStart(2, '0')}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handleMobilePrev}
+                  className="w-8 h-8 rounded-full border border-black/20 bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs active:scale-95"
+                  aria-label="Previous Service"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={handleMobileNext}
+                  className="w-8 h-8 rounded-full border border-black/20 bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs active:scale-95"
+                  aria-label="Next Service"
+                >
+                  →
+                </button>
+              </div>
             </div>
           </div>
 
