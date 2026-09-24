@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
@@ -119,6 +119,105 @@ export const categories = [
   },
 ];
 
+// ── SCROLL-REVEAL IMAGE CARD (HIDES OVERLAY ONE BY ONE ON SCROLL) ───────────
+
+function ScrollRevealImageCard({
+  svc,
+  isMobile,
+  onClick,
+}: {
+  svc: typeof servicesList[0];
+  isMobile: boolean;
+  onClick: (e: React.MouseEvent) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [manualToggle, setManualToggle] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof window === 'undefined') return;
+
+    let ticking = false;
+
+    const checkCenter = () => {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const viewportCenter = vh / 2;
+      const imageCenter = rect.top + rect.height / 2;
+      const distanceFromCenter = Math.abs(imageCenter - viewportCenter);
+
+      // ONLY hidden when the image is in the center band of the screen
+      const isCenter = distanceFromCenter < vh * 0.28;
+
+      setIsRevealed(isCenter);
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(checkCenter);
+        ticking = true;
+      }
+    };
+
+    checkCenter();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
+
+  const overlayHidden = manualToggle !== null ? manualToggle : isRevealed;
+
+  const handleClick = (e: React.MouseEvent) => {
+    const isMouseDevice = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
+    if (!isMouseDevice) {
+      setManualToggle((prev) => (prev !== null ? !prev : !isRevealed));
+    }
+    onClick(e);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onClick={handleClick}
+      className={
+        isMobile
+          ? "group/svc-img relative w-full aspect-[3/4] sm:aspect-[3/4] md:aspect-[3/4] max-w-none sm:max-w-lg md:max-w-xl mx-auto bg-[#0D0D0D] overflow-hidden cursor-pointer flex-shrink-0 sm:rounded-t-xs sm:border sm:border-black/10 sm:shadow-sm"
+          : "group/svc-img relative w-full h-[700px] min-h-[520px] aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
+      }
+      title="Tap to view or toggle image overlay"
+    >
+      <Image
+        src={svc.image}
+        alt={svc.title}
+        fill
+        className={
+          isMobile
+            ? "object-cover object-top group-hover/svc-img:scale-[1.02] transition-transform duration-700 ease-out"
+            : "object-cover object-top"
+        }
+      />
+
+      {/* Bespoke Midnight Espresso Overlay that hides one by one as the user scrolls */}
+      <div
+        className={`absolute inset-0 z-10 ${
+          isMobile 
+            ? 'bg-gradient-to-b from-[#1C1612]/85 via-[#231B16]/75 to-[#14100D]/90' 
+            : 'bg-[#1C1612]/45'
+        } pointer-events-none transition-opacity duration-700 ease-out motion-reduce:transition-none ${
+          overlayHidden ? 'opacity-0' : 'opacity-100 group-hover/svc-img:opacity-0'
+        }`}
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
+
 // ── COMPONENT ────────────────────────────────────────────────────────────────
 
 export default function ServicesContent({ 
@@ -138,9 +237,9 @@ export default function ServicesContent({
 
   const handleCardImageClick = (e: React.MouseEvent, svc: typeof servicesList[0]) => {
     const isMouseDevice = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
-    if (!isMouseDevice && !revealedServices[svc.num]) {
+    if (!isMouseDevice) {
       e.stopPropagation();
-      setRevealedServices((prev) => ({ ...prev, [svc.num]: true }));
+      setRevealedServices((prev) => ({ ...prev, [svc.num]: !prev[svc.num] }));
       return;
     }
     openLightbox(svc.image, svc.title, {
@@ -199,35 +298,19 @@ export default function ServicesContent({
           </h2>
         </div>
 
-        {/* MOBILE LAYOUT: FULL-BLEED IMAGES WITH IN-DEPTH DETAILS BETWEEN EACH IMAGE */}
-        <div className="flex flex-col lg:hidden divide-y divide-black/15 -mx-6 sm:-mx-12">
+        {/* MOBILE & TABLET LAYOUT: EDITORIAL PORTRAIT IMAGES WITH IN-DEPTH DETAILS BETWEEN EACH IMAGE */}
+        <div className="flex flex-col lg:hidden divide-y divide-black/15 -mx-6 sm:mx-0 sm:gap-12 sm:divide-y-0">
           {servicesList.map((svc) => (
-            <div key={svc.num} className="flex flex-col bg-[#FAF9F6]">
-              {/* Full Bleed Image (Touch Left & Right Edges) */}
-              <div
+            <div key={svc.num} className="flex flex-col bg-[#FAF9F6] sm:bg-transparent">
+              {/* Full Bleed on Mobile, Elegant Centered Portrait Box on Tablet */}
+              <ScrollRevealImageCard
+                svc={svc}
+                isMobile={true}
                 onClick={(e) => handleCardImageClick(e, svc)}
-                onTouchStart={() => setRevealedServices((prev) => ({ ...prev, [svc.num]: true }))}
-                className="group/svc-img relative w-full h-[70vh] min-h-[420px] bg-[#0D0D0D] overflow-hidden cursor-pointer flex-shrink-0"
-                title="Tap to reveal image"
-              >
-                <Image
-                  src={svc.image}
-                  alt={svc.title}
-                  fill
-                  className="object-cover object-top group-hover/svc-img:scale-[1.02] transition-transform duration-700 ease-out"
-                />
-
-                {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
-                <div
-                  className={`absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none ${
-                    revealedServices[svc.num] ? 'opacity-0' : 'opacity-100 group-hover/svc-img:opacity-0'
-                  }`}
-                  aria-hidden="true"
-                />
-              </div>
+              />
 
               {/* Service Detailed Writing Panel Between/Under the Image */}
-              <div className="px-6 sm:px-8 py-8 bg-[#FAF8F3] flex flex-col gap-4 border-b border-black/10">
+              <div className="px-6 sm:px-8 py-8 bg-[#FAF8F3] flex flex-col gap-4 border-b border-black/10 max-w-none sm:max-w-lg md:max-w-xl sm:mx-auto w-full sm:rounded-b-xs sm:border-x sm:border-b sm:shadow-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
                     ✦ SERVICE {svc.num} · {svc.category}
@@ -292,29 +375,13 @@ export default function ServicesContent({
               key={svc.num}
               className="group grid grid-cols-12 gap-8 py-16 hover:bg-[#F5F3EF] -mx-12 px-12 transition-colors duration-300 items-center"
             >
-              {/* COVER IMAGE */}
+              {/* COVER IMAGE WITH SCROLL-TRIGGERED OVERLAY FADE */}
               <div className="col-span-5 order-2 flex items-center justify-center">
-                <div 
+                <ScrollRevealImageCard
+                  svc={svc}
+                  isMobile={false}
                   onClick={(e) => handleCardImageClick(e, svc)}
-                  onTouchStart={() => setRevealedServices((prev) => ({ ...prev, [svc.num]: true }))}
-                  className="group/svc-img relative w-full h-[700px] min-h-[520px] aspect-[3/4] overflow-hidden bg-[#0D0D0D] border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 rounded-xs cursor-pointer z-10"
-                  title="Click to view image details"
-                >
-                  <Image
-                    src={svc.image}
-                    alt={svc.title}
-                    fill
-                    className="object-cover object-top"
-                  />
-
-                  {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
-                  <div
-                    className={`absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none ${
-                      revealedServices[svc.num] ? 'opacity-0' : 'opacity-100 group-hover/svc-img:opacity-0'
-                    }`}
-                    aria-hidden="true"
-                  />
-                </div>
+                />
               </div>
 
               {/* WRITINGS & DETAILS */}

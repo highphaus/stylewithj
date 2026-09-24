@@ -24,11 +24,13 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-10 pb-10 sm:pb-16 border-b border-white/10">
           <div className="w-full sm:w-auto flex justify-between items-center sm:block">
             <Image
-              src="/logo/style with j.png"
+              src="/logo/style with j-white.png"
               alt="Style With J"
-              width={160}
-              height={50}
-              className="w-32 sm:w-44 h-auto object-contain brightness-0 invert"
+              width={268}
+              height={368}
+              className="h-12 sm:h-14 w-auto object-contain"
+              priority
+              unoptimized
             />
           </div>
           

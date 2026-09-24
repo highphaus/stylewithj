@@ -134,11 +134,6 @@ function DesktopServiceCard({ item, index, total, scrollYProgress, onSelectServi
           sizes="50vw"
           priority={index <= 1}
         />
-        {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
-        <div
-          className="absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none opacity-100 group-hover/svc-img:opacity-0"
-          aria-hidden="true"
-        />
       </div>
     </motion.div>
   );
@@ -156,18 +151,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   // Mobile state (Auto scroll)
   const [mobileIndex, setMobileIndex] = useState(0);
   const [mobileDirection, setMobileDirection] = useState(1);
-  const [mobileRevealed, setMobileRevealed] = useState<Record<string, boolean>>({});
   const mobileTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleMobileCardClick = (e: React.MouseEvent, svc: ServiceDefinition) => {
-    const isMouseDevice = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
-    if (!isMouseDevice && !mobileRevealed[svc.num]) {
-      e.stopPropagation();
-      setMobileRevealed((prev) => ({ ...prev, [svc.num]: true }));
-      return;
-    }
-    setSelectedService(svc);
-  };
 
   // Shared modal state
   const [selectedService, setSelectedService] = useState<ServiceDefinition | null>(null);
@@ -314,18 +298,20 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
             
             {/* DESKTOP FIXED LEFT EDITORIAL PANEL */}
             <div className="
-              absolute top-0 left-0 bottom-0 z-50 bg-[#FAF9F6] flex flex-col justify-start
-              w-[480px] xl:w-[540px] px-12 xl:px-20 pt-16 xl:pt-20 border-r border-black/10 pointer-events-auto
+              absolute top-0 left-0 bottom-0 z-50 bg-[#FAF9F6] flex flex-col justify-between
+              w-[480px] xl:w-[540px] px-12 xl:px-20 pt-16 xl:pt-20 pb-12 xl:pb-16 border-r border-black/10 pointer-events-auto
             ">
-              <div>
-                <h2 className="font-serif text-5xl xl:text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-2">
-                  Our Services
-                </h2>
-                <div className="flex items-center gap-2.5 mb-6">
-                  <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
-                  <p className="font-mono text-[10px] xl:text-[11px] tracking-[0.22em] uppercase text-black/60 font-medium">
-                    Personal Styling & Image Consulting
-                  </p>
+              <div className="flex flex-col gap-6">
+                <div>
+                  <h2 className="font-serif text-5xl xl:text-6xl font-light tracking-tight text-[#1A1A1A] leading-tight mb-2">
+                    Our Services
+                  </h2>
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-black/40 flex-shrink-0" />
+                    <p className="font-mono text-[10px] xl:text-[11px] tracking-[0.22em] uppercase text-black/60 font-medium">
+                      Personal Styling & Image Consulting
+                    </p>
+                  </div>
                 </div>
 
                 {/* Dynamic Active Service Details */}
@@ -339,53 +325,31 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                       transition={{ duration: 0.35, ease: "easeOut" }}
                       className="flex flex-col gap-4"
                     >
-                      <span className="font-mono text-[9.5px] xl:text-[10px] tracking-[0.35em] uppercase text-black/50 font-semibold block">
-                        ✦ SERVICE {currentDesktopService.num} · {currentDesktopService.category}
-                      </span>
-
-                      <h3 className="font-serif text-2xl xl:text-3xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-snug">
+                      <h3 
+                        onClick={() => setSelectedService(currentDesktopService)}
+                        className="font-serif text-2xl xl:text-3xl font-light tracking-wide text-[#1A1A1A] uppercase leading-snug cursor-pointer hover:opacity-75 transition-opacity"
+                        title="Click to view overview"
+                      >
                         {currentDesktopService.name}
                       </h3>
 
                       <p className="font-sans text-xs xl:text-sm text-black/75 font-light leading-relaxed max-w-md">
                         {currentDesktopService.desc}
                       </p>
-
-                      <div className="pt-3 flex items-center justify-between">
-                        <button 
-                          type="button"
-                          onClick={() => setSelectedService(currentDesktopService)}
-                          className="inline-flex items-center gap-2 font-mono text-[9.5px] xl:text-[10px] tracking-[0.25em] text-[#1A1A1A] hover:text-black uppercase border-b border-black pb-1 transition-all font-medium group cursor-pointer"
-                        >
-                          <span>Explore Service Details</span>
-                          <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
-                        </button>
-
-                        {/* Desktop Prev / Next Nav Arrows */}
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={handleDesktopPrev}
-                            disabled={activeDesktopIndex === 0}
-                            className="w-7 h-7 rounded-full border border-black/20 bg-white/80 hover:bg-black hover:text-white disabled:opacity-30 disabled:pointer-events-none text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs"
-                            aria-label="Previous Service"
-                          >
-                            ←
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleDesktopNext}
-                            disabled={activeDesktopIndex === total - 1}
-                            className="w-7 h-7 rounded-full border border-black/20 bg-white/80 hover:bg-black hover:text-white disabled:opacity-30 disabled:pointer-events-none text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs"
-                            aria-label="Next Service"
-                          >
-                            →
-                          </button>
-                        </div>
-                      </div>
                     </motion.div>
                   </AnimatePresence>
                 </div>
+              </div>
+
+              {/* PERMANENT STICKY ACTION BAR (DOES NOT CHANGE OR ANIMATE AWAY) */}
+              <div className="pt-6 border-t border-black/10 flex items-center justify-between gap-4 mt-auto">
+                <Link
+                  href="/services"
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-[9.5px] xl:text-[10px] tracking-[0.25em] uppercase font-mono font-semibold rounded-xs shadow-md transition-all group"
+                >
+                  <span>Explore in Detail</span>
+                  <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+                </Link>
               </div>
             </div>
 
@@ -424,14 +388,14 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          2. SMALLER DEVICE VIEW (< lg): AUTO-MOVEMENT CAROUSEL
-             (Landscape image + Service Name & details, NO timer line)
+          2. SMALLER DEVICE & TABLET VIEW (< lg): AUTO-MOVEMENT CAROUSEL
+             (Portrait image + Service Name & details in vertical fashion layout)
          ═══════════════════════════════════════════════════════════════════ */}
       <div className="lg:hidden relative w-full bg-[#FAF9F6] py-10 sm:py-14 select-none">
         <div className="px-5 sm:px-8">
           
-          {/* MOBILE HEADER BAR */}
-          <div className="flex items-end justify-between pb-6 border-b border-black/10 gap-3">
+          {/* MOBILE & TABLET HEADER BAR */}
+          <div className="flex items-end justify-between pb-6 border-b border-black/10 gap-3 max-w-md sm:max-w-lg md:max-w-xl mx-auto w-full">
             <div className="flex flex-col items-start text-left">
               <h2 className="font-serif text-2xl sm:text-3xl font-light tracking-tight text-[#1A1A1A] leading-tight text-left">
                 Our Services
@@ -444,7 +408,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               </div>
             </div>
 
-            {/* Mobile Controls: Index & Nav Arrows */}
+            {/* Mobile / Tablet Controls: Index & Nav Arrows */}
             <div className="flex items-center gap-2.5 flex-shrink-0">
               <div className="flex items-center font-mono text-[11px] text-black/50">
                 <span className="text-[#1A1A1A] font-bold">{String(mobileIndex + 1).padStart(2, '0')}</span>
@@ -472,7 +436,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
             </div>
           </div>
 
-          {/* MOBILE CAROUSEL CARD */}
+          {/* MOBILE & TABLET CAROUSEL CARD */}
           <div className="pt-6">
             <AnimatePresence mode="wait" custom={mobileDirection}>
               <motion.div
@@ -490,13 +454,12 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                   if (offset.x < -40) handleMobileNext();
                   else if (offset.x > 40) handleMobilePrev();
                 }}
-                className="flex flex-col gap-4 cursor-grab active:cursor-grabbing"
+                className="flex flex-col gap-4 cursor-grab active:cursor-grabbing max-w-md sm:max-w-lg md:max-w-xl mx-auto w-full"
               >
-                {/* Fashion Editorial Image */}
+                {/* Fashion Editorial Image (PORTRAIT ORIENTATION ON PHONES & TABLETS) */}
                 <div 
-                  onClick={(e) => handleMobileCardClick(e, currentMobileService)}
-                  onTouchStart={() => setMobileRevealed((prev) => ({ ...prev, [currentMobileService.num]: true }))}
-                  className="group/svc-img relative w-full aspect-[4/5] sm:aspect-[4/3] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 cursor-pointer shadow-xs"
+                  onClick={() => setSelectedService(currentMobileService)}
+                  className="group/svc-img relative w-full aspect-[3/4] sm:aspect-[3/4] md:aspect-[3/4] bg-[#EFECE6] overflow-hidden rounded-xs border border-black/10 cursor-pointer shadow-xs"
                 >
                   <Image 
                     src={currentMobileService.image} 
@@ -506,39 +469,36 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                     priority
                     className="object-cover object-top"
                   />
-                  {/* Subtle Semi-Transparent Overlay with Hover & Touch Reveal */}
-                  <div
-                    className={`absolute inset-0 z-10 bg-black/35 pointer-events-none transition-opacity duration-400 ease-out motion-reduce:transition-none ${
-                      mobileRevealed[currentMobileService.num] ? 'opacity-0' : 'opacity-100 group-hover/svc-img:opacity-0'
-                    }`}
-                    aria-hidden="true"
-                  />
                 </div>
 
                 {/* Service Name & Details */}
                 <div className="flex flex-col items-start text-left gap-2 w-full">
 
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-tight text-left">
+                  <h3 
+                    onClick={() => setSelectedService(currentMobileService)}
+                    className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-tight text-left cursor-pointer hover:opacity-75 transition-opacity"
+                    title="Click to view overview"
+                  >
                     {currentMobileService.name}
                   </h3>
 
                   <p className="font-sans text-xs sm:text-sm text-black/75 font-light leading-relaxed text-left">
                     {currentMobileService.desc}
                   </p>
-
-                  <div className="pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedService(currentMobileService)}
-                      className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.22em] text-[#1A1A1A] hover:text-black uppercase font-semibold border-b border-black pb-0.5 transition-all cursor-pointer group"
-                    >
-                      <span>Explore Service Details</span>
-                      <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
-                    </button>
-                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>
+
+            {/* Stationary Sticky Bottom Action Bar (Does not change or animate with carousel) */}
+            <div className="mt-6 pt-5 border-t border-black/10 flex items-center justify-between gap-3 max-w-md sm:max-w-lg md:max-w-xl mx-auto w-full">
+              <Link
+                href="/services"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9px] sm:text-[9.5px] tracking-[0.22em] uppercase font-semibold rounded-xs shadow-sm transition-all group flex-1 text-center"
+              >
+                <span>Explore in Detail</span>
+                <span className="transform group-hover:translate-x-1 transition-transform text-xs">→</span>
+              </Link>
+            </div>
           </div>
 
         </div>

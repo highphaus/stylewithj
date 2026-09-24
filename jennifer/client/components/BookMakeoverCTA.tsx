@@ -196,31 +196,16 @@ export default function BookMakeoverCTA({
         
         {/* Section Header (Hidden on Home Page as requested) */}
         {!isHome && (
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 pb-6 border-b border-black/10">
-            <div className="max-w-2xl">
-              <span className="font-mono text-[8.5px] sm:text-[9px] tracking-[0.35em] uppercase text-black/45 block mb-2 font-semibold">
-                ✦ {kicker}
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1A1A1A] leading-snug">
-                {title}
-              </h2>
-              <p className="font-sans text-xs sm:text-sm font-light text-black/65 mt-2 leading-relaxed max-w-xl">
-                {subtitle}
-              </p>
-            </div>
-
-            {/* WhatsApp Concierge Button */}
-            <div className="flex-shrink-0">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 text-[#1A1A1A] hover:text-black text-[9px] sm:text-[9.5px] font-mono uppercase tracking-[0.2em] font-semibold border border-black/20 hover:border-black transition-all rounded-xs bg-white/70 shadow-xs"
-              >
-                <span>WhatsApp Concierge</span>
-                <span className="text-[11px]">↗</span>
-              </a>
-            </div>
+          <div className="flex flex-col items-start gap-3 pb-6 border-b border-black/10">
+            <span className="font-mono text-[8.5px] sm:text-[9px] tracking-[0.35em] uppercase text-black/45 block font-semibold">
+              ✦ {kicker}
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1A1A1A] leading-snug">
+              {title}
+            </h2>
+            <p className="font-sans text-xs sm:text-sm font-light text-black/65 leading-relaxed max-w-xl">
+              {subtitle}
+            </p>
           </div>
         )}
 
@@ -264,14 +249,6 @@ export default function BookMakeoverCTA({
                   >
                     Send Another Inquiry
                   </button>
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3 border border-black/20 hover:border-black text-[#1A1A1A] text-[9px] font-mono uppercase tracking-[0.2em] font-medium rounded-xs transition-colors bg-white/70"
-                  >
-                    Chat on WhatsApp ↗
-                  </a>
                 </div>
               </div>
             ) : (
@@ -377,25 +354,15 @@ export default function BookMakeoverCTA({
                   />
                 </div>
 
-                {/* Submit & WhatsApp Action Buttons */}
+                {/* Submit Action Button */}
                 <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="px-8 py-4 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9.5px] sm:text-[10px] font-medium uppercase tracking-[0.25em] transition-colors shadow-sm rounded-xs cursor-pointer disabled:opacity-50"
+                    className="w-full sm:w-auto px-10 py-4 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9.5px] sm:text-[10px] font-medium uppercase tracking-[0.25em] transition-colors shadow-sm rounded-xs cursor-pointer disabled:opacity-50 text-center"
                   >
                     {isSubmitting ? 'Transmitting Email...' : 'Send Message →'}
                   </button>
-
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-6 py-4 text-black/70 hover:text-black text-[9px] sm:text-[9.5px] font-mono uppercase tracking-[0.2em] font-medium border border-black/15 hover:border-black/40 transition-all rounded-xs bg-white/70 shadow-xs text-center"
-                  >
-                    <span>WhatsApp Concierge</span>
-                    <span className="text-[10px]">↗</span>
-                  </a>
                 </div>
               </form>
             )}

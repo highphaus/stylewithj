@@ -48,6 +48,10 @@ export interface ContactContentData {
   email: string;
   phone: string;
   hours: string;
+  whatsappPhone?: string;
+  whatsappMessage?: string;
+  instagramUrl?: string;
+  linkedinUrl?: string;
 }
 
 export interface TestimonialItem {
@@ -66,6 +70,8 @@ export interface ServiceItem {
   name: string;
   desc: string;
   image: string;
+  summary?: string;
+  points?: string[];
 }
 
 export interface AudienceItem {
@@ -136,6 +142,10 @@ export const seedContactContent: ContactContentData = {
   email: "jennifer@stylewithj.in",
   phone: "+91 80783 41747",
   hours: "Mon - Fri: 9am - 6pm\nSat: 10am - 4pm\nSun: Closed",
+  whatsappPhone: "918078341747",
+  whatsappMessage: "Hi Jennifer, I would like to inquire about personal styling with Style with J.",
+  instagramUrl: "https://www.instagram.com/stylewithjennifer",
+  linkedinUrl: "https://www.linkedin.com/in/stylewithjennifer",
 };
 
 export const seedTestimonials: TestimonialItem[] = [

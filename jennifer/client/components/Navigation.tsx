@@ -103,11 +103,11 @@ export default function Navigation() {
             className="flex-shrink-0 flex items-center hover:opacity-75 transition-opacity duration-300"
           >
             <Image
-              src="/logo/style with j.png"
+              src={isLight ? "/logo/style with j.png" : "/logo/style with j-white.png"}
               alt="Style With J"
-              width={240}
-              height={70}
-              className={`w-[75px] sm:w-[90px] md:w-[105px] h-auto object-contain transition-all duration-300 ${isLight ? '' : 'invert'}`}
+              width={268}
+              height={368}
+              className="h-10 sm:h-12 md:h-14 w-auto object-contain transition-all duration-300"
               priority
               unoptimized
             />

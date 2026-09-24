@@ -16,7 +16,8 @@ type TabType =
   | 'audiences' 
   | 'articles' 
   | 'testimonials'
-  | 'contact';
+  | 'contact'
+  | 'mailbox';
 
 const EMPTY_LOOK: Omit<Look, 'id' | 'num'> = {
   title: '',
@@ -34,6 +35,8 @@ const EMPTY_SERVICE: Omit<ServiceItem, 'id' | 'num'> = {
   name: '',
   desc: '',
   image: '',
+  summary: '',
+  points: [],
 };
 
 const EMPTY_AUDIENCE: Omit<AudienceItem, 'id'> = {
@@ -296,13 +299,35 @@ export default function AdminPage() {
           <FormField label="Category Badge" value={serviceForm.category} onChange={v => setServiceForm(p => ({ ...p, category: v }))} placeholder="e.g. Style Discovery" required />
 
           <div className="flex flex-col gap-1.5">
-            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Service Description *</label>
+            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Brief Service Description (Card Overview) *</label>
             <textarea
               value={serviceForm.desc}
               onChange={e => setServiceForm(p => ({ ...p, desc: e.target.value }))}
-              rows={4}
+              rows={3}
               className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
               required
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Full In-Depth Summary (Dedicated Service Page)</label>
+            <textarea
+              value={serviceForm.summary || ''}
+              onChange={e => setServiceForm(p => ({ ...p, summary: e.target.value }))}
+              rows={3}
+              placeholder="e.g. A comprehensive sartorial overhaul crafted for discerning clients seeking bespoke wardrobe harmony..."
+              className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Key Offerings / Service Highlights (One item per line)</label>
+            <textarea
+              value={(serviceForm.points || []).join('\n')}
+              onChange={e => setServiceForm(p => ({ ...p, points: e.target.value.split('\n').map(s => s.trim()).filter(Boolean) }))}
+              rows={4}
+              placeholder="e.g.&#10;Wardrobe Auditing & Architectural Reorganization&#10;Personal Color Palette & Silhouette Profiling&#10;Seasonal Capsule Curation & Lookbook Generation"
+              className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none font-mono"
             />
           </div>
 
@@ -488,6 +513,7 @@ export default function AdminPage() {
             { id: 'articles', label: '📰 Journal Articles' },
             { id: 'testimonials', label: '💬 Testimonials' },
             { id: 'contact', label: '📍 Contact & Info' },
+            { id: 'mailbox', label: '✉️ Mailbox & SMTP (.env)' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -887,6 +913,44 @@ export default function AdminPage() {
               <textarea value={tempContact.hours} onChange={e => setTempContact(p => ({ ...p, hours: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
             </div>
 
+            {/* WhatsApp Concierge Configuration */}
+            <div className="flex flex-col gap-3 p-5 bg-[#F7F5F0] border border-black/10 rounded-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 font-bold">
+                  ✦ WHATSAPP CONCIERGE & SOCIAL SETTINGS
+                </span>
+                <span className="font-mono text-[9px] text-black/40">Used Across All CTAs & Footers</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField 
+                  label="WhatsApp Phone Number (with country code, no + or dashes)" 
+                  value={tempContact.whatsappPhone || ''} 
+                  onChange={v => setTempContact(p => ({ ...p, whatsappPhone: v }))} 
+                  placeholder="e.g. 919876543210" 
+                />
+                <FormField 
+                  label="Instagram Profile Link" 
+                  value={tempContact.instagramUrl || ''} 
+                  onChange={v => setTempContact(p => ({ ...p, instagramUrl: v }))} 
+                  placeholder="https://instagram.com/..." 
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField 
+                  label="Default WhatsApp Message Template" 
+                  value={tempContact.whatsappMessage || ''} 
+                  onChange={v => setTempContact(p => ({ ...p, whatsappMessage: v }))} 
+                  placeholder="e.g. Hello Jennifer, I would like to schedule a styling consultation." 
+                />
+                <FormField 
+                  label="LinkedIn Profile Link" 
+                  value={tempContact.linkedinUrl || ''} 
+                  onChange={v => setTempContact(p => ({ ...p, linkedinUrl: v }))} 
+                  placeholder="https://linkedin.com/in/..." 
+                />
+              </div>
+            </div>
+
             <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md">
               Save Contact Details →
             </button>
@@ -956,7 +1020,11 @@ export default function AdminPage() {
                 badge={`SERVICE /${item.num}`}
                 onEdit={() => {
                   const { id, num, ...rest } = item;
-                  setServiceForm(rest);
+                  setServiceForm({
+                    ...rest,
+                    summary: rest.summary || '',
+                    points: rest.points || [],
+                  });
                   setEditingId(id);
                   setView('edit');
                 }}
@@ -1072,6 +1140,11 @@ export default function AdminPage() {
               />
             ))}
           </div>
+        )}
+
+        {/* ── 10. TAB CONTENT: MAILBOX & SMTP (.ENV) ── */}
+        {activeTab === 'mailbox' && (
+          <MailboxConfigSection onToast={showToast} />
         )}
 
       </div>
@@ -1242,6 +1315,309 @@ function ItemCard({ id, title, subtitle, image, badge, onEdit, onDelete, viewUrl
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+// ── MAILBOX & NODEMAILER CONFIG SECTION ──
+function MailboxConfigSection({ onToast }: { onToast: () => void }) {
+  const [email, setEmail] = useState('jennifer@stylewithj.in');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [hasPassword, setHasPassword] = useState(false);
+  const [host, setHost] = useState('smtpout.secureserver.net');
+  const [port, setPort] = useState(465);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [alert, setAlert] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
+
+  useEffect(() => {
+    async function loadConfig() {
+      try {
+        setLoading(true);
+        const res = await fetch('/api/admin/email-config');
+        const data = await res.json();
+        if (data.email) setEmail(data.email);
+        if (data.hasPassword !== undefined) setHasPassword(Boolean(data.hasPassword));
+        if (data.host) setHost(data.host);
+        if (data.port) setPort(data.port);
+      } catch {
+        setAlert({
+          type: 'error',
+          message: 'Unable to reach the server to check email configuration.',
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadConfig();
+  }, []);
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    if (!password.trim()) {
+      setAlert({
+        type: 'error',
+        message: 'Please enter a password to update in .env and .env.local.',
+      });
+      return;
+    }
+
+    try {
+      setSaving(true);
+      setAlert(null);
+      const res = await fetch('/api/admin/email-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setHasPassword(true);
+        setPassword('');
+        setAlert({
+          type: 'success',
+          message: 'Password successfully updated in .env and .env.local! Nodemailer has been updated with the new credentials immediately.',
+        });
+        onToast();
+      } else {
+        setAlert({
+          type: 'error',
+          message: data.error || 'Failed to update credentials in environment files.',
+        });
+      }
+    } catch {
+      setAlert({
+        type: 'error',
+        message: 'Network error while saving mailbox credentials.',
+      });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleTest() {
+    try {
+      setTesting(true);
+      setAlert({
+        type: 'info',
+        message: 'Testing connection to GoDaddy/Titan SMTP server (smtpout.secureserver.net:465)...',
+      });
+      const res = await fetch('/api/admin/email-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'test',
+          email: email.trim(),
+          password: password.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAlert({
+          type: 'success',
+          message: `✓ Connection Verified: ${data.message}`,
+        });
+      } else {
+        setAlert({
+          type: 'error',
+          message: `✗ SMTP Error: ${data.error || 'Connection or authentication failed.'}`,
+        });
+      }
+    } catch {
+      setAlert({
+        type: 'error',
+        message: 'Network error while attempting SMTP verification.',
+      });
+    } finally {
+      setTesting(false);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-8">
+      {/* Overview & Credentials Header */}
+      <div className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-black/10">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
+                ✦ SECURE MAILBOX & SMTP CONFIGURATION
+              </span>
+              <span className="px-2 py-0.5 text-[8px] font-mono uppercase tracking-wider bg-black text-white rounded-xs">
+                .env / Nodemailer
+              </span>
+            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-light text-[#1A1A1A]">
+              Titan / GoDaddy Mailbox Password
+            </h2>
+            <p className="font-sans text-xs text-black/60 mt-1 max-w-xl">
+              Configure or change the mailbox password used by Nodemailer to dispatch client booking inquiries and contact forms directly to your inbox.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-black/50">Status:</span>
+            {loading ? (
+              <span className="px-2.5 py-1 text-[9px] font-mono bg-black/5 text-black/50 rounded-xs animate-pulse">
+                Checking...
+              </span>
+            ) : hasPassword ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-[9px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                Active in .env
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-[9px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border border-amber-300 rounded-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                Password Not Set
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Server Specification Badges */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-[#F7F5F0] border border-black/10 rounded-xs text-[11px] font-mono text-black/70">
+          <div>
+            <span className="block text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold">SMTP Host</span>
+            <span className="text-black font-medium">{host}</span>
+          </div>
+          <div>
+            <span className="block text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold">Port & Security</span>
+            <span className="text-black font-medium">{port} (SSL / TLS Secure)</span>
+          </div>
+          <div>
+            <span className="block text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold">Target Mailbox</span>
+            <span className="text-black font-medium truncate block">{email}</span>
+          </div>
+        </div>
+
+        {/* Alert Feedback Banner */}
+        {alert && (
+          <div
+            className={`p-4 rounded-xs border text-xs leading-relaxed flex items-start gap-3 transition-all ${
+              alert.type === 'success'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : alert.type === 'error'
+                ? 'bg-rose-50 border-rose-200 text-rose-800'
+                : 'bg-sky-50 border-sky-200 text-sky-800'
+            }`}
+          >
+            <span className="text-sm font-bold">
+              {alert.type === 'success' ? '✓' : alert.type === 'error' ? '⚠' : 'ℹ'}
+            </span>
+            <div className="flex-1 font-sans">{alert.message}</div>
+          </div>
+        )}
+
+        {/* Password Update Form */}
+        <form onSubmit={handleSave} className="flex flex-col gap-6 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">
+                Mailbox Sender Email <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-2.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black transition-colors"
+                placeholder="jennifer@stylewithj.in"
+              />
+              <span className="text-[10px] text-black/40 font-sans">
+                Corresponds to TITAN_EMAIL in .env.local
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">
+                {hasPassword ? 'Change Mailbox Password (.env)' : 'Set Mailbox Password (.env)'}{' '}
+                <span className="text-red-500">*</span>
+              </label>
+              <div className="relative w-full">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder={hasPassword ? 'Enter new password to overwrite...' : 'Enter your mailbox password...'}
+                  className="w-full pl-4 pr-11 py-2.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-black/40 hover:text-black transition-colors"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 014.122-.971c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <span className="text-[10px] text-black/40 font-sans">
+                {hasPassword ? 'Existing password is saved in your .env files.' : 'Enter password to activate Nodemailer.'}
+              </span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+            <button
+              type="submit"
+              disabled={saving || !password.trim()}
+              className="flex-1 py-3.5 bg-black hover:bg-black/90 text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {saving ? (
+                <>
+                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Saving to .env...
+                </>
+              ) : (
+                '💾 Save Mailbox Password to .env'
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleTest}
+              disabled={testing || (!password.trim() && !hasPassword)}
+              className="px-6 py-3.5 border border-black/20 hover:border-black/50 text-[10px] tracking-[0.2em] uppercase font-mono font-medium text-black hover:bg-[#F2EFE9] transition-all rounded-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {testing ? (
+                <>
+                  <span className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  Verifying SMTP...
+                </>
+              ) : (
+                '⚡ Test SMTP Connection'
+              )}
+            </button>
+          </div>
+        </form>
+
+        {/* Security & Setup Guide */}
+        <div className="mt-4 pt-6 border-t border-black/10 flex flex-col gap-2">
+          <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/60 font-bold">
+            🔒 How Mailbox Credentials Work
+          </span>
+          <ul className="text-xs text-black/60 space-y-1.5 list-disc list-inside font-sans leading-relaxed">
+            <li>When you click <strong>Save</strong>, the password is encrypted directly into your server&apos;s <code className="bg-black/5 px-1.5 py-0.5 font-mono text-[10px] text-black">.env.local</code> and <code className="bg-black/5 px-1.5 py-0.5 font-mono text-[10px] text-black">.env</code> files.</li>
+            <li>Runtime environment variables are refreshed in memory on-the-fly, so customer contact submissions work immediately without requiring a manual server restart.</li>
+            <li>Click <strong>Test SMTP Connection</strong> at any time to verify that GoDaddy/Titan SMTP accepts your email and password.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
