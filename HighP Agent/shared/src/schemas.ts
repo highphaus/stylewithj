@@ -92,21 +92,61 @@ export const AgentHeartbeatSchema = z.object({
   status: z.nativeEnum(ActivityState),
   currentApplication: z.string().optional(),
   idleSeconds: z.number().min(0),
-  recentDurationSeconds: z.number().min(0).optional()
-});
+  recentDurationSeconds: z.number().min(0).optional(),
+  website: z.object({ domain: z.string() }).nullable().optional()
+}).passthrough();
 
 export const AgentSyncSchema = z.object({
   deviceId: z.string().min(1),
   sessionId: z.string().min(1),
   events: z.array(
     z.object({
-      eventId: z.string().uuid(),
+      eventId: z.string().min(1),
       type: z.nativeEnum(ActivityEventType),
       applicationName: z.string().min(1),
       processName: z.string().optional(),
       startedAt: z.string(),
       endedAt: z.string(),
-      durationSeconds: z.number().min(0)
-    })
+      durationSeconds: z.number().min(0),
+      domain: z.string().optional()
+    }).passthrough()
   ).max(500)
 });
+
+export const CreateTrackedApplicationSchema = z.object({
+  name: z.string().min(1, 'Application name is required').max(100),
+  category: z.string().min(1, 'Category is required'),
+  executableNames: z.array(z.string().min(1)).min(1, 'At least one executable name is required'),
+  executablePaths: z.array(z.string()).optional(),
+  tracked: z.boolean().default(true),
+  ignored: z.boolean().default(false),
+  isSystemApp: z.boolean().default(false)
+});
+
+export const UpdateTrackedApplicationSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  category: z.string().min(1).optional(),
+  executableNames: z.array(z.string().min(1)).optional(),
+  executablePaths: z.array(z.string()).optional(),
+  tracked: z.boolean().optional(),
+  ignored: z.boolean().optional(),
+  isSystemApp: z.boolean().optional()
+});
+
+export const ToggleApplicationTrackingSchema = z.object({
+  tracked: z.boolean()
+});
+
+export const ReportDiscoveredAppSchema = z.object({
+  executableName: z.string().min(1),
+  executablePath: z.string().optional(),
+  windowTitle: z.string().optional()
+});
+
+export const ConvertDiscoveredApplicationSchema = z.object({
+  name: z.string().min(1).optional(),
+  category: z.string().default('Other'),
+  tracked: z.boolean().default(true),
+  ignored: z.boolean().default(false)
+});
+

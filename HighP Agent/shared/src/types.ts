@@ -71,6 +71,15 @@ export interface IEmployeeProfile {
   todayActiveSeconds: number;
   todayIdleSeconds: number;
   todayBreakSeconds: number;
+  todayShiftDuration?: number;
+  todayShiftStartedAt?: string | null;
+  todayShiftEndedAt?: string | null;
+  currentShiftStartedAt?: string | null;
+  lastCompletedShiftStartedAt?: string | null;
+  lastCompletedShiftEndedAt?: string | null;
+  lastCompletedShiftDuration?: number;
+  todayAttendanceStatus?: string;
+  todaySessionsCount?: number;
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -82,11 +91,13 @@ export interface IAttendanceSession {
   deviceId?: string;
   startedAt: Date | string;
   endedAt?: Date | string;
+  durationSeconds?: number;
   activeSeconds: number;
   idleSeconds: number;
   breakSeconds: number;
   status: SessionStatus;
   endReason?: string;
+  lastHeartbeatAt?: Date | string;
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -316,4 +327,70 @@ export interface ISocketEvents {
     durationSeconds: number;
     endedAt: string;
   };
+  'applications:updated': {
+    companyId: string;
+    version: number;
+  };
 }
+
+// Application Registry Models
+export interface ITrackedApplication {
+  id: string;
+  _id?: string;
+  companyId: string;
+  name: string;
+  executableNames: string[];
+  executablePaths?: string[];
+  category: string;
+  tracked: boolean;
+  ignored: boolean;
+  isSystemApp: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+}
+
+export interface IDiscoveredApplication {
+  id: string;
+  _id?: string;
+  companyId: string;
+  executableName: string;
+  executablePath?: string;
+  windowTitle?: string;
+  detectedTimes: number;
+  firstSeenAt: Date | string;
+  lastSeenAt: Date | string;
+  lastSeenByEmployeeId?: string;
+  status: 'DISCOVERED' | 'TRACKED' | 'IGNORED';
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+}
+
+export interface ResolvedApplication {
+  applicationId?: string;
+  name: string;
+  executableName: string;
+  executablePath?: string;
+  processId: number;
+  category: string;
+  trackingState: 'TRACKED' | 'IGNORED' | 'UNKNOWN';
+  tracked: boolean;
+  ignored: boolean;
+  isUnknown: boolean;
+  confidence: 'high' | 'medium' | 'unknown';
+}
+
+export interface IApplicationConfigResponse {
+  version: number;
+  upToDate?: boolean;
+  applications: Array<{
+    id: string;
+    name: string;
+    executableNames: string[];
+    executablePaths?: string[];
+    category: string;
+    tracked: boolean;
+    ignored: boolean;
+    isSystemApp: boolean;
+  }>;
+}
+

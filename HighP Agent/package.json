@@ -1,0 +1,31 @@
+{
+  "name": "highp-agent-saas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-Ready Employee Activity Monitoring SaaS",
+  "workspaces": [
+    "shared",
+    "backend",
+    "frontend",
+    "desktop-agent"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:agent\"",
+    "dev:api": "npm run dev --workspace=backend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:web": "npm run dev --workspace=frontend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:agent": "npm run dev --workspace=desktop-agent",
+    "dev:shared": "npm run dev --workspace=shared",
+    "build": "npm run build --workspaces --if-present",
+    "build:agent": "npm run build --workspace=desktop-agent",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  }
+}
