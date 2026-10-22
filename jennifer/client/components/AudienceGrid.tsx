@@ -62,7 +62,7 @@ export default function AudienceGrid() {
   const [progress, setProgress] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const progressRef = useRef<NodeJS.Timeout | null>(null);
-  const { openLightbox } = useLightbox();
+  const { openLightbox } = useLightbox(); 
 
   const { audiences: dynamicAudiences } = useSiteData();
   const audiencesList = dynamicAudiences.length > 0 ? dynamicAudiences : audiences;
