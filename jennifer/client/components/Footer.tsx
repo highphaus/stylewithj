@@ -9,11 +9,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-8 mb-24">
           
           {/* Brand Left */}
-          <div className="md:col-span-4 lg:col-span-5 flex flex-col items-start leading-none group">
-            <span className="text-[10px] uppercase tracking-[0.25em] font-light text-thalina-text/60 mb-1">style with</span>
-            <span className="text-4xl font-bold tracking-tight leading-none font-serif">J</span>
-            <span className="text-[10px] uppercase tracking-[0.3em] font-light text-thalina-text/70 mt-1">by jennifer</span>
-          </div>
+          <Link href="/" className="md:col-span-4 lg:col-span-5 flex items-center gap-2.5 group">
+            <span className="font-sans text-xs sm:text-sm tracking-[0.28em] uppercase font-light text-thalina-text whitespace-nowrap leading-none flex items-center">
+              Style with
+            </span>
+            <img
+              src="/logo/style with j.png"
+              alt="J - Style With J"
+              className="h-8 sm:h-9 w-auto object-contain"
+            />
+          </Link>
 
           {/* Center Links 1 */}
           <div className="md:col-span-2 lg:col-span-2">

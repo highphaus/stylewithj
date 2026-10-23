@@ -97,17 +97,24 @@ export default function Navigation() {
         {/* Main Flex Bar */}
         <div className="w-full px-6 sm:px-8 lg:px-16 flex items-center justify-between h-[88px]">
 
-          {/* Logo */}
+          {/* Logo & Brand Name: "Style with" followed by floral "J" logo */}
           <Link
             href="/"
-            className="flex-shrink-0 flex items-center hover:opacity-75 transition-opacity duration-300"
+            className="flex-shrink-0 flex items-center gap-2 sm:gap-2.5 hover:opacity-85 transition-opacity duration-300 group"
           >
+            <span
+              className={`font-sans text-[11px] sm:text-[12px] md:text-[13px] tracking-[0.28em] uppercase font-light whitespace-nowrap select-none transition-colors duration-300 flex items-center leading-none ${
+                isLight ? 'text-[#1A1A1A]' : 'text-white'
+              }`}
+            >
+              Style with
+            </span>
             <Image
               src={isLight ? "/logo/style with j.png" : "/logo/style with j-white.png"}
-              alt="Style With J"
+              alt="J - Style With J"
               width={268}
               height={368}
-              className="h-10 sm:h-12 md:h-14 w-auto object-contain transition-all duration-300"
+              className="h-7 sm:h-8 md:h-9 w-auto object-contain transition-all duration-300"
               priority
               unoptimized
             />

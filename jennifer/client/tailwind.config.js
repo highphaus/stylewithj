@@ -17,7 +17,8 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-manrope)', 'sans-serif'],
         satoshi: ['Satoshi', 'sans-serif'],
-        serif: ['Satoshi', 'sans-serif'],
+        serif: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
+        playfair: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
         general: ['General Sans', 'sans-serif'],
       },
       transitionTimingFunction: {
