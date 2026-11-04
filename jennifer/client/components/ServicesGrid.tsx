@@ -155,7 +155,9 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
   // Shared modal state
   const [selectedService, setSelectedService] = useState<ServiceDefinition | null>(null);
-  const { services: dynamicServices } = useSiteData();
+  const { services: dynamicServices, responsive } = useSiteData();
+  const isAutoPlay = responsive?.servicesMobileCarouselSpeed === undefined ? true : responsive.servicesMobileCarouselSpeed > 0;
+  const mobileIntervalMs = (responsive?.servicesMobileCarouselSpeed && responsive.servicesMobileCarouselSpeed > 0 ? responsive.servicesMobileCarouselSpeed : 7) * 1000;
 
   const servicesList: ServiceDefinition[] = dynamicServices.length > 0 
     ? dynamicServices.map((ds, idx) => {
@@ -183,13 +185,7 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   });
 
   useMotionValueEvent(smoothProgress, "change", (latest) => {
-    let idx = 0;
-    if (latest >= 0.88) idx = 4;
-    else if (latest >= 0.65) idx = 3;
-    else if (latest >= 0.40) idx = 2;
-    else if (latest >= 0.18) idx = 1;
-    else idx = 0;
-
+    const idx = Math.min(Math.max(0, Math.floor(latest * total)), Math.max(0, total - 1));
     setActiveDesktopIndex(idx);
   });
 
@@ -212,11 +208,13 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
   const resetMobileTimer = () => {
     if (mobileTimerRef.current) {
       clearInterval(mobileTimerRef.current);
-      mobileTimerRef.current = setInterval(() => {
-        setMobileDirection(1);
-        setMobileIndex((prev) => (prev + 1) % total);
-      }, 7000);
+      mobileTimerRef.current = null;
     }
+    if (!isAutoPlay) return;
+    mobileTimerRef.current = setInterval(() => {
+      setMobileDirection(1);
+      setMobileIndex((prev) => (prev + 1) % total);
+    }, mobileIntervalMs);
   };
 
   const handleMobileNext = () => {
@@ -237,19 +235,19 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
     resetMobileTimer();
   };
 
-  // Auto scroll effect for mobile (continuous 3.5s interval, pauses only if modal is open)
+  // Auto scroll effect for mobile
   useEffect(() => {
-    if (selectedService !== null) return;
+    if (selectedService !== null || !isAutoPlay) return;
 
     mobileTimerRef.current = setInterval(() => {
       setMobileDirection(1);
       setMobileIndex((prev) => (prev + 1) % total);
-    }, 7000);
+    }, mobileIntervalMs);
 
     return () => {
       if (mobileTimerRef.current) clearInterval(mobileTimerRef.current);
     };
-  }, [selectedService, total]);
+  }, [selectedService, total, isAutoPlay, mobileIntervalMs]);
 
   const currentDesktopService = servicesList[activeDesktopIndex] || servicesList[0];
   const currentMobileService = servicesList[mobileIndex] || servicesList[0];

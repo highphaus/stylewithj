@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 import { useLightbox } from '@/components/ImageLightbox';
+import { useSiteData } from '@/lib/use-site-data';
 
 // ── DATA ────────────────────────────────────────────────────────────────────
 
@@ -228,6 +229,20 @@ export default function ServicesContent({
   hideCta?: boolean;
 }) {
   const { openLightbox } = useLightbox();
+  const { services: dynamicServices } = useSiteData();
+  const currentServicesList = dynamicServices && dynamicServices.length > 0
+    ? dynamicServices.map((ds, idx) => {
+        const fallback = servicesList[idx % servicesList.length] || servicesList[0];
+        return {
+          num: ds.num || String(idx + 1).padStart(2, '0'),
+          category: ds.category || fallback.category,
+          title: ds.name || fallback.title,
+          summary: ds.summary || ds.desc || fallback.summary,
+          points: (ds.points && ds.points.length > 0) ? ds.points : fallback.points,
+          image: ds.image && ds.image.trim() !== '' ? ds.image : fallback.image,
+        };
+      })
+    : servicesList;
   const [expandedMobileServices, setExpandedMobileServices] = useState<Record<string, boolean>>({});
   const [revealedServices, setRevealedServices] = useState<Record<string, boolean>>({});
 
@@ -300,7 +315,7 @@ export default function ServicesContent({
 
         {/* MOBILE & TABLET LAYOUT: EDITORIAL PORTRAIT IMAGES WITH IN-DEPTH DETAILS BETWEEN EACH IMAGE */}
         <div className="flex flex-col lg:hidden divide-y divide-black/15 -mx-6 sm:mx-0 sm:gap-12 sm:divide-y-0">
-          {servicesList.map((svc) => (
+          {currentServicesList.map((svc) => (
             <div key={svc.num} className="flex flex-col bg-[#FAF9F6] sm:bg-transparent">
               {/* Full Bleed on Mobile, Elegant Centered Portrait Box on Tablet */}
               <ScrollRevealImageCard
@@ -370,7 +385,7 @@ export default function ServicesContent({
 
         {/* DESKTOP LAYOUT (lg:flex) */}
         <div className="hidden lg:flex flex-col divide-y divide-[#1A1A1A]/10">
-          {servicesList.map((svc) => (
+          {currentServicesList.map((svc) => (
             <div
               key={svc.num}
               className="group grid grid-cols-12 gap-8 py-16 hover:bg-[#F5F3EF] -mx-12 px-12 transition-colors duration-300 items-center"

@@ -100,7 +100,7 @@ export default function Navigation() {
           {/* Logo & Brand Name: "Style with" followed by floral "J" logo */}
           <Link
             href="/"
-            className="flex-shrink-0 flex items-center gap-2 sm:gap-2.5 hover:opacity-85 transition-opacity duration-300 group"
+            className="flex-shrink-0 flex items-center gap-1 hover:opacity-85 transition-opacity duration-300 group"
           >
             <span
               className={`font-sans text-[11px] sm:text-[12px] md:text-[13px] tracking-[0.28em] uppercase font-light whitespace-nowrap select-none transition-colors duration-300 flex items-center leading-none ${

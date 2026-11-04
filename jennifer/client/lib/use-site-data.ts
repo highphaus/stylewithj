@@ -1,6 +1,6 @@
 'use client';
 // lib/use-site-data.ts
-// Comprehensive hook managing all site content & text blocks for home page, about page, meet section, hero section, contact info, testimonials, services, clientele, and journal.
+// Comprehensive hook managing all site content & text blocks for home page, about page, meet section, hero section, contact info, testimonials, services, clientele, journal, transformations, CTA banner, and responsive device controls.
 
 import { useState, useEffect, useCallback } from 'react';
 import { 
@@ -11,7 +11,10 @@ import {
   TestimonialItem, seedTestimonials,
   ServiceItem, seedServices, 
   AudienceItem, seedAudiences, 
-  JournalArticle, seedArticles 
+  JournalArticle, seedArticles,
+  TransformationItem, seedTransformations,
+  CtaBannerContent, seedCtaBanner,
+  ResponsiveConfig, seedResponsiveConfig
 } from './site-data';
 
 const HERO_KEY = 'swj_hero';
@@ -22,6 +25,9 @@ const TESTIMONIALS_KEY = 'swj_testimonials';
 const SERVICES_KEY = 'swj_services';
 const AUDIENCES_KEY = 'swj_audiences';
 const ARTICLES_KEY = 'swj_articles';
+const TRANSFORMATIONS_KEY = 'swj_transformations';
+const CTA_BANNER_KEY = 'swj_cta_banner';
+const RESPONSIVE_KEY = 'swj_responsive';
 
 export function useSiteData() {
   const [hero, setHero] = useState<HeroContent>(seedHeroContent);
@@ -32,6 +38,9 @@ export function useSiteData() {
   const [services, setServices] = useState<ServiceItem[]>(seedServices);
   const [audiences, setAudiences] = useState<AudienceItem[]>(seedAudiences);
   const [articles, setArticles] = useState<JournalArticle[]>(seedArticles);
+  const [transformations, setTransformations] = useState<TransformationItem[]>(seedTransformations);
+  const [ctaBanner, setCtaBanner] = useState<CtaBannerContent>(seedCtaBanner);
+  const [responsive, setResponsive] = useState<ResponsiveConfig>(seedResponsiveConfig);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -67,6 +76,15 @@ export function useSiteData() {
 
       const storedArticles = localStorage.getItem(ARTICLES_KEY);
       if (storedArticles) setArticles(JSON.parse(storedArticles));
+
+      const storedTransformations = localStorage.getItem(TRANSFORMATIONS_KEY);
+      if (storedTransformations) setTransformations(JSON.parse(storedTransformations));
+
+      const storedCta = localStorage.getItem(CTA_BANNER_KEY);
+      if (storedCta) setCtaBanner(JSON.parse(storedCta));
+
+      const storedResp = localStorage.getItem(RESPONSIVE_KEY);
+      if (storedResp) setResponsive({ ...seedResponsiveConfig, ...JSON.parse(storedResp) });
     } catch {
       // Fallbacks to seeds on error
     }
@@ -105,6 +123,24 @@ export function useSiteData() {
     setContact(prev => {
       const updated = { ...prev, ...changes };
       localStorage.setItem(CONTACT_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  // ── CTA BANNER UPDATER ──
+  const updateCtaBanner = useCallback((changes: Partial<CtaBannerContent>) => {
+    setCtaBanner(prev => {
+      const updated = { ...prev, ...changes };
+      localStorage.setItem(CTA_BANNER_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  // ── RESPONSIVE CONFIG UPDATER ──
+  const updateResponsive = useCallback((changes: Partial<ResponsiveConfig>) => {
+    setResponsive(prev => {
+      const updated = { ...prev, ...changes };
+      localStorage.setItem(RESPONSIVE_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -215,6 +251,32 @@ export function useSiteData() {
     });
   }, []);
 
+  // ── TRANSFORMATIONS CRUD ──
+  const addTransformation = useCallback((item: Omit<TransformationItem, 'id'>) => {
+    setTransformations(prev => {
+      const id = String(prev.length + 1).padStart(2, '0');
+      const updated = [...prev, { ...item, id }];
+      localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  const updateTransformation = useCallback((id: string, changes: Partial<TransformationItem>) => {
+    setTransformations(prev => {
+      const updated = prev.map(t => t.id === id ? { ...t, ...changes } : t);
+      localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  const deleteTransformation = useCallback((id: string) => {
+    setTransformations(prev => {
+      const updated = prev.filter(t => t.id !== id);
+      localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
   // ── RESET ALL ──
   const resetAllSiteData = useCallback(() => {
     setHero(seedHeroContent);
@@ -225,6 +287,9 @@ export function useSiteData() {
     setServices(seedServices);
     setAudiences(seedAudiences);
     setArticles(seedArticles);
+    setTransformations(seedTransformations);
+    setCtaBanner(seedCtaBanner);
+    setResponsive(seedResponsiveConfig);
 
     localStorage.setItem(HERO_KEY, JSON.stringify(seedHeroContent));
     localStorage.setItem(ABOUT_KEY, JSON.stringify(seedAboutContent));
@@ -234,6 +299,9 @@ export function useSiteData() {
     localStorage.setItem(SERVICES_KEY, JSON.stringify(seedServices));
     localStorage.setItem(AUDIENCES_KEY, JSON.stringify(seedAudiences));
     localStorage.setItem(ARTICLES_KEY, JSON.stringify(seedArticles));
+    localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(seedTransformations));
+    localStorage.setItem(CTA_BANNER_KEY, JSON.stringify(seedCtaBanner));
+    localStorage.setItem(RESPONSIVE_KEY, JSON.stringify(seedResponsiveConfig));
   }, []);
 
   return {
@@ -245,6 +313,9 @@ export function useSiteData() {
     services, addService, updateService, deleteService,
     audiences, addAudience, updateAudience, deleteAudience,
     articles, addArticle, updateArticle, deleteArticle,
+    transformations, addTransformation, updateTransformation, deleteTransformation,
+    ctaBanner, updateCtaBanner,
+    responsive, updateResponsive,
     isLoaded, resetAllSiteData
   };
 }

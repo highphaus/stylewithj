@@ -5,7 +5,22 @@ import { motion } from 'framer-motion';
 import { useSiteData } from '@/lib/use-site-data';
 
 export default function HeroSection() {
-  const { hero } = useSiteData();
+  const { hero, responsive } = useSiteData();
+
+  const desktopPos = hero.desktopImagePosition || responsive?.heroDesktopImagePosition || 'center 50%';
+  const mobilePos = hero.mobileImagePosition || responsive?.heroMobileImagePosition || 'center 15%';
+
+  const desktopTitleClass = responsive?.heroDesktopTitleSize === 'compact' 
+    ? 'md:text-[34px] lg:text-[38px]' 
+    : responsive?.heroDesktopTitleSize === 'editorial' 
+    ? 'md:text-[46px] lg:text-[52px]' 
+    : 'md:text-[40px] lg:text-[44px]';
+
+  const mobileTitleClass = responsive?.heroMobileTitleSize === 'compact'
+    ? 'text-xl sm:text-2xl'
+    : responsive?.heroMobileTitleSize === 'prominent'
+    ? 'text-[26px] sm:text-[32px]'
+    : 'text-2xl sm:text-3xl';
 
   return (
     <section className="relative w-full h-[100dvh] min-h-[580px] sm:min-h-[620px] md:min-h-[680px] bg-[#111] text-white overflow-hidden flex flex-col justify-center items-start pt-20 md:pt-24 pb-8 md:pb-12 z-10">
@@ -19,7 +34,7 @@ export default function HeroSection() {
           fill
           priority
           sizes="(min-width: 768px) 100vw, 1px"
-          style={{ objectPosition: hero.desktopImagePosition || 'center 50%' }}
+          style={{ objectPosition: desktopPos }}
           className="object-cover opacity-100 hidden md:block transition-all duration-700"
         />
         {/* Mobile / Small Device Hero Image */}
@@ -29,7 +44,7 @@ export default function HeroSection() {
           fill
           priority
           sizes="(max-width: 767px) 100vw, 1px"
-          style={{ objectPosition: hero.mobileImagePosition || 'center 15%' }}
+          style={{ objectPosition: mobilePos }}
           className="object-cover opacity-100 block md:hidden transition-all duration-700"
         />
         {/* Mobile gradient: Balanced middle-and-bottom fade ensuring text readability while keeping the model's portrait clear */}
@@ -56,7 +71,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-2xl sm:text-3xl md:text-[40px] lg:text-[44px] font-serif font-light leading-[1.18] sm:leading-[1.16] tracking-wide mb-2.5 sm:mb-4"
+            className={`${mobileTitleClass} ${desktopTitleClass} font-serif font-light leading-[1.18] sm:leading-[1.16] tracking-wide mb-2.5 sm:mb-4`}
           >
             {hero.titleLine1} <br />
             {hero.titleLine2} <br />

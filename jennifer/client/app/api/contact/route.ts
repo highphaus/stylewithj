@@ -60,23 +60,20 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { firstName, lastName, email, phone, service, message, locationText, coords } = body;
+    const { firstName, lastName, email, phone, location, service, message, locationText, coords } = body;
 
-    // Validate required fields
-    if (!firstName || !email || !message) {
+    // Validate required fields: First Name and Message or Phone
+    if (!firstName || !message) {
       return NextResponse.json(
-        { error: 'Missing required fields: Name, email, and message are required.' },
+        { error: 'Missing required fields: Name and message are required.' },
         { status: 400 }
       );
     }
 
-    const cleanEmail = sanitizeHeader(String(email));
-    if (!isValidEmail(cleanEmail)) {
-      return NextResponse.json(
-        { error: 'Invalid email address format.' },
-        { status: 400 }
-      );
-    }
+    const hasValidEmail = email && typeof email === 'string' && isValidEmail(email.trim());
+    const cleanEmail = hasValidEmail
+      ? sanitizeHeader(email.trim())
+      : (process.env.TITAN_EMAIL || 'jennifer@stylewithj.in').trim();
 
     const cleanFirstName = sanitizeHeader(String(firstName));
     const cleanLastName = lastName ? sanitizeHeader(String(lastName)) : '';
@@ -84,6 +81,7 @@ export async function POST(req: Request) {
     const cleanService = service ? sanitizeHeader(String(service)) : 'General Inquiry';
     const cleanMessage = String(message).trim();
     const cleanLocationText = locationText ? sanitizeHeader(String(locationText)) : 'Not provided';
+    const cleanUserLocation = location ? sanitizeHeader(String(location)) : '';
 
     const customerFullName = cleanLastName
       ? `${cleanFirstName} ${cleanLastName}`
@@ -134,6 +132,7 @@ export async function POST(req: Request) {
     const safeEmail = escapeHtml(cleanEmail);
     const safeService = escapeHtml(cleanService);
     const safeLocation = escapeHtml(cleanLocationText);
+    const safeUserLocation = escapeHtml(cleanUserLocation);
     const safeMessage = escapeHtml(cleanMessage).replace(/\n/g, '<br />');
     const safeTimestamp = escapeHtml(submissionDate);
 
@@ -152,13 +151,23 @@ export async function POST(req: Request) {
             <td style="padding: 8px 0; color: #1A1A1A; font-weight: 500;">${safeName}</td>
           </tr>
           <tr>
-            <td style="padding: 8px 0; font-weight: bold; color: #444;">Email Address:</td>
-            <td style="padding: 8px 0; color: #1A1A1A;"><a href="mailto:${safeEmail}" style="color: #1A1A1A; text-decoration: underline;">${safeEmail}</a></td>
-          </tr>
-          <tr>
             <td style="padding: 8px 0; font-weight: bold; color: #444;">Phone Number:</td>
             <td style="padding: 8px 0; color: #1A1A1A; font-weight: bold;"><a href="tel:${safePhone}" style="color: #1A1A1A; text-decoration: underline;">${safePhone}</a></td>
           </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold; color: #444;">Client Location:</td>
+            <td style="padding: 8px 0; color: #1A1A1A; font-weight: 500;">${safeUserLocation || 'Not provided'}</td>
+          </tr>
+          ${
+            hasValidEmail
+              ? `
+          <tr>
+            <td style="padding: 8px 0; font-weight: bold; color: #444;">Email Address:</td>
+            <td style="padding: 8px 0; color: #1A1A1A;"><a href="mailto:${safeEmail}" style="color: #1A1A1A; text-decoration: underline;">${safeEmail}</a></td>
+          </tr>
+          `
+              : ''
+          }
           <tr>
             <td style="padding: 8px 0; font-weight: bold; color: #444;">Selected Service:</td>
             <td style="padding: 8px 0; font-weight: bold; color: #000; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em;">${safeService}</td>
@@ -168,7 +177,7 @@ export async function POST(req: Request) {
             <td style="padding: 8px 0; color: #555; font-family: monospace; font-size: 12px;">${safeTimestamp} IST</td>
           </tr>
           <tr>
-            <td style="padding: 8px 0; font-weight: bold; color: #444;">Location Info:</td>
+            <td style="padding: 8px 0; font-weight: bold; color: #444;">Device Location Info:</td>
             <td style="padding: 8px 0; color: #111; font-family: monospace; font-size: 12px;">${safeLocation}</td>
           </tr>
           ${
@@ -215,11 +224,11 @@ export async function POST(req: Request) {
     const plainTextContent = `New Website Enquiry – ${customerFullName}
 
 Customer Name: ${customerFullName}
-Email Address: ${cleanEmail}
 Phone Number: ${cleanPhone}
-Selected Service: ${cleanService}
+Client Location: ${cleanUserLocation || 'Not provided'}
+${hasValidEmail ? `Email Address: ${cleanEmail}\n` : ''}Selected Service: ${cleanService}
 Submission Date & Time: ${submissionDate} IST
-Location Info: ${cleanLocationText}
+Device Location Info: ${cleanLocationText}
 ${coords && typeof coords.lat === 'number' ? `GPS: ${coords.lat}, ${coords.lng}\n` : ''}${googleMapsUrl ? `Google Maps: ${googleMapsUrl}\n` : ''}
 Customer Message:
 ${cleanMessage}
@@ -228,7 +237,7 @@ ${cleanMessage}
     const mailOptions = {
       from: `Style With J Website <${emailUser}>`,
       to: recipientEmail,
-      replyTo: cleanEmail,
+      replyTo: hasValidEmail ? cleanEmail : emailUser,
       subject: `New Website Enquiry – ${customerFullName}`,
       text: plainTextContent,
       html: htmlContent,
@@ -244,7 +253,7 @@ ${cleanMessage}
   } catch (error: unknown) {
     console.error('[Nodemailer Contact API Error]', error);
     return NextResponse.json(
-      { error: 'Failed to send enquiry. Please try again or contact us directly.' },
+      { error: 'An unexpected error occurred while transmitting your request.' },
       { status: 500 }
     );
   }

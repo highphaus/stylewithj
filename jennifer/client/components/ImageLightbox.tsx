@@ -63,10 +63,8 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const openLightbox = (src: string, title?: string, details?: StoryDetails) => {
-    // Find matching look in seed or allGalleryLooks by src, num, or id
-    const foundIndex = allGalleryLooks.findIndex(
-      l => l.image === src || (details?.num && l.num === details.num) || (details?.id && l.id === details.id)
-    );
+    // Only match look in allGalleryLooks if the exact image matches
+    const foundIndex = allGalleryLooks.findIndex(l => l.image === src);
 
     let foundLook: Look | undefined;
     if (foundIndex !== -1) {
@@ -74,17 +72,17 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
     }
 
     setActiveItem({
-      src: foundLook?.image || src,
-      title: foundLook?.title || title,
+      src: src, // ALWAYS use the exact image clicked by the user!
+      title: title || foundLook?.title || '',
       details: {
-        id: foundLook?.id || details?.id,
-        num: foundLook?.num || details?.num,
-        category: foundLook?.category || details?.category,
-        concept: foundLook?.concept || details?.concept,
-        fabric: foundLook?.fabric || details?.fabric,
-        story: foundLook?.story || details?.story,
-        occasion: foundLook?.occasion || details?.occasion,
-        tag: foundLook?.tag || details?.tag,
+        id: details?.id || foundLook?.id,
+        num: details?.num || foundLook?.num,
+        category: details?.category || foundLook?.category,
+        concept: details?.concept || foundLook?.concept,
+        fabric: details?.fabric || foundLook?.fabric,
+        story: details?.story || foundLook?.story,
+        occasion: details?.occasion || foundLook?.occasion,
+        tag: details?.tag || foundLook?.tag,
       },
     });
   };
@@ -93,14 +91,10 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
     setActiveItem(null);
   };
 
-  // Find index of the currently active look in allGalleryLooks
+  // Find index of the currently active look in allGalleryLooks (only if it is a gallery look)
   const currentLookIndex = useMemo(() => {
     if (!activeItem) return -1;
-    return allGalleryLooks.findIndex(
-      l => (activeItem.details?.num && l.num === activeItem.details.num) ||
-           (activeItem.details?.id && l.id === activeItem.details.id) ||
-           l.image === activeItem.src
-    );
+    return allGalleryLooks.findIndex(l => l.image === activeItem.src);
   }, [activeItem, allGalleryLooks]);
 
   const selectLookByIndex = (idx: number) => {
@@ -208,25 +202,33 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                   {/* Top Bar inside Viewport: Look Counter & Quick Prev/Next controls */}
                   <div className="w-full flex items-center justify-between z-30 pb-2">
                     <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={handlePrev}
-                        className="px-2 py-1 bg-black/80 hover:bg-white hover:text-black text-white text-[9px] font-mono rounded-xs border border-white/20 cursor-pointer transition-all"
-                        title="Previous Look in Archive"
-                      >
-                        ‹
-                      </button>
-                      <span className="px-2.5 py-1 bg-black/80 backdrop-blur-md text-white text-[9px] font-mono tracking-[0.25em] uppercase border border-white/15 rounded-xs">
-                        LOOK {activeItem.details?.num || String(currentLookIndex + 1).padStart(2, '0')} OF {String(allGalleryLooks.length).padStart(2, '0')}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={handleNext}
-                        className="px-2 py-1 bg-black/80 hover:bg-white hover:text-black text-white text-[9px] font-mono rounded-xs border border-white/20 cursor-pointer transition-all"
-                        title="Next Look in Archive"
-                      >
-                        ›
-                      </button>
+                      {currentLookIndex !== -1 ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={handlePrev}
+                            className="px-2 py-1 bg-black/80 hover:bg-white hover:text-black text-white text-[9px] font-mono rounded-xs border border-white/20 cursor-pointer transition-all"
+                            title="Previous Look in Archive"
+                          >
+                            ‹
+                          </button>
+                          <span className="px-2.5 py-1 bg-black/80 backdrop-blur-md text-white text-[9px] font-mono tracking-[0.25em] uppercase border border-white/15 rounded-xs">
+                            LOOK {activeItem.details?.num || String(currentLookIndex + 1).padStart(2, '0')} OF {String(allGalleryLooks.length).padStart(2, '0')}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={handleNext}
+                            className="px-2 py-1 bg-black/80 hover:bg-white hover:text-black text-white text-[9px] font-mono rounded-xs border border-white/20 cursor-pointer transition-all"
+                            title="Next Look in Archive"
+                          >
+                            ›
+                          </button>
+                        </>
+                      ) : (
+                        <span className="px-2.5 py-1 bg-black/80 backdrop-blur-md text-white text-[9px] font-mono tracking-[0.25em] uppercase border border-white/15 rounded-xs">
+                          {activeItem.details?.tag ? `${activeItem.details.tag} VIEW` : 'CASE STUDY'}
+                        </span>
+                      )}
                     </div>
 
                     <span className="px-2.5 py-1 bg-white/10 text-white/70 text-[8px] font-mono tracking-[0.2em] uppercase rounded-xs hidden sm:inline-block">
@@ -257,30 +259,34 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                     </AnimatePresence>
 
                     {/* Prev & Next Look Navigation Arrows */}
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 hover:bg-black text-white flex items-center justify-center text-xl font-mono border border-white/20 shadow-lg cursor-pointer transition-all z-30 active:scale-95"
-                      title="Previous Look (Swipe Right)"
-                      aria-label="Previous look"
-                    >
-                      ‹
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); handleNext(); }}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 hover:bg-black text-white flex items-center justify-center text-xl font-mono border border-white/20 shadow-lg cursor-pointer transition-all z-30 active:scale-95"
-                      title="Next Look (Swipe Left)"
-                      aria-label="Next look"
-                    >
-                      ›
-                    </button>
+                    {currentLookIndex !== -1 && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 hover:bg-black text-white flex items-center justify-center text-xl font-mono border border-white/20 shadow-lg cursor-pointer transition-all z-30 active:scale-95"
+                          title="Previous Look (Swipe Right)"
+                          aria-label="Previous look"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 hover:bg-black text-white flex items-center justify-center text-xl font-mono border border-white/20 shadow-lg cursor-pointer transition-all z-30 active:scale-95"
+                          title="Next Look (Swipe Left)"
+                          aria-label="Next look"
+                        >
+                          ›
+                        </button>
+                      </>
+                    )}
                   </div>
 
                   {/* Bottom Counter Bar */}
                   <div className="w-full pt-2 z-30 flex items-center justify-between text-white/50 text-[8.5px] font-mono tracking-widest uppercase border-t border-white/10">
-                    <span>SWIPE OR USE ARROWS TO BROWSE</span>
-                    <span>{currentLookIndex + 1} / {allGalleryLooks.length}</span>
+                    <span>{currentLookIndex !== -1 ? 'SWIPE OR USE ARROWS TO BROWSE' : 'STYLE WITH J · TRANSFORMATION'}</span>
+                    <span>{currentLookIndex !== -1 ? `${currentLookIndex + 1} / ${allGalleryLooks.length}` : activeItem.details?.tag || ''}</span>
                   </div>
                 </div>
 
@@ -291,7 +297,9 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                     {/* Category & Look Number */}
                     <div className="flex items-center justify-between pb-4 border-b border-black/10">
                       <span className="font-mono text-[9px] tracking-[0.35em] uppercase text-black/50 font-bold">
-                        {activeItem.details?.num ? `LOOK /${activeItem.details.num}` : 'LOOKBOOK EDIT'}
+                        {currentLookIndex !== -1 
+                          ? (activeItem.details?.num ? `LOOK /${activeItem.details.num}` : 'LOOKBOOK EDIT')
+                          : (activeItem.details?.tag ? `${activeItem.details.tag} ARCHIVE` : 'TRANSFORMATION')}
                       </span>
                       <span className="px-3 py-1 bg-[#1A1A1A] text-white text-[8px] tracking-[0.25em] font-mono uppercase font-semibold rounded-xs">
                         {activeItem.details?.category || 'CURATED STYLE'}
@@ -342,22 +350,24 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
 
                   {/* Navigation controls between looks & CTA Action */}
                   <div className="pt-6 mt-6 border-t border-black/10 flex flex-col gap-3">
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={handlePrev}
-                        className="flex-1 py-3 border border-black/20 text-[9px] font-mono uppercase tracking-widest text-black hover:bg-black hover:text-white transition-all rounded-xs cursor-pointer text-center"
-                      >
-                        ← Prev Look
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleNext}
-                        className="flex-1 py-3 border border-black/20 text-[9px] font-mono uppercase tracking-widest text-black hover:bg-black hover:text-white transition-all rounded-xs text-center cursor-pointer"
-                      >
-                        Next Look →
-                      </button>
-                    </div>
+                    {currentLookIndex !== -1 && (
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handlePrev}
+                          className="flex-1 py-3 border border-black/20 text-[9px] font-mono uppercase tracking-widest text-black hover:bg-black hover:text-white transition-all rounded-xs cursor-pointer text-center"
+                        >
+                          ← Prev Look
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleNext}
+                          className="flex-1 py-3 border border-black/20 text-[9px] font-mono uppercase tracking-widest text-black hover:bg-black hover:text-white transition-all rounded-xs text-center cursor-pointer"
+                        >
+                          Next Look →
+                        </button>
+                      </div>
+                    )}
 
                     <Link
                       href="/connect"

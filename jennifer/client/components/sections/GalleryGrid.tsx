@@ -5,16 +5,24 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLooks } from '@/lib/use-looks';
+import { useSiteData } from '@/lib/use-site-data';
 import { useLightbox } from '@/components/ImageLightbox';
 import { Look } from '@/lib/looks-data';
 
 export default function GalleryGrid() {
   const [filter, setFilter] = useState<'all' | 'western' | 'evening' | 'resort' | 'bridal' | 'bespoke'>('all');
   const { looks, isLoaded } = useLooks();
+  const { responsive } = useSiteData();
   const { openLightbox } = useLightbox();
   const router = useRouter();
 
-  // Mobile Auto-Scroll Carousel State (reliable continuous timer)
+  // Responsive device settings
+  const carouselSpeed = responsive?.lookbookMobileCarouselSpeed ?? 4;
+  const isAutoPlay = carouselSpeed > 0;
+  const intervalMs = carouselSpeed * 1000;
+  const desktopCols = String(responsive?.lookbookDesktopColumns || 3);
+
+  // Mobile Auto-Scroll Carousel State
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -29,29 +37,31 @@ export default function GalleryGrid() {
   const total = filteredItems.length;
   const currentLook: Look | undefined = filteredItems[currentIndex] || filteredItems[0];
 
-  // Continuous auto-scroll effect for Lookbook mobile carousel (every 4s)
+  // Auto-scroll effect for Lookbook mobile carousel
   const resetTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
-      timerRef.current = setInterval(() => {
-        setDirection(1);
-        setCurrentIndex((prev) => (total > 0 ? (prev + 1) % total : 0));
-      }, 4000);
+      timerRef.current = null;
     }
+    if (!isAutoPlay) return;
+    timerRef.current = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex((prev) => (total > 0 ? (prev + 1) % total : 0));
+    }, intervalMs);
   };
 
   useEffect(() => {
-    if (total <= 1) return;
+    if (total <= 1 || !isAutoPlay) return;
 
     timerRef.current = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % total);
-    }, 4000);
+    }, intervalMs);
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [total]);
+  }, [total, isAutoPlay, intervalMs]);
 
   const handleNext = () => {
     if (total === 0) return;
@@ -290,7 +300,13 @@ export default function GalleryGrid() {
                    (Original clean grid - all new carousel/actions are for smaller devices only)
                ═══════════════════════════════════════════════════════════════════ */}
             <div className="hidden lg:block px-8 lg:px-20 py-16">
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              <div className={
+                desktopCols === '2'
+                  ? 'grid grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto'
+                  : desktopCols === '4'
+                  ? 'grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6'
+                  : 'grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'
+              }>
                 <AnimatePresence mode="popLayout">
                   {filteredItems.map((item, index) => (
                     <motion.div

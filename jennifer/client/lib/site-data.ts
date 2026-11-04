@@ -1,5 +1,5 @@
 // lib/site-data.ts
-// Shared types + seed data for all dynamic site content (Hero, About, Meet, Contact, Services, Clientele, Journal, Lookbook, Testimonials)
+// Shared types + seed data for all dynamic site content (Hero, About, Meet, Contact, Services, Clientele, Journal, Lookbook, Testimonials, Transformations)
 
 export interface HeroContent {
   eyebrow: string;
@@ -93,7 +93,72 @@ export interface JournalArticle {
   date?: string;
 }
 
+export interface TransformationReview {
+  rating: number;
+  quote: string;
+  author: string;
+  location: string;
+}
+
+export interface TransformationItem {
+  id: string;
+  client: string;
+  demographic: string;
+  concept: string;
+  beforeImg: string;
+  afterImg: string;
+  beforeStory: string;
+  afterStory: string;
+  review: TransformationReview;
+}
+
+export interface CtaBannerContent {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  buttonText: string;
+}
+
+export interface ResponsiveConfig {
+  heroDesktopImagePosition: string;
+  heroMobileImagePosition: string;
+  heroDesktopTitleSize: 'compact' | 'standard' | 'editorial' | string;
+  heroMobileTitleSize: 'compact' | 'standard' | 'prominent' | string;
+
+  transformationsDesktopHeight: '580px' | '640px' | '700px' | string;
+  transformationsMobileHeight: '48vh' | '55vh' | '65vh' | string;
+  transformationsCycleSpeed: number;
+
+  servicesMobileCarouselSpeed: number;
+
+  lookbookDesktopColumns: 2 | 3 | 4 | number;
+  lookbookMobileCarouselSpeed: number;
+}
+
 // ── SEED DATA DEFAULTS ──
+
+export const seedResponsiveConfig: ResponsiveConfig = {
+  heroDesktopImagePosition: 'center 50%',
+  heroMobileImagePosition: 'center 15%',
+  heroDesktopTitleSize: 'standard',
+  heroMobileTitleSize: 'standard',
+
+  transformationsDesktopHeight: '640px',
+  transformationsMobileHeight: '55vh',
+  transformationsCycleSpeed: 9,
+
+  servicesMobileCarouselSpeed: 7,
+
+  lookbookDesktopColumns: 3,
+  lookbookMobileCarouselSpeed: 4,
+};
+
+export const seedCtaBanner: CtaBannerContent = {
+  kicker: "BESPOKE STYLING",
+  title: "Ready for Your Complete Style Makeover?",
+  subtitle: "Discover an intentional wardrobe designed around your silhouette and authentic presence.",
+  buttonText: "Book The Makeover",
+};
 
 export const seedHeroContent: HeroContent = {
   eyebrow: "Personal Stylist",
@@ -293,5 +358,56 @@ export const seedArticles: JournalArticle[] = [
     category: "The Expensive Edit",
     image: "/images/includes/IMG_9158.JPG.jpeg",
     excerpt: "Focusing on fit, monochrome tailoring, and polished grooming — actionable advice for looking luxurious on any budget."
+  }
+];
+
+export const seedTransformations: TransformationItem[] = [
+  {
+    id: "01",
+    client: "THE MODERN PATRIARCH",
+    demographic: "MALE SILHOUETTE SYSTEM",
+    concept: "Monolithic wool structures and tailored minimalist layering.",
+    beforeImg: "/images/includes/IMG_8820.JPG.jpeg",
+    afterImg: "/images/includes/IMG_8863.JPG.jpeg",
+    beforeStory: "Relying on ill-fitting off-the-rack garments created a slouched shoulder line and diminished presence in executive boardrooms.",
+    afterStory: "Engineered a structured drop-line silhouette using heavy matte crepe and wool, restoring commanding posture and effortless authority.",
+    review: {
+      rating: 5,
+      quote: "Jennifer completely redefined how I perceive my silhouette. The change in how board members and peers respond was immediate. My wardrobe finally matches my seniority without feeling stiff.",
+      author: "R. Varma, Managing Partner",
+      location: "Bangalore"
+    }
+  },
+  {
+    id: "02",
+    client: "CULTURAL AVANT-GARDE LENS",
+    demographic: "MALE SILHOUETTE SYSTEM",
+    concept: "Structured architectural drops with historic tailored lines.",
+    beforeImg: "/images/includes/IMG_8777.JPG.jpeg",
+    afterImg: "/images/includes/IMG_8771.JPG.jpeg",
+    beforeStory: "Drowning in generic corporate neutrals that felt disconnected from his creative identity and Indian artisanal roots.",
+    afterStory: "Curated a bespoke matrix of handloom textured linen and architectural asymmetric cuts, merging heritage craftsmanship with modern ease.",
+    review: {
+      rating: 5,
+      quote: "The shift was extraordinary. People at events take note of the balance between raw Indian textures and sharp contemporary cuts. It is the first time clothes felt authentically mine.",
+      author: "K. Nambiar, Creative Director",
+      location: "Indiranagar"
+    }
+  },
+  {
+    id: "03",
+    client: "THE ARCHITECTURAL MINIMALIST",
+    demographic: "EVENING & OCCASION SILHOUETTE",
+    concept: "Razor-cut contouring and sculpted monochrome balance.",
+    beforeImg: "/images/Before.jpeg",
+    afterImg: "/images/After.jpeg",
+    beforeStory: "Struggled with standard evening silhouettes that constrained natural posture and felt overwhelmed by excess ornamentation.",
+    afterStory: "Crafted a razor-sharp monochrome silhouette with contour waist sculpting in midnight obsidian silk-wool, projecting pure modern elegance.",
+    review: {
+      rating: 5,
+      quote: "A true masterclass in proportion and restraint. Jennifer stripped away the unnecessary noise and built an evening look that makes me feel poised and invincible every single time.",
+      author: "P. Sen, Tech Founder",
+      location: "Whitefield"
+    }
   }
 ];

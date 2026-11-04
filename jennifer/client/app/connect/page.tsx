@@ -4,8 +4,10 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import AtelierFooter from '@/components/sections/AtelierFooter';
+import { useSiteData } from '@/lib/use-site-data';
 
 function ConnectContent() {
+  const { contact } = useSiteData();
   const searchParams = useSearchParams();
   const serviceParam = searchParams.get('service');
   const bookingParam = searchParams.get('booking');
@@ -14,8 +16,8 @@ function ConnectContent() {
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
   const [service, setService] = useState(
     serviceParam || (bookingParam === 'makeover' ? 'Full Transformation' : '')
   );
@@ -98,8 +100,8 @@ function ConnectContent() {
         body: JSON.stringify({
           firstName,
           lastName,
-          email,
           phone,
+          location,
           service,
           message,
           locationText,
@@ -148,25 +150,9 @@ function ConnectContent() {
               <h3 className="font-serif text-xl sm:text-2xl font-light text-white leading-snug">
                 Complete Style Makeover Package Selected
               </h3>
-              <p className="font-sans text-xs text-white/75 font-light leading-relaxed">
-                Your 1-on-1 wardrobe and silhouette transformation is ready to be scheduled. Complete the form below, and Jennifer will contact you directly to confirm your consultation timeline.
-              </p>
-            </div>
-            <div className="px-3.5 py-2 bg-white/10 border border-white/15 rounded-xs font-mono text-[9px] uppercase tracking-wider text-white/90 flex-shrink-0">
-              ✦ Direct Atelier Dispatch
             </div>
           </div>
         )}
-
-        {/* Dynamic Location Badge */}
-        <div className="mb-8 p-3.5 bg-[#EFECE6] border-l-2 border-[#1A1A1A] text-[9px] sm:text-[10px] font-mono tracking-wider text-black/75 flex items-center justify-between flex-wrap gap-2 rounded-xs">
-          <span>{locationText}</span>
-          <span className="text-[8px] uppercase font-bold text-black/60 px-2.5 py-1 bg-white rounded-xs border border-black/10">
-            {locationStatus === 'success' ? 'GPS Active 📍' : 'Location Optional'}
-          </span>
-        </div>
-
-        <h2 className="font-serif text-2xl sm:text-3xl font-light mb-8 text-[#1A1A1A]">Send Us a Message</h2>
 
         {submitted ? (
           <div className="p-8 sm:p-12 bg-[#EFECE6] border-2 border-black text-center flex flex-col items-center gap-5 rounded-xs shadow-md">
@@ -183,13 +169,13 @@ function ConnectContent() {
             </h3>
 
             <p className="font-sans text-xs sm:text-sm text-black/80 max-w-lg leading-relaxed font-light">
-              Thank you, <strong className="font-semibold text-black">{firstName}</strong>! Your consultation request, contact details, and location context have been transmitted directly to Jennifer at <strong className="font-semibold text-black">jennifer@stylewithj.in</strong>.
+              Thank you, <strong className="font-semibold text-black">{firstName}</strong>! Your consultation request, contact details, and location have been transmitted directly to Jennifer at <strong className="font-semibold text-black">jennifer@stylewithj.in</strong>.
             </p>
 
             <div className="p-4 bg-white/90 border border-black/10 text-left w-full max-w-md font-mono text-[9px] text-black/80 rounded-xs space-y-1.5 shadow-xs">
               <p><strong>Client Name:</strong> {firstName} {lastName}</p>
               <p><strong>Phone Number:</strong> {phone}</p>
-              <p><strong>Email Address:</strong> {email}</p>
+              <p><strong>Client Location:</strong> {location || 'Not provided'}</p>
               <p><strong>Selected Service:</strong> {service || 'General Inquiry'}</p>
               <p><strong>Detected Location:</strong> {locationText.replace('📍 ', '')}</p>
               {coords && (
@@ -202,8 +188,8 @@ function ConnectContent() {
                 setSubmitted(false);
                 setFirstName('');
                 setLastName('');
-                setEmail('');
                 setPhone('');
+                setLocation('');
                 setMessage('');
                 setService('');
               }}
@@ -220,93 +206,81 @@ function ConnectContent() {
               </div>
             )}
 
+            {/* Row 1: First Name & Last Name (Just Clean Placeholders, No Labels) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="flex flex-col gap-2">
-                <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">First Name *</label>
-                <input 
-                  type="text" 
-                  value={firstName}
-                  onChange={e => setFirstName(e.target.value)}
-                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" 
-                  required 
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Last Name *</label>
-                <input 
-                  type="text" 
-                  value={lastName}
-                  onChange={e => setLastName(e.target.value)}
-                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" 
-                  required 
-                />
-              </div>
+              <input 
+                type="text" 
+                value={firstName}
+                placeholder="First Name *"
+                onChange={e => setFirstName(e.target.value)}
+                className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                required 
+              />
+              <input 
+                type="text" 
+                value={lastName}
+                placeholder="Last Name *"
+                onChange={e => setLastName(e.target.value)}
+                className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                required 
+              />
             </div>
             
+            {/* Row 2: Phone Number & Location */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="flex flex-col gap-2">
-                <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Email *</label>
-                <input 
-                  type="email" 
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors" 
-                  required 
-                />
-              </div>
-              
-              <div className="flex flex-col gap-2">
-                <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Phone Number *</label>
-                <input 
-                  type="tel" 
-                  value={phone}
-                  placeholder="Enter your phone number (e.g., +91 80783 41747)"
-                  onChange={e => setPhone(e.target.value)}
-                  className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/35" 
-                  required 
-                />
-              </div>
+              <input 
+                type="tel" 
+                value={phone}
+                placeholder="Phone Number *"
+                onChange={e => setPhone(e.target.value)}
+                className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                required 
+              />
+              <input 
+                type="text" 
+                value={location}
+                placeholder="Location / City *"
+                onChange={e => setLocation(e.target.value)}
+                className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                required 
+              />
             </div>
 
-            {/* HIGH-FASHION DESIGNER VIBE DROPDOWN HEADING */}
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">
-                SELECT YOUR STYLING CURATION *
-              </label>
+            {/* Row 3: Styling Curation Service Selection */}
+            <div>
               <select 
                 value={service}
                 onChange={e => setService(e.target.value)}
-                className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none transition-colors text-black/90 cursor-pointer"
+                className="w-full bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black/90 cursor-pointer"
                 required
               >
-                <option value="" disabled className="bg-[#FAF8F3] text-black/50">Choose Your Desired Styling Service...</option>
+                <option value="" disabled className="bg-[#FAF8F3] text-black/45">Select Your Desired Styling Service *</option>
                 <option value="Personal Styling" className="bg-[#FAF8F3] text-black">Personal Styling</option>
-                <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling</option>
+                <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling & Audit</option>
                 <option value="Personal Shopping" className="bg-[#FAF8F3] text-black">Personal Shopping</option>
-                <option value="Occasion Styling" className="bg-[#FAF8F3] text-black">Occasion Styling</option>
-                <option value="Workwear Styling" className="bg-[#FAF8F3] text-black">Workwear Styling</option>
+                <option value="Occasion Styling" className="bg-[#FAF8F3] text-black">Occasion & Bridal Styling</option>
+                <option value="Workwear Styling" className="bg-[#FAF8F3] text-black">Executive Workwear Styling</option>
                 <option value="Full Transformation" className="bg-[#FAF8F3] text-black">Full Style Transformation</option>
                 <option value="Bespoke Consultation" className="bg-[#FAF8F3] text-black">Bespoke Consultation</option>
               </select>
             </div>
             
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs font-light tracking-wider text-black/60 uppercase">Message *</label>
-              <textarea 
-                rows={4} 
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                className="bg-transparent border-b border-black/30 pb-2 font-sans focus:border-black focus:outline-none resize-none transition-colors" 
-                required
-              ></textarea>
-            </div>
+            {/* Row 4: Message */}
+            <textarea 
+              rows={4} 
+              value={message}
+              placeholder="Your Message / Styling Goals *"
+              onChange={e => setMessage(e.target.value)}
+              className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none resize-none transition-colors text-black placeholder:text-black/45" 
+              required
+            ></textarea>
             
             <button 
               type="submit" 
               disabled={isSubmitting}
               className="w-full sm:w-auto self-start px-10 py-4 bg-black text-white font-sans text-xs font-medium uppercase tracking-[0.25em] hover:bg-black/85 transition-colors shadow-sm rounded-xs cursor-pointer disabled:opacity-50"
             >
-              {isSubmitting ? 'Transmitting Email...' : 'Submit Message →'}
+              {isSubmitting ? 'Transmitting Request...' : 'Submit Message →'}
             </button>
           </form>
         )}
@@ -317,20 +291,20 @@ function ConnectContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-12 font-sans text-base font-light text-black/80">
           <div className="bg-[#FAF8F3] border border-black/10 p-6 sm:p-8 rounded-sm">
             <h3 className="font-serif text-lg font-normal mb-3 text-[#1A1A1A]">Location</h3>
-            <p className="leading-relaxed text-sm text-black/75">DLF Emporio, Vasant Kunj<br />New Delhi, Delhi 110070</p>
+            <p className="leading-relaxed text-sm text-black/75 whitespace-pre-line">{contact?.address || "DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070"}</p>
           </div>
           
           <div className="bg-[#FAF8F3] border border-black/10 p-6 sm:p-8 rounded-sm">
             <h3 className="font-serif text-lg font-normal mb-3 text-[#1A1A1A]">Contact</h3>
             <p className="leading-relaxed text-sm text-black/75">
-              <a href="mailto:jennifer@stylewithj.in" className="hover:text-black hover:underline transition-colors block">jennifer@stylewithj.in</a>
-              <a href="tel:+918078341747" className="hover:text-black transition-colors block mt-1">+91 80783 41747</a>
+              <a href={`mailto:${contact?.email || 'jennifer@stylewithj.in'}`} className="hover:text-black hover:underline transition-colors block">{contact?.email || 'jennifer@stylewithj.in'}</a>
+              <a href={`tel:${contact?.phone?.replace(/\s+/g, '') || '+918078341747'}`} className="hover:text-black transition-colors block mt-1">{contact?.phone || '+91 80783 41747'}</a>
             </p>
           </div>
           
           <div className="bg-[#FAF8F3] border border-black/10 p-6 sm:p-8 rounded-sm">
             <h3 className="font-serif text-lg font-normal mb-3 text-[#1A1A1A]">Hours</h3>
-            <p className="leading-relaxed text-sm text-black/75">Mon - Fri: 9am - 6pm<br />Sat: 10am - 4pm<br />Sun: Closed</p>
+            <p className="leading-relaxed text-sm text-black/75 whitespace-pre-line">{contact?.hours || "Mon - Fri: 9am - 6pm\nSat: 10am - 4pm\nSun: Closed"}</p>
           </div>
         </div>
       </div>

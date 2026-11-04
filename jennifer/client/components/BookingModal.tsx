@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 
 export default function BookingModal() {
   const [firstName, setFirstName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
   const [service, setService] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,8 +22,8 @@ export default function BookingModal() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstName,
-          email,
           phone,
+          location,
           service,
           message: `Consultation Modal Request for ${service}`,
           locationText: 'Modal Direct Submission'
@@ -36,8 +36,8 @@ export default function BookingModal() {
 
       setSubmitted(true);
       setFirstName('');
-      setEmail('');
       setPhone('');
+      setLocation('');
       setService('');
     } catch (err: unknown) {
       console.error('Modal submission error:', err);
@@ -109,20 +109,20 @@ export default function BookingModal() {
               </div>
               <div>
                 <input 
-                  type="email" 
-                  placeholder="Email Address *" 
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  type="tel" 
+                  placeholder="Phone Number *" 
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
                   required 
                   className="w-full bg-white border border-black/15 rounded-xs p-3 text-xs text-black placeholder:text-black/40 focus:outline-none focus:border-black" 
                 />
               </div>
               <div>
                 <input 
-                  type="tel" 
-                  placeholder="Enter your phone number (e.g., +91 80783 41747) *" 
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
+                  type="text" 
+                  placeholder="Location / City *" 
+                  value={location}
+                  onChange={e => setLocation(e.target.value)}
                   required 
                   className="w-full bg-white border border-black/15 rounded-xs p-3 text-xs text-black placeholder:text-black/40 focus:outline-none focus:border-black" 
                 />
@@ -140,6 +140,8 @@ export default function BookingModal() {
                   <option value="Personal Shopping">Personal Shopping</option>
                   <option value="Occasion Styling">Occasion & Bridal Styling</option>
                   <option value="Workwear Styling">Executive Workwear Styling</option>
+                  <option value="Full Transformation">Full Style Transformation</option>
+                  <option value="Bespoke Consultation">Bespoke Consultation</option>
                 </select>
               </div>
               <button 
@@ -147,7 +149,7 @@ export default function BookingModal() {
                 disabled={isSubmitting}
                 className="w-full bg-[#1A1A1A] text-white rounded-xs p-3.5 text-[9px] font-mono font-bold tracking-[0.25em] uppercase hover:bg-black transition-colors mt-2 disabled:opacity-50 cursor-pointer"
               >
-                {isSubmitting ? 'Transmitting...' : 'Submit Consultation Request →'}
+                {isSubmitting ? 'Transmitting Request...' : 'Submit Consultation Request →'}
               </button>
             </form>
           )}

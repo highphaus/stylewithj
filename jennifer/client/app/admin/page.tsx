@@ -5,19 +5,24 @@ import Link from 'next/link';
 import { Look } from '@/lib/looks-data';
 import { useLooks } from '@/lib/use-looks';
 import { useSiteData } from '@/lib/use-site-data';
-import { ServiceItem, AudienceItem, JournalArticle, TestimonialItem } from '@/lib/site-data';
+import { 
+  ServiceItem, AudienceItem, JournalArticle, TestimonialItem, 
+  TransformationItem, ResponsiveConfig, CtaBannerContent 
+} from '@/lib/site-data';
 
 type TabType = 
-  | 'lookbook' 
   | 'hero'
+  | 'transformations' 
+  | 'services' 
+  | 'lookbook' 
   | 'about'
   | 'meet'
-  | 'services' 
   | 'audiences' 
   | 'articles' 
   | 'testimonials'
   | 'contact'
-  | 'mailbox';
+  | 'cta'
+  | 'responsive';
 
 const EMPTY_LOOK: Omit<Look, 'id' | 'num'> = {
   title: '',
@@ -62,12 +67,28 @@ const EMPTY_TESTIMONIAL: Omit<TestimonialItem, 'id'> = {
   avatar: '',
 };
 
+const EMPTY_TRANSFORMATION: Omit<TransformationItem, 'id'> = {
+  client: '',
+  demographic: '',
+  concept: '',
+  beforeImg: '',
+  afterImg: '',
+  beforeStory: '',
+  afterStory: '',
+  review: {
+    rating: 5,
+    quote: '',
+    author: '',
+    location: '',
+  },
+};
+
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
-  const [activeTab, setActiveTab] = useState<TabType>('lookbook');
+  const [activeTab, setActiveTab] = useState<TabType>('hero');
 
   // Custom Hooks
   const { looks, addLook, updateLook, deleteLook } = useLooks();
@@ -80,6 +101,9 @@ export default function AdminPage() {
     services, addService, updateService, deleteService,
     audiences, addAudience, updateAudience, deleteAudience,
     articles, addArticle, updateArticle, deleteArticle,
+    transformations, addTransformation, updateTransformation, deleteTransformation,
+    ctaBanner, updateCtaBanner,
+    responsive, updateResponsive,
     resetAllSiteData
   } = useSiteData();
 
@@ -95,13 +119,44 @@ export default function AdminPage() {
   const [audienceForm, setAudienceForm] = useState<Omit<AudienceItem, 'id'>>(EMPTY_AUDIENCE);
   const [articleForm, setArticleForm] = useState<Omit<JournalArticle, 'id' | 'num'>>(EMPTY_ARTICLE);
   const [testimonialForm, setTestimonialForm] = useState<Omit<TestimonialItem, 'id'>>(EMPTY_TESTIMONIAL);
+  const [transformationForm, setTransformationForm] = useState<Omit<TransformationItem, 'id'>>(EMPTY_TRANSFORMATION);
 
   // Section level forms
   const [tempHero, setTempHero] = useState(hero);
   const [tempAbout, setTempAbout] = useState(about);
   const [tempMeet, setTempMeet] = useState(meet);
   const [tempContact, setTempContact] = useState(contact);
+  const [tempCta, setTempCta] = useState(ctaBanner);
+  const [tempResponsive, setTempResponsive] = useState<ResponsiveConfig>(responsive);
   const [heroPreviewDevice, setHeroPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
+
+  // Live Interactive Device Simulator states
+  const [simulatorDevice, setSimulatorDevice] = useState<'mobile' | 'mobile-mini' | 'tablet' | 'desktop' | 'custom'>('mobile');
+  const [simulatorWidth, setSimulatorWidth] = useState<number>(390);
+  const [simulatorPage, setSimulatorPage] = useState<string>('/');
+  const [simulatorScale, setSimulatorScale] = useState<number>(1);
+  const [simulatorIframeKey, setSimulatorIframeKey] = useState<number>(1);
+  const [showDeviceSimulatorModal, setShowDeviceSimulatorModal] = useState<boolean>(false);
+
+  const targetWidth = simulatorDevice === 'mobile' 
+    ? 390 
+    : simulatorDevice === 'mobile-mini' 
+    ? 360 
+    : simulatorDevice === 'tablet' 
+    ? 768 
+    : simulatorDevice === 'desktop' 
+    ? 1240 
+    : simulatorWidth;
+
+  const targetHeight = simulatorDevice === 'mobile' 
+    ? 740 
+    : simulatorDevice === 'mobile-mini' 
+    ? 660 
+    : simulatorDevice === 'tablet' 
+    ? 840 
+    : simulatorDevice === 'desktop' 
+    ? 800 
+    : 740;
 
   useEffect(() => {
     const stored = sessionStorage.getItem('swj_admin');
@@ -112,6 +167,8 @@ export default function AdminPage() {
   useEffect(() => { setTempAbout(about); }, [about]);
   useEffect(() => { setTempMeet(meet); }, [meet]);
   useEffect(() => { setTempContact(contact); }, [contact]);
+  useEffect(() => { setTempCta(ctaBanner); }, [ctaBanner]);
+  useEffect(() => { setTempResponsive(responsive); }, [responsive]);
 
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -139,19 +196,36 @@ export default function AdminPage() {
 
   function showToast() {
     setSaved(true);
-    setTimeout(() => setSaved(false), 2200);
+    setSimulatorIframeKey(k => k + 1);
+    setTimeout(() => setSaved(false), 2400);
   }
+
+  // Navigation tab list with item counts
+  const tabList: { id: TabType; label: string; count?: number }[] = [
+    { id: 'hero', label: '🌟 Hero Section' },
+    { id: 'transformations', label: '🔄 Transformations', count: transformations.length },
+    { id: 'services', label: '✦ Services', count: services.length },
+    { id: 'lookbook', label: '📸 Lookbook & Gallery', count: looks.length },
+    { id: 'about', label: '📖 About Section' },
+    { id: 'meet', label: '👤 Meet Jennifer' },
+    { id: 'audiences', label: '👥 Clientele', count: audiences.length },
+    { id: 'articles', label: '📰 Journal', count: articles.length },
+    { id: 'testimonials', label: '💬 Reviews', count: testimonials.length },
+    { id: 'contact', label: '📍 Studio & Contact' },
+    { id: 'cta', label: '📣 Makeover CTA' },
+    { id: 'responsive', label: '📱 Responsive & Devices' },
+  ];
 
   // ── LOGIN GATE ──
   if (!authed) {
     return (
-      <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] flex flex-col items-center justify-center p-6 select-none">
-        <div className="w-full max-w-md bg-[#EFECE6] border border-black/15 p-8 sm:p-12 rounded-xs shadow-[0_20px_50px_rgba(0,0,0,0.06)] text-center flex flex-col items-center gap-6">
-          <div className="flex flex-col items-center gap-2">
+      <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] flex flex-col items-center justify-center p-4 sm:p-6 select-none">
+        <div className="w-full max-w-md bg-[#EFECE6] border border-black/15 p-6 sm:p-10 rounded-xs shadow-[0_20px_50px_rgba(0,0,0,0.06)] text-center flex flex-col items-center gap-5 sm:gap-6">
+          <div className="flex flex-col items-center gap-1.5 sm:gap-2">
             <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-black/50 font-bold">
               ✦ ATELIER PORTAL
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A1A]">
+            <h1 className="font-serif text-2xl sm:text-4xl font-light text-[#1A1A1A]">
               Admin Management
             </h1>
           </div>
@@ -159,41 +233,34 @@ export default function AdminPage() {
           <div className="w-12 h-px bg-black/20" />
 
           <p className="font-sans text-xs text-black/75 leading-relaxed font-light">
-            This private administration portal is reserved for Jennifer to add, edit, and curate all text, images, and content across all website pages.
+            Private management portal for Jennifer to edit, add, or delete all text, case studies, images, and services across all devices.
           </p>
 
-          <form onSubmit={handleLogin} className="w-full flex flex-col gap-4 mt-2">
-            <div className="flex flex-col gap-1.5 text-left">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">
-                ENTER ADMIN PASSWORD
-              </label>
-              <div className="relative w-full">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="e.g. jennifer2026"
-                  className="w-full pl-4 pr-11 py-3 border border-black/20 bg-white font-sans text-sm text-[#1A1A1A] placeholder-black/30 rounded-xs outline-none focus:border-black transition-colors"
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-black/40 hover:text-black transition-colors"
-                  title={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 014.122-.971c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" />
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  )}
-                </button>
-              </div>
+          <form onSubmit={handleLogin} className="w-full flex flex-col gap-3.5 mt-1">
+            <div className="relative w-full">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setAuthError('');
+                }}
+                placeholder="Enter password..."
+                className="w-full px-4 py-3 bg-white border border-black/20 font-mono text-xs text-[#1A1A1A] placeholder:text-black/35 rounded-xs outline-none focus:border-black/60 transition-colors"
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[9px] uppercase tracking-wider text-black/40 hover:text-black transition-colors cursor-pointer select-none"
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between px-1 text-[9.5px] font-mono text-black/50">
+              <span>Password hint: <strong className="text-black font-semibold">jennifer2026</strong></span>
+              <span>Atelier Security</span>
             </div>
 
             {authError && (
@@ -204,16 +271,16 @@ export default function AdminPage() {
 
             <button
               type="submit"
-              className="w-full py-3.5 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
+              className="w-full py-3.5 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md cursor-pointer"
             >
               Sign In to Management Portal →
             </button>
           </form>
 
-          <div className="pt-4 border-t border-black/10 w-full flex items-center justify-between text-[9px] font-mono text-black/40">
+          <div className="pt-3 border-t border-black/10 w-full flex items-center justify-between text-[9px] font-mono text-black/40">
             <span>Style with J Atelier</span>
             <Link href="/" className="hover:text-black transition-colors">
-              ← Return to Main Website
+              ← Return to Live Website
             </Link>
           </div>
         </div>
@@ -253,6 +320,7 @@ export default function AdminPage() {
                 <option>EVENING</option>
                 <option>RESORT</option>
                 <option>BESPOKE</option>
+                <option>BRIDAL</option>
               </select>
             </div>
           </div>
@@ -321,13 +389,13 @@ export default function AdminPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Key Offerings / Service Highlights (One item per line)</label>
+            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Key Deliverables (one per line)</label>
             <textarea
               value={(serviceForm.points || []).join('\n')}
-              onChange={e => setServiceForm(p => ({ ...p, points: e.target.value.split('\n').map(s => s.trim()).filter(Boolean) }))}
+              onChange={e => setServiceForm(p => ({ ...p, points: e.target.value.split('\n').filter(Boolean) }))}
               rows={4}
-              placeholder="e.g.&#10;Wardrobe Auditing & Architectural Reorganization&#10;Personal Color Palette & Silhouette Profiling&#10;Seasonal Capsule Curation & Lookbook Generation"
-              className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none font-mono"
+              placeholder="Silhouette Consultation&#10;Wardrobe Audit&#10;Color Palette Mapping"
+              className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none font-mono text-[11px]"
             />
           </div>
 
@@ -337,10 +405,138 @@ export default function AdminPage() {
     );
   }
 
-  // ── ADD/EDIT FORM FOR AUDIENCE ──
+  // ── ADD/EDIT FORM FOR TRANSFORMATIONS ──
+  if ((view === 'add' || view === 'edit') && activeTab === 'transformations') {
+    return (
+      <FormWrapper title={view === 'add' ? 'Add Transformation Case Study' : 'Edit Transformation'} onBack={() => setView('list')}>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          if (view === 'add') addTransformation(transformationForm);
+          else if (editingId) updateTransformation(editingId, transformationForm);
+          showToast();
+          setView('list');
+        }} className="flex flex-col gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormField label="Client Name" value={transformationForm.client} onChange={v => setTransformationForm(p => ({ ...p, client: v }))} placeholder="e.g. Ananya R." required />
+            <FormField label="Demographic / Role" value={transformationForm.demographic} onChange={v => setTransformationForm(p => ({ ...p, demographic: v }))} placeholder="e.g. Tech Founder & Speaker" required />
+          </div>
+
+          <FormField label="Transformation Concept" value={transformationForm.concept} onChange={v => setTransformationForm(p => ({ ...p, concept: v }))} placeholder="e.g. Sartorial Authority to Quiet Luxury" required />
+
+          {/* Dual Photo Uploads */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 sm:p-5 bg-[#EFECE6]/40 border border-black/10 rounded-xs">
+            <div>
+              <span className="font-mono text-[8.5px] uppercase tracking-wider text-black/60 font-bold block mb-2">1. BEFORE PHOTO</span>
+              <ImageUploadField image={transformationForm.beforeImg} onImageChange={(img) => setTransformationForm(p => ({ ...p, beforeImg: img }))} />
+            </div>
+            <div>
+              <span className="font-mono text-[8.5px] uppercase tracking-wider text-black/60 font-bold block mb-2">2. AFTER PHOTO</span>
+              <ImageUploadField image={transformationForm.afterImg} onImageChange={(img) => setTransformationForm(p => ({ ...p, afterImg: img }))} />
+            </div>
+          </div>
+
+          {/* Storytelling before and after */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Before Storytelling *</label>
+              <textarea
+                value={transformationForm.beforeStory}
+                onChange={e => setTransformationForm(p => ({ ...p, beforeStory: e.target.value }))}
+                rows={4}
+                placeholder="Describe the client's wardrobe pain points, color hesitation, silhouette mismatches..."
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">After Storytelling *</label>
+              <textarea
+                value={transformationForm.afterStory}
+                onChange={e => setTransformationForm(p => ({ ...p, afterStory: e.target.value }))}
+                rows={4}
+                placeholder="Describe the intentional wardrobe curation, silhouette restructuring, presence shift..."
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Review Card Information */}
+          <div className="flex flex-col gap-4 p-4 sm:p-5 bg-white border border-black/10 rounded-xs">
+            <div className="flex items-center justify-between border-b border-black/10 pb-2">
+              <span className="font-mono text-[8.5px] uppercase tracking-wider text-black/60 font-bold">
+                CLIENT REVIEW CARD (CONTENT ONLY)
+              </span>
+              <div className="flex items-center gap-1 text-amber-500 text-xs">
+                {'★'.repeat(transformationForm.review?.rating || 5)}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Client Review Quote *</label>
+              <textarea
+                value={transformationForm.review?.quote || ''}
+                onChange={e => setTransformationForm(p => ({ 
+                  ...p, 
+                  review: { ...(p.review || { rating: 5, quote: '', author: '', location: '' }), quote: e.target.value } 
+                }))}
+                rows={3}
+                placeholder="Quote from the client describing how they feel in their new wardrobe..."
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <FormField 
+                label="Author Name" 
+                value={transformationForm.review?.author || ''} 
+                onChange={v => setTransformationForm(p => ({ 
+                  ...p, 
+                  review: { ...(p.review || { rating: 5, quote: '', author: '', location: '' }), author: v } 
+                }))} 
+                placeholder="e.g. Ananya R." 
+                required 
+              />
+              <FormField 
+                label="Location" 
+                value={transformationForm.review?.location || ''} 
+                onChange={v => setTransformationForm(p => ({ 
+                  ...p, 
+                  review: { ...(p.review || { rating: 5, quote: '', author: '', location: '' }), location: v } 
+                }))} 
+                placeholder="e.g. Bangalore, India" 
+                required 
+              />
+              <div className="flex flex-col gap-1.5">
+                <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Star Rating</label>
+                <select
+                  value={transformationForm.review?.rating || 5}
+                  onChange={e => setTransformationForm(p => ({ 
+                    ...p, 
+                    review: { ...(p.review || { quote: '', author: '', location: '', rating: 5 }), rating: Number(e.target.value) } 
+                  }))}
+                  className="w-full px-4 py-2.5 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40"
+                >
+                  <option value={5}>★★★★★ (5 Stars)</option>
+                  <option value={4}>★★★★☆ (4 Stars)</option>
+                  <option value={3}>★★★☆☆ (3 Stars)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <SubmitButtons isAdd={view === 'add'} onCancel={() => setView('list')} />
+        </form>
+      </FormWrapper>
+    );
+  }
+
+  // ── ADD/EDIT FORM FOR AUDIENCES (CLIENTELE) ──
   if ((view === 'add' || view === 'edit') && activeTab === 'audiences') {
     return (
-      <FormWrapper title={view === 'add' ? 'Add New Clientele Card (Who We Accompany)' : 'Edit Clientele Card'} onBack={() => setView('list')}>
+      <FormWrapper title={view === 'add' ? 'Add Clientele Segment' : 'Edit Clientele Segment'} onBack={() => setView('list')}>
         <form onSubmit={(e) => {
           e.preventDefault();
           if (view === 'add') addAudience(audienceForm);
@@ -351,20 +547,21 @@ export default function AdminPage() {
 
           <ImageUploadField image={audienceForm.image} onImageChange={(img) => setAudienceForm(p => ({ ...p, image: img }))} />
 
-          <FormField label="Clientele Title" value={audienceForm.title} onChange={v => setAudienceForm(p => ({ ...p, title: v }))} placeholder="e.g. Creators & Influencers" required />
-          <FormField label="Keyword Watermark" value={audienceForm.keyword} onChange={v => setAudienceForm(p => ({ ...p, keyword: v }))} placeholder="e.g. Distinction" required />
-          <FormField label="URL Slug" value={audienceForm.slug} onChange={v => setAudienceForm(p => ({ ...p, slug: v }))} placeholder="e.g. creators" required />
+          <FormField label="Keyword / Focus" value={audienceForm.keyword} onChange={v => setAudienceForm(p => ({ ...p, keyword: v }))} placeholder="e.g. Corporate Executives" required />
+          <FormField label="Full Title Headline" value={audienceForm.title} onChange={v => setAudienceForm(p => ({ ...p, title: v }))} placeholder="e.g. Leaders Stepping into Boardrooms" required />
 
           <div className="flex flex-col gap-1.5">
-            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Description *</label>
+            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Segment Description *</label>
             <textarea
               value={audienceForm.desc}
               onChange={e => setAudienceForm(p => ({ ...p, desc: e.target.value }))}
-              rows={4}
+              rows={3}
               className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
               required
             />
           </div>
+
+          <FormField label="URL Slug" value={audienceForm.slug} onChange={v => setAudienceForm(p => ({ ...p, slug: v }))} placeholder="e.g. corporate-executives" required />
 
           <SubmitButtons isAdd={view === 'add'} onCancel={() => setView('list')} />
         </form>
@@ -372,10 +569,10 @@ export default function AdminPage() {
     );
   }
 
-  // ── ADD/EDIT FORM FOR JOURNAL ──
+  // ── ADD/EDIT FORM FOR JOURNAL ARTICLES ──
   if ((view === 'add' || view === 'edit') && activeTab === 'articles') {
     return (
-      <FormWrapper title={view === 'add' ? 'Add New Journal Article' : 'Edit Journal Article'} onBack={() => setView('list')}>
+      <FormWrapper title={view === 'add' ? 'Add Journal Article' : 'Edit Journal Article'} onBack={() => setView('list')}>
         <form onSubmit={(e) => {
           e.preventDefault();
           if (view === 'add') addArticle(articleForm);
@@ -386,11 +583,11 @@ export default function AdminPage() {
 
           <ImageUploadField image={articleForm.image} onImageChange={(img) => setArticleForm(p => ({ ...p, image: img }))} />
 
-          <FormField label="Article Title" value={articleForm.title} onChange={v => setArticleForm(p => ({ ...p, title: v }))} required />
-          <FormField label="Category Badge" value={articleForm.category} onChange={v => setArticleForm(p => ({ ...p, category: v }))} placeholder="e.g. The Style Edit" required />
+          <FormField label="Article Headline" value={articleForm.title} onChange={v => setArticleForm(p => ({ ...p, title: v }))} placeholder="e.g. The Architecture of Personal Presence" required />
+          <FormField label="Category Badge" value={articleForm.category} onChange={v => setArticleForm(p => ({ ...p, category: v }))} placeholder="e.g. Editorial Notes" required />
 
           <div className="flex flex-col gap-1.5">
-            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Article Excerpt *</label>
+            <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Excerpt / Summary *</label>
             <textarea
               value={articleForm.excerpt}
               onChange={e => setArticleForm(p => ({ ...p, excerpt: e.target.value }))}
@@ -409,7 +606,7 @@ export default function AdminPage() {
   // ── ADD/EDIT FORM FOR TESTIMONIALS ──
   if ((view === 'add' || view === 'edit') && activeTab === 'testimonials') {
     return (
-      <FormWrapper title={view === 'add' ? 'Add Client Review' : 'Edit Review'} onBack={() => setView('list')}>
+      <FormWrapper title={view === 'add' ? 'Add Client Review' : 'Edit Client Review'} onBack={() => setView('list')}>
         <form onSubmit={(e) => {
           e.preventDefault();
           if (view === 'add') addTestimonial(testimonialForm);
@@ -417,8 +614,6 @@ export default function AdminPage() {
           showToast();
           setView('list');
         }} className="flex flex-col gap-6">
-
-          <ImageUploadField image={testimonialForm.avatar || ''} onImageChange={(img) => setTestimonialForm(p => ({ ...p, avatar: img }))} />
 
           <FormField label="Client Name" value={testimonialForm.name} onChange={v => setTestimonialForm(p => ({ ...p, name: v }))} placeholder="e.g. Ananya R." required />
           <FormField label="Client Role" value={testimonialForm.role} onChange={v => setTestimonialForm(p => ({ ...p, role: v }))} placeholder="e.g. Founder & CEO" required />
@@ -444,40 +639,65 @@ export default function AdminPage() {
   // ── MAIN DASHBOARD (WITH ALL SECTION TABS) ──
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
-      {/* Header */}
-      <header className="border-b border-black/10 bg-white sticky top-0 z-50 px-6 sm:px-12 py-4 flex items-center justify-between shadow-xs">
-        <div>
-          <span className="font-mono text-[8px] tracking-[0.35em] uppercase text-black/40 font-bold block">STYLE WITH J</span>
-          <h1 className="font-serif text-xl font-light text-[#1A1A1A]">Full Site Management Portal</h1>
+      {/* Header Bar - Fully Responsive for Mobile, Tablet & Desktop */}
+      <header className="border-b border-black/10 bg-white/95 backdrop-blur-xs sticky top-0 z-50 px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <div>
+            <span className="font-mono text-[8px] tracking-[0.35em] uppercase text-black/40 font-bold block">STYLE WITH J</span>
+            <h1 className="font-serif text-lg sm:text-xl font-light text-[#1A1A1A]">Site Management Portal</h1>
+          </div>
+          <div className="sm:hidden flex items-center gap-3">
+            <button 
+              type="button"
+              onClick={() => setShowDeviceSimulatorModal(true)} 
+              className="font-mono text-[8.5px] tracking-wider uppercase text-black font-semibold border-b border-black pb-0.5 cursor-pointer"
+            >
+              📱 Devices
+            </button>
+            <Link href="/" target="_blank" className="font-mono text-[8.5px] tracking-wider uppercase text-black/60 hover:text-black">
+              Live Site ↗
+            </Link>
+            <button onClick={handleLogout} className="font-mono text-[8.5px] tracking-wider uppercase text-red-600 font-semibold cursor-pointer">
+              Exit
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <button onClick={() => setResetModal(true)} className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber-700 hover:text-amber-900 transition-colors">
+
+        <div className="hidden sm:flex items-center gap-4">
+          <button
+            type="button"
+            onClick={() => setShowDeviceSimulatorModal(true)}
+            className="px-3 py-1.5 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9px] uppercase tracking-[0.2em] rounded-xs cursor-pointer flex items-center gap-1.5 shadow-xs transition-colors"
+          >
+            <span>📱 View On Devices</span>
+          </button>
+          <button onClick={() => setResetModal(true)} className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber-700 hover:text-amber-900 transition-colors cursor-pointer">
             Reset Seeds
           </button>
           <Link href="/" target="_blank" className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/60 hover:text-black transition-colors">
             View Live Site →
           </Link>
-          <button onClick={handleLogout} className="font-mono text-[9px] tracking-[0.2em] uppercase text-red-600 hover:text-red-800 transition-colors">
+          <button onClick={handleLogout} className="font-mono text-[9px] tracking-[0.2em] uppercase text-red-600 hover:text-red-800 transition-colors cursor-pointer">
             Sign Out
           </button>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-12 py-10 flex flex-col gap-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-10 flex flex-col gap-6 sm:gap-8">
         {/* Toast */}
         {saved && (
-          <div className="fixed bottom-6 right-6 bg-black text-white px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase rounded-xs shadow-lg z-50">
+          <div className="fixed bottom-6 right-6 bg-black text-white px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase rounded-xs shadow-lg z-50 animate-bounce">
             ✓ Changes Saved Successfully
           </div>
         )}
 
         {/* Reset modal */}
         {resetModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-6 z-50">
-            <div className="bg-white border border-black/15 p-8 max-w-md w-full rounded-xs flex flex-col gap-4 text-center">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 z-50">
+            <div className="bg-white border border-black/15 p-6 sm:p-8 max-w-md w-full rounded-xs flex flex-col gap-4 text-center shadow-xl">
               <h3 className="font-serif text-xl text-black">Reset All Website Content?</h3>
               <p className="font-sans text-xs text-black/60 leading-relaxed">
-                This will restore all Hero, About, Meet, Services, Clientele, Journal, and Contact content to initial seed defaults.
+                This will restore all Hero, About, Meet, Transformations, Services, Clientele, Journal, Testimonials, and Contact content to initial seed defaults.
               </p>
               <div className="flex gap-3 mt-4">
                 <button
@@ -486,13 +706,13 @@ export default function AdminPage() {
                     setResetModal(false);
                     showToast();
                   }}
-                  className="flex-1 py-3 bg-red-600 text-white font-mono text-[10px] uppercase tracking-wider rounded-xs"
+                  className="flex-1 py-3 bg-red-600 text-white font-mono text-[10px] uppercase tracking-wider rounded-xs cursor-pointer hover:bg-red-700"
                 >
-                  Yes, Reset All Data
+                  Yes, Reset All
                 </button>
                 <button
                   onClick={() => setResetModal(false)}
-                  className="flex-1 py-3 border border-black/20 font-mono text-[10px] uppercase tracking-wider rounded-xs"
+                  className="flex-1 py-3 border border-black/20 font-mono text-[10px] uppercase tracking-wider rounded-xs cursor-pointer hover:bg-black/5"
                 >
                   Cancel
                 </button>
@@ -501,35 +721,227 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* ── SECTION TABS ── */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-black/10 pb-4">
-          {[
-            { id: 'hero', label: '🌟 Hero Section' },
-            { id: 'about', label: '📖 About Section' },
-            { id: 'meet', label: '👤 Meet Jennifer' },
-            { id: 'lookbook', label: '📸 Lookbook & Gallery' },
-            { id: 'services', label: '✦ Services (What We Do)' },
-            { id: 'audiences', label: '👥 Clientele' },
-            { id: 'articles', label: '📰 Journal Articles' },
-            { id: 'testimonials', label: '💬 Testimonials' },
-            { id: 'contact', label: '📍 Contact & Info' },
-            { id: 'mailbox', label: '✉️ Mailbox & SMTP (.env)' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id as TabType);
+        {/* ── FULL SCREEN LIVE DEVICE SIMULATOR MODAL ── */}
+        {showDeviceSimulatorModal && (
+          <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex flex-col z-50 p-2 sm:p-5 overflow-y-auto">
+            <div className="max-w-6xl w-full mx-auto flex flex-col gap-3 my-auto">
+              {/* Modal Top Bar */}
+              <div className="bg-[#1C1C1C] text-white p-3 sm:p-4 rounded-t-xl border border-white/15 flex flex-wrap items-center justify-between gap-3 shadow-xl">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-white/50 font-bold">
+                    ✦ DEVICE SIMULATOR
+                  </span>
+                  <span className="font-serif text-base sm:text-lg font-light text-white">
+                    Live Viewport: {targetWidth}px × {targetHeight}px
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowDeviceSimulatorModal(false)}
+                  className="px-3 py-1 bg-white/10 hover:bg-white/25 text-white font-mono text-[9px] uppercase tracking-wider rounded-xs cursor-pointer flex items-center gap-1.5 transition-colors"
+                >
+                  <span>✕ Close Simulator</span>
+                </button>
+              </div>
+
+              {/* Controls bar inside modal */}
+              <div className="bg-[#242424] text-white p-3 border-x border-white/15 flex flex-wrap items-center justify-between gap-2.5">
+                <div className="flex flex-wrap items-center gap-1">
+                  <span className="font-mono text-[7.5px] uppercase tracking-wider text-white/40 font-bold mr-1">DEVICE:</span>
+                  {[
+                    { id: 'mobile', label: '📱 iPhone (390px)', w: 390, s: 1 },
+                    { id: 'mobile-mini', label: '📱 Compact (360px)', w: 360, s: 1 },
+                    { id: 'tablet', label: '📟 iPad (768px)', w: 768, s: 0.9 },
+                    { id: 'desktop', label: '💻 Desktop (1240px)', w: 1240, s: 0.72 },
+                    { id: 'custom', label: '📐 Custom', w: simulatorWidth, s: 1 },
+                  ].map(dev => (
+                    <button
+                      key={dev.id}
+                      type="button"
+                      onClick={() => {
+                        setSimulatorDevice(dev.id as any);
+                        if (dev.id !== 'custom') {
+                          setSimulatorWidth(dev.w);
+                          setSimulatorScale(dev.s);
+                        }
+                      }}
+                      className={`px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer transition-all ${
+                        simulatorDevice === dev.id
+                          ? 'bg-white text-black font-semibold shadow-xs'
+                          : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
+                      }`}
+                    >
+                      {dev.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <span className="font-mono text-[7.5px] uppercase tracking-wider text-white/40 font-bold mr-1">ZOOM:</span>
+                  {[
+                    { scale: 1, label: '100%' },
+                    { scale: 0.85, label: '85%' },
+                    { scale: 0.72, label: '72%' },
+                    { scale: 0.55, label: '55%' },
+                  ].map(z => (
+                    <button
+                      key={z.scale}
+                      type="button"
+                      onClick={() => setSimulatorScale(z.scale)}
+                      className={`px-2 py-0.5 font-mono text-[8px] rounded-xs cursor-pointer transition-colors ${
+                        simulatorScale === z.scale
+                          ? 'bg-amber-400 text-black font-bold'
+                          : 'bg-white/10 text-white/60 hover:text-white'
+                      }`}
+                    >
+                      {z.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Page Selector bar */}
+              <div className="bg-[#1C1C1C] text-white px-3 py-2 border-x border-white/15 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-1">
+                  <span className="font-mono text-[7.5px] uppercase tracking-wider text-white/40 font-bold mr-1">PAGE:</span>
+                  {[
+                    { path: '/', label: '🏠 Home' },
+                    { path: '/#transformations', label: '🔄 Transformations' },
+                    { path: '/#services', label: '✦ Services' },
+                    { path: '/lookbook', label: '📸 Lookbook' },
+                    { path: '/about', label: '📖 About' },
+                    { path: '/connect', label: '📍 Connect' },
+                  ].map(pg => (
+                    <button
+                      key={pg.path}
+                      type="button"
+                      onClick={() => {
+                        setSimulatorPage(pg.path);
+                        setSimulatorIframeKey(k => k + 1);
+                      }}
+                      className={`px-2 py-0.5 font-mono text-[8px] uppercase tracking-wider rounded-xs cursor-pointer transition-colors ${
+                        simulatorPage === pg.path
+                          ? 'bg-amber-400 text-black font-semibold'
+                          : 'bg-white/10 text-white/70 hover:bg-white/20'
+                      }`}
+                    >
+                      {pg.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSimulatorIframeKey(k => k + 1)}
+                    className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer flex items-center gap-1"
+                  >
+                    ↻ Reload
+                  </button>
+                  <a
+                    href={simulatorPage}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs flex items-center gap-1"
+                  >
+                    ↗ New Tab
+                  </a>
+                </div>
+              </div>
+
+              {/* Viewport Frame in Modal */}
+              <div className="bg-[#0E0E0E] p-4 sm:p-6 rounded-b-xl border-x border-b border-white/15 flex justify-center overflow-x-auto min-h-[550px] shadow-2xl">
+                <div className="flex flex-col items-center my-auto">
+                  <div
+                    style={{ width: `${Math.round(targetWidth * simulatorScale)}px` }}
+                    className="bg-[#242424] text-white px-3 py-1.5 flex items-center justify-between border-t border-x border-white/15 rounded-t-xl"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] inline-block" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] inline-block" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] inline-block" />
+                      <span className="ml-2 font-mono text-[8px] text-white/50 tracking-wider">
+                        {targetWidth}px ({Math.round(simulatorScale * 100)}%)
+                      </span>
+                    </div>
+                    <span className="font-mono text-[8px] text-white/40 truncate max-w-[200px]">
+                      stylewithj.com{simulatorPage}
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      width: `${Math.round(targetWidth * simulatorScale)}px`,
+                      height: `${Math.round(targetHeight * simulatorScale)}px`,
+                      overflow: 'hidden',
+                    }}
+                    className="bg-white rounded-b-xl shadow-2xl border-b border-x border-white/15 relative"
+                  >
+                    <iframe
+                      key={`modal-${simulatorIframeKey}`}
+                      src={simulatorPage}
+                      style={{
+                        width: `${targetWidth}px`,
+                        height: `${targetHeight}px`,
+                        transform: `scale(${simulatorScale})`,
+                        transformOrigin: 'top left',
+                      }}
+                      className="border-0 bg-[#FAF9F6] w-full h-full"
+                      title="Live Website Modal Responsive Simulator"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── RESPONSIVE SECTION TABS ── */}
+        <div className="flex flex-col gap-2 border-b border-black/10 pb-4">
+          <div className="sm:hidden flex flex-col gap-1">
+            <label className="font-mono text-[8px] uppercase tracking-[0.2em] text-black/40 font-bold">
+              JUMP TO SECTION:
+            </label>
+            <select
+              value={activeTab}
+              onChange={(e) => {
+                setActiveTab(e.target.value as TabType);
                 setView('list');
               }}
-              className={`px-4 py-2 text-[9px] sm:text-[10px] font-mono tracking-[0.15em] uppercase transition-all rounded-xs border ${
-                activeTab === tab.id
-                  ? 'bg-black text-white border-black font-semibold shadow-xs'
-                  : 'bg-white text-black/60 border-black/10 hover:border-black/30 hover:text-black'
-              }`}
+              className="w-full px-3.5 py-2.5 bg-white border border-black/20 font-mono text-xs text-[#1A1A1A] rounded-xs outline-none shadow-2xs"
             >
-              {tab.label}
-            </button>
-          ))}
+              {tabList.map(tab => (
+                <option key={tab.id} value={tab.id}>
+                  {tab.label} {tab.count !== undefined ? `(${tab.count})` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="hidden sm:flex flex-wrap items-center gap-2 overflow-x-auto no-scrollbar py-1">
+            {tabList.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setView('list');
+                }}
+                className={`px-3 sm:px-4 py-2 text-[9px] sm:text-[10px] font-mono tracking-[0.15em] uppercase transition-all rounded-xs border cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                  activeTab === tab.id
+                    ? 'bg-black text-white border-black font-semibold shadow-xs'
+                    : 'bg-white text-black/60 border-black/10 hover:border-black/30 hover:text-black'
+                }`}
+              >
+                <span>{tab.label}</span>
+                {tab.count !== undefined && (
+                  <span className={`px-1.5 py-0.2 text-[8px] rounded-full ${activeTab === tab.id ? 'bg-white/20 text-white' : 'bg-black/5 text-black/50'}`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* ── 1. HERO SECTION EDIT FORM ── */}
@@ -539,612 +951,1388 @@ export default function AdminPage() {
               e.preventDefault();
               updateHero(tempHero);
               showToast();
-            }} className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6">
+            }} className="bg-white border border-black/10 p-5 sm:p-8 lg:p-10 rounded-xs flex flex-col gap-6 shadow-2xs">
               <div>
                 <h2 className="font-serif text-2xl font-light">Hero Section Content & Layout</h2>
-                <p className="font-sans text-xs text-black/50 mt-1">
-                  Manage all headlines, imagery, image vertical lift/positioning on larger devices, and CTAs.
+                <p className="font-sans text-xs text-black/60 mt-1">
+                  Customize the entrance typography, images, and alignments for both desktop and mobile viewports.
                 </p>
               </div>
 
-              {/* Desktop Image & Vertical Lift Controls */}
-              <div className="flex flex-col gap-3 p-5 bg-[#F7F5F0] border border-black/10 rounded-xs">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 font-bold">
-                    1. DESKTOP HERO IMAGE & VERTICAL LIFT
-                  </span>
-                  <span className="font-mono text-[9px] text-black/40">Large Screens / PC</span>
-                </div>
-
-                <ImageUploadField
-                  image={tempHero.desktopImage}
-                  onImageChange={img => setTempHero(p => ({ ...p, desktopImage: img }))}
-                />
-
-                {/* Vertical Lift Settings */}
-                <div className="flex flex-col gap-2 mt-2 pt-3 border-t border-black/10">
-                  <label className="font-mono text-[8.5px] tracking-[0.2em] uppercase text-black/60 font-bold">
-                    Desktop Image Vertical Lift / Position (Fixes bottom cut-off on bigger screens)
-                  </label>
-                  <p className="font-sans text-[11px] text-black/50">
-                    Lifting the image shifts the photograph upward inside the viewport so the bottom of the saree, chair base, and floor remain fully visible.
-                  </p>
-                  
-                  {/* Presets */}
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {[
-                      { label: 'Balanced Lift (center 50%) — Recommended', val: 'center 50%' },
-                      { label: 'Extra Lift (center 55%)', val: 'center 55%' },
-                      { label: 'High Lift (center 65%)', val: 'center 65%' },
-                      { label: 'Subtle Lift (center 40%)', val: 'center 40%' },
-                      { label: 'Top Pinned (center 0%)', val: 'center 0%' },
-                    ].map(preset => (
-                      <button
-                        key={preset.val}
-                        type="button"
-                        onClick={() => setTempHero(p => ({ ...p, desktopImagePosition: preset.val }))}
-                        className={`px-3 py-1.5 text-[9px] font-mono uppercase tracking-wider rounded-xs border transition-colors ${
-                          (tempHero.desktopImagePosition || 'center 50%') === preset.val
-                            ? 'bg-black text-white border-black'
-                            : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                        }`}
-                      >
-                        {preset.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Custom Input */}
-                  <div className="flex items-center gap-3 mt-2">
-                    <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40">Custom CSS Position:</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <span className="font-mono text-[8.5px] uppercase tracking-wider text-black/60 font-bold block mb-2">DESKTOP HERO IMAGE</span>
+                  <ImageUploadField image={tempHero.desktopImage || ''} onImageChange={(img) => setTempHero(p => ({ ...p, desktopImage: img }))} />
+                  <div className="mt-3">
+                    <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Desktop Vertical Lift (objectPosition)</label>
                     <input
                       type="text"
                       value={tempHero.desktopImagePosition || 'center 50%'}
                       onChange={e => setTempHero(p => ({ ...p, desktopImagePosition: e.target.value }))}
                       placeholder="e.g. center 50%"
-                      className="w-48 px-3 py-1.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black"
+                      className="w-full px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40 mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <span className="font-mono text-[8.5px] uppercase tracking-wider text-black/60 font-bold block mb-2">MOBILE HERO IMAGE</span>
+                  <ImageUploadField image={tempHero.mobileImage || ''} onImageChange={(img) => setTempHero(p => ({ ...p, mobileImage: img }))} />
+                  <div className="mt-3">
+                    <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Mobile Vertical Focus (objectPosition)</label>
+                    <input
+                      type="text"
+                      value={tempHero.mobileImagePosition || 'center 15%'}
+                      onChange={e => setTempHero(p => ({ ...p, mobileImagePosition: e.target.value }))}
+                      placeholder="e.g. center 15%"
+                      className="w-full px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40 mt-1"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Mobile Image & Position */}
-              <div className="flex flex-col gap-3 p-5 bg-[#F7F5F0] border border-black/10 rounded-xs">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 font-bold">
-                    2. MOBILE HERO IMAGE & ALIGNMENT
-                  </span>
-                  <span className="font-mono text-[9px] text-black/40">Mobile Viewport</span>
-                </div>
-
-                <ImageUploadField
-                  image={tempHero.mobileImage}
-                  onImageChange={img => setTempHero(p => ({ ...p, mobileImage: img }))}
-                />
-
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-2 pt-3 border-t border-black/10">
-                  <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/50 font-bold">
-                    Mobile Image Alignment:
-                  </span>
-                  <div className="flex gap-2">
-                    {['center 15%', 'center 25%', 'center 50%'].map(val => (
-                      <button
-                        key={val}
-                        type="button"
-                        onClick={() => setTempHero(p => ({ ...p, mobileImagePosition: val }))}
-                        className={`px-3 py-1 text-[9px] font-mono uppercase tracking-wider rounded-xs border transition-colors ${
-                          (tempHero.mobileImagePosition || 'center 15%') === val
-                            ? 'bg-black text-white border-black'
-                            : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                        }`}
-                      >
-                        {val}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <FormField label="Eyebrow Sub-tag" value={tempHero.eyebrow} onChange={v => setTempHero(p => ({ ...p, eyebrow: v }))} required />
-
+              <FormField label="Eyebrow Subtitle" value={tempHero.eyebrow} onChange={v => setTempHero(p => ({ ...p, eyebrow: v }))} required />
+              
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <FormField label="Title Line 1" value={tempHero.titleLine1} onChange={v => setTempHero(p => ({ ...p, titleLine1: v }))} required />
                 <FormField label="Title Line 2" value={tempHero.titleLine2} onChange={v => setTempHero(p => ({ ...p, titleLine2: v }))} required />
-                <FormField label="Title Italic Emphasis" value={tempHero.titleItalic} onChange={v => setTempHero(p => ({ ...p, titleItalic: v }))} required />
+                <FormField label="Title Italic Accent" value={tempHero.titleItalic} onChange={v => setTempHero(p => ({ ...p, titleItalic: v }))} required />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField label="Subtitle Line 1" value={tempHero.subtitleLine1} onChange={v => setTempHero(p => ({ ...p, subtitleLine1: v }))} required />
-                <FormField label="Subtitle Line 2" value={tempHero.subtitleLine2} onChange={v => setTempHero(p => ({ ...p, subtitleLine2: v }))} required />
+                <FormField label="Description Line 1" value={tempHero.subtitleLine1} onChange={v => setTempHero(p => ({ ...p, subtitleLine1: v }))} required />
+                <FormField label="Description Line 2" value={tempHero.subtitleLine2} onChange={v => setTempHero(p => ({ ...p, subtitleLine2: v }))} required />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField label="CTA Button Text" value={tempHero.ctaText} onChange={v => setTempHero(p => ({ ...p, ctaText: v }))} required />
-                <FormField label="CTA Destination URL" value={tempHero.ctaUrl} onChange={v => setTempHero(p => ({ ...p, ctaUrl: v }))} required />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <FormField label="Button Label" value={tempHero.ctaText || 'Connect'} onChange={v => setTempHero(p => ({ ...p, ctaText: v }))} required />
+                <FormField label="Button Link" value={tempHero.ctaUrl || '/connect'} onChange={v => setTempHero(p => ({ ...p, ctaUrl: v }))} required />
+                <FormField label="Right-side Editorial Callout" value={tempHero.sideText} onChange={v => setTempHero(p => ({ ...p, sideText: v }))} required />
               </div>
 
-              <FormField label="Side Editorial Text" value={tempHero.sideText} onChange={v => setTempHero(p => ({ ...p, sideText: v }))} required />
-
-              <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md hover:bg-black/90 transition-all">
-                Save Hero Changes →
+              <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90">
+                Save Hero Section Changes →
               </button>
             </form>
-
-            {/* Live Interactive Hero Section Preview */}
-            <div className="flex flex-col gap-4 bg-white border border-black/10 p-6 sm:p-8 rounded-xs shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-black/10">
-                <div>
-                  <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold block">
-                    ✦ REAL-TIME HERO SECTION PREVIEW
-                  </span>
-                  <h3 className="font-serif text-lg font-light text-[#1A1A1A]">
-                    Left-Middle Placement, Refined Font Size & Lifted Image Preview
-                  </h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setHeroPreviewDevice('desktop')}
-                    className={`px-3.5 py-1.5 text-[9px] font-mono uppercase tracking-wider rounded-xs transition-all ${
-                      heroPreviewDevice === 'desktop'
-                        ? 'bg-black text-white shadow-sm'
-                        : 'bg-[#F2EFE9] text-black/70 border border-black/15 hover:text-black'
-                    }`}
-                  >
-                    🖥 Desktop View
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setHeroPreviewDevice('mobile')}
-                    className={`px-3.5 py-1.5 text-[9px] font-mono uppercase tracking-wider rounded-xs transition-all ${
-                      heroPreviewDevice === 'mobile'
-                        ? 'bg-black text-white shadow-sm'
-                        : 'bg-[#F2EFE9] text-black/70 border border-black/15 hover:text-black'
-                    }`}
-                  >
-                    📱 Mobile View
-                  </button>
-                </div>
-              </div>
-
-              {/* Simulated Container */}
-              <div className="w-full flex justify-center py-2 bg-[#FAF9F6]">
-                <div
-                  className={`relative w-full overflow-hidden rounded-xs border border-black/20 shadow-lg text-white flex flex-col justify-center items-start transition-all duration-500 ${
-                    heroPreviewDevice === 'mobile'
-                      ? 'max-w-[360px] h-[580px] p-6'
-                      : 'max-w-4xl h-[460px] p-8 sm:p-12'
-                  }`}
-                  style={{ backgroundColor: '#111' }}
-                >
-                  {/* Background Image with Dynamic Lift */}
-                  <img
-                    src={
-                      heroPreviewDevice === 'desktop'
-                        ? (tempHero.desktopImage || "/images/hero/hero image desktop.png")
-                        : (tempHero.mobileImage || "/images/hero/hero image.jpeg")
-                    }
-                    alt="Hero Live Preview"
-                    className="absolute inset-0 w-full h-full object-cover transition-all duration-500 pointer-events-none"
-                    style={{
-                      objectPosition:
-                        heroPreviewDevice === 'desktop'
-                          ? (tempHero.desktopImagePosition || 'center 50%')
-                          : (tempHero.mobileImagePosition || 'center 15%'),
-                    }}
-                  />
-
-                  {/* Overlays matching the production site */}
-                  {heroPreviewDevice === 'desktop' ? (
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-black/10 pointer-events-none" />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/25 pointer-events-none" />
-                  )}
-
-                  {/* Left-Middle Hero Writing */}
-                  <div className="relative z-10 max-w-sm flex flex-col items-start text-left">
-                    <span className="text-[8px] sm:text-[9.5px] tracking-[0.35em] uppercase text-white/70 mb-1.5 block font-mono font-medium">
-                      {tempHero.eyebrow}
-                    </span>
-
-                    <h1 className="text-xl sm:text-3xl font-serif font-light leading-[1.18] tracking-wide mb-2">
-                      {tempHero.titleLine1} <br />
-                      {tempHero.titleLine2} <br />
-                      <span className="italic font-normal">{tempHero.titleItalic}</span>
-                    </h1>
-
-                    <div className="w-8 sm:w-10 h-[1px] bg-white/30 mb-2 sm:mb-2.5" />
-
-                    <p className="text-[10px] sm:text-xs font-light text-white/80 leading-relaxed mb-3 sm:mb-4 max-w-[240px] tracking-wide">
-                      {tempHero.subtitleLine1} <br />
-                      {tempHero.subtitleLine2}
-                    </p>
-
-                    <div className="inline-flex items-center justify-between gap-6 px-4 py-2 border border-white/40 bg-black/40 text-[9px] tracking-[0.25em] uppercase font-mono text-white rounded-xs shadow-md">
-                      <span>{tempHero.ctaText || "Connect"}</span>
-                      <span>→</span>
-                    </div>
-                  </div>
-
-                  {/* Side text for desktop preview */}
-                  {heroPreviewDevice === 'desktop' && (
-                    <div className="absolute right-8 bottom-8 hidden sm:flex flex-col items-start border-l border-white/20 pl-4 py-1 max-w-[120px] z-10">
-                      <p className="text-[8px] tracking-[0.2em] uppercase font-light leading-relaxed text-white/80">
-                        {tempHero.sideText}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
         )}
 
-        {/* ── 2. ABOUT SECTION EDIT FORM ── */}
-        {activeTab === 'about' && (
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            updateAbout(tempAbout);
-            showToast();
-          }} className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6">
-            <div>
-              <h2 className="font-serif text-2xl font-light">About Page Story & Philosophy</h2>
-              <p className="font-sans text-xs text-black/50 mt-1">Manage headlines, philosophy quotes, goals, and story text on /about</p>
-            </div>
-
-            <ImageUploadField
-              image={tempAbout.creativeDirectorImage}
-              onImageChange={img => setTempAbout(p => ({ ...p, creativeDirectorImage: img }))}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="Creative Director Title" value={tempAbout.creativeDirectorTitle} onChange={v => setTempAbout(p => ({ ...p, creativeDirectorTitle: v }))} required />
-              <FormField label="Creative Director Name" value={tempAbout.creativeDirectorName} onChange={v => setTempAbout(p => ({ ...p, creativeDirectorName: v }))} required />
-            </div>
-
-            <FormField label="Eyebrow Badge" value={tempAbout.eyebrow} onChange={v => setTempAbout(p => ({ ...p, eyebrow: v }))} required />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="Headline Line 1" value={tempAbout.titleLine1} onChange={v => setTempAbout(p => ({ ...p, titleLine1: v }))} required />
-              <FormField label="Headline Line 2 (Italic)" value={tempAbout.titleLine2} onChange={v => setTempAbout(p => ({ ...p, titleLine2: v }))} required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Philosophy Quote *</label>
-              <textarea value={tempAbout.philosophyQuote} onChange={e => setTempAbout(p => ({ ...p, philosophyQuote: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Goal Statement Quote *</label>
-              <textarea value={tempAbout.goalQuote} onChange={e => setTempAbout(p => ({ ...p, goalQuote: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Story Paragraph 1 *</label>
-              <textarea value={tempAbout.storyParagraph1} onChange={e => setTempAbout(p => ({ ...p, storyParagraph1: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Story Paragraph 2 *</label>
-              <textarea value={tempAbout.storyParagraph2} onChange={e => setTempAbout(p => ({ ...p, storyParagraph2: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Story Paragraph 3 *</label>
-              <textarea value={tempAbout.storyParagraph3} onChange={e => setTempAbout(p => ({ ...p, storyParagraph3: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md">
-              Save About Page Changes →
-            </button>
-          </form>
-        )}
-
-        {/* ── 3. MEET JENNIFER EDIT FORM ── */}
-        {activeTab === 'meet' && (
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            updateMeet(tempMeet);
-            showToast();
-          }} className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6">
-            <div>
-              <h2 className="font-serif text-2xl font-light">Meet Jennifer Profile Section</h2>
-              <p className="font-sans text-xs text-black/50 mt-1">Manage bio, profile photo, quotes, and philosophy callout on home page</p>
-            </div>
-
-            <ImageUploadField
-              image={tempMeet.image}
-              onImageChange={img => setTempMeet(p => ({ ...p, image: img }))}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <FormField label="Section Eyebrow" value={tempMeet.eyebrow} onChange={v => setTempMeet(p => ({ ...p, eyebrow: v }))} required />
-              <FormField label="Title" value={tempMeet.title} onChange={v => setTempMeet(p => ({ ...p, title: v }))} required />
-              <FormField label="Subtitle Badge" value={tempMeet.subtitle} onChange={v => setTempMeet(p => ({ ...p, subtitle: v }))} required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Profile Bio Text *</label>
-              <textarea value={tempMeet.bioText} onChange={e => setTempMeet(p => ({ ...p, bioText: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Featured Quote *</label>
-              <textarea value={tempMeet.quote} onChange={e => setTempMeet(p => ({ ...p, quote: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="Accent Callout Title" value={tempMeet.accentTitle} onChange={v => setTempMeet(p => ({ ...p, accentTitle: v }))} required />
-              <FormField label="Accent Callout Text" value={tempMeet.accentText} onChange={v => setTempMeet(p => ({ ...p, accentText: v }))} required />
-            </div>
-
-            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md">
-              Save Meet Profile Changes →
-            </button>
-          </form>
-        )}
-
-        {/* ── 4. CONTACT & INFO EDIT FORM ── */}
-        {activeTab === 'contact' && (
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            updateContact(tempContact);
-            showToast();
-          }} className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6">
-            <div>
-              <h2 className="font-serif text-2xl font-light">Contact Information & Footer Details</h2>
-              <p className="font-sans text-xs text-black/50 mt-1">Manage email, phone, address, and business hours across the site</p>
-            </div>
-
-            <FormField label="Contact Page Heading" value={tempContact.heading} onChange={v => setTempContact(p => ({ ...p, heading: v }))} required />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="Official Email" value={tempContact.email} onChange={v => setTempContact(p => ({ ...p, email: v }))} required />
-              <FormField label="Contact Phone" value={tempContact.phone} onChange={v => setTempContact(p => ({ ...p, phone: v }))} required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Office Address *</label>
-              <textarea value={tempContact.address} onChange={e => setTempContact(p => ({ ...p, address: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Operating Hours *</label>
-              <textarea value={tempContact.hours} onChange={e => setTempContact(p => ({ ...p, hours: e.target.value }))} rows={3} className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs rounded-xs outline-none" required />
-            </div>
-
-            {/* WhatsApp Concierge Configuration */}
-            <div className="flex flex-col gap-3 p-5 bg-[#F7F5F0] border border-black/10 rounded-xs">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 font-bold">
-                  ✦ WHATSAPP CONCIERGE & SOCIAL SETTINGS
-                </span>
-                <span className="font-mono text-[9px] text-black/40">Used Across All CTAs & Footers</span>
+        {/* ── 2. TRANSFORMATIONS TAB ── */}
+        {activeTab === 'transformations' && (
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-serif text-2xl font-light">Transformations Case Studies</h2>
+                <p className="font-sans text-xs text-black/60 mt-0.5">
+                  Manage before & after dual images, narrative storytelling, and review cards.
+                </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField 
-                  label="WhatsApp Phone Number (with country code, no + or dashes)" 
-                  value={tempContact.whatsappPhone || ''} 
-                  onChange={v => setTempContact(p => ({ ...p, whatsappPhone: v }))} 
-                  placeholder="e.g. 919876543210" 
-                />
-                <FormField 
-                  label="Instagram Profile Link" 
-                  value={tempContact.instagramUrl || ''} 
-                  onChange={v => setTempContact(p => ({ ...p, instagramUrl: v }))} 
-                  placeholder="https://instagram.com/..." 
-                />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField 
-                  label="Default WhatsApp Message Template" 
-                  value={tempContact.whatsappMessage || ''} 
-                  onChange={v => setTempContact(p => ({ ...p, whatsappMessage: v }))} 
-                  placeholder="e.g. Hello Jennifer, I would like to schedule a styling consultation." 
-                />
-                <FormField 
-                  label="LinkedIn Profile Link" 
-                  value={tempContact.linkedinUrl || ''} 
-                  onChange={v => setTempContact(p => ({ ...p, linkedinUrl: v }))} 
-                  placeholder="https://linkedin.com/in/..." 
-                />
-              </div>
-            </div>
-
-            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md">
-              Save Contact Details →
-            </button>
-          </form>
-        )}
-
-        {/* ── 5. TAB CONTENT: LOOKBOOK ── */}
-        {activeTab === 'lookbook' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center pb-2">
-              <span className="font-mono text-[10px] text-black/50 font-bold">LOOKBOOK ITEMS ({looks.length})</span>
               <button
                 onClick={() => {
-                  setLookForm(EMPTY_LOOK);
+                  setTransformationForm(EMPTY_TRANSFORMATION);
                   setEditingId(null);
                   setView('add');
                 }}
-                className="px-4 py-2 bg-[#1A1A1A] text-white text-[9px] tracking-[0.2em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
+                className="px-4 py-2.5 bg-black text-white font-mono text-[9.5px] uppercase tracking-[0.2em] rounded-xs cursor-pointer hover:bg-black/80 flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
               >
-                + Add New Look
+                <span>+ Add Transformation</span>
               </button>
             </div>
-            {looks.map((item) => (
-              <ItemCard
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                subtitle={`${item.category} • Tag: ${item.tag}`}
-                image={item.image}
-                badge={`LOOK /${item.num}`}
-                onEdit={() => {
-                  const { id, num, ...rest } = item;
-                  setLookForm(rest);
-                  setEditingId(id);
-                  setView('edit');
-                }}
-                onDelete={() => deleteLook(item.id)}
-                viewUrl={`/lookbook/${item.id}`}
-              />
-            ))}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {transformations.map(t => (
+                <div key={t.id} className="bg-white border border-black/10 p-5 rounded-xs flex flex-col gap-4 shadow-2xs">
+                  {/* Before & After Dual Thumbnails */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="relative aspect-[3/4] bg-black/5 rounded-xs overflow-hidden border border-black/10">
+                      {t.beforeImg ? (
+                        <img src={t.beforeImg} alt="Before" className="w-full h-full object-cover object-top" />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full text-black/30 font-mono text-[8px]">No Image</div>
+                      )}
+                      <span className="absolute top-1.5 left-1.5 bg-black/80 text-white px-1.5 py-0.5 text-[7px] font-mono uppercase rounded-xs">Before</span>
+                    </div>
+                    <div className="relative aspect-[3/4] bg-black/5 rounded-xs overflow-hidden border border-black/10">
+                      {t.afterImg ? (
+                        <img src={t.afterImg} alt="After" className="w-full h-full object-cover object-top" />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full text-black/30 font-mono text-[8px]">No Image</div>
+                      )}
+                      <span className="absolute top-1.5 left-1.5 bg-black/80 text-white px-1.5 py-0.5 text-[7px] font-mono uppercase rounded-xs">After</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="font-mono text-[8px] uppercase tracking-wider text-black/50 block">{t.demographic}</span>
+                    <h3 className="font-serif text-lg font-light mt-0.5">{t.client}</h3>
+                    <p className="font-sans text-xs text-black/70 italic mt-0.5">"{t.concept}"</p>
+                  </div>
+
+                  {t.review && t.review.quote && (
+                    <div className="p-3 bg-[#FAF9F6] border border-black/10 rounded-xs text-[11px] text-black/75">
+                      <div className="flex items-center justify-between font-mono text-[8px] text-black/40 mb-1">
+                        <span>Review Quote</span>
+                        <span className="text-amber-500">{'★'.repeat(t.review.rating || 5)}</span>
+                      </div>
+                      <p className="line-clamp-2">"{t.review.quote}"</p>
+                      <span className="block text-[9px] font-mono text-black/50 mt-1">— {t.review.author} ({t.review.location})</span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-black/10 mt-auto">
+                    <button
+                      onClick={() => {
+                        setTransformationForm({
+                          client: t.client,
+                          demographic: t.demographic,
+                          concept: t.concept,
+                          beforeImg: t.beforeImg,
+                          afterImg: t.afterImg,
+                          beforeStory: t.beforeStory,
+                          afterStory: t.afterStory,
+                          review: t.review || { rating: 5, quote: '', author: '', location: '' },
+                        });
+                        setEditingId(t.id);
+                        setView('edit');
+                      }}
+                      className="flex-1 py-2 border border-black/20 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-black/5 cursor-pointer text-center"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete transformation for "${t.client}"?`)) {
+                          deleteTransformation(t.id);
+                          showToast();
+                        }
+                      }}
+                      className="py-2 px-3 border border-red-200 text-red-600 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-red-50 cursor-pointer text-center"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* ── 6. TAB CONTENT: SERVICES ── */}
+        {/* ── 3. SERVICES TAB ── */}
         {activeTab === 'services' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center pb-2">
-              <span className="font-mono text-[10px] text-black/50 font-bold">SERVICES ({services.length})</span>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-serif text-2xl font-light">Services (What We Do)</h2>
+                <p className="font-sans text-xs text-black/60 mt-0.5">
+                  Update service cards, dedicated detail summaries, key points, and imagery.
+                </p>
+              </div>
               <button
                 onClick={() => {
                   setServiceForm(EMPTY_SERVICE);
                   setEditingId(null);
                   setView('add');
                 }}
-                className="px-4 py-2 bg-[#1A1A1A] text-white text-[9px] tracking-[0.2em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
+                className="px-4 py-2.5 bg-black text-white font-mono text-[9.5px] uppercase tracking-[0.2em] rounded-xs cursor-pointer hover:bg-black/80 flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
               >
-                + Add New Service
+                <span>+ Add Service</span>
               </button>
             </div>
-            {services.map((item) => (
-              <ItemCard
-                key={item.id}
-                id={item.id}
-                title={item.name}
-                subtitle={`${item.category} • ${item.desc}`}
-                image={item.image}
-                badge={`SERVICE /${item.num}`}
-                onEdit={() => {
-                  const { id, num, ...rest } = item;
-                  setServiceForm({
-                    ...rest,
-                    summary: rest.summary || '',
-                    points: rest.points || [],
-                  });
-                  setEditingId(id);
-                  setView('edit');
-                }}
-                onDelete={() => deleteService(item.id)}
-              />
-            ))}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {services.map(s => (
+                <div key={s.id} className="bg-white border border-black/10 p-5 rounded-xs flex flex-col gap-4 shadow-2xs">
+                  <div className="relative aspect-[16/10] bg-black/5 rounded-xs overflow-hidden border border-black/10">
+                    {s.image ? (
+                      <img src={s.image} alt={s.name} className="w-full h-full object-cover object-top" />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-black/30 font-mono text-[8px]">No Image</div>
+                    )}
+                    <span className="absolute top-2 left-2 bg-black/80 text-white px-2 py-0.5 text-[7.5px] font-mono uppercase rounded-xs">
+                      {s.category}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-lg font-light">{s.name}</h3>
+                    <p className="font-sans text-xs text-black/60 line-clamp-3 mt-1">{s.desc}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-black/10 mt-auto">
+                    <button
+                      onClick={() => {
+                        setServiceForm({
+                          category: s.category,
+                          name: s.name,
+                          desc: s.desc,
+                          image: s.image,
+                          summary: s.summary || '',
+                          points: s.points || [],
+                        });
+                        setEditingId(s.id);
+                        setView('edit');
+                      }}
+                      className="flex-1 py-2 border border-black/20 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-black/5 cursor-pointer text-center"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete service "${s.name}"?`)) {
+                          deleteService(s.id);
+                          showToast();
+                        }
+                      }}
+                      className="py-2 px-3 border border-red-200 text-red-600 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-red-50 cursor-pointer text-center"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* ── 7. TAB CONTENT: CLIENTELE ── */}
+        {/* ── 4. LOOKBOOK TAB ── */}
+        {activeTab === 'lookbook' && (
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-serif text-2xl font-light">Lookbook & High Fashion Gallery</h2>
+                <p className="font-sans text-xs text-black/60 mt-0.5">
+                  Manage haute couture gallery items, story notes, fabric tags, and imagery.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setLookForm(EMPTY_LOOK);
+                  setEditingId(null);
+                  setView('add');
+                }}
+                className="px-4 py-2.5 bg-black text-white font-mono text-[9.5px] uppercase tracking-[0.2em] rounded-xs cursor-pointer hover:bg-black/80 flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
+              >
+                <span>+ Add Look</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {looks.map(l => (
+                <div key={l.id} className="bg-white border border-black/10 p-4 rounded-xs flex flex-col gap-3 shadow-2xs">
+                  <div className="relative aspect-[3/4] bg-black/5 rounded-xs overflow-hidden border border-black/10">
+                    {l.image ? (
+                      <img src={l.image} alt={l.title} className="w-full h-full object-cover object-top" />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-black/30 font-mono text-[8px]">No Image</div>
+                    )}
+                    <span className="absolute top-2 left-2 bg-black/80 text-white px-2 py-0.5 text-[7.5px] font-mono uppercase rounded-xs">
+                      LOOK {l.num}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="font-mono text-[8px] uppercase tracking-wider text-black/50 block">{l.category}</span>
+                    <h3 className="font-serif text-base font-light mt-0.5">{l.title}</h3>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-black/10 mt-auto">
+                    <button
+                      onClick={() => {
+                        setLookForm({
+                          title: l.title,
+                          category: l.category,
+                          tag: l.tag,
+                          concept: l.concept,
+                          fabric: l.fabric,
+                          story: l.story,
+                          occasion: l.occasion,
+                          image: l.image,
+                        });
+                        setEditingId(l.id);
+                        setView('edit');
+                      }}
+                      className="flex-1 py-2 border border-black/20 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-black/5 cursor-pointer text-center"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete look "${l.title}"?`)) {
+                          deleteLook(l.id);
+                          showToast();
+                        }
+                      }}
+                      className="py-2 px-3 border border-red-200 text-red-600 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-red-50 cursor-pointer text-center"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── 5. ABOUT SECTION TAB ── */}
+        {activeTab === 'about' && (
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            updateAbout(tempAbout);
+            showToast();
+          }} className="bg-white border border-black/10 p-5 sm:p-8 lg:p-10 rounded-xs flex flex-col gap-6 shadow-2xs">
+            <div>
+              <h2 className="font-serif text-2xl font-light">About Section Content</h2>
+              <p className="font-sans text-xs text-black/60 mt-1">
+                Edit the studio philosophy narrative, focal portrait, and editorial statement.
+              </p>
+            </div>
+
+            <ImageUploadField image={tempAbout.creativeDirectorImage || ''} onImageChange={(img) => setTempAbout(p => ({ ...p, creativeDirectorImage: img }))} />
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <FormField label="Eyebrow Kicker" value={tempAbout.eyebrow} onChange={v => setTempAbout(p => ({ ...p, eyebrow: v }))} required />
+              <FormField label="Title Line 1" value={tempAbout.titleLine1} onChange={v => setTempAbout(p => ({ ...p, titleLine1: v }))} required />
+              <FormField label="Title Line 2" value={tempAbout.titleLine2} onChange={v => setTempAbout(p => ({ ...p, titleLine2: v }))} required />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField label="Philosophy Quote" value={tempAbout.philosophyQuote} onChange={v => setTempAbout(p => ({ ...p, philosophyQuote: v }))} required />
+              <FormField label="Goal Quote" value={tempAbout.goalQuote} onChange={v => setTempAbout(p => ({ ...p, goalQuote: v }))} required />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Story Paragraph 1 *</label>
+              <textarea
+                value={tempAbout.storyParagraph1}
+                onChange={e => setTempAbout(p => ({ ...p, storyParagraph1: e.target.value }))}
+                rows={3}
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Story Paragraph 2 *</label>
+              <textarea
+                value={tempAbout.storyParagraph2}
+                onChange={e => setTempAbout(p => ({ ...p, storyParagraph2: e.target.value }))}
+                rows={3}
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Story Paragraph 3 *</label>
+              <textarea
+                value={tempAbout.storyParagraph3}
+                onChange={e => setTempAbout(p => ({ ...p, storyParagraph3: e.target.value }))}
+                rows={3}
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField label="Director Title" value={tempAbout.creativeDirectorTitle} onChange={v => setTempAbout(p => ({ ...p, creativeDirectorTitle: v }))} required />
+              <FormField label="Director Name" value={tempAbout.creativeDirectorName} onChange={v => setTempAbout(p => ({ ...p, creativeDirectorName: v }))} required />
+            </div>
+
+            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90">
+              Save About Section Changes →
+            </button>
+          </form>
+        )}
+
+        {/* ── 6. MEET JENNIFER TAB ── */}
+        {activeTab === 'meet' && (
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            updateMeet(tempMeet);
+            showToast();
+          }} className="bg-white border border-black/10 p-5 sm:p-8 lg:p-10 rounded-xs flex flex-col gap-6 shadow-2xs">
+            <div>
+              <h2 className="font-serif text-2xl font-light">Meet Jennifer Section</h2>
+              <p className="font-sans text-xs text-black/60 mt-1">
+                Edit personal stylist introduction, portrait photo, signature, and bio paragraphs.
+              </p>
+            </div>
+
+            <ImageUploadField image={tempMeet.image || ''} onImageChange={(img) => setTempMeet(p => ({ ...p, image: img }))} />
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <FormField label="Eyebrow Kicker" value={tempMeet.eyebrow} onChange={v => setTempMeet(p => ({ ...p, kicker: v, eyebrow: v }))} required />
+              <FormField label="Section Title" value={tempMeet.title} onChange={v => setTempMeet(p => ({ ...p, title: v }))} required />
+              <FormField label="Role / Subtitle" value={tempMeet.subtitle} onChange={v => setTempMeet(p => ({ ...p, subtitle: v }))} required />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Bio Overview Text *</label>
+              <textarea
+                value={tempMeet.bioText}
+                onChange={e => setTempMeet(p => ({ ...p, bioText: e.target.value }))}
+                rows={3}
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Personal Quote *</label>
+              <textarea
+                value={tempMeet.quote}
+                onChange={e => setTempMeet(p => ({ ...p, quote: e.target.value }))}
+                rows={3}
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField label="Philosophy Accent Title" value={tempMeet.accentTitle} onChange={v => setTempMeet(p => ({ ...p, accentTitle: v }))} required />
+              <FormField label="Philosophy Accent Text" value={tempMeet.accentText} onChange={v => setTempMeet(p => ({ ...p, accentText: v }))} required />
+            </div>
+
+            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90">
+              Save Meet Jennifer Changes →
+            </button>
+          </form>
+        )}
+
+        {/* ── 7. CLIENTELE (AUDIENCES) TAB ── */}
         {activeTab === 'audiences' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center pb-2">
-              <span className="font-mono text-[10px] text-black/50 font-bold">CLIENTELE CARDS ({audiences.length})</span>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-serif text-2xl font-light">Clientele Segments (Who We Style)</h2>
+                <p className="font-sans text-xs text-black/60 mt-0.5">
+                  Manage audience cards for professionals, brides, public figures, and entrepreneurs.
+                </p>
+              </div>
               <button
                 onClick={() => {
                   setAudienceForm(EMPTY_AUDIENCE);
                   setEditingId(null);
                   setView('add');
                 }}
-                className="px-4 py-2 bg-[#1A1A1A] text-white text-[9px] tracking-[0.2em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
+                className="px-4 py-2.5 bg-black text-white font-mono text-[9.5px] uppercase tracking-[0.2em] rounded-xs cursor-pointer hover:bg-black/80 flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
               >
-                + Add Clientele Profile
+                <span>+ Add Segment</span>
               </button>
             </div>
-            {audiences.map((item) => (
-              <ItemCard
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                subtitle={`Watermark: ${item.keyword} • ${item.desc}`}
-                image={item.image}
-                badge={`CLIENTELE`}
-                onEdit={() => {
-                  const { id, ...rest } = item;
-                  setAudienceForm(rest);
-                  setEditingId(id);
-                  setView('edit');
-                }}
-                onDelete={() => deleteAudience(item.id)}
-              />
-            ))}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {audiences.map(a => (
+                <div key={a.id} className="bg-white border border-black/10 p-5 rounded-xs flex flex-col gap-4 shadow-2xs">
+                  <div className="relative aspect-[16/9] bg-black/5 rounded-xs overflow-hidden border border-black/10">
+                    {a.image ? (
+                      <img src={a.image} alt={a.title} className="w-full h-full object-cover object-top" />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-black/30 font-mono text-[8px]">No Image</div>
+                    )}
+                    <span className="absolute top-2 left-2 bg-black/80 text-white px-2 py-0.5 text-[7.5px] font-mono uppercase rounded-xs">
+                      {a.keyword}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-lg font-light">{a.title}</h3>
+                    <p className="font-sans text-xs text-black/60 mt-1 line-clamp-3">{a.desc}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-black/10 mt-auto">
+                    <button
+                      onClick={() => {
+                        setAudienceForm({
+                          keyword: a.keyword,
+                          title: a.title,
+                          desc: a.desc,
+                          image: a.image,
+                          slug: a.slug,
+                        });
+                        setEditingId(a.id);
+                        setView('edit');
+                      }}
+                      className="flex-1 py-2 border border-black/20 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-black/5 cursor-pointer text-center"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete audience segment "${a.title}"?`)) {
+                          deleteAudience(a.id);
+                          showToast();
+                        }
+                      }}
+                      className="py-2 px-3 border border-red-200 text-red-600 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-red-50 cursor-pointer text-center"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* ── 8. TAB CONTENT: JOURNAL ── */}
+        {/* ── 8. JOURNAL ARTICLES TAB ── */}
         {activeTab === 'articles' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center pb-2">
-              <span className="font-mono text-[10px] text-black/50 font-bold">JOURNAL ARTICLES ({articles.length})</span>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-serif text-2xl font-light">Journal & Style Insights</h2>
+                <p className="font-sans text-xs text-black/60 mt-0.5">
+                  Manage articles, headlines, categories, excerpts, and thumbnail photos.
+                </p>
+              </div>
               <button
                 onClick={() => {
                   setArticleForm(EMPTY_ARTICLE);
                   setEditingId(null);
                   setView('add');
                 }}
-                className="px-4 py-2 bg-[#1A1A1A] text-white text-[9px] tracking-[0.2em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
+                className="px-4 py-2.5 bg-black text-white font-mono text-[9.5px] uppercase tracking-[0.2em] rounded-xs cursor-pointer hover:bg-black/80 flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
               >
-                + Add Journal Article
+                <span>+ Add Article</span>
               </button>
             </div>
-            {articles.map((item) => (
-              <ItemCard
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                subtitle={`${item.category} • ${item.excerpt}`}
-                image={item.image}
-                badge={`ARTICLE /${item.num}`}
-                onEdit={() => {
-                  const { id, num, ...rest } = item;
-                  setArticleForm(rest);
-                  setEditingId(id);
-                  setView('edit');
-                }}
-                onDelete={() => deleteArticle(item.id)}
-              />
-            ))}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {articles.map(art => (
+                <div key={art.id} className="bg-white border border-black/10 p-5 rounded-xs flex flex-col gap-4 shadow-2xs">
+                  <div className="relative aspect-[16/10] bg-black/5 rounded-xs overflow-hidden border border-black/10">
+                    {art.image ? (
+                      <img src={art.image} alt={art.title} className="w-full h-full object-cover object-top" />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-black/30 font-mono text-[8px]">No Image</div>
+                    )}
+                    <span className="absolute top-2 left-2 bg-black/80 text-white px-2 py-0.5 text-[7.5px] font-mono uppercase rounded-xs">
+                      {art.category}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-base font-light">{art.title}</h3>
+                    <p className="font-sans text-xs text-black/60 mt-1 line-clamp-2">{art.excerpt}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-black/10 mt-auto">
+                    <button
+                      onClick={() => {
+                        setArticleForm({
+                          title: art.title,
+                          category: art.category,
+                          image: art.image,
+                          excerpt: art.excerpt,
+                        });
+                        setEditingId(art.id);
+                        setView('edit');
+                      }}
+                      className="flex-1 py-2 border border-black/20 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-black/5 cursor-pointer text-center"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete article "${art.title}"?`)) {
+                          deleteArticle(art.id);
+                          showToast();
+                        }
+                      }}
+                      className="py-2 px-3 border border-red-200 text-red-600 font-mono text-[9px] uppercase tracking-wider rounded-xs hover:bg-red-50 cursor-pointer text-center"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* ── 9. TAB CONTENT: TESTIMONIALS ── */}
+        {/* ── 9. REVIEWS & TESTIMONIALS TAB ── */}
         {activeTab === 'testimonials' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center pb-2">
-              <span className="font-mono text-[10px] text-black/50 font-bold">CLIENT REVIEWS ({testimonials.length})</span>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="font-serif text-2xl font-light">Client Testimonials & Reviews</h2>
+                <p className="font-sans text-xs text-black/60 mt-0.5">
+                  Manage client review quotes, authors, roles, and locations.
+                </p>
+              </div>
               <button
                 onClick={() => {
                   setTestimonialForm(EMPTY_TESTIMONIAL);
                   setEditingId(null);
                   setView('add');
                 }}
-                className="px-4 py-2 bg-[#1A1A1A] text-white text-[9px] tracking-[0.2em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
+                className="px-4 py-2.5 bg-black text-white font-mono text-[9.5px] uppercase tracking-[0.2em] rounded-xs cursor-pointer hover:bg-black/80 flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
               >
-                + Add Client Review
+                <span>+ Add Review</span>
               </button>
             </div>
-            {testimonials.map((item) => (
-              <ItemCard
-                key={item.id}
-                id={item.id}
-                title={`${item.name} (${item.role})`}
-                subtitle={`${item.location} • "${item.text}"`}
-                image={item.avatar || ''}
-                badge={`REVIEW`}
-                onEdit={() => {
-                  const { id, ...rest } = item;
-                  setTestimonialForm(rest);
-                  setEditingId(id);
-                  setView('edit');
-                }}
-                onDelete={() => deleteTestimonial(item.id)}
-              />
-            ))}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {testimonials.map(t => (
+                <div key={t.id} className="bg-white border border-black/10 p-5 rounded-xs flex flex-col gap-3 shadow-2xs">
+                  <div className="flex items-center gap-1 text-amber-500 text-xs">
+                    ★★★★★
+                  </div>
+                  <p className="font-serif text-sm font-light text-black/85 italic leading-relaxed line-clamp-4">
+                    "{t.text}"
+                  </p>
+                  <div className="pt-2 border-t border-black/10 mt-auto">
+                    <h4 className="font-serif text-sm font-light">{t.name}</h4>
+                    <span className="font-mono text-[8px] uppercase tracking-wider text-black/50 block">
+                      {t.role} • {t.location}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      onClick={() => {
+                        setTestimonialForm({
+                          name: t.name,
+                          role: t.role,
+                          location: t.location,
+                          text: t.text,
+                          avatar: t.avatar,
+                        });
+                        setEditingId(t.id);
+                        setView('edit');
+                      }}
+                      className="flex-1 py-1.5 border border-black/20 font-mono text-[8.5px] uppercase tracking-wider rounded-xs hover:bg-black/5 cursor-pointer text-center"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete testimonial from "${t.name}"?`)) {
+                          deleteTestimonial(t.id);
+                          showToast();
+                        }
+                      }}
+                      className="py-1.5 px-3 border border-red-200 text-red-600 font-mono text-[8.5px] uppercase tracking-wider rounded-xs hover:bg-red-50 cursor-pointer text-center"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* ── 10. TAB CONTENT: MAILBOX & SMTP (.ENV) ── */}
-        {activeTab === 'mailbox' && (
-          <MailboxConfigSection onToast={showToast} />
+        {/* ── 10. STUDIO & CONTACT TAB ── */}
+        {activeTab === 'contact' && (
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            updateContact(tempContact);
+            showToast();
+          }} className="bg-white border border-black/10 p-5 sm:p-8 lg:p-10 rounded-xs flex flex-col gap-6 shadow-2xs">
+            <div>
+              <h2 className="font-serif text-2xl font-light">Studio & Atelier Contact Information</h2>
+              <p className="font-sans text-xs text-black/60 mt-1">
+                Update client consultation studio address, phone, direct email, hours, and social media.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField label="Contact Heading" value={tempContact.heading} onChange={v => setTempContact(p => ({ ...p, heading: v }))} required />
+              <FormField label="Studio Street Address" value={tempContact.address} onChange={v => setTempContact(p => ({ ...p, address: v }))} required />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField label="Consultation Phone" value={tempContact.phone} onChange={v => setTempContact(p => ({ ...p, phone: v }))} required />
+              <FormField label="Atelier Email" value={tempContact.email} onChange={v => setTempContact(p => ({ ...p, email: v }))} required />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <FormField label="Consultation Hours" value={tempContact.hours} onChange={v => setTempContact(p => ({ ...p, hours: v }))} required />
+              <FormField label="WhatsApp Direct Phone" value={tempContact.whatsappPhone || ''} onChange={v => setTempContact(p => ({ ...p, whatsappPhone: v }))} placeholder="e.g. 918078341747" />
+              <FormField label="Instagram Link" value={tempContact.instagramUrl || ''} onChange={v => setTempContact(p => ({ ...p, instagramUrl: v }))} placeholder="https://instagram.com/..." />
+            </div>
+
+            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90">
+              Save Contact Information Changes →
+            </button>
+          </form>
+        )}
+
+        {/* ── 11. MAKEOVER CTA BANNER TAB ── */}
+        {activeTab === 'cta' && (
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            updateCtaBanner(tempCta);
+            showToast();
+          }} className="bg-white border border-black/10 p-5 sm:p-8 lg:p-10 rounded-xs flex flex-col gap-6 shadow-2xs">
+            <div>
+              <h2 className="font-serif text-2xl font-light">Makeover Call-To-Action Banner</h2>
+              <p className="font-sans text-xs text-black/60 mt-1">
+                Update the conversion banner shown at the bottom of the Home and Transformations pages.
+              </p>
+            </div>
+
+            <FormField label="Eyebrow Kicker" value={tempCta.kicker} onChange={v => setTempCta(p => ({ ...p, kicker: v }))} placeholder="e.g. BESPOKE STYLING" required />
+            <FormField label="Main Banner Headline" value={tempCta.title} onChange={v => setTempCta(p => ({ ...p, title: v }))} placeholder="e.g. Ready for Your Complete Style Makeover?" required />
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">Banner Subtitle / Value Proposition *</label>
+              <textarea
+                value={tempCta.subtitle}
+                onChange={e => setTempCta(p => ({ ...p, subtitle: e.target.value }))}
+                rows={3}
+                placeholder="e.g. Discover an intentional wardrobe designed around your silhouette and authentic presence."
+                className="w-full px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40 resize-none"
+                required
+              />
+            </div>
+
+            <FormField label="Button Label Text" value={tempCta.buttonText} onChange={v => setTempCta(p => ({ ...p, buttonText: v }))} placeholder="e.g. Book The Makeover" required />
+
+            <div className="p-5 bg-[#1A1A1A] text-white rounded-xs flex flex-col gap-2">
+              <span className="font-mono text-[8px] uppercase tracking-wider text-white/50">{tempCta.kicker || 'BESPOKE STYLING'}</span>
+              <h3 className="font-serif text-lg font-light text-white">
+                {tempCta.title || 'Ready for Your Complete Style Makeover?'}
+              </h3>
+              <p className="font-sans text-xs text-white/70 max-w-xl">
+                {tempCta.subtitle || 'Discover an intentional wardrobe designed around your silhouette and authentic presence.'}
+              </p>
+              <div className="pt-2">
+                <span className="inline-block px-5 py-2.5 bg-white text-black font-mono text-[9px] uppercase tracking-[0.2em] font-semibold rounded-xs">
+                  {tempCta.buttonText || 'Book The Makeover'} →
+                </span>
+              </div>
+            </div>
+
+            <button type="submit" className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90">
+              Save Makeover CTA Changes →
+            </button>
+          </form>
+        )}
+
+        {/* ── 12. RESPONSIVE & DEVICE CONTROLS TAB ── */}
+        {activeTab === 'responsive' && (
+          <div className="flex flex-col gap-8">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              updateResponsive(tempResponsive);
+              showToast();
+            }} className="bg-white border border-black/10 p-5 sm:p-8 lg:p-10 rounded-xs flex flex-col gap-8 shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-black/10 pb-6">
+                <div>
+                  <span className="font-mono text-[8px] tracking-[0.3em] uppercase text-black/40 font-bold block">
+                    DEVICE LAYOUT & RESPONSIVE CALIBRATION
+                  </span>
+                  <h2 className="font-serif text-2xl sm:text-3xl font-light mt-1">
+                    Responsive Device Engine
+                  </h2>
+                  <p className="font-sans text-xs text-black/60 mt-1 max-w-xl">
+                    Configure viewport heights, responsive columns, image framing, typography scaling, and auto-scroll speeds for phones, tablets, and desktop screens.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowDeviceSimulatorModal(true)}
+                  className="self-start sm:self-auto px-4 py-2 bg-black text-white hover:bg-black/85 font-mono text-[9px] uppercase tracking-[0.2em] rounded-xs cursor-pointer flex items-center gap-1.5 shadow-xs transition-colors"
+                >
+                  <span>⛶ Open Fullscreen Simulator</span>
+                </button>
+              </div>
+
+              {/* CARD 1: HERO SECTION */}
+              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
+                <div className="flex items-center justify-between border-b border-black/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🌟</span>
+                    <h3 className="font-serif text-lg font-light">Hero Section Responsiveness</h3>
+                  </div>
+                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
+                    Desktop + Mobile Framing
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Desktop Image Vertical Lift (objectPosition)
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['center 45%', 'center 50%', 'center 55%', 'center 60%'].map(pos => (
+                        <button
+                          key={pos}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, heroDesktopImagePosition: pos }))}
+                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
+                            tempResponsive.heroDesktopImagePosition === pos
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          {pos}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      value={tempResponsive.heroDesktopImagePosition}
+                      onChange={e => setTempResponsive(p => ({ ...p, heroDesktopImagePosition: e.target.value }))}
+                      placeholder="e.g. center 50%"
+                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Mobile Image Vertical Focus (objectPosition)
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['center 10%', 'center 15%', 'center 25%', 'center 50%'].map(pos => (
+                        <button
+                          key={pos}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, heroMobileImagePosition: pos }))}
+                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
+                            tempResponsive.heroMobileImagePosition === pos
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          {pos}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      value={tempResponsive.heroMobileImagePosition}
+                      onChange={e => setTempResponsive(p => ({ ...p, heroMobileImagePosition: e.target.value }))}
+                      placeholder="e.g. center 15%"
+                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Desktop Hero Headline Scale
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: 'compact', label: 'Compact', detail: '38px' },
+                        { id: 'standard', label: 'Standard', detail: '44px' },
+                        { id: 'editorial', label: 'Editorial', detail: '52px' },
+                      ].map(item => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, heroDesktopTitleSize: item.id as any }))}
+                          className={`p-2.5 flex flex-col items-center justify-center rounded-xs border text-center cursor-pointer transition-colors ${
+                            tempResponsive.heroDesktopTitleSize === item.id
+                              ? 'bg-black text-white border-black'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          <span className="font-mono text-[9.5px] uppercase font-bold">{item.label}</span>
+                          <span className="text-[8px] opacity-60 font-mono">{item.detail}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Mobile Hero Headline Scale
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: 'compact', label: 'Compact', detail: '22px' },
+                        { id: 'standard', label: 'Standard', detail: '28px' },
+                        { id: 'prominent', label: 'Prominent', detail: '32px' },
+                      ].map(item => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, heroMobileTitleSize: item.id as any }))}
+                          className={`p-2.5 flex flex-col items-center justify-center rounded-xs border text-center cursor-pointer transition-colors ${
+                            tempResponsive.heroMobileTitleSize === item.id
+                              ? 'bg-black text-white border-black'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          <span className="font-mono text-[9.5px] uppercase font-bold">{item.label}</span>
+                          <span className="text-[8px] opacity-60 font-mono">{item.detail}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CARD 2: TRANSFORMATIONS */}
+              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
+                <div className="flex items-center justify-between border-b border-black/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🔄</span>
+                    <h3 className="font-serif text-lg font-light">Transformations Section Responsiveness</h3>
+                  </div>
+                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
+                    Dual Stage & Auto-Cycle
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Desktop Dual-Image Height
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['580px', '640px', '700px'].map(h => (
+                        <button
+                          key={h}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, transformationsDesktopHeight: h }))}
+                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
+                            tempResponsive.transformationsDesktopHeight === h
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          {h}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      value={tempResponsive.transformationsDesktopHeight}
+                      onChange={e => setTempResponsive(p => ({ ...p, transformationsDesktopHeight: e.target.value }))}
+                      placeholder="e.g. 640px"
+                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Mobile Stage Height (Viewport %)
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['48vh', '55vh', '65vh'].map(h => (
+                        <button
+                          key={h}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, transformationsMobileHeight: h }))}
+                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
+                            tempResponsive.transformationsMobileHeight === h
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          {h}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      value={tempResponsive.transformationsMobileHeight}
+                      onChange={e => setTempResponsive(p => ({ ...p, transformationsMobileHeight: e.target.value }))}
+                      placeholder="e.g. 55vh"
+                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Auto-Cycle Timer (Seconds)
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { sec: 0, label: '0s (Paused)' },
+                        { sec: 6, label: '6s' },
+                        { sec: 9, label: '9s' },
+                        { sec: 12, label: '12s' },
+                      ].map(item => (
+                        <button
+                          key={item.sec}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, transformationsCycleSpeed: item.sec }))}
+                          className={`px-2 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
+                            tempResponsive.transformationsCycleSpeed === item.sec
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="number"
+                      min="0"
+                      max="30"
+                      value={tempResponsive.transformationsCycleSpeed}
+                      onChange={e => setTempResponsive(p => ({ ...p, transformationsCycleSpeed: Number(e.target.value) }))}
+                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
+                    />
+                    <span className="font-sans text-[10px] text-black/40">Set to 0 to disable auto-rotation and use manual navigation</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CARD 3: SERVICES */}
+              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
+                <div className="flex items-center justify-between border-b border-black/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">✦</span>
+                    <h3 className="font-serif text-lg font-light">Services Section Responsiveness</h3>
+                  </div>
+                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
+                    Mobile Auto-Scroll + Desktop Sticky
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Mobile Services Auto-Carousel Speed (Seconds)
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { sec: 0, label: '0s (Manual Swipe)' },
+                        { sec: 5, label: '5s (Fast)' },
+                        { sec: 7, label: '7s (Standard)' },
+                        { sec: 10, label: '10s (Relaxed)' },
+                      ].map(item => (
+                        <button
+                          key={item.sec}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, servicesMobileCarouselSpeed: item.sec }))}
+                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
+                            tempResponsive.servicesMobileCarouselSpeed === item.sec
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="number"
+                      min="0"
+                      max="30"
+                      value={tempResponsive.servicesMobileCarouselSpeed}
+                      onChange={e => setTempResponsive(p => ({ ...p, servicesMobileCarouselSpeed: Number(e.target.value) }))}
+                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
+                    />
+                    <span className="font-sans text-[10px] text-black/40">Set to 0 to disable auto-slide on touch screens</span>
+                  </div>
+
+                  <div className="p-4 bg-white border border-black/10 rounded-xs flex flex-col justify-center gap-1.5">
+                    <span className="font-mono text-[8.5px] uppercase tracking-wider text-black/40 font-bold">DESKTOP SCROLL BEHAVIOR</span>
+                    <p className="font-serif text-sm font-light text-black">
+                      Scroll-Linked Sticky Viewport (Fluid Spring Physics)
+                    </p>
+                    <p className="font-sans text-[11px] text-black/60 leading-relaxed">
+                      On desktop computers & laptops, Services automatically lock smoothly in viewport while scrolling down, cycling through all {services.length} services naturally.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* CARD 4: LOOKBOOK & GALLERY */}
+              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
+                <div className="flex items-center justify-between border-b border-black/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">📸</span>
+                    <h3 className="font-serif text-lg font-light">Lookbook & Gallery Responsiveness</h3>
+                  </div>
+                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
+                    Grid Columns + Mobile Speed
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Desktop Grid Presentation Columns
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { cols: '2', label: '2 Columns', desc: 'Editorial Focus' },
+                        { cols: '3', label: '3 Columns', desc: 'Classic Standard' },
+                        { cols: '4', label: '4 Columns', desc: 'Catalog Dense' },
+                      ].map(item => (
+                        <button
+                          key={item.cols}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, lookbookDesktopColumns: Number(item.cols) }))}
+                          className={`p-3 flex flex-col items-center justify-center rounded-xs border text-center cursor-pointer transition-colors ${
+                            String(tempResponsive.lookbookDesktopColumns) === item.cols
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          <span className="font-mono text-[10px] uppercase font-bold">{item.label}</span>
+                          <span className="text-[8px] opacity-60 font-mono mt-0.5">{item.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
+                      Mobile Lookbook Auto-Carousel Speed (Seconds)
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { sec: 0, label: '0s (Manual)' },
+                        { sec: 3, label: '3s (Swift)' },
+                        { sec: 4, label: '4s (Default)' },
+                        { sec: 6, label: '6s (Slow)' },
+                      ].map(item => (
+                        <button
+                          key={item.sec}
+                          type="button"
+                          onClick={() => setTempResponsive(p => ({ ...p, lookbookMobileCarouselSpeed: item.sec }))}
+                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
+                            tempResponsive.lookbookMobileCarouselSpeed === item.sec
+                              ? 'bg-black text-white border-black font-semibold'
+                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="number"
+                      min="0"
+                      max="30"
+                      value={tempResponsive.lookbookMobileCarouselSpeed}
+                      onChange={e => setTempResponsive(p => ({ ...p, lookbookMobileCarouselSpeed: Number(e.target.value) }))}
+                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
+                    />
+                    <span className="font-sans text-[10px] text-black/40">Set to 0 to disable auto-cycling on mobile touch devices</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* REAL-TIME INTERACTIVE LIVE WEBSITE DEVICE SIMULATOR */}
+              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#181818] text-white rounded-xs border border-black/20 shadow-lg">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                  <div>
+                    <span className="font-mono text-[8.5px] tracking-[0.3em] uppercase text-white/50 font-bold block">
+                      ✦ LIVE INTERACTIVE WEBSITE SIMULATOR
+                    </span>
+                    <h3 className="font-serif text-xl sm:text-2xl font-light text-white mt-0.5">
+                      How Pictures & Writings Look on Every Device
+                    </h3>
+                    <p className="font-sans text-[11px] text-white/60 mt-0.5 max-w-xl">
+                      Experience the live website exactly as your clients see it on iPhones, Android phones, iPads, and desktop monitors. Test font readability, image framing, and responsive breakpoints in real time.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowDeviceSimulatorModal(true)}
+                    className="self-start lg:self-center px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-mono text-[9px] uppercase tracking-[0.2em] rounded-xs cursor-pointer flex items-center gap-1.5 transition-colors"
+                  >
+                    <span>⛶ Expand Simulator</span>
+                  </button>
+                </div>
+
+                {/* Device Selector & Zoom Toolbar */}
+                <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white/5 border border-white/10 rounded-xs">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="font-mono text-[8px] uppercase tracking-wider text-white/40 font-bold mr-1">DEVICE:</span>
+                    {[
+                      { id: 'mobile', label: '📱 iPhone (390px)', w: 390, s: 1 },
+                      { id: 'mobile-mini', label: '📱 Compact (360px)', w: 360, s: 1 },
+                      { id: 'tablet', label: '📟 iPad (768px)', w: 768, s: 0.9 },
+                      { id: 'desktop', label: '💻 Desktop (1240px)', w: 1240, s: 0.72 },
+                      { id: 'custom', label: '📐 Custom', w: simulatorWidth, s: 1 },
+                    ].map(dev => (
+                      <button
+                        key={dev.id}
+                        type="button"
+                        onClick={() => {
+                          setSimulatorDevice(dev.id as any);
+                          if (dev.id !== 'custom') {
+                            setSimulatorWidth(dev.w);
+                            setSimulatorScale(dev.s);
+                          }
+                        }}
+                        className={`px-3 py-1.5 font-mono text-[9px] uppercase tracking-wider rounded-xs cursor-pointer transition-all ${
+                          simulatorDevice === dev.id
+                            ? 'bg-white text-black font-semibold shadow-xs'
+                            : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
+                        }`}
+                      >
+                        {dev.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-[8px] uppercase tracking-wider text-white/40 font-bold mr-1">ZOOM:</span>
+                    {[
+                      { scale: 1, label: '100%' },
+                      { scale: 0.85, label: '85%' },
+                      { scale: 0.72, label: '72%' },
+                      { scale: 0.55, label: '55%' },
+                    ].map(z => (
+                      <button
+                        key={z.scale}
+                        type="button"
+                        onClick={() => setSimulatorScale(z.scale)}
+                        className={`px-2 py-1 font-mono text-[8.5px] rounded-xs cursor-pointer transition-colors ${
+                          simulatorScale === z.scale
+                            ? 'bg-amber-400 text-black font-bold'
+                            : 'bg-white/10 text-white/60 hover:text-white'
+                        }`}
+                      >
+                        {z.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {simulatorDevice === 'custom' && (
+                  <div className="flex items-center gap-4 px-3 py-2 bg-white/5 border border-white/10 rounded-xs">
+                    <span className="font-mono text-[8.5px] uppercase tracking-wider text-white/60 font-bold">
+                      CUSTOM VIEWPORT WIDTH: {simulatorWidth}px
+                    </span>
+                    <input
+                      type="range"
+                      min="320"
+                      max="1400"
+                      step="10"
+                      value={simulatorWidth}
+                      onChange={e => setSimulatorWidth(Number(e.target.value))}
+                      className="flex-1 accent-white cursor-pointer"
+                    />
+                    <div className="flex gap-1">
+                      {[375, 414, 768, 1024, 1280].map(px => (
+                        <button
+                          key={px}
+                          type="button"
+                          onClick={() => setSimulatorWidth(px)}
+                          className="px-2 py-0.5 bg-white/10 text-[8px] font-mono text-white/80 rounded-xs hover:bg-white/20 cursor-pointer"
+                        >
+                          {px}px
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Page Navigation Quick Switcher */}
+                <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xs">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="font-mono text-[8px] uppercase tracking-wider text-white/40 font-bold mr-1">PAGE:</span>
+                    {[
+                      { path: '/', label: '🏠 Home' },
+                      { path: '/#transformations', label: '🔄 Transformations' },
+                      { path: '/#services', label: '✦ Services' },
+                      { path: '/lookbook', label: '📸 Lookbook' },
+                      { path: '/about', label: '📖 About' },
+                      { path: '/connect', label: '📍 Connect' },
+                    ].map(pg => (
+                      <button
+                        key={pg.path}
+                        type="button"
+                        onClick={() => {
+                          setSimulatorPage(pg.path);
+                          setSimulatorIframeKey(k => k + 1);
+                        }}
+                        className={`px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer transition-colors ${
+                          simulatorPage === pg.path
+                            ? 'bg-amber-400 text-black font-semibold'
+                            : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
+                        }`}
+                      >
+                        {pg.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSimulatorIframeKey(k => k + 1)}
+                      className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer flex items-center gap-1 transition-colors"
+                      title="Reload website in device"
+                    >
+                      <span>↻ Refresh Preview</span>
+                    </button>
+                    <a
+                      href={simulatorPage}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs flex items-center gap-1 transition-colors"
+                      title="Open page in a real browser tab"
+                    >
+                      <span>↗ Open Full Site</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Device Frame Viewport Container */}
+                <div className="w-full flex justify-center py-6 bg-[#0E0E0E] rounded-xs border border-white/10 overflow-x-auto min-h-[500px]">
+                  <div className="flex flex-col items-center">
+                    <div 
+                      style={{ width: `${Math.round(targetWidth * simulatorScale)}px` }}
+                      className="bg-[#242424] text-white px-3 sm:px-4 py-2 flex items-center justify-between border-t border-x border-white/15 rounded-t-xl transition-all duration-200"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] inline-block" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] inline-block" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] inline-block" />
+                        <span className="ml-2 font-mono text-[8.5px] text-white/50 tracking-wider">
+                          {targetWidth}px × {targetHeight}px ({Math.round(simulatorScale * 100)}% zoom)
+                        </span>
+                      </div>
+                      <div className="font-mono text-[8px] text-white/40 tracking-wider uppercase px-2 py-0.5 bg-black/40 rounded-xs truncate max-w-[220px]">
+                        stylewithj.com{simulatorPage}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        width: `${Math.round(targetWidth * simulatorScale)}px`,
+                        height: `${Math.round(targetHeight * simulatorScale)}px`,
+                        overflow: 'hidden',
+                      }}
+                      className="bg-white rounded-b-xl shadow-[0_25px_60px_rgba(0,0,0,0.6)] border-b border-x border-white/15 relative transition-all duration-200"
+                    >
+                      <iframe
+                        key={simulatorIframeKey}
+                        src={simulatorPage}
+                        style={{
+                          width: `${targetWidth}px`,
+                          height: `${targetHeight}px`,
+                          transform: `scale(${simulatorScale})`,
+                          transformOrigin: 'top left',
+                        }}
+                        className="border-0 bg-[#FAF9F6] w-full h-full"
+                        title="Live Website Device Responsive Simulator"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[9px] font-mono text-white/40 px-1">
+                  <span>✦ Interacting inside the simulator: You can scroll, click buttons, and browse pages just like a client on that device.</span>
+                  <span>Viewport Breakpoint: {targetWidth < 640 ? 'Mobile Screen (< 640px)' : targetWidth < 1024 ? 'Tablet Screen (640px - 1023px)' : 'Desktop Screen (≥ 1024px)'}</span>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90 transition-all"
+              >
+                Save Responsive & Device Changes →
+              </button>
+            </form>
+          </div>
         )}
 
       </div>
@@ -1152,18 +2340,23 @@ export default function AdminPage() {
   );
 }
 
-// ── REUSABLE HELPER COMPONENTS ──
+// ── REUSABLE HELPER COMPONENTS (MOBILE & DESKTOP TUNED) ──
 function FormWrapper({ title, onBack, children }: { title: string; onBack: () => void; children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
-      <header className="border-b border-black/10 bg-white sticky top-0 z-50 px-6 sm:px-12 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">← Back</button>
-          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/30">|</span>
-          <span className="font-serif text-lg font-light">{title}</span>
+      <header className="border-b border-black/10 bg-white/95 backdrop-blur-xs sticky top-0 z-50 px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex items-center justify-between shadow-xs">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+          <button 
+            onClick={onBack} 
+            className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-black/60 hover:text-black transition-colors cursor-pointer flex items-center gap-1"
+          >
+            ← Back
+          </button>
+          <span className="font-mono text-[9px] text-black/30">|</span>
+          <span className="font-serif text-base sm:text-lg font-light truncate">{title}</span>
         </div>
       </header>
-      <div className="max-w-3xl mx-auto px-6 sm:px-12 py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
         {children}
       </div>
     </div>
@@ -1172,26 +2365,26 @@ function FormWrapper({ title, onBack, children }: { title: string; onBack: () =>
 
 function ImageUploadField({ image, onImageChange }: { image: string; onImageChange: (v: string) => void }) {
   return (
-    <div className="flex flex-col gap-3 p-5 bg-[#EFECE6]/60 border border-black/10 rounded-xs">
+    <div className="flex flex-col gap-3 p-4 sm:p-5 bg-[#EFECE6]/60 border border-black/10 rounded-xs">
       <div className="flex items-center justify-between">
-        <label className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/60 font-bold">
+        <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
           IMAGE FILE OR URL <span className="text-red-500">*</span>
         </label>
-        <span className="font-sans text-[10px] text-black/50">Upload image OR paste path</span>
+        <span className="font-sans text-[10px] text-black/50">Upload file OR paste path</span>
       </div>
 
       {image && (
         <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#D8D4CC] rounded-xs border border-black/10 shadow-sm">
           <img src={image} alt="Preview" className="w-full h-full object-cover object-top" />
-          <div className="absolute top-3 left-3 bg-black/80 text-white px-2.5 py-1 text-[8px] tracking-[0.2em] font-mono uppercase rounded-xs">
+          <div className="absolute top-2.5 left-2.5 bg-black/80 text-white px-2.5 py-0.5 text-[7.5px] tracking-[0.2em] font-mono uppercase rounded-xs">
             ✦ Preview
           </div>
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-        <label className="flex-shrink-0 cursor-pointer inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#1A1A1A] hover:bg-black text-white text-[10px] tracking-[0.2em] uppercase font-mono font-semibold transition-all rounded-xs shadow-sm">
-          <span>📁 Choose Image File</span>
+      <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 items-stretch sm:items-center">
+        <label className="flex-shrink-0 cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#1A1A1A] hover:bg-black text-white text-[9.5px] tracking-[0.2em] uppercase font-mono font-semibold transition-all rounded-xs shadow-sm">
+          <span>📁 Choose File</span>
           <input
             type="file"
             accept="image/*"
@@ -1209,28 +2402,30 @@ function ImageUploadField({ image, onImageChange }: { image: string; onImageChan
             }}
           />
         </label>
-
-        <div className="text-[10px] font-mono text-black/40 text-center sm:text-left">OR</div>
-
         <input
           type="text"
           value={image}
-          onChange={e => onImageChange(e.target.value)}
-          placeholder="Paste URL or path (e.g. /images/includes/IMG_0267.JPG.jpeg)"
-          required
-          className="flex-1 px-4 py-3 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] placeholder-black/30 rounded-xs outline-none focus:border-black transition-colors"
+          onChange={(e) => onImageChange(e.target.value)}
+          placeholder="Or paste /images/hero/photo.png or web URL..."
+          className="flex-1 px-4 py-2.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40"
         />
       </div>
     </div>
   );
 }
 
-function FormField({ label, value, onChange, placeholder, required }: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-  required?: boolean;
+function FormField({ 
+  label, 
+  value, 
+  onChange, 
+  placeholder, 
+  required 
+}: { 
+  label: string; 
+  value: string; 
+  onChange: (v: string) => void; 
+  placeholder?: string; 
+  required?: boolean; 
 }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -1240,10 +2435,10 @@ function FormField({ label, value, onChange, placeholder, required }: {
       <input
         type="text"
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className="w-full px-4 py-2.5 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] placeholder-black/30 rounded-xs outline-none focus:border-black transition-colors"
+        className="w-full px-4 py-2.5 border border-black/15 bg-white font-sans text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40"
       />
     </div>
   );
@@ -1254,370 +2449,17 @@ function SubmitButtons({ isAdd, onCancel }: { isAdd: boolean; onCancel: () => vo
     <div className="flex items-center gap-3 pt-4 border-t border-black/10">
       <button
         type="submit"
-        className="flex-1 py-3.5 bg-[#1A1A1A] text-white text-[10px] tracking-[0.25em] uppercase font-mono font-semibold hover:bg-black transition-colors rounded-xs shadow-md"
+        className="flex-1 py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90 font-semibold"
       >
-        {isAdd ? 'Add Entry →' : 'Save Changes →'}
+        {isAdd ? 'Create Entry →' : 'Update & Save Changes →'}
       </button>
       <button
         type="button"
         onClick={onCancel}
-        className="px-6 py-3.5 border border-black/20 text-[10px] tracking-[0.25em] uppercase font-mono text-black/60 hover:text-black hover:border-black/40 transition-colors rounded-xs"
+        className="px-6 py-3.5 border border-black/20 font-mono text-[10px] uppercase tracking-[0.2em] rounded-xs hover:bg-black/5 cursor-pointer"
       >
         Cancel
       </button>
-    </div>
-  );
-}
-
-function ItemCard({ id, title, subtitle, image, badge, onEdit, onDelete, viewUrl }: {
-  id: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  badge: string;
-  onEdit: () => void;
-  onDelete: () => void;
-  viewUrl?: string;
-}) {
-  const [confirmDelete, setConfirmDelete] = useState(false);
-
-  return (
-    <div className="bg-white border border-black/8 rounded-xs overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-4 shadow-2xs">
-      <div className="flex items-center gap-4 min-w-0 flex-1">
-        <div className="relative w-16 h-16 bg-[#EFECE6] rounded-xs overflow-hidden border border-black/5 flex-shrink-0">
-          {image && <img src={image} alt={title} className="w-full h-full object-cover object-top" />}
-        </div>
-        <div className="flex flex-col min-w-0 flex-1">
-          <span className="font-mono text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold mb-0.5">{badge}</span>
-          <h3 className="font-serif text-base font-light text-[#1A1A1A] truncate">{title}</h3>
-          <p className="font-sans text-[10px] text-black/50 truncate mt-0.5">{subtitle}</p>
-        </div>
-      </div>
-
-      {confirmDelete ? (
-        <div className="flex items-center gap-2 self-end sm:self-center">
-          <span className="text-[10px] font-mono text-red-600">Confirm?</span>
-          <button onClick={onDelete} className="px-3 py-1 bg-red-600 text-white text-[8px] font-mono uppercase tracking-[0.15em] rounded-xs">Yes, Delete</button>
-          <button onClick={() => setConfirmDelete(false)} className="px-3 py-1 border border-black/20 text-[8px] font-mono uppercase tracking-[0.15em] rounded-xs">Cancel</button>
-        </div>
-      ) : (
-        <div className="flex items-center gap-2 flex-shrink-0 self-end sm:self-center">
-          {viewUrl && (
-            <Link href={viewUrl} target="_blank" className="px-3 py-1.5 border border-black/15 text-[8px] tracking-[0.15em] uppercase font-mono text-black/50 hover:text-black transition-colors rounded-xs">
-              View
-            </Link>
-          )}
-          <button onClick={onEdit} className="px-3 py-1.5 border border-black/15 text-[8px] tracking-[0.15em] uppercase font-mono text-black/50 hover:text-black transition-colors rounded-xs">
-            Edit
-          </button>
-          <button onClick={() => setConfirmDelete(true)} className="px-3 py-1.5 border border-red-200 text-[8px] tracking-[0.15em] uppercase font-mono text-red-500 hover:text-red-700 transition-colors rounded-xs">
-            Delete
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── MAILBOX & NODEMAILER CONFIG SECTION ──
-function MailboxConfigSection({ onToast }: { onToast: () => void }) {
-  const [email, setEmail] = useState('jennifer@stylewithj.in');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [hasPassword, setHasPassword] = useState(false);
-  const [host, setHost] = useState('smtpout.secureserver.net');
-  const [port, setPort] = useState(465);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [testing, setTesting] = useState(false);
-  const [alert, setAlert] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
-
-  useEffect(() => {
-    async function loadConfig() {
-      try {
-        setLoading(true);
-        const res = await fetch('/api/admin/email-config');
-        const data = await res.json();
-        if (data.email) setEmail(data.email);
-        if (data.hasPassword !== undefined) setHasPassword(Boolean(data.hasPassword));
-        if (data.host) setHost(data.host);
-        if (data.port) setPort(data.port);
-      } catch {
-        setAlert({
-          type: 'error',
-          message: 'Unable to reach the server to check email configuration.',
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadConfig();
-  }, []);
-
-  async function handleSave(e: React.FormEvent) {
-    e.preventDefault();
-    if (!password.trim()) {
-      setAlert({
-        type: 'error',
-        message: 'Please enter a password to update in .env and .env.local.',
-      });
-      return;
-    }
-
-    try {
-      setSaving(true);
-      setAlert(null);
-      const res = await fetch('/api/admin/email-config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email.trim(),
-          password: password.trim(),
-        }),
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setHasPassword(true);
-        setPassword('');
-        setAlert({
-          type: 'success',
-          message: 'Password successfully updated in .env and .env.local! Nodemailer has been updated with the new credentials immediately.',
-        });
-        onToast();
-      } else {
-        setAlert({
-          type: 'error',
-          message: data.error || 'Failed to update credentials in environment files.',
-        });
-      }
-    } catch {
-      setAlert({
-        type: 'error',
-        message: 'Network error while saving mailbox credentials.',
-      });
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function handleTest() {
-    try {
-      setTesting(true);
-      setAlert({
-        type: 'info',
-        message: 'Testing connection to GoDaddy/Titan SMTP server (smtpout.secureserver.net:465)...',
-      });
-      const res = await fetch('/api/admin/email-config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'test',
-          email: email.trim(),
-          password: password.trim() || undefined,
-        }),
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setAlert({
-          type: 'success',
-          message: `✓ Connection Verified: ${data.message}`,
-        });
-      } else {
-        setAlert({
-          type: 'error',
-          message: `✗ SMTP Error: ${data.error || 'Connection or authentication failed.'}`,
-        });
-      }
-    } catch {
-      setAlert({
-        type: 'error',
-        message: 'Network error while attempting SMTP verification.',
-      });
-    } finally {
-      setTesting(false);
-    }
-  }
-
-  return (
-    <div className="flex flex-col gap-8">
-      {/* Overview & Credentials Header */}
-      <div className="bg-white border border-black/10 p-6 sm:p-10 rounded-xs flex flex-col gap-6 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-black/10">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-black/50 font-bold">
-                ✦ SECURE MAILBOX & SMTP CONFIGURATION
-              </span>
-              <span className="px-2 py-0.5 text-[8px] font-mono uppercase tracking-wider bg-black text-white rounded-xs">
-                .env / Nodemailer
-              </span>
-            </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-light text-[#1A1A1A]">
-              Titan / GoDaddy Mailbox Password
-            </h2>
-            <p className="font-sans text-xs text-black/60 mt-1 max-w-xl">
-              Configure or change the mailbox password used by Nodemailer to dispatch client booking inquiries and contact forms directly to your inbox.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-black/50">Status:</span>
-            {loading ? (
-              <span className="px-2.5 py-1 text-[9px] font-mono bg-black/5 text-black/50 rounded-xs animate-pulse">
-                Checking...
-              </span>
-            ) : hasPassword ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-[9px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                Active in .env
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-[9px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border border-amber-300 rounded-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                Password Not Set
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Server Specification Badges */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-[#F7F5F0] border border-black/10 rounded-xs text-[11px] font-mono text-black/70">
-          <div>
-            <span className="block text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold">SMTP Host</span>
-            <span className="text-black font-medium">{host}</span>
-          </div>
-          <div>
-            <span className="block text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold">Port & Security</span>
-            <span className="text-black font-medium">{port} (SSL / TLS Secure)</span>
-          </div>
-          <div>
-            <span className="block text-[8px] tracking-[0.2em] uppercase text-black/40 font-bold">Target Mailbox</span>
-            <span className="text-black font-medium truncate block">{email}</span>
-          </div>
-        </div>
-
-        {/* Alert Feedback Banner */}
-        {alert && (
-          <div
-            className={`p-4 rounded-xs border text-xs leading-relaxed flex items-start gap-3 transition-all ${
-              alert.type === 'success'
-                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                : alert.type === 'error'
-                ? 'bg-rose-50 border-rose-200 text-rose-800'
-                : 'bg-sky-50 border-sky-200 text-sky-800'
-            }`}
-          >
-            <span className="text-sm font-bold">
-              {alert.type === 'success' ? '✓' : alert.type === 'error' ? '⚠' : 'ℹ'}
-            </span>
-            <div className="flex-1 font-sans">{alert.message}</div>
-          </div>
-        )}
-
-        {/* Password Update Form */}
-        <form onSubmit={handleSave} className="flex flex-col gap-6 pt-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">
-                Mailbox Sender Email <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-2.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black transition-colors"
-                placeholder="jennifer@stylewithj.in"
-              />
-              <span className="text-[10px] text-black/40 font-sans">
-                Corresponds to TITAN_EMAIL in .env.local
-              </span>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/50 font-bold">
-                {hasPassword ? 'Change Mailbox Password (.env)' : 'Set Mailbox Password (.env)'}{' '}
-                <span className="text-red-500">*</span>
-              </label>
-              <div className="relative w-full">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder={hasPassword ? 'Enter new password to overwrite...' : 'Enter your mailbox password...'}
-                  className="w-full pl-4 pr-11 py-2.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black transition-colors"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-black/40 hover:text-black transition-colors"
-                  title={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 014.122-.971c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" />
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  )}
-                </button>
-              </div>
-              <span className="text-[10px] text-black/40 font-sans">
-                {hasPassword ? 'Existing password is saved in your .env files.' : 'Enter password to activate Nodemailer.'}
-              </span>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
-            <button
-              type="submit"
-              disabled={saving || !password.trim()}
-              className="flex-1 py-3.5 bg-black hover:bg-black/90 text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {saving ? (
-                <>
-                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Saving to .env...
-                </>
-              ) : (
-                '💾 Save Mailbox Password to .env'
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={handleTest}
-              disabled={testing || (!password.trim() && !hasPassword)}
-              className="px-6 py-3.5 border border-black/20 hover:border-black/50 text-[10px] tracking-[0.2em] uppercase font-mono font-medium text-black hover:bg-[#F2EFE9] transition-all rounded-xs disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {testing ? (
-                <>
-                  <span className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                  Verifying SMTP...
-                </>
-              ) : (
-                '⚡ Test SMTP Connection'
-              )}
-            </button>
-          </div>
-        </form>
-
-        {/* Security & Setup Guide */}
-        <div className="mt-4 pt-6 border-t border-black/10 flex flex-col gap-2">
-          <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/60 font-bold">
-            🔒 How Mailbox Credentials Work
-          </span>
-          <ul className="text-xs text-black/60 space-y-1.5 list-disc list-inside font-sans leading-relaxed">
-            <li>When you click <strong>Save</strong>, the password is encrypted directly into your server&apos;s <code className="bg-black/5 px-1.5 py-0.5 font-mono text-[10px] text-black">.env.local</code> and <code className="bg-black/5 px-1.5 py-0.5 font-mono text-[10px] text-black">.env</code> files.</li>
-            <li>Runtime environment variables are refreshed in memory on-the-fly, so customer contact submissions work immediately without requiring a manual server restart.</li>
-            <li>Click <strong>Test SMTP Connection</strong> at any time to verify that GoDaddy/Titan SMTP accepts your email and password.</li>
-          </ul>
-        </div>
-      </div>
     </div>
   );
 }

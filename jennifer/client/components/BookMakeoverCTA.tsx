@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSiteData } from '@/lib/use-site-data';
 
 interface PageCtaConfig {
   kicker: string;
@@ -100,6 +101,7 @@ export default function BookMakeoverCTA({
   buttonText: overrideButtonText,
   service: overrideService,
 }: BookMakeoverCTAProps) {
+  const { ctaBanner, contact } = useSiteData();
   const currentPath = usePathname() || '/';
   const effectivePath = sourcePage || currentPath;
   const isHome = effectivePath === '/';
@@ -107,8 +109,8 @@ export default function BookMakeoverCTA({
   // Form states for Home page direct message form
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
   const [selectedService, setSelectedService] = useState('Full Transformation');
   const [message, setMessage] = useState('I would like to book a Complete Style Makeover consultation with Jennifer.');
   const [submitted, setSubmitted] = useState(false);
@@ -141,15 +143,21 @@ export default function BookMakeoverCTA({
     }
   }
 
-  const kicker = overrideKicker || matchedConfig.kicker;
-  const title = overrideTitle || matchedConfig.title;
-  const subtitle = overrideSubtitle || matchedConfig.subtitle;
-  const buttonText = overrideButtonText || matchedConfig.buttonText;
+  const homeKicker = isHome ? (ctaBanner?.kicker || matchedConfig.kicker) : matchedConfig.kicker;
+  const homeTitle = isHome ? (ctaBanner?.title || matchedConfig.title) : matchedConfig.title;
+  const homeSubtitle = isHome ? (ctaBanner?.subtitle || matchedConfig.subtitle) : matchedConfig.subtitle;
+  const homeButtonText = isHome ? (ctaBanner?.buttonText || matchedConfig.buttonText) : matchedConfig.buttonText;
+
+  const kicker = overrideKicker || homeKicker;
+  const title = overrideTitle || homeTitle;
+  const subtitle = overrideSubtitle || homeSubtitle;
+  const buttonText = overrideButtonText || homeButtonText;
   const service = overrideService || matchedConfig.service;
   const booking = matchedConfig.booking;
 
   const targetHref = `/connect?service=${encodeURIComponent(service)}&booking=${encodeURIComponent(booking)}#book-makeover`;
-  const whatsappUrl = `https://wa.me/918078341747?text=${encodeURIComponent(`Hi Jennifer, I would like to inquire about ${title} (${service}).`)}`;
+  const cleanPhone = contact?.whatsappPhone || '918078341747';
+  const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hi Jennifer, I would like to inquire about ${title} (${service}).`)}`;
 
   async function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -163,8 +171,8 @@ export default function BookMakeoverCTA({
         body: JSON.stringify({
           firstName,
           lastName,
-          email,
           phone,
+          location,
           service: selectedService,
           message,
           locationText: 'Home Page Direct Inquiry'
@@ -232,7 +240,7 @@ export default function BookMakeoverCTA({
                   Message Sent Successfully!
                 </h3>
                 <p className="font-sans text-xs sm:text-sm text-black/80 max-w-md leading-relaxed font-light">
-                  Thank you, <strong className="font-semibold text-black">{firstName}</strong>! Your style makeover inquiry has been sent directly to Jennifer. We will connect with you shortly.
+                  Thank you, <strong className="font-semibold text-black">{firstName}</strong>! Your style makeover inquiry has been sent directly to Jennifer. We will connect with you shortly via phone.
                 </p>
                 <div className="mt-2 flex flex-col sm:flex-row items-center gap-3">
                   <button
@@ -241,8 +249,8 @@ export default function BookMakeoverCTA({
                       setSubmitted(false);
                       setFirstName('');
                       setLastName('');
-                      setEmail('');
                       setPhone('');
+                      setLocation('');
                       setMessage('I would like to book a Complete Style Makeover consultation with Jennifer.');
                     }}
                     className="px-6 py-3 bg-[#1A1A1A] hover:bg-black text-white text-[9px] font-mono uppercase tracking-[0.22em] font-semibold rounded-xs transition-colors cursor-pointer"
@@ -259,75 +267,52 @@ export default function BookMakeoverCTA({
                   </div>
                 )}
 
-                {/* Name Row */}
+                {/* Row 1: First Name & Last Name (Pure Placeholders, No Labels) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="font-sans text-[11px] font-light tracking-wider text-black/60 uppercase">
-                      First Name *
-                    </label>
-                    <input 
-                      type="text" 
-                      value={firstName}
-                      onChange={e => setFirstName(e.target.value)}
-                      placeholder="e.g. Maya"
-                      className="bg-transparent border-b border-black/30 pb-2 font-sans text-sm focus:border-black focus:outline-none transition-colors placeholder:text-black/30" 
-                      required 
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="font-sans text-[11px] font-light tracking-wider text-black/60 uppercase">
-                      Last Name *
-                    </label>
-                    <input 
-                      type="text" 
-                      value={lastName}
-                      onChange={e => setLastName(e.target.value)}
-                      placeholder="e.g. Sen"
-                      className="bg-transparent border-b border-black/30 pb-2 font-sans text-sm focus:border-black focus:outline-none transition-colors placeholder:text-black/30" 
-                      required 
-                    />
-                  </div>
+                  <input 
+                    type="text" 
+                    value={firstName}
+                    onChange={e => setFirstName(e.target.value)}
+                    placeholder="First Name *"
+                    className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                    required 
+                  />
+                  <input 
+                    type="text" 
+                    value={lastName}
+                    onChange={e => setLastName(e.target.value)}
+                    placeholder="Last Name *"
+                    className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                    required 
+                  />
                 </div>
 
-                {/* Email & Phone Row */}
+                {/* Row 2: Phone Number & Location */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="font-sans text-[11px] font-light tracking-wider text-black/60 uppercase">
-                      Email Address *
-                    </label>
-                    <input 
-                      type="email" 
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="e.g. maya@example.com"
-                      className="bg-transparent border-b border-black/30 pb-2 font-sans text-sm focus:border-black focus:outline-none transition-colors placeholder:text-black/30" 
-                      required 
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="font-sans text-[11px] font-light tracking-wider text-black/60 uppercase">
-                      Phone Number *
-                    </label>
-                    <input 
-                      type="tel" 
-                      value={phone}
-                      onChange={e => setPhone(e.target.value)}
-                      placeholder="+91 80783 41747"
-                      className="bg-transparent border-b border-black/30 pb-2 font-sans text-sm focus:border-black focus:outline-none transition-colors placeholder:text-black/30" 
-                      required 
-                    />
-                  </div>
+                  <input 
+                    type="tel" 
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    placeholder="Phone Number *"
+                    className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                    required 
+                  />
+                  <input 
+                    type="text" 
+                    value={location}
+                    onChange={e => setLocation(e.target.value)}
+                    placeholder="Location / City *"
+                    className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black placeholder:text-black/45" 
+                    required 
+                  />
                 </div>
 
-                {/* Service Selection Dropdown */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="font-sans text-[11px] font-light tracking-wider text-black/60 uppercase">
-                    Select Your Styling Curation *
-                  </label>
+                {/* Row 3: Service Selection Dropdown */}
+                <div>
                   <select 
                     value={selectedService}
                     onChange={e => setSelectedService(e.target.value)}
-                    className="bg-transparent border-b border-black/30 pb-2 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black/90 cursor-pointer"
+                    className="w-full bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black/90 cursor-pointer"
                     required
                   >
                     <option value="Full Transformation" className="bg-[#FAF8F3] text-black">Complete Style Makeover / Full Transformation</option>
@@ -340,55 +325,63 @@ export default function BookMakeoverCTA({
                   </select>
                 </div>
 
-                {/* Message Textarea */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="font-sans text-[11px] font-light tracking-wider text-black/60 uppercase">
-                    Tell Jennifer About Your Style Goals *
-                  </label>
-                  <textarea 
-                    rows={3} 
-                    value={message}
-                    onChange={e => setMessage(e.target.value)}
-                    className="bg-transparent border-b border-black/30 pb-2 font-sans text-sm focus:border-black focus:outline-none resize-none transition-colors" 
-                    required
-                  />
-                </div>
+                {/* Row 4: Message Textarea */}
+                <textarea 
+                  rows={3} 
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  placeholder="Your Message / Styling Goals *"
+                  className="bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none resize-none transition-colors text-black placeholder:text-black/45" 
+                  required
+                />
 
                 {/* Submit Action Button */}
                 <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="w-full sm:w-auto px-10 py-4 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9.5px] sm:text-[10px] font-medium uppercase tracking-[0.25em] transition-colors shadow-sm rounded-xs cursor-pointer disabled:opacity-50 text-center"
+                    className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#1A1A1A] hover:bg-black text-white text-[10px] tracking-[0.25em] uppercase font-mono font-medium transition-all shadow-sm rounded-xs disabled:opacity-50 cursor-pointer"
                   >
-                    {isSubmitting ? 'Transmitting Email...' : 'Send Message →'}
+                    <span>{isSubmitting ? 'Transmitting Request...' : 'Submit Message →'}</span>
                   </button>
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-4 border border-black/15 hover:border-black text-[#1A1A1A] text-[10px] tracking-[0.2em] uppercase font-mono font-medium transition-colors rounded-xs"
+                  >
+                    <span>Chat on WhatsApp</span>
+                    <span className="text-xs">↗</span>
+                  </a>
                 </div>
               </form>
             )}
           </div>
         ) : (
-          /* ON OTHER PAGES: Compact Banner with CTA and WhatsApp */
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 self-start">
-            <Link
-              href={targetHref}
-              className="group inline-flex items-center justify-center gap-3 px-7 py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-[9.5px] sm:text-[10px] font-mono uppercase tracking-[0.25em] font-medium transition-all duration-200 rounded-xs shadow-xs"
-            >
-              <span>{buttonText}</span>
-              <span className="transform group-hover:translate-x-1 transition-transform duration-200 text-xs">
-                →
-              </span>
-            </Link>
-
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-3.5 text-black/60 hover:text-black text-[9px] font-mono uppercase tracking-[0.2em] font-medium border border-black/10 hover:border-black/30 transition-all duration-200 rounded-xs bg-white/60"
-            >
-              <span>WhatsApp Concierge</span>
-              <span className="text-[10px]">↗</span>
-            </a>
+          /* ON INNER PAGES: Clean Minimal Banner with Dual Action Buttons */
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <Link
+                href={targetHref}
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#1A1A1A] hover:bg-black text-white text-[10px] tracking-[0.25em] uppercase font-mono font-medium transition-all duration-300 shadow-sm hover:shadow-md rounded-xs border border-white/10 active:scale-98"
+              >
+                <span>{buttonText}</span>
+                <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
+              </Link>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-4 border border-black/15 hover:border-black text-[#1A1A1A] text-[10px] tracking-[0.2em] uppercase font-mono font-medium transition-colors rounded-xs"
+              >
+                <span>Chat on WhatsApp</span>
+                <span className="text-xs">↗</span>
+              </a>
+            </div>
+            <div className="flex items-center gap-3 text-xs text-black/50 font-light font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] uppercase tracking-wider">Concierge Responds Within 4 Hours</span>
+            </div>
           </div>
         )}
 

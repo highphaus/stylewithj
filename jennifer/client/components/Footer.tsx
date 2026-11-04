@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-8 mb-24">
           
           {/* Brand Left */}
-          <Link href="/" className="md:col-span-4 lg:col-span-5 flex items-center gap-2.5 group">
+          <Link href="/" className="md:col-span-4 lg:col-span-5 flex items-center gap-1.5 group">
             <span className="font-sans text-xs sm:text-sm tracking-[0.28em] uppercase font-light text-thalina-text whitespace-nowrap leading-none flex items-center">
               Style with
             </span>

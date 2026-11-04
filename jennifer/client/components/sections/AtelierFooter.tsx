@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import BookMakeoverCTA from '@/components/BookMakeoverCTA';
+import { useSiteData } from '@/lib/use-site-data';
 
 interface AtelierFooterProps {
   hideCta?: boolean;
@@ -12,7 +13,14 @@ interface AtelierFooterProps {
 
 export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
   const pathname = usePathname();
+  const { contact } = useSiteData();
   const shouldShowCta = !hideCta && pathname !== '/connect' && !pathname?.startsWith('/admin');
+
+  const email = contact?.email || 'jennifer@stylewithj.in';
+  const phone = contact?.phone || '+91 80783 41747';
+  const cleanPhone = phone.replace(/\s+/g, '');
+  const address = contact?.address || 'DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070\nIndia';
+  const instagram = contact?.instagramUrl || 'https://instagram.com/stylewithj';
 
   return (
     <>
@@ -22,7 +30,7 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
         
         {/* Top Branding Bar */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-10 pb-10 sm:pb-16 border-b border-white/10">
-          <Link href="/" className="w-full sm:w-auto flex items-center gap-2.5 sm:gap-3.5 hover:opacity-90 transition-opacity duration-300 group">
+          <Link href="/" className="w-full sm:w-auto flex items-center gap-1.5 sm:gap-2 hover:opacity-90 transition-opacity duration-300 group">
             <span className="font-sans text-xs sm:text-sm md:text-base tracking-[0.28em] uppercase font-light text-white whitespace-nowrap select-none leading-none flex items-center">
               Style with
             </span>
@@ -40,11 +48,10 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
           <div className="w-full sm:w-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 sm:gap-8 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
             <div className="flex flex-col gap-0.5">
               <span className="text-[8px] uppercase tracking-[0.3em] text-white/40 font-mono">DIRECT INQUIRIES</span>
-              <a href="mailto:jennifer@stylewithj.in" className="text-xs sm:text-sm font-sans font-light text-white/90 hover:text-white transition-colors">
-                jennifer@stylewithj.in
+              <a href={`mailto:${email}`} className="text-xs sm:text-sm font-sans font-light text-white/90 hover:text-white transition-colors">
+                {email}
               </a>
             </div>
-
           </div>
         </div>
 
@@ -68,9 +75,9 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-4 font-mono font-medium">Explore</h4>
             <ul className="flex flex-col gap-2.5 text-white/60 font-light text-xs">
               <li><Link href="/categories" className="hover:text-white transition-colors">Categories</Link></li>
-              <li><Link href="/journal" className="hover:text-white transition-colors">Blog</Link></li>
-              <li><Link href="/insights" className="hover:text-white transition-colors">Insights</Link></li>
-              <li><Link href="/programs" className="hover:text-white transition-colors">Programs</Link></li>
+              <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+              <li><Link href="/lookbook" className="hover:text-white transition-colors">Gallery</Link></li>
+              <li><Link href="/services" className="hover:text-white transition-colors">Offerings</Link></li>
               <li><Link href="/connect" className="hover:text-white transition-colors">Connect</Link></li>
             </ul>
           </div>
@@ -78,10 +85,8 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
           {/* Col 3: Studio Location */}
           <div className="col-span-2 sm:col-span-1">
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-4 font-mono font-medium">Studio Address</h4>
-            <address className="text-white/60 font-light not-italic leading-relaxed">
-              DLF Emporio, Vasant Kunj<br />
-              New Delhi, Delhi 110070<br />
-              India
+            <address className="text-white/60 font-light not-italic leading-relaxed whitespace-pre-line">
+              {address}
             </address>
           </div>
 
@@ -90,7 +95,7 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-4 font-mono font-medium">Social & Direct</h4>
             <div className="flex flex-row sm:flex-col gap-6 sm:gap-3.5 text-white/60 font-light">
               <a 
-                href="https://instagram.com/stylewithj" 
+                href={instagram} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="flex items-center gap-2 hover:text-white transition-colors group"
@@ -102,7 +107,7 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
               </a>
 
               <a 
-                href="mailto:jennifer@stylewithj.in" 
+                href={`mailto:${email}`} 
                 className="flex items-center gap-2 hover:text-white transition-colors group"
               >
                 <svg className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -112,13 +117,13 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
               </a>
 
               <a 
-                href="tel:+918078341747" 
+                href={`tel:${cleanPhone}`} 
                 className="flex items-center gap-2 hover:text-white transition-colors group"
               >
                 <svg className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.828-1.41-5.11-3.692-6.52-6.52l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                 </svg>
-                <span>+91 80783 41747</span>
+                <span>{phone}</span>
               </a>
             </div>
           </div>
