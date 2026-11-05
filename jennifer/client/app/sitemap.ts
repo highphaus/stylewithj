@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { BLOG_POSTS } from '@/lib/blog-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://stylewithj.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.stylewithj.in';
 
   // Core static pages
   const staticRoutes: MetadataRoute.Sitemap = [

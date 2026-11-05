@@ -49,11 +49,11 @@ async function generateAssets() {
       </text>
 
       <!-- Main Heading -->
-      <text x="90" y="335" font-family="'Times New Roman', Times, Georgia, serif" font-size="52" letter-spacing="1" fill="#FFFFFF" font-weight="300">
+      <text x="90" y="340" font-family="'Times New Roman', Times, Georgia, serif" font-size="58" letter-spacing="1" fill="#FFFFFF" font-weight="300">
         Personal Stylist
       </text>
-      <text x="90" y="395" font-family="'Times New Roman', Times, Georgia, serif" font-size="44" font-style="italic" fill="#FAF9F6" font-weight="300">
-        &amp; Image Consultant
+      <text x="90" y="398" font-family="'Times New Roman', Times, Georgia, serif" font-size="40" font-style="italic" fill="#FAF9F6" font-weight="300">
+        &amp; Wardrobe Curation
       </text>
 
       <!-- Thin gold accent line -->
@@ -71,7 +71,7 @@ async function generateAssets() {
       </text>
 
       <text x="1120" y="565" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="13" fill="#FFFFFF" fill-opacity="0.75" letter-spacing="3">
-        STYLEWITHJ.COM
+        STYLEWITHJ.IN
       </text>
     </svg>
   `);
@@ -145,14 +145,7 @@ async function generateAssets() {
   await sharp(icon512Path).resize(180, 180).png().toFile(appleTouchPath);
   console.log('✓ Created:', appleTouchPath);
 
-  // Also place in app/ directory for Next.js convention
-  const appIconPath = path.join(appDir, 'icon.png');
-  const appApplePath = path.join(appDir, 'apple-icon.png');
-  fs.copyFileSync(icon512Path, appIconPath);
-  fs.copyFileSync(appleTouchPath, appApplePath);
-  console.log('✓ Created:', appIconPath);
-  console.log('✓ Created:', appApplePath);
-
+  // Note: Icons are maintained directly from public/logo/style with j.png per user requirement.
   console.log('All social and WhatsApp assets generated successfully!');
 }
 

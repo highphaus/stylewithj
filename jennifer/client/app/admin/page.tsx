@@ -866,7 +866,7 @@ export default function AdminPage() {
                       </span>
                     </div>
                     <span className="font-mono text-[8px] text-white/40 truncate max-w-[200px]">
-                      stylewithj.com{simulatorPage}
+                      stylewithj.in{simulatorPage}
                     </span>
                   </div>
 
@@ -2291,7 +2291,7 @@ export default function AdminPage() {
                         </span>
                       </div>
                       <div className="font-mono text-[8px] text-white/40 tracking-wider uppercase px-2 py-0.5 bg-black/40 rounded-xs truncate max-w-[220px]">
-                        stylewithj.com{simulatorPage}
+                        stylewithj.in{simulatorPage}
                       </div>
                     </div>
 

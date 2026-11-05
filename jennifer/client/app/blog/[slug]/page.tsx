@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) return { title: 'Article Not Found | Style with J' };
 
-  const canonicalUrl = `https://stylewithj.com/blog/${post.slug}`;
+  const canonicalUrl = `https://www.stylewithj.in/blog/${post.slug}`;
 
   return {
     title: post.metaTitle,
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       authors: [post.author],
       images: [
         {
-          url: `https://stylewithj.com${post.coverImage}`,
+          url: `https://www.stylewithj.in${post.coverImage}`,
           width: 1200,
           height: 630,
           alt: post.coverImageAlt || post.title,
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: post.metaTitle,
       description: post.metaDescription,
-      images: [`https://stylewithj.com${post.coverImage}`],
+      images: [`https://www.stylewithj.in${post.coverImage}`],
     },
   };
 }
@@ -66,7 +66,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   // Related articles from same category or fallback
   const relatedPosts = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
-  const articleUrl = `https://stylewithj.com/blog/${post.slug}`;
+  const articleUrl = `https://www.stylewithj.in/blog/${post.slug}`;
 
   // Schema.org BlogPosting Structured Data
   const jsonLd = {
@@ -78,11 +78,11 @@ export default async function BlogPostPage({ params }: Props) {
     },
     headline: post.title,
     description: post.metaDescription,
-    image: `https://stylewithj.com${post.coverImage}`,
+    image: `https://www.stylewithj.in${post.coverImage}`,
     author: {
       '@type': 'Person',
       name: post.author,
-      jobTitle: 'Personal Stylist & Image Consultant',
+      jobTitle: 'Personal Stylist',
       worksFor: {
         '@type': 'Organization',
         name: 'Style with J',
@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
       name: 'Style with J',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://stylewithj.com/images/style%20with%20j.png',
+        url: 'https://www.stylewithj.in/images/style%20with%20j.png',
       },
     },
     datePublished: post.publishDate,
