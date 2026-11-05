@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Manrope, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { LightboxProvider } from '@/components/ImageLightbox';
+import NetworkStatusListener from '@/components/NetworkStatusListener';
 
 const manrope = Manrope({ 
   subsets: ['latin'], 
@@ -16,8 +17,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Personal Stylist | Style with J',
-  description: 'Premier Personal Stylist & Image Consultant. Tailored wardrobe audits, executive workwear, personal shopping, and bridal trousseau styling in Bangalore & virtually worldwide.',
+  title: 'Personal Stylist & Image Consultant | Style with J',
+  description: 'Bespoke Personal Stylist & Image Consultant by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide.',
   keywords: [
     'personal stylist',
     'personal stylist bangalore',
@@ -36,33 +37,53 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://stylewithj.com',
   },
+  icons: {
+    icon: [
+      { url: '/logo/style with j.png', type: 'image/png' },
+      { url: '/logo/style-with-j.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/logo/style with j.png' },
+    ],
+    shortcut: '/logo/style with j.png',
+  },
+  manifest: '/manifest.json',
   openGraph: {
-    title: 'Personal Stylist | Style with J',
-    description: 'Premier Personal Stylist & Image Consultant. Tailored wardrobe audits, executive workwear, personal shopping, and bridal trousseau styling in Bangalore & virtually worldwide.',
+    title: 'Personal Stylist & Image Consultant | Style with J',
+    description: 'Bespoke Personal Stylist & Image Consultant by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide.',
     url: 'https://stylewithj.com',
     siteName: 'Style with J',
     locale: 'en_IN',
     type: 'website',
     images: [
       {
-        url: 'https://stylewithj.com/images/style%20with%20j.png',
+        url: 'https://stylewithj.com/og-image.jpg',
+        secureUrl: 'https://stylewithj.com/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Personal Stylist | Style with J',
+        type: 'image/jpeg',
+        alt: 'Personal Stylist & Image Consultant | Style with J',
       },
       {
-        url: 'https://stylewithj.com/images/includes/IMG_8863.JPG.jpeg',
-        width: 1200,
-        height: 630,
-        alt: 'Personal Stylist | Style with J Workwear',
+        url: 'https://stylewithj.com/icon-512.png',
+        secureUrl: 'https://stylewithj.com/icon-512.png',
+        width: 512,
+        height: 512,
+        type: 'image/png',
+        alt: 'Style with J Luxury Monogram Icon',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Personal Stylist | Style with J',
-    description: 'Premier Personal Stylist & Image Consultant. Tailored wardrobe audits, executive workwear, personal shopping, and bridal trousseau styling.',
-    images: ['https://stylewithj.com/images/style%20with%20j.png'],
+    title: 'Personal Stylist & Image Consultant | Style with J',
+    description: 'Bespoke Personal Stylist & Image Consultant by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury styling.',
+    images: ['https://stylewithj.com/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -86,8 +107,8 @@ const jsonLdSchema = {
       name: 'Style with J',
       alternateName: ['Style with J Bangalore', 'Style with J Personal Stylist'],
       url: 'https://stylewithj.com',
-      logo: 'https://stylewithj.com/logo/style%20with%20j.png',
-      image: 'https://stylewithj.com/images/hero/hero%20image%20desktop.png',
+      logo: 'https://stylewithj.com/icon-512.png',
+      image: 'https://stylewithj.com/og-image.jpg',
       description: 'Premier Personal Stylist, Wardrobe Audit, Personal Shopper, and Corporate Image Consultant in Bangalore. Specialized in executive workwear, capsule wardrobes, and bridal trousseau styling.',
       telephone: '+918078341747',
       priceRange: '₹5,000 - ₹50,000',
@@ -178,12 +199,44 @@ const jsonLdSchema = {
   ],
 };
 
-import NetworkStatusListener from '@/components/NetworkStatusListener';
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${manrope.className} ${manrope.variable} ${playfair.variable} overflow-x-clip w-full max-w-[100vw]`}>
       <head>
+        <meta name="theme-color" content="#111111" />
+        <meta name="apple-mobile-web-app-title" content="Style with J" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        {/* WhatsApp & Social Media OpenGraph Meta Tags */}
+        <meta property="og:title" content="Personal Stylist & Image Consultant | Style with J" />
+        <meta property="og:description" content="Bespoke Personal Stylist & Image Consultant by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide." />
+        <meta property="og:image" content="https://stylewithj.com/og-image.jpg" />
+        <meta property="og:image:secure_url" content="https://stylewithj.com/og-image.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Personal Stylist & Image Consultant | Style with J" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://stylewithj.com" />
+        <meta property="og:site_name" content="Style with J" />
+
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Personal Stylist & Image Consultant | Style with J" />
+        <meta name="twitter:description" content="Bespoke Personal Stylist & Image Consultant by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury styling." />
+        <meta name="twitter:image" content="https://stylewithj.com/og-image.jpg" />
+
+        {/* Favicons & Browser Tab Icons - Using exact navbar logo */}
+        <link rel="icon" href="/logo/style%20with%20j.png?v=3" type="image/png" />
+        <link rel="icon" href="/logo/style-with-j.png?v=3" type="image/png" />
+        <link rel="shortcut icon" href="/logo/style%20with%20j.png?v=3" type="image/png" />
+        <link rel="apple-touch-icon" href="/logo/style%20with%20j.png?v=3" />
+        <link rel="icon" href="/favicon.ico?v=3" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
+        <link rel="manifest" href="/manifest.json" />
+
         <link
           rel="stylesheet"
           href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&f[]=general-sans@300,400,500,600,700&display=swap"
