@@ -38,17 +38,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/favicon.ico', sizes: 'any' },
       { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
       { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
       { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-      { url: '/logo/style-with-j.png', type: 'image/png' },
     ],
     apple: [
-      { url: '/icon-192.png' },
+      { url: '/icon-192.png', sizes: '192x192' },
     ],
     shortcut: '/favicon.ico',
   },
@@ -68,14 +65,6 @@ export const metadata: Metadata = {
         height: 630,
         type: 'image/jpeg',
         alt: 'Personal Stylist | Style with J',
-      },
-      {
-        url: 'https://www.stylewithj.in/icon-512.png',
-        secureUrl: 'https://www.stylewithj.in/icon-512.png',
-        width: 512,
-        height: 512,
-        type: 'image/png',
-        alt: 'Style with J Luxury Monogram Icon',
       },
     ],
   },
@@ -211,35 +200,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-        {/* WhatsApp & Social Media OpenGraph Meta Tags */}
-        <meta property="og:title" content="Personal Stylist | Style with J" />
-        <meta property="og:description" content="Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide." />
-        <meta property="og:image" content="https://www.stylewithj.in/og-image.jpg" />
-        <meta property="og:image:secure_url" content="https://www.stylewithj.in/og-image.jpg" />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Personal Stylist | Style with J" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.stylewithj.in" />
-        <meta property="og:site_name" content="Style with J" />
-
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Personal Stylist | Style with J" />
-        <meta name="twitter:description" content="Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury styling." />
-        <meta name="twitter:image" content="https://www.stylewithj.in/og-image.jpg" />
-
-        {/* Favicons & Browser Tab Icons (Google Search & Social Compliant) */}
-        <link rel="icon" href="/favicon.ico?v=4" sizes="48x48" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=4" />
-        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=4" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=4" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=4" />
-        <link rel="shortcut icon" href="/favicon.ico?v=4" />
-        <link rel="apple-touch-icon" href="/icon-192.png?v=4" />
-        <link rel="manifest" href="/manifest.json" />
+        {/* WhatsApp & Schema ItemProp Image Fallbacks */}
+        <link rel="image_src" href="https://www.stylewithj.in/og-image.jpg" />
+        <meta itemProp="name" content="Personal Stylist | Style with J" />
+        <meta itemProp="description" content="Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide." />
+        <meta itemProp="image" content="https://www.stylewithj.in/og-image.jpg" />
 
         <link
           rel="stylesheet"
