@@ -409,5 +409,21 @@ export const seedTransformations: TransformationItem[] = [
       author: "P. Sen, Tech Founder",
       location: "Whitefield"
     }
+  },
+  {
+    id: "04",
+    client: "THE EXECUTIVE STRATEGIST",
+    demographic: "LEADERSHIP & BESPOKE DRAPE",
+    concept: "Sculpted jewel-tone tailoring and structural silk layering.",
+    beforeImg: "/images/includes/IMG_1756.JPG.jpeg",
+    afterImg: "/images/includes/IMG_1754.JPG.jpeg",
+    beforeStory: "Constrained by conventional boxy boardroom suiting that masked individual authority and felt rigid during global summits.",
+    afterStory: "Architected a fluid silk-wool drape matrix with sculpted shoulders and tailored contour lines, commanding executive presence with effortless ease.",
+    review: {
+      rating: 5,
+      quote: "Jennifer understood exactly what I needed for high-stakes investor summits. The transformation gave me commanding poise without sacrificing comfort or my authentic identity.",
+      author: "Dr. A. Menon, VP Global Strategy",
+      location: "Bengaluru & Singapore"
+    }
   }
 ];

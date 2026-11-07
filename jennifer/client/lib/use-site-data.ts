@@ -78,7 +78,23 @@ export function useSiteData() {
       if (storedArticles) setArticles(JSON.parse(storedArticles));
 
       const storedTransformations = localStorage.getItem(TRANSFORMATIONS_KEY);
-      if (storedTransformations) setTransformations(JSON.parse(storedTransformations));
+      if (storedTransformations) {
+        try {
+          const parsed = JSON.parse(storedTransformations);
+          if (Array.isArray(parsed)) {
+            // Guarantee all seed items (including newly added items like 04) are present
+            const merged = [...parsed];
+            seedTransformations.forEach(seed => {
+              if (!merged.some(m => m.id === seed.id)) {
+                merged.push(seed);
+              }
+            });
+            setTransformations(merged);
+          }
+        } catch {
+          setTransformations(seedTransformations);
+        }
+      }
 
       const storedCta = localStorage.getItem(CTA_BANNER_KEY);
       if (storedCta) setCtaBanner(JSON.parse(storedCta));

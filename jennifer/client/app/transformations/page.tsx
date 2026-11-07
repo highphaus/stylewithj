@@ -1,6 +1,7 @@
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import TransformationsFeed from '@/components/TransformationsFeed';
+import EditorialReviewCarousel from '@/components/EditorialReviewCarousel';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 
 export default function TransformationsPage() {
@@ -18,8 +19,11 @@ export default function TransformationsPage() {
           </p>
         </header>
         
-        {/* Alternating Zigzag Down-by-Down Showcase */}
+        {/* 1. Alternating Zigzag Down-by-Down Showcase (4 Complete Case Studies) */}
         <TransformationsFeed />
+
+        {/* 2. Editorial Writings-Only Client Review Carousel */}
+        <EditorialReviewCarousel />
       </main>
 
       <AtelierFooter />
