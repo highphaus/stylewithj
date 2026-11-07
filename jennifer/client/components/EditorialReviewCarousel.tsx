@@ -71,9 +71,11 @@ export default function EditorialReviewCarousel() {
   const total = EDITORIAL_REVIEWS.length;
   const current = EDITORIAL_REVIEWS[currentIndex];
 
-  // ── AUTOMATIC MOVEMENT (Moves every 4.5 seconds continuously) ──
+  // ── AUTOMATIC MOVEMENT (Moves every 4.5 seconds continuously, pauses on hover) ──
+  const [isPaused, setIsPaused] = useState(false);
+
   useEffect(() => {
-    if (total <= 1) return;
+    if (total <= 1 || isPaused) return;
 
     const timer = setInterval(() => {
       setDirection(1);
@@ -81,7 +83,7 @@ export default function EditorialReviewCarousel() {
     }, 4500);
 
     return () => clearInterval(timer);
-  }, [total]);
+  }, [total, isPaused]);
 
   const handleNext = () => {
     setDirection(1);
@@ -137,54 +139,70 @@ export default function EditorialReviewCarousel() {
 
         {/* ═══════════════════════════════════════════════════════════════════
             MAIN CAROUSEL STAGE: BUTTONS FLANKING THE LEFT & RIGHT SIDES
-            [ ← Left Button ]      [ Center Review Writings ]      [ Right Button → ]
+            [ ← Left Button ]      [ Center Review Card ]      [ Right Button → ]
             ═══════════════════════════════════════════════════════════════════ */}
-        <div className="relative w-full max-w-5xl mx-auto flex items-center justify-between gap-3 sm:gap-6 lg:gap-10">
+        <div className="relative w-full max-w-5xl mx-auto flex items-center justify-between gap-3 sm:gap-6 lg:gap-8">
           
           {/* ── LEFT SIDE BUTTON ── */}
           <button
             onClick={handlePrev}
             aria-label="Previous review"
             title="Previous review"
-            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-black/15 bg-white/90 hover:bg-black text-black hover:text-white transition-all duration-300 flex items-center justify-center font-mono text-sm sm:text-base cursor-pointer shadow-xs hover:scale-105 z-20"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-black/15 bg-white hover:bg-black text-black hover:text-white transition-all duration-300 flex items-center justify-center font-mono text-sm sm:text-base cursor-pointer shadow-md hover:scale-105 z-20"
           >
             &larr;
           </button>
 
-          {/* ── CENTER WRITINGS / TYPOGRAPHY CARD ── */}
-          <div className="flex-1 px-2 sm:px-6 md:px-10 min-h-[300px] sm:min-h-[250px] md:min-h-[220px] flex items-center justify-center overflow-hidden">
+          {/* ── CENTER REVIEW CARD ── */}
+          <div
+            className="flex-1 px-1 sm:px-4 md:px-6 flex items-center justify-center min-h-[340px] sm:min-h-[300px] md:min-h-[280px]"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={current.id}
                 custom={direction}
-                initial={{ opacity: 0, x: direction > 0 ? 30 : -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: direction > 0 ? -30 : 30 }}
-                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center gap-5 sm:gap-6 w-full text-center"
+                initial={{ opacity: 0, y: 14, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -14, scale: 0.98 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-3xl bg-white border border-black/10 rounded-2xl sm:rounded-3xl p-7 sm:p-10 md:p-12 shadow-[0_12px_45px_rgba(0,0,0,0.06)] text-center flex flex-col items-center gap-5 sm:gap-6 relative overflow-hidden"
               >
-                {/* Star Rating & Verified Pill */}
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1 text-[#D4AF37] text-xs sm:text-sm">
+                {/* Subtle Decorative Watermark Quotation Mark */}
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-4 -left-2 text-8xl sm:text-9xl font-serif text-black/[0.03] select-none pointer-events-none leading-none"
+                >
+                  &ldquo;
+                </span>
+
+                {/* Card Top: Gold Star Rating & Verified Client Badge */}
+                <div className="flex flex-wrap items-center justify-center gap-2.5 z-10">
+                  <div className="flex items-center gap-1 text-[#D4AF37] text-sm sm:text-base">
                     {'★'.repeat(current.rating)}
                   </div>
-                  <span className="text-black/25">•</span>
-                  <span className="font-mono text-[8px] sm:text-[8.5px] tracking-[0.25em] uppercase text-black/45 font-bold">
+                  <span className="text-black/20">•</span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF9F6] border border-black/10 text-[8.5px] sm:text-[9.5px] font-mono tracking-[0.2em] uppercase text-black/70 font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block"></span>
                     VERIFIED CLIENT
                   </span>
                 </div>
 
-                {/* Large Editorial Quotation */}
-                <blockquote className="font-serif text-lg sm:text-2xl md:text-3xl font-light italic leading-relaxed text-[#1A1A1A] max-w-3xl mx-auto">
-                  "{current.quote}"
+                {/* Card Body: Editorial Quote Writings */}
+                <blockquote className="font-serif text-base sm:text-xl md:text-2xl font-light italic leading-relaxed text-[#1A1A1A] max-w-2xl mx-auto z-10">
+                  &ldquo;{current.quote}&rdquo;
                 </blockquote>
 
-                {/* Author & Location Details */}
-                <div className="flex flex-col items-center gap-1 pt-1">
-                  <div className="font-serif text-base sm:text-lg font-medium text-black">
+                {/* Card Divider */}
+                <div className="w-16 h-px bg-black/10 z-10" />
+
+                {/* Card Footer: Author Name, Role & Location */}
+                <div className="flex flex-col items-center gap-1 z-10">
+                  <div className="font-serif text-base sm:text-lg font-medium text-black tracking-tight">
                     {current.author}
                   </div>
-                  <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-black/50">
+                  <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-black/55">
                     {current.role} &middot; {current.location}
                   </div>
                 </div>
@@ -197,7 +215,7 @@ export default function EditorialReviewCarousel() {
             onClick={handleNext}
             aria-label="Next review"
             title="Next review"
-            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-black/15 bg-white/90 hover:bg-black text-black hover:text-white transition-all duration-300 flex items-center justify-center font-mono text-sm sm:text-base cursor-pointer shadow-xs hover:scale-105 z-20"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-black/15 bg-white hover:bg-black text-black hover:text-white transition-all duration-300 flex items-center justify-center font-mono text-sm sm:text-base cursor-pointer shadow-md hover:scale-105 z-20"
           >
             &rarr;
           </button>
