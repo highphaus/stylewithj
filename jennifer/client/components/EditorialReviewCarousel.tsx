@@ -66,23 +66,22 @@ export const EDITORIAL_REVIEWS: EditorialReview[] = [
 export default function EditorialReviewCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
   const total = EDITORIAL_REVIEWS.length;
   const current = EDITORIAL_REVIEWS[currentIndex];
 
-  // Auto-cycle every 6 seconds, pausing on hover/interaction
+  // ── AUTOMATIC MOVEMENT (Moves every 4.5 seconds continuously) ──
   useEffect(() => {
-    if (isPaused || total <= 1) return;
+    if (total <= 1) return;
 
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % total);
-    }, 6000);
+    }, 4500);
 
     return () => clearInterval(timer);
-  }, [isPaused, total]);
+  }, [total]);
 
   const handleNext = () => {
     setDirection(1);
@@ -118,12 +117,10 @@ export default function EditorialReviewCarousel() {
     <section
       id="reviews-carousel"
       className="w-full bg-[#FAF9F6] border-t border-black/10 py-16 sm:py-24 lg:py-28 relative overflow-hidden"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className="max-w-[1240px] mx-auto px-6 sm:px-10 lg:px-16 text-center">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-12 text-center">
         
         {/* Top Header */}
         <div className="flex flex-col items-center gap-3 mb-10 sm:mb-14">
@@ -138,74 +135,82 @@ export default function EditorialReviewCarousel() {
           </p>
         </div>
 
-        {/* ── PURE WRITINGS / TYPOGRAPHY CAROUSEL CARD ── */}
-        <div className="relative min-h-[300px] sm:min-h-[260px] md:min-h-[240px] flex items-center justify-center max-w-4xl mx-auto">
+        {/* ═══════════════════════════════════════════════════════════════════
+            MAIN CAROUSEL STAGE: BUTTONS FLANKING THE LEFT & RIGHT SIDES
+            [ ← Left Button ]      [ Center Review Writings ]      [ Right Button → ]
+            ═══════════════════════════════════════════════════════════════════ */}
+        <div className="relative w-full max-w-5xl mx-auto flex items-center justify-between gap-3 sm:gap-6 lg:gap-10">
           
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={current.id}
-              custom={direction}
-              initial={{ opacity: 0, y: direction > 0 ? 16 : -16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: direction > 0 ? -16 : 16 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col items-center gap-6 w-full"
-            >
-              {/* Star Rating & Verified Pill */}
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 text-[#D4AF37] text-xs">
-                  {'★'.repeat(current.rating)}
-                </div>
-                <span className="text-black/25">•</span>
-                <span className="font-mono text-[8px] tracking-[0.25em] uppercase text-black/45 font-bold">
-                  VERIFIED CLIENT
-                </span>
-              </div>
+          {/* ── LEFT SIDE BUTTON ── */}
+          <button
+            onClick={handlePrev}
+            aria-label="Previous review"
+            title="Previous review"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-black/15 bg-white/90 hover:bg-black text-black hover:text-white transition-all duration-300 flex items-center justify-center font-mono text-sm sm:text-base cursor-pointer shadow-xs hover:scale-105 z-20"
+          >
+            &larr;
+          </button>
 
-              {/* Large Editorial Quotation */}
-              <blockquote className="font-serif text-lg sm:text-2xl md:text-3xl font-light italic leading-relaxed text-[#1A1A1A] max-w-3xl mx-auto">
-                "{current.quote}"
-              </blockquote>
+          {/* ── CENTER WRITINGS / TYPOGRAPHY CARD ── */}
+          <div className="flex-1 px-2 sm:px-6 md:px-10 min-h-[300px] sm:min-h-[250px] md:min-h-[220px] flex items-center justify-center overflow-hidden">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={current.id}
+                custom={direction}
+                initial={{ opacity: 0, x: direction > 0 ? 30 : -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction > 0 ? -30 : 30 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col items-center gap-5 sm:gap-6 w-full text-center"
+              >
+                {/* Star Rating & Verified Pill */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 text-[#D4AF37] text-xs sm:text-sm">
+                    {'★'.repeat(current.rating)}
+                  </div>
+                  <span className="text-black/25">•</span>
+                  <span className="font-mono text-[8px] sm:text-[8.5px] tracking-[0.25em] uppercase text-black/45 font-bold">
+                    VERIFIED CLIENT
+                  </span>
+                </div>
 
-              {/* Author & Location Details */}
-              <div className="flex flex-col items-center gap-1 pt-2">
-                <div className="font-serif text-base sm:text-lg font-medium text-black">
-                  {current.author}
+                {/* Large Editorial Quotation */}
+                <blockquote className="font-serif text-lg sm:text-2xl md:text-3xl font-light italic leading-relaxed text-[#1A1A1A] max-w-3xl mx-auto">
+                  "{current.quote}"
+                </blockquote>
+
+                {/* Author & Location Details */}
+                <div className="flex flex-col items-center gap-1 pt-1">
+                  <div className="font-serif text-base sm:text-lg font-medium text-black">
+                    {current.author}
+                  </div>
+                  <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-black/50">
+                    {current.role} &middot; {current.location}
+                  </div>
                 </div>
-                <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-black/50">
-                  {current.role} &middot; {current.location}
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* ── RIGHT SIDE BUTTON ── */}
+          <button
+            onClick={handleNext}
+            aria-label="Next review"
+            title="Next review"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-black/15 bg-white/90 hover:bg-black text-black hover:text-white transition-all duration-300 flex items-center justify-center font-mono text-sm sm:text-base cursor-pointer shadow-xs hover:scale-105 z-20"
+          >
+            &rarr;
+          </button>
 
         </div>
 
-        {/* ── CAROUSEL CONTROLS: ARROWS, COUNTER & DOTS ── */}
-        <div className="mt-12 sm:mt-16 flex flex-col items-center gap-6">
+        {/* ── BOTTOM PROGRESS COUNTER & DOT INDICATORS ── */}
+        <div className="mt-10 sm:mt-14 flex flex-col items-center gap-4">
           
-          {/* Arrows & Counter Bar */}
-          <div className="flex items-center gap-6">
-            <button
-              onClick={handlePrev}
-              aria-label="Previous review"
-              className="w-10 h-10 rounded-full border border-black/15 bg-white/70 hover:bg-black hover:text-white transition-all flex items-center justify-center font-mono text-xs cursor-pointer shadow-xs hover:scale-105"
-            >
-              &larr;
-            </button>
-
-            <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.25em] text-black/50 font-medium">
-              0{currentIndex + 1} / 0{total}
-            </span>
-
-            <button
-              onClick={handleNext}
-              aria-label="Next review"
-              className="w-10 h-10 rounded-full border border-black/15 bg-white/70 hover:bg-black hover:text-white transition-all flex items-center justify-center font-mono text-xs cursor-pointer shadow-xs hover:scale-105"
-            >
-              &rarr;
-            </button>
-          </div>
+          {/* Numerical Counter */}
+          <span className="font-mono text-[9.5px] sm:text-[10.5px] tracking-[0.25em] text-black/50 font-medium">
+            0{currentIndex + 1} / 0{total}
+          </span>
 
           {/* Dots Indicator */}
           <div className="flex items-center gap-2">
@@ -216,8 +221,8 @@ export default function EditorialReviewCarousel() {
                 aria-label={`Go to review ${dotIdx + 1}`}
                 className={`transition-all duration-300 rounded-full cursor-pointer ${
                   dotIdx === currentIndex
-                    ? 'w-7 h-1.5 bg-black'
-                    : 'w-1.5 h-1.5 bg-black/20 hover:bg-black/50'
+                    ? 'w-7 sm:w-8 h-1 sm:h-1.5 bg-black'
+                    : 'w-1.5 sm:w-2 h-1 sm:h-1.5 bg-black/20 hover:bg-black/50'
                 }`}
               />
             ))}
@@ -229,4 +234,3 @@ export default function EditorialReviewCarousel() {
     </section>
   );
 }
-
