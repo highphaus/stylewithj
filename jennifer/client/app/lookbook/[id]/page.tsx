@@ -79,7 +79,7 @@ export default function LookPage() {
                 fill
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 priority
-                className="object-cover object-top"
+                className="object-cover object-top subpage-image-filter"
               />
 
               {/* Gradient overlay at bottom for readability */}

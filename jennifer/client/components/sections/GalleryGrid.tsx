@@ -235,8 +235,11 @@ export default function GalleryGrid() {
                             alt={currentLook.title}
                             fill
                             priority
-                            className="object-cover object-top"
+                            className="object-cover object-top subpage-image-filter"
                           />
+
+                          {/* Matching Editorial Overlay */}
+                          <div className="subpage-image-overlay" />
 
                           {/* Floating Top Badge */}
                           <div className="absolute top-3.5 left-3.5 z-20 bg-black/80 backdrop-blur-md text-white px-2.5 py-1 text-[8px] font-mono tracking-[0.25em] uppercase rounded-xs border border-white/10">
@@ -333,10 +336,13 @@ export default function GalleryGrid() {
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-[2000ms] ease-out"
+                        className="object-cover object-top subpage-image-filter group-hover:scale-[1.04] transition-transform duration-[2000ms] ease-out"
                         sizes="(max-width: 1024px) 50vw, 33vw"
                         loading={index < 3 ? "eager" : "lazy"}
                       />
+
+                      {/* Matching Editorial Overlay */}
+                      <div className="subpage-image-overlay" />
 
                       {/* Floating Top Look Badge */}
                       <div className="absolute top-4 left-4 z-20 bg-black/80 backdrop-blur-md text-white px-3 py-1 text-[8px] font-mono tracking-[0.3em] uppercase rounded-xs border border-white/10">

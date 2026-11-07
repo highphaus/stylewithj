@@ -199,8 +199,8 @@ function ScrollRevealImageCard({
         fill
         className={
           isMobile
-            ? "object-cover object-top group-hover/svc-img:scale-[1.02] transition-transform duration-700 ease-out"
-            : "object-cover object-top"
+            ? "object-cover object-top subpage-image-filter group-hover/svc-img:scale-[1.02] transition-transform duration-700 ease-out"
+            : "object-cover object-top subpage-image-filter"
         }
       />
 

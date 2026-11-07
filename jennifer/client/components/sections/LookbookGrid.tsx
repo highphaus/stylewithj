@@ -67,12 +67,15 @@ function CuratedLookCardCarousel({ images, title, category, globalIdx, onOpenSto
             src={list[currentIdx]}
             alt={`${title} - image ${currentIdx + 1}`}
             fill
-            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            className="object-cover object-center subpage-image-filter transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 100vw, 33vw"
             loading={globalIdx < 3 ? 'eager' : 'lazy'}
           />
         </motion.div>
       </AnimatePresence>
+
+      {/* Matching Editorial Overlay */}
+      <div className="subpage-image-overlay" />
 
       {/* Top Floating Category Badge */}
       <div className="absolute top-4 left-4 z-10 bg-black/80 backdrop-blur-md text-white px-3 py-1 text-[8px] tracking-[0.3em] font-mono uppercase font-semibold border border-white/10 rounded-xs">

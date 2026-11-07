@@ -17,7 +17,7 @@ export default function TransformationsPage() {
             A visual ledger of shape balancing, outline corrections, and tailored posture alterations.
           </p>
         </header>
-        <Transformations hideButton={true} hideHeading={true} />
+        <Transformations hideButton={true} hideHeading={true} hasFilter={true} />
       </main>
 
       <AtelierFooter />

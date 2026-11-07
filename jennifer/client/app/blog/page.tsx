@@ -116,11 +116,12 @@ export default function JournalPage() {
                       src={post.coverImage}
                       alt={post.title}
                       fill
-                      className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="object-cover object-top subpage-image-filter group-hover:scale-105 transition-transform duration-700 ease-out"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       loading="lazy"
                     />
-                    <div className="absolute top-3 left-3 bg-black/80 text-white font-mono text-[8px] tracking-[0.2em] uppercase px-2.5 py-1 backdrop-blur-sm">
+                    <div className="subpage-image-overlay" />
+                    <div className="absolute top-3 left-3 z-10 bg-black/80 text-white font-mono text-[8px] tracking-[0.2em] uppercase px-2.5 py-1 backdrop-blur-sm">
                       {post.category}
                     </div>
                   </Link>

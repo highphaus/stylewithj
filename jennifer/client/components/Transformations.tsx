@@ -11,9 +11,10 @@ interface TransformationsProps {
   hideButton?: boolean;
   isStatic?: boolean;
   hideHeading?: boolean;
+  hasFilter?: boolean;
 }
 
-export default function Transformations({ hideButton = false, hideHeading = false }: TransformationsProps) {
+export default function Transformations({ hideButton = false, hideHeading = false, hasFilter = false }: TransformationsProps) {
   const { openLightbox } = useLightbox();
   const { transformations, responsive } = useSiteData();
   const data: TransformationItem[] = (transformations && transformations.length > 0) ? transformations : seedTransformations;
@@ -123,10 +124,11 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                     <img
                       src={currentItem.beforeImg}
                       alt={`${currentItem.client} Before`}
-                      className="w-full h-full object-cover object-top grayscale-[15%]"
+                      className={`w-full h-full object-cover object-top grayscale-[15%] ${hasFilter ? 'subpage-image-filter' : ''}`}
                       draggable={false}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    {hasFilter && <div className="subpage-image-overlay" />}
                     <div className="absolute top-4 left-5 bg-[#FAF9F6]/95 border border-black/10 px-3.5 py-1 text-[8.5px] tracking-[0.25em] font-mono text-black uppercase font-bold shadow-xs">
                       BEFORE
                     </div>
@@ -137,10 +139,11 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                     <img
                       src={currentItem.afterImg}
                       alt={`${currentItem.client} After`}
-                      className="w-full h-full object-cover object-top"
+                      className={`w-full h-full object-cover object-top ${hasFilter ? 'subpage-image-filter' : ''}`}
                       draggable={false}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    {hasFilter && <div className="subpage-image-overlay" />}
                     <div className="absolute top-4 right-5 bg-black text-white px-3.5 py-1 text-[8.5px] tracking-[0.25em] font-mono uppercase font-bold shadow-xs border border-white/10">
                       AFTER
                     </div>
@@ -354,9 +357,10 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                   <img
                     src={currentItem.beforeImg}
                     alt="Before"
-                    className="w-full h-full object-cover object-top grayscale-[15%]"
+                    className={`w-full h-full object-cover object-top grayscale-[15%] ${hasFilter ? 'subpage-image-filter' : ''}`}
                     draggable={false}
                   />
+                  {hasFilter && <div className="subpage-image-overlay" />}
                   <div className="absolute top-3 left-4 bg-[#FAF9F6]/95 border border-black/10 px-2.5 py-0.5 text-[7.5px] sm:text-[8.5px] tracking-[0.2em] font-mono text-black uppercase font-bold shadow-xs">
                     BEFORE
                   </div>
@@ -369,9 +373,10 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                   <img
                     src={currentItem.afterImg}
                     alt="After"
-                    className="w-full h-full object-cover object-top"
+                    className={`w-full h-full object-cover object-top ${hasFilter ? 'subpage-image-filter' : ''}`}
                     draggable={false}
                   />
+                  {hasFilter && <div className="subpage-image-overlay" />}
                   <div className="absolute top-3 right-4 bg-black text-white px-2.5 py-0.5 text-[7.5px] sm:text-[8.5px] tracking-[0.2em] font-mono uppercase font-bold shadow-xs border border-white/10">
                     AFTER
                   </div>

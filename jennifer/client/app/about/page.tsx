@@ -41,7 +41,7 @@ function AboutContent() {
                 alt={`${about.creativeDirectorName}, ${about.creativeDirectorTitle}`}
                 fill
                 priority
-                className="object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
+                className="object-cover object-top subpage-image-filter transition-transform duration-700 hover:scale-[1.02]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-4 left-4 bg-black/85 backdrop-blur-md px-4 py-2 border border-white/10 text-white rounded-xs">

@@ -145,7 +145,7 @@ export default async function BlogPostPage({ params }: Props) {
               alt={post.coverImageAlt || post.title}
               fill
               priority
-              className="object-cover object-top"
+              className="object-cover object-top subpage-image-filter"
             />
           </div>
 

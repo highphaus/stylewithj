@@ -42,3 +42,35 @@ html, body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ── EDITORIAL SUBPAGE IMAGE FILTER & MATCHING OVERLAY ── */
+/* Unifies diverse shoot lighting, skin tones, and background contrasts into a cohesive haute couture tone */
+.subpage-image-filter {
+  filter: contrast(1.05) brightness(0.97) saturate(0.92);
+  transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .subpage-image-filter,
+.subpage-image-filter:hover {
+  filter: contrast(1.02) brightness(1.0) saturate(0.98);
+}
+
+/* Matching Editorial Scrim Overlay for Lookbook and subpage cards:
+   Creates elegant visual depth and guarantees top badges and bottom captions/buttons always pop with contrast */
+.subpage-image-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(13, 13, 13, 0.32) 0%,
+    rgba(13, 13, 13, 0.04) 38%,
+    rgba(13, 13, 13, 0.12) 65%,
+    rgba(13, 13, 13, 0.62) 100%
+  );
+  transition: opacity 0.4s ease;
+}
+
+.group:hover .subpage-image-overlay {
+  opacity: 0.85;
+}
