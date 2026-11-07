@@ -1,6 +1,6 @@
 import React from 'react';
 import Navigation from '@/components/Navigation';
-import Transformations from '@/components/Transformations';
+import TransformationsFeed from '@/components/TransformationsFeed';
 import AtelierFooter from '@/components/sections/AtelierFooter';
 
 export default function TransformationsPage() {
@@ -17,7 +17,9 @@ export default function TransformationsPage() {
             A visual ledger of shape balancing, outline corrections, and tailored posture alterations.
           </p>
         </header>
-        <Transformations hideButton={true} hideHeading={true} hasFilter={true} />
+        
+        {/* Alternating Zigzag Down-by-Down Showcase */}
+        <TransformationsFeed />
       </main>
 
       <AtelierFooter />
