@@ -59,20 +59,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://www.stylewithj.in/icon-512.png',
-        secureUrl: 'https://www.stylewithj.in/icon-512.png',
-        width: 512,
-        height: 512,
+        url: 'https://www.stylewithj.in/favicon-96x96.png',
+        secureUrl: 'https://www.stylewithj.in/favicon-96x96.png',
+        width: 96,
+        height: 96,
         type: 'image/png',
-        alt: 'Style with J Favicon Logo',
-      },
-      {
-        url: 'https://www.stylewithj.in/og-image.jpg',
-        secureUrl: 'https://www.stylewithj.in/og-image.jpg',
-        width: 1200,
-        height: 630,
-        type: 'image/jpeg',
-        alt: 'Personal Stylist | Style with J',
+        alt: 'Style with J Favicon',
       },
     ],
   },
@@ -80,7 +72,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Personal Stylist | Style with J',
     description: 'Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury styling.',
-    images: ['https://www.stylewithj.in/icon-512.png'],
+    images: ['https://www.stylewithj.in/favicon-96x96.png'],
   },
   robots: {
     index: true,
@@ -107,8 +99,8 @@ const jsonLdSchema = {
       name: 'Style with J',
       alternateName: ['Style with J Bangalore', 'Style with J Personal Stylist'],
       url: 'https://www.stylewithj.in',
-      logo: 'https://www.stylewithj.in/icon-512.png',
-      image: 'https://www.stylewithj.in/icon-512.png',
+      logo: 'https://www.stylewithj.in/favicon-96x96.png',
+      image: 'https://www.stylewithj.in/favicon-96x96.png',
       description: 'Premier Personal Stylist, Wardrobe Audit, Personal Shopper, and Executive Wardrobe Stylist in Bangalore. Specialized in executive workwear, capsule wardrobes, and bridal trousseau styling.',
       telephone: '+918078341747',
       priceRange: '₹5,000 - ₹50,000',
@@ -208,11 +200,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-        {/* WhatsApp & Schema ItemProp Image Fallbacks - Uses Tab Favicon Logo */}
-        <link rel="image_src" href="https://www.stylewithj.in/icon-512.png" />
+        {/* WhatsApp & Schema ItemProp Image Fallbacks - Uses Favicon 96x96 PNG */}
+        <link rel="image_src" href="https://www.stylewithj.in/favicon-96x96.png" />
         <meta itemProp="name" content="Personal Stylist | Style with J" />
         <meta itemProp="description" content="Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide." />
-        <meta itemProp="image" content="https://www.stylewithj.in/icon-512.png" />
+        <meta itemProp="image" content="https://www.stylewithj.in/favicon-96x96.png" />
 
         <link
           rel="stylesheet"
