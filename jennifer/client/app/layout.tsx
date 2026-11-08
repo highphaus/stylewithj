@@ -195,16 +195,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${manrope.className} ${manrope.variable} ${playfair.variable} overflow-x-clip w-full max-w-[100vw]`}>
       <head>
-        <meta name="theme-color" content="#111111" />
-        <meta name="apple-mobile-web-app-title" content="Style with J" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        {/* Core OpenGraph & Social Preview Tags (Placed at the very top of head for WhatsApp & Social bots) */}
+        <link rel="preload" as="image" href="https://www.stylewithj.in/style-with-j-logo.png" />
+        <meta property="og:title" content="Personal Stylist | Style with J" />
+        <meta property="og:description" content="Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide." />
+        <meta property="og:image" content="https://www.stylewithj.in/style-with-j-logo.png" />
+        <meta property="og:image:secure_url" content="https://www.stylewithj.in/style-with-j-logo.png" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="600" />
+        <meta property="og:image:height" content="600" />
+        <meta property="og:image:alt" content="Style with J Logo" />
+        <meta property="og:url" content="https://www.stylewithj.in" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Style with J" />
 
-        {/* WhatsApp & Schema ItemProp Image Fallbacks - Uses Pure Navbar/Favicon Logo */}
         <link rel="image_src" href="https://www.stylewithj.in/style-with-j-logo.png" />
         <meta itemProp="name" content="Personal Stylist | Style with J" />
         <meta itemProp="description" content="Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury bridal styling in Bangalore & virtually worldwide." />
         <meta itemProp="image" content="https://www.stylewithj.in/style-with-j-logo.png" />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Personal Stylist | Style with J" />
+        <meta name="twitter:description" content="Bespoke Personal Stylist by Jennifer. Tailored wardrobe audits, executive workwear, personal shopping, and luxury styling." />
+        <meta name="twitter:image" content="https://www.stylewithj.in/style-with-j-logo.png" />
+
+        <meta name="theme-color" content="#111111" />
+        <meta name="apple-mobile-web-app-title" content="Style with J" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
         <link
           rel="stylesheet"
