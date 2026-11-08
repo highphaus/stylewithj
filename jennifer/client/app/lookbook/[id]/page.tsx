@@ -84,11 +84,6 @@ export default function LookPage() {
 
               {/* Gradient overlay at bottom for readability */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-
-              {/* Look number badge */}
-              <div className="absolute top-6 left-6 z-20 bg-black/75 backdrop-blur-md text-white px-3 py-1.5 text-[8.5px] tracking-[0.3em] font-mono uppercase border border-white/10 rounded-xs">
-                LOOK {look.num}
-              </div>
             </div>
 
             {/* RIGHT: STORY PANEL */}

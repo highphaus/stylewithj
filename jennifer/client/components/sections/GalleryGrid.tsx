@@ -240,11 +240,6 @@ export default function GalleryGrid() {
 
                           {/* Matching Editorial Overlay */}
                           <div className="subpage-image-overlay" />
-
-                          {/* Floating Top Badge */}
-                          <div className="absolute top-3.5 left-3.5 z-20 bg-black/80 backdrop-blur-md text-white px-2.5 py-1 text-[8px] font-mono tracking-[0.25em] uppercase rounded-xs border border-white/10">
-                            LOOK {currentLook.num}
-                          </div>
                         </div>
 
                         {/* Look Details & Prominent Read More Button */}
@@ -343,11 +338,6 @@ export default function GalleryGrid() {
 
                       {/* Matching Editorial Overlay */}
                       <div className="subpage-image-overlay" />
-
-                      {/* Floating Top Look Badge */}
-                      <div className="absolute top-4 left-4 z-20 bg-black/80 backdrop-blur-md text-white px-3 py-1 text-[8px] font-mono tracking-[0.3em] uppercase rounded-xs border border-white/10">
-                        LOOK {item.num}
-                      </div>
 
                       {/* Clean Hover Card at Bottom */}
                       <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
