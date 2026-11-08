@@ -335,22 +335,22 @@ export default function BookMakeoverCTA({
                   required
                 />
 
-                {/* Submit Action Button */}
-                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                {/* Submit Action Button & WhatsApp in one horizontal line on mobile */}
+                <div className="pt-2 flex flex-row items-center gap-2 sm:gap-3 w-full sm:w-auto">
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#1A1A1A] hover:bg-black text-white text-[10px] tracking-[0.25em] uppercase font-mono font-medium transition-all shadow-sm rounded-xs disabled:opacity-50 cursor-pointer"
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-3 px-3 min-[360px]:px-5 sm:px-8 py-3.5 sm:py-4 bg-[#1A1A1A] hover:bg-black text-white text-[8.5px] min-[360px]:text-[9.5px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.25em] uppercase font-mono font-medium transition-all shadow-sm rounded-xs disabled:opacity-50 cursor-pointer text-center whitespace-nowrap"
                   >
-                    <span>{isSubmitting ? 'Transmitting Request...' : 'Submit Message →'}</span>
+                    <span>{isSubmitting ? 'Transmitting...' : 'Submit Message →'}</span>
                   </button>
                   <a
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-4 border border-black/15 hover:border-black text-[#1A1A1A] text-[10px] tracking-[0.2em] uppercase font-mono font-medium transition-colors rounded-xs"
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 min-[360px]:px-4 sm:px-6 py-3.5 sm:py-4 border border-black/15 hover:border-black text-[#1A1A1A] text-[8.5px] min-[360px]:text-[9.5px] sm:text-[10px] tracking-[0.14em] sm:tracking-[0.2em] uppercase font-mono font-medium transition-colors rounded-xs text-center whitespace-nowrap"
                   >
-                    <span>Chat on WhatsApp</span>
+                    <span>WhatsApp</span>
                     <span className="text-xs">↗</span>
                   </a>
                 </div>
@@ -358,12 +358,12 @@ export default function BookMakeoverCTA({
             )}
           </div>
         ) : (
-          /* ON INNER PAGES: Clean Minimal Banner with Dual Action Buttons */
+          /* ON INNER PAGES: Clean Minimal Banner with Dual Action Buttons (single horizontal line on mobile) */
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 pt-2">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="flex flex-row items-center gap-2 sm:gap-3 w-full sm:w-auto">
               <Link
                 href={targetHref}
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#1A1A1A] hover:bg-black text-white text-[10px] tracking-[0.25em] uppercase font-mono font-medium transition-all duration-300 shadow-sm hover:shadow-md rounded-xs border border-white/10 active:scale-98"
+                className="flex-1 sm:flex-initial group inline-flex items-center justify-center gap-1.5 sm:gap-3 px-3 min-[360px]:px-5 sm:px-8 py-3.5 sm:py-4 bg-[#1A1A1A] hover:bg-black text-white text-[8.5px] min-[360px]:text-[9.5px] sm:text-[10px] tracking-[0.16em] sm:tracking-[0.25em] uppercase font-mono font-medium transition-all duration-300 shadow-sm hover:shadow-md rounded-xs border border-white/10 active:scale-98 text-center whitespace-nowrap"
               >
                 <span>{buttonText}</span>
                 <span className="transform group-hover:translate-x-1.5 transition-transform text-xs">→</span>
@@ -372,9 +372,9 @@ export default function BookMakeoverCTA({
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 border border-black/15 hover:border-black text-[#1A1A1A] text-[10px] tracking-[0.2em] uppercase font-mono font-medium transition-colors rounded-xs"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 min-[360px]:px-4 sm:px-6 py-3.5 sm:py-4 border border-black/15 hover:border-black text-[#1A1A1A] text-[8.5px] min-[360px]:text-[9.5px] sm:text-[10px] tracking-[0.14em] sm:tracking-[0.2em] uppercase font-mono font-medium transition-colors rounded-xs text-center whitespace-nowrap"
               >
-                <span>Chat on WhatsApp</span>
+                <span>WhatsApp</span>
                 <span className="text-xs">↗</span>
               </a>
             </div>

@@ -304,41 +304,83 @@ export default function Transformations({ hideButton = false, hideHeading = fals
           Includes Storytelling, Text Review Card, and Explore More Button
           ========================================================================= */}
       <div 
-        className="block lg:hidden w-full flex flex-col gap-6"
+        className="block lg:hidden w-full flex flex-col gap-5"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
+        {/* Top Header: Heading & Arrow Navigation (No 1, 2, 3 buttons) */}
         <div className="flex flex-col gap-2 pt-6 pb-2 px-4 sm:px-8">
           {!hideHeading && (
-            <h2 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A1A] tracking-tight">
-              Transformations
-            </h2>
-          )}
-          <div className="flex items-center justify-between">
-            <h3 className="font-mono text-[10px] sm:text-xs tracking-[0.2em] text-black/65 uppercase font-medium truncate">
-              0{currentItem.id} &middot; {currentItem.client}
-            </h3>
+            <div className="flex items-center justify-between border-b border-black/10 pb-3">
+              <h2 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A1A] tracking-tight">
+                Transformations
+              </h2>
 
-            <div className="flex items-center gap-1.5 bg-[#EAE7E0] p-1 rounded-full">
-              {data.map((item, index) => (
+              {/* Arrow navigation buttons only (no 1, 2, 3 numbers) */}
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/50">
+                  0{safeIndex + 1} / 0{data.length}
+                </span>
                 <button
-                  key={item.id}
-                  onClick={() => setActiveIndex(index)}
-                  className={[
-                    'px-2.5 py-0.5 rounded-full font-mono text-[8.5px] uppercase tracking-[0.15em] transition-all cursor-pointer',
-                    safeIndex === index 
-                      ? 'bg-black text-white font-semibold' 
-                      : 'text-black/50'
-                  ].join(' ')}
+                  onClick={handlePrev}
+                  title="Previous"
+                  aria-label="Previous transformation"
+                  className="w-8 h-8 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white transition-all flex items-center justify-center text-xs font-mono shadow-xs active:scale-95 cursor-pointer"
                 >
-                  {item.id}
+                  &larr;
                 </button>
-              ))}
+                <button
+                  onClick={handleNext}
+                  title="Next"
+                  aria-label="Next transformation"
+                  className="w-8 h-8 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white transition-all flex items-center justify-center text-xs font-mono shadow-xs active:scale-95 cursor-pointer"
+                >
+                  &rarr;
+                </button>
+              </div>
             </div>
+          )}
+
+          {/* Fully visible client dossier info and writings under heading (no truncation) */}
+          <div className="flex flex-col gap-1 pt-1">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[8.5px] uppercase tracking-[0.25em] text-black/50 font-semibold">
+                DOSSIER 0{currentItem.id} // {currentItem.demographic}
+              </span>
+              {hideHeading && (
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/50">
+                    0{safeIndex + 1} / 0{data.length}
+                  </span>
+                  <button
+                    onClick={handlePrev}
+                    title="Previous"
+                    className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
+                  >
+                    &larr;
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    title="Next"
+                    className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
+                  >
+                    &rarr;
+                  </button>
+                </div>
+              )}
+            </div>
+            <h3 className="font-serif text-xl sm:text-2xl font-light text-[#1A1A1A] tracking-tight leading-snug">
+              {currentItem.client}
+            </h3>
+            {currentItem.concept && (
+              <p className="font-serif text-xs sm:text-sm italic text-black/60 font-light leading-relaxed">
+                {currentItem.concept}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Mobile Dual Canvas */}
+        {/* Mobile Dual Canvas with gap on left, right, and center */}
         <AnimatePresence mode="wait">
           <motion.div
             key={safeIndex}
@@ -348,11 +390,16 @@ export default function Transformations({ hideButton = false, hideHeading = fals
             transition={{ duration: 0.4 }}
             className="flex flex-col gap-4 w-full"
           >
-            <div className="w-full overflow-hidden">
-              <div className="grid grid-cols-2 gap-0 w-full min-h-[360px] sm:min-h-[480px] border-y border-black/15 overflow-hidden transition-all duration-300" style={{ height: responsive?.transformationsMobileHeight || '55vh' }}>
+            {/* Gap in center (gap-2.5 sm:gap-4) and on left & right sides (px-4 sm:px-8) */}
+            <div className="w-full px-4 sm:px-8">
+              <div 
+                className="grid grid-cols-2 gap-2.5 sm:gap-4 w-full min-h-[360px] sm:min-h-[480px] transition-all duration-300" 
+                style={{ height: responsive?.transformationsMobileHeight || '55vh' }}
+              >
+                {/* Before Card */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.beforeImg, currentItem.client, 'BEFORE', currentItem)}
-                  className="relative w-full h-full bg-[#0D0D0D] overflow-hidden border-r border-black/15 cursor-pointer"
+                  className="relative w-full h-full bg-[#0D0D0D] overflow-hidden rounded-xs border border-black/15 shadow-xs cursor-pointer select-none"
                 >
                   <img
                     src={currentItem.beforeImg}
@@ -361,14 +408,15 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                     draggable={false}
                   />
                   {hasFilter && <div className="subpage-image-overlay" />}
-                  <div className="absolute top-3 left-4 bg-[#FAF9F6]/95 border border-black/10 px-2.5 py-0.5 text-[7.5px] sm:text-[8.5px] tracking-[0.2em] font-mono text-black uppercase font-bold shadow-xs">
+                  <div className="absolute top-3 left-3 bg-[#FAF9F6]/95 border border-black/10 px-2.5 py-0.5 text-[7.5px] sm:text-[8.5px] tracking-[0.2em] font-mono text-black uppercase font-bold shadow-xs">
                     BEFORE
                   </div>
                 </div>
 
+                {/* After Card */}
                 <div 
                   onClick={() => handleOpenLightbox(currentItem.afterImg, currentItem.client, 'AFTER', currentItem)}
-                  className="relative w-full h-full bg-[#0D0D0D] overflow-hidden cursor-pointer"
+                  className="relative w-full h-full bg-[#0D0D0D] overflow-hidden rounded-xs border border-black/15 shadow-xs cursor-pointer select-none"
                 >
                   <img
                     src={currentItem.afterImg}
@@ -377,26 +425,44 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                     draggable={false}
                   />
                   {hasFilter && <div className="subpage-image-overlay" />}
-                  <div className="absolute top-3 right-4 bg-black text-white px-2.5 py-0.5 text-[7.5px] sm:text-[8.5px] tracking-[0.2em] font-mono uppercase font-bold shadow-xs border border-white/10">
+                  <div className="absolute top-3 right-3 bg-black text-white px-2.5 py-0.5 text-[7.5px] sm:text-[8.5px] tracking-[0.2em] font-mono uppercase font-bold shadow-xs border border-white/10">
                     AFTER
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Mobile Review Card & Explore Action (Before/After story text removed on smaller devices for clean view) */}
+            {/* Mobile Storytelling, Review Card & Explore Action */}
             <div className="px-4 sm:px-8 space-y-3">
+              {/* Transformation Story writings fully viewable */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <div className="bg-[#FAF8F3] border border-black/10 p-3 rounded-xs space-y-1">
+                  <span className="font-mono text-[7px] uppercase tracking-[0.2em] px-1.5 py-0.5 bg-black/10 text-black font-semibold rounded-xs">
+                    BEFORE &middot; THE CHALLENGE
+                  </span>
+                  <p className="font-serif text-xs italic text-black/75 leading-relaxed">
+                    &ldquo;{currentItem.beforeStory}&rdquo;
+                  </p>
+                </div>
+                <div className="bg-[#FAF8F3] border border-black/10 p-3 rounded-xs space-y-1">
+                  <span className="font-mono text-[7px] uppercase tracking-[0.2em] px-1.5 py-0.5 bg-black text-white font-semibold rounded-xs">
+                    AFTER &middot; THE ARCHITECTURE
+                  </span>
+                  <p className="font-serif text-xs italic text-black/85 leading-relaxed">
+                    &ldquo;{currentItem.afterStory}&rdquo;
+                  </p>
+                </div>
+              </div>
+
               {/* Text Review Card */}
               <div className="bg-[#EFECE6] border border-black/10 p-3.5 rounded-xs space-y-1.5">
                 <div className="flex items-center justify-between text-xs text-black/75">
-                  <span>
-                    {Array.from({ length: currentItem.review?.rating || 5 }).map((_, idx) => (
-                      <span key={idx}>&#9733;</span>
-                    ))}
+                  <span className="text-[#D4AF37]">
+                    {'★'.repeat(currentItem.review?.rating || 5)}
                   </span>
                   <span className="font-mono text-[7px] tracking-wider uppercase text-black/45">VERIFIED REVIEW</span>
                 </div>
-                <p className="font-serif text-xs italic text-black/85">
+                <p className="font-serif text-xs italic text-black/85 leading-relaxed">
                   &ldquo;{currentItem.review?.quote}&rdquo;
                 </p>
                 <span className="font-mono text-[8px] text-black/60 block pt-1 border-t border-black/8">
@@ -407,7 +473,7 @@ export default function Transformations({ hideButton = false, hideHeading = fals
               <div className="pt-1 flex items-center justify-between">
                 <Link
                   href="/transformations"
-                  className="tracking-[0.18em] text-[8.5px] uppercase font-mono font-semibold text-white bg-[#1A1A1A] hover:bg-black transition-all py-2.5 px-4 rounded-xs inline-flex items-center gap-1.5"
+                  className="tracking-[0.18em] text-[8.5px] uppercase font-mono font-semibold text-white bg-[#1A1A1A] hover:bg-black transition-all py-2.5 px-4 rounded-xs inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>Explore More</span>
                   <span>&rarr;</span>
