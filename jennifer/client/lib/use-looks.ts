@@ -44,7 +44,9 @@ export function useLooks() {
       const id = `look-${Date.now()}`;
       const num = String(prev.length + 1).padStart(2, '0');
       const updated = [...prev, { ...look, id, num }];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch { /* ignore quota */ }
       return updated;
     });
   }, []);
@@ -52,7 +54,9 @@ export function useLooks() {
   const updateLook = useCallback((id: string, changes: Partial<Look>) => {
     setLooks(prev => {
       const updated = prev.map(l => l.id === id ? { ...l, ...changes } : l);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch { /* ignore quota */ }
       return updated;
     });
   }, []);
@@ -60,7 +64,9 @@ export function useLooks() {
   const deleteLook = useCallback((id: string) => {
     setLooks(prev => {
       const updated = prev.filter(l => l.id !== id);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch { /* ignore quota */ }
       return updated;
     });
   }, []);

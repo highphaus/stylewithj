@@ -29,6 +29,14 @@ const TRANSFORMATIONS_KEY = 'swj_transformations';
 const CTA_BANNER_KEY = 'swj_cta_banner';
 const RESPONSIVE_KEY = 'swj_responsive';
 
+function safeSetItem(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (err) {
+    console.warn(`[useSiteData] Storage quota exceeded or disabled for key "${key}"`, err);
+  }
+}
+
 export function useSiteData() {
   const [hero, setHero] = useState<HeroContent>(seedHeroContent);
   const [about, setAbout] = useState<AboutContentData>(seedAboutContent);
@@ -111,7 +119,7 @@ export function useSiteData() {
   const updateHero = useCallback((changes: Partial<HeroContent>) => {
     setHero(prev => {
       const updated = { ...prev, ...changes };
-      localStorage.setItem(HERO_KEY, JSON.stringify(updated));
+      safeSetItem(HERO_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -120,7 +128,7 @@ export function useSiteData() {
   const updateAbout = useCallback((changes: Partial<AboutContentData>) => {
     setAbout(prev => {
       const updated = { ...prev, ...changes };
-      localStorage.setItem(ABOUT_KEY, JSON.stringify(updated));
+      safeSetItem(ABOUT_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -129,7 +137,7 @@ export function useSiteData() {
   const updateMeet = useCallback((changes: Partial<MeetContentData>) => {
     setMeet(prev => {
       const updated = { ...prev, ...changes };
-      localStorage.setItem(MEET_KEY, JSON.stringify(updated));
+      safeSetItem(MEET_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -138,7 +146,7 @@ export function useSiteData() {
   const updateContact = useCallback((changes: Partial<ContactContentData>) => {
     setContact(prev => {
       const updated = { ...prev, ...changes };
-      localStorage.setItem(CONTACT_KEY, JSON.stringify(updated));
+      safeSetItem(CONTACT_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -147,7 +155,7 @@ export function useSiteData() {
   const updateCtaBanner = useCallback((changes: Partial<CtaBannerContent>) => {
     setCtaBanner(prev => {
       const updated = { ...prev, ...changes };
-      localStorage.setItem(CTA_BANNER_KEY, JSON.stringify(updated));
+      safeSetItem(CTA_BANNER_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -156,7 +164,7 @@ export function useSiteData() {
   const updateResponsive = useCallback((changes: Partial<ResponsiveConfig>) => {
     setResponsive(prev => {
       const updated = { ...prev, ...changes };
-      localStorage.setItem(RESPONSIVE_KEY, JSON.stringify(updated));
+      safeSetItem(RESPONSIVE_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -166,7 +174,7 @@ export function useSiteData() {
     setTestimonials(prev => {
       const id = `test-${Date.now()}`;
       const updated = [...prev, { ...item, id }];
-      localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      safeSetItem(TESTIMONIALS_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -174,7 +182,7 @@ export function useSiteData() {
   const updateTestimonial = useCallback((id: string, changes: Partial<TestimonialItem>) => {
     setTestimonials(prev => {
       const updated = prev.map(t => t.id === id ? { ...t, ...changes } : t);
-      localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      safeSetItem(TESTIMONIALS_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -182,7 +190,7 @@ export function useSiteData() {
   const deleteTestimonial = useCallback((id: string) => {
     setTestimonials(prev => {
       const updated = prev.filter(t => t.id !== id);
-      localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      safeSetItem(TESTIMONIALS_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -193,7 +201,7 @@ export function useSiteData() {
       const id = `service-${Date.now()}`;
       const num = String(prev.length + 1).padStart(2, '0');
       const updated = [...prev, { ...service, id, num }];
-      localStorage.setItem(SERVICES_KEY, JSON.stringify(updated));
+      safeSetItem(SERVICES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -201,7 +209,7 @@ export function useSiteData() {
   const updateService = useCallback((id: string, changes: Partial<ServiceItem>) => {
     setServices(prev => {
       const updated = prev.map(s => s.id === id ? { ...s, ...changes } : s);
-      localStorage.setItem(SERVICES_KEY, JSON.stringify(updated));
+      safeSetItem(SERVICES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -209,7 +217,7 @@ export function useSiteData() {
   const deleteService = useCallback((id: string) => {
     setServices(prev => {
       const updated = prev.filter(s => s.id !== id);
-      localStorage.setItem(SERVICES_KEY, JSON.stringify(updated));
+      safeSetItem(SERVICES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -219,7 +227,7 @@ export function useSiteData() {
     setAudiences(prev => {
       const id = `aud-${Date.now()}`;
       const updated = [...prev, { ...audience, id }];
-      localStorage.setItem(AUDIENCES_KEY, JSON.stringify(updated));
+      safeSetItem(AUDIENCES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -227,7 +235,7 @@ export function useSiteData() {
   const updateAudience = useCallback((id: string, changes: Partial<AudienceItem>) => {
     setAudiences(prev => {
       const updated = prev.map(a => a.id === id ? { ...a, ...changes } : a);
-      localStorage.setItem(AUDIENCES_KEY, JSON.stringify(updated));
+      safeSetItem(AUDIENCES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -235,7 +243,7 @@ export function useSiteData() {
   const deleteAudience = useCallback((id: string) => {
     setAudiences(prev => {
       const updated = prev.filter(a => a.id !== id);
-      localStorage.setItem(AUDIENCES_KEY, JSON.stringify(updated));
+      safeSetItem(AUDIENCES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -246,7 +254,7 @@ export function useSiteData() {
       const id = `art-${Date.now()}`;
       const num = String(prev.length + 1).padStart(2, '0');
       const updated = [...prev, { ...article, id, num }];
-      localStorage.setItem(ARTICLES_KEY, JSON.stringify(updated));
+      safeSetItem(ARTICLES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -254,7 +262,7 @@ export function useSiteData() {
   const updateArticle = useCallback((id: string, changes: Partial<JournalArticle>) => {
     setArticles(prev => {
       const updated = prev.map(a => a.id === id ? { ...a, ...changes } : a);
-      localStorage.setItem(ARTICLES_KEY, JSON.stringify(updated));
+      safeSetItem(ARTICLES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -262,7 +270,7 @@ export function useSiteData() {
   const deleteArticle = useCallback((id: string) => {
     setArticles(prev => {
       const updated = prev.filter(a => a.id !== id);
-      localStorage.setItem(ARTICLES_KEY, JSON.stringify(updated));
+      safeSetItem(ARTICLES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -272,7 +280,7 @@ export function useSiteData() {
     setTransformations(prev => {
       const id = String(prev.length + 1).padStart(2, '0');
       const updated = [...prev, { ...item, id }];
-      localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -280,7 +288,7 @@ export function useSiteData() {
   const updateTransformation = useCallback((id: string, changes: Partial<TransformationItem>) => {
     setTransformations(prev => {
       const updated = prev.map(t => t.id === id ? { ...t, ...changes } : t);
-      localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -288,7 +296,7 @@ export function useSiteData() {
   const deleteTransformation = useCallback((id: string) => {
     setTransformations(prev => {
       const updated = prev.filter(t => t.id !== id);
-      localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -307,17 +315,17 @@ export function useSiteData() {
     setCtaBanner(seedCtaBanner);
     setResponsive(seedResponsiveConfig);
 
-    localStorage.setItem(HERO_KEY, JSON.stringify(seedHeroContent));
-    localStorage.setItem(ABOUT_KEY, JSON.stringify(seedAboutContent));
-    localStorage.setItem(MEET_KEY, JSON.stringify(seedMeetContent));
-    localStorage.setItem(CONTACT_KEY, JSON.stringify(seedContactContent));
-    localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(seedTestimonials));
-    localStorage.setItem(SERVICES_KEY, JSON.stringify(seedServices));
-    localStorage.setItem(AUDIENCES_KEY, JSON.stringify(seedAudiences));
-    localStorage.setItem(ARTICLES_KEY, JSON.stringify(seedArticles));
-    localStorage.setItem(TRANSFORMATIONS_KEY, JSON.stringify(seedTransformations));
-    localStorage.setItem(CTA_BANNER_KEY, JSON.stringify(seedCtaBanner));
-    localStorage.setItem(RESPONSIVE_KEY, JSON.stringify(seedResponsiveConfig));
+    safeSetItem(HERO_KEY, JSON.stringify(seedHeroContent));
+    safeSetItem(ABOUT_KEY, JSON.stringify(seedAboutContent));
+    safeSetItem(MEET_KEY, JSON.stringify(seedMeetContent));
+    safeSetItem(CONTACT_KEY, JSON.stringify(seedContactContent));
+    safeSetItem(TESTIMONIALS_KEY, JSON.stringify(seedTestimonials));
+    safeSetItem(SERVICES_KEY, JSON.stringify(seedServices));
+    safeSetItem(AUDIENCES_KEY, JSON.stringify(seedAudiences));
+    safeSetItem(ARTICLES_KEY, JSON.stringify(seedArticles));
+    safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(seedTransformations));
+    safeSetItem(CTA_BANNER_KEY, JSON.stringify(seedCtaBanner));
+    safeSetItem(RESPONSIVE_KEY, JSON.stringify(seedResponsiveConfig));
   }, []);
 
   return {

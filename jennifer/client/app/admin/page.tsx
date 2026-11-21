@@ -2363,14 +2363,55 @@ function FormWrapper({ title, onBack, children }: { title: string; onBack: () =>
   );
 }
 
+function compressImageFile(file: File, maxDim = 1280, quality = 0.82): Promise<string> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const src = event.target?.result as string;
+      if (!src) return resolve('');
+      const img = new window.Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve(src);
+        ctx.drawImage(img, 0, 0, width, height);
+        try {
+          const compressed = canvas.toDataURL('image/jpeg', quality);
+          resolve(compressed);
+        } catch {
+          resolve(src);
+        }
+      };
+      img.onerror = () => resolve(src);
+      img.src = src;
+    };
+    reader.onerror = () => resolve('');
+    reader.readAsDataURL(file);
+  });
+}
+
 function ImageUploadField({ image, onImageChange }: { image: string; onImageChange: (v: string) => void }) {
+  const [isProcessing, setIsProcessing] = useState(false);
+
   return (
     <div className="flex flex-col gap-3 p-4 sm:p-5 bg-[#EFECE6]/60 border border-black/10 rounded-xs">
       <div className="flex items-center justify-between">
         <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
           IMAGE FILE OR URL <span className="text-red-500">*</span>
         </label>
-        <span className="font-sans text-[10px] text-black/50">Upload file OR paste path</span>
+        <span className="font-sans text-[10px] text-black/50">Upload file (auto-optimized) OR paste path</span>
       </div>
 
       {image && (
@@ -2379,25 +2420,37 @@ function ImageUploadField({ image, onImageChange }: { image: string; onImageChan
           <div className="absolute top-2.5 left-2.5 bg-black/80 text-white px-2.5 py-0.5 text-[7.5px] tracking-[0.2em] font-mono uppercase rounded-xs">
             ✦ Preview
           </div>
+          <button
+            type="button"
+            onClick={() => onImageChange('')}
+            className="absolute top-2.5 right-2.5 bg-black/80 hover:bg-black text-white px-2.5 py-0.5 text-[7.5px] tracking-[0.15em] font-mono uppercase rounded-xs transition-colors cursor-pointer"
+            title="Clear and reset image"
+          >
+            ✕ Reset
+          </button>
         </div>
       )}
 
       <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 items-stretch sm:items-center">
-        <label className="flex-shrink-0 cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#1A1A1A] hover:bg-black text-white text-[9.5px] tracking-[0.2em] uppercase font-mono font-semibold transition-all rounded-xs shadow-sm">
-          <span>📁 Choose File</span>
+        <label className={`flex-shrink-0 cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-3 ${isProcessing ? 'bg-black/50' : 'bg-[#1A1A1A] hover:bg-black'} text-white text-[9.5px] tracking-[0.2em] uppercase font-mono font-semibold transition-all rounded-xs shadow-sm`}>
+          <span>{isProcessing ? '⏳ Optimizing...' : '📁 Choose File'}</span>
           <input
             type="file"
             accept="image/*"
+            disabled={isProcessing}
             className="hidden"
-            onChange={(e) => {
+            onChange={async (e) => {
               const file = e.target.files?.[0];
               if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                  const dataUrl = event.target?.result as string;
-                  if (dataUrl) onImageChange(dataUrl);
-                };
-                reader.readAsDataURL(file);
+                setIsProcessing(true);
+                try {
+                  const optimizedDataUrl = await compressImageFile(file);
+                  if (optimizedDataUrl) onImageChange(optimizedDataUrl);
+                } catch (err) {
+                  console.error('Failed to compress image:', err);
+                } finally {
+                  setIsProcessing(false);
+                }
               }
             }}
           />
@@ -2406,7 +2459,7 @@ function ImageUploadField({ image, onImageChange }: { image: string; onImageChan
           type="text"
           value={image}
           onChange={(e) => onImageChange(e.target.value)}
-          placeholder="Or paste /images/hero/photo.png or web URL..."
+          placeholder="Or paste /images/includes/IMG_0332.JPG.jpeg or web URL..."
           className="flex-1 px-4 py-2.5 border border-black/15 bg-white font-mono text-xs text-[#1A1A1A] rounded-xs outline-none focus:border-black/40"
         />
       </div>

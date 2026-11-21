@@ -32,6 +32,7 @@ export default function HeroSection() {
           src={hero.desktopImage || "/images/hero/hero image desktop.png"}
           alt="Style with J — Hero Desktop"
           fill
+          unoptimized={Boolean(hero.desktopImage?.startsWith('data:') || hero.desktopImage?.startsWith('http'))}
           sizes="(min-width: 768px) 100vw, 1px"
           style={{ objectPosition: desktopPos }}
           className="object-cover opacity-100 hidden md:block transition-all duration-700"
@@ -41,6 +42,7 @@ export default function HeroSection() {
           src={hero.mobileImage || "/images/hero/hero image.jpeg"}
           alt="Style with J — Hero Mobile"
           fill
+          unoptimized={Boolean(hero.mobileImage?.startsWith('data:') || hero.mobileImage?.startsWith('http'))}
           sizes="(max-width: 767px) 100vw, 1px"
           style={{ objectPosition: mobilePos }}
           className="object-cover opacity-100 block md:hidden transition-all duration-700"
