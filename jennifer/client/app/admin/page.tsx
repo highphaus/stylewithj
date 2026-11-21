@@ -170,6 +170,29 @@ export default function AdminPage() {
   useEffect(() => { setTempCta(ctaBanner); }, [ctaBanner]);
   useEffect(() => { setTempResponsive(responsive); }, [responsive]);
 
+  const [dbStatus, setDbStatus] = useState<{ connected?: boolean; message?: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/site-data')
+      .then(res => res.json())
+      .then(json => {
+        if (json?.connected) {
+          setDbStatus({ connected: true, message: 'Connected & syncing across all devices globally' });
+        } else {
+          setDbStatus({ 
+            connected: false, 
+            message: json?.error || 'MongoDB Atlas IP Block: Add 0.0.0.0/0 in MongoDB Atlas -> Security -> Network Access to allow Vercel to sync all devices.' 
+          });
+        }
+      })
+      .catch(() => {
+        setDbStatus({ 
+          connected: false, 
+          message: 'Unable to reach sync API. Check MongoDB Atlas -> Network Access.' 
+        });
+      });
+  }, []);
+
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     const cleanPass = password.trim().toLowerCase();
@@ -684,6 +707,25 @@ export default function AdminPage() {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-10 flex flex-col gap-6 sm:gap-8">
+        {/* Live Cloud Multi-Device Sync Status Banner */}
+        {dbStatus && (
+          <div className={`p-3.5 sm:p-4 rounded-xs border font-mono flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 transition-all ${
+            dbStatus.connected
+              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-900'
+              : 'bg-amber-500/10 border-amber-500/40 text-amber-950'
+          }`}>
+            <div className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full flex-shrink-0 ${dbStatus.connected ? 'bg-emerald-600 animate-pulse' : 'bg-amber-600'}`} />
+              <span className="font-bold uppercase tracking-wider text-[10px]">
+                {dbStatus.connected ? '✦ LIVE CLOUD SYNC: CONNECTED' : '⚠️ LIVE CLOUD SYNC: ACTION REQUIRED IN MONGODB ATLAS'}
+              </span>
+            </div>
+            <span className="text-[10px] leading-relaxed font-sans sm:font-mono opacity-90">
+              {dbStatus.message}
+            </span>
+          </div>
+        )}
+
         {/* Toast */}
         {saved && (
           <div className="fixed bottom-6 right-6 bg-black text-white px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase rounded-xs shadow-lg z-50 animate-bounce">

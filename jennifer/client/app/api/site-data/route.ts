@@ -10,14 +10,18 @@ export async function GET() {
     const doc = await db.collection('content').findOne({ _id: 'global_site_data' as any });
 
     if (!doc) {
-      return NextResponse.json({ success: true, data: null });
+      return NextResponse.json({ success: true, data: null, connected: true });
     }
 
     const { _id, ...cleanData } = doc;
-    return NextResponse.json({ success: true, data: cleanData });
+    return NextResponse.json({ success: true, data: cleanData, connected: true });
   } catch (error: any) {
-    console.warn('[API /api/site-data GET] Database read error, using fallback:', error?.message);
-    return NextResponse.json({ success: false, error: error?.message || 'Database unavailable' }, { status: 500 });
+    let errorMsg = error?.message || 'Database unavailable';
+    if (errorMsg.includes('SSL alert number 80') || errorMsg.includes('tlsv1 alert internal error')) {
+      errorMsg = 'MongoDB Atlas IP Block: Please add 0.0.0.0/0 (Allow Access from Anywhere) in MongoDB Atlas -> Security -> Network Access so Vercel can connect.';
+    }
+    console.warn('[API /api/site-data GET] Database read error:', errorMsg);
+    return NextResponse.json({ success: false, error: errorMsg, connected: false }, { status: 500 });
   }
 }
 
@@ -57,7 +61,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, message: 'Content synced across all devices globally' });
   } catch (error: any) {
-    console.error('[API /api/site-data POST] Database write error:', error?.message);
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to save to database' }, { status: 500 });
+    let errorMsg = error?.message || 'Failed to save to database';
+    if (errorMsg.includes('SSL alert number 80') || errorMsg.includes('tlsv1 alert internal error')) {
+      errorMsg = 'MongoDB Atlas IP Block: Please add 0.0.0.0/0 (Allow Access from Anywhere) in MongoDB Atlas -> Security -> Network Access so Vercel can save changes.';
+    }
+    console.error('[API /api/site-data POST] Database write error:', errorMsg);
+    return NextResponse.json({ success: false, error: errorMsg }, { status: 500 });
   }
 }
