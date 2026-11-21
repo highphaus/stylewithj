@@ -7,11 +7,21 @@ import { Look, seedLooks } from './looks-data';
 
 const STORAGE_KEY = 'swj_looks_v3';
 
+function syncLooksToServer(updated: Look[]) {
+  if (typeof window === 'undefined') return;
+  fetch('/api/site-data', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key: 'looks', data: updated }),
+  }).catch(err => console.warn('[useLooks] Failed to sync looks to server:', err));
+}
+
 export function useLooks() {
   const [looks, setLooks] = useState<Look[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    // 1. Initial local load
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -30,6 +40,19 @@ export function useLooks() {
       setLooks(seedLooks);
     }
     setIsLoaded(true);
+
+    // 2. Fetch global synced looks
+    fetch('/api/site-data')
+      .then(res => res.json())
+      .then(json => {
+        if (json?.success && json?.data?.looks && Array.isArray(json.data.looks)) {
+          setLooks(json.data.looks);
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(json.data.looks));
+          } catch { /* ignore quota */ }
+        }
+      })
+      .catch(err => console.warn('[useLooks] Server sync fetch failed:', err));
   }, []);
 
   const save = useCallback((updated: Look[]) => {
@@ -37,6 +60,7 @@ export function useLooks() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     } catch { /* ignore quota errors */ }
+    syncLooksToServer(updated);
   }, []);
 
   const addLook = useCallback((look: Omit<Look, 'id' | 'num'>) => {
@@ -47,6 +71,7 @@ export function useLooks() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch { /* ignore quota */ }
+      syncLooksToServer(updated);
       return updated;
     });
   }, []);
@@ -57,6 +82,7 @@ export function useLooks() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch { /* ignore quota */ }
+      syncLooksToServer(updated);
       return updated;
     });
   }, []);
@@ -67,6 +93,7 @@ export function useLooks() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch { /* ignore quota */ }
+      syncLooksToServer(updated);
       return updated;
     });
   }, []);

@@ -37,6 +37,15 @@ function safeSetItem(key: string, value: string) {
   }
 }
 
+function syncToServer(key: string, data: any) {
+  if (typeof window === 'undefined') return;
+  fetch('/api/site-data', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key, data }),
+  }).catch(err => console.warn(`[useSiteData] Failed to sync ${key} to server:`, err));
+}
+
 export function useSiteData() {
   const [hero, setHero] = useState<HeroContent>(seedHeroContent);
   const [about, setAbout] = useState<AboutContentData>(seedAboutContent);
@@ -52,6 +61,7 @@ export function useSiteData() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    // 1. Instant local read for zero-delay initial render
     try {
       const storedHero = localStorage.getItem(HERO_KEY);
       if (storedHero) {
@@ -90,7 +100,6 @@ export function useSiteData() {
         try {
           const parsed = JSON.parse(storedTransformations);
           if (Array.isArray(parsed)) {
-            // Guarantee all seed items (including newly added items like 04) are present
             const merged = [...parsed];
             seedTransformations.forEach(seed => {
               if (!merged.some(m => m.id === seed.id)) {
@@ -110,9 +119,63 @@ export function useSiteData() {
       const storedResp = localStorage.getItem(RESPONSIVE_KEY);
       if (storedResp) setResponsive({ ...seedResponsiveConfig, ...JSON.parse(storedResp) });
     } catch {
-      // Fallbacks to seeds on error
+      // Fallback to defaults
     }
     setIsLoaded(true);
+
+    // 2. Fetch global synced data from server so all devices see updates
+    fetch('/api/site-data')
+      .then(res => res.json())
+      .then(json => {
+        if (json?.success && json?.data) {
+          const d = json.data;
+          if (d.hero) {
+            setHero(prev => ({ ...prev, ...d.hero }));
+            safeSetItem(HERO_KEY, JSON.stringify(d.hero));
+          }
+          if (d.about) {
+            setAbout(prev => ({ ...prev, ...d.about }));
+            safeSetItem(ABOUT_KEY, JSON.stringify(d.about));
+          }
+          if (d.meet) {
+            setMeet(prev => ({ ...prev, ...d.meet }));
+            safeSetItem(MEET_KEY, JSON.stringify(d.meet));
+          }
+          if (d.contact) {
+            setContact(prev => ({ ...prev, ...d.contact }));
+            safeSetItem(CONTACT_KEY, JSON.stringify(d.contact));
+          }
+          if (d.testimonials && Array.isArray(d.testimonials)) {
+            setTestimonials(d.testimonials);
+            safeSetItem(TESTIMONIALS_KEY, JSON.stringify(d.testimonials));
+          }
+          if (d.services && Array.isArray(d.services)) {
+            setServices(d.services);
+            safeSetItem(SERVICES_KEY, JSON.stringify(d.services));
+          }
+          if (d.audiences && Array.isArray(d.audiences)) {
+            setAudiences(d.audiences);
+            safeSetItem(AUDIENCES_KEY, JSON.stringify(d.audiences));
+          }
+          if (d.articles && Array.isArray(d.articles)) {
+            setArticles(d.articles);
+            safeSetItem(ARTICLES_KEY, JSON.stringify(d.articles));
+          }
+          if (d.transformations && Array.isArray(d.transformations)) {
+            setTransformations(d.transformations);
+            safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(d.transformations));
+          }
+          if (d.ctaBanner) {
+            setCtaBanner(prev => ({ ...prev, ...d.ctaBanner }));
+            safeSetItem(CTA_BANNER_KEY, JSON.stringify(d.ctaBanner));
+          }
+          if (d.responsive) {
+            setResponsive(prev => ({ ...prev, ...d.responsive }));
+            safeSetItem(RESPONSIVE_KEY, JSON.stringify(d.responsive));
+          }
+        }
+      })
+      .catch(err => console.warn('[useSiteData] Server sync fetch failed:', err));
   }, []);
 
   // ── HERO SECTION UPDATER ──
@@ -120,6 +183,7 @@ export function useSiteData() {
     setHero(prev => {
       const updated = { ...prev, ...changes };
       safeSetItem(HERO_KEY, JSON.stringify(updated));
+      syncToServer('hero', updated);
       return updated;
     });
   }, []);
@@ -129,6 +193,7 @@ export function useSiteData() {
     setAbout(prev => {
       const updated = { ...prev, ...changes };
       safeSetItem(ABOUT_KEY, JSON.stringify(updated));
+      syncToServer('about', updated);
       return updated;
     });
   }, []);
@@ -138,6 +203,7 @@ export function useSiteData() {
     setMeet(prev => {
       const updated = { ...prev, ...changes };
       safeSetItem(MEET_KEY, JSON.stringify(updated));
+      syncToServer('meet', updated);
       return updated;
     });
   }, []);
@@ -147,6 +213,7 @@ export function useSiteData() {
     setContact(prev => {
       const updated = { ...prev, ...changes };
       safeSetItem(CONTACT_KEY, JSON.stringify(updated));
+      syncToServer('contact', updated);
       return updated;
     });
   }, []);
@@ -156,6 +223,7 @@ export function useSiteData() {
     setCtaBanner(prev => {
       const updated = { ...prev, ...changes };
       safeSetItem(CTA_BANNER_KEY, JSON.stringify(updated));
+      syncToServer('ctaBanner', updated);
       return updated;
     });
   }, []);
@@ -165,6 +233,7 @@ export function useSiteData() {
     setResponsive(prev => {
       const updated = { ...prev, ...changes };
       safeSetItem(RESPONSIVE_KEY, JSON.stringify(updated));
+      syncToServer('responsive', updated);
       return updated;
     });
   }, []);
@@ -175,6 +244,7 @@ export function useSiteData() {
       const id = `test-${Date.now()}`;
       const updated = [...prev, { ...item, id }];
       safeSetItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      syncToServer('testimonials', updated);
       return updated;
     });
   }, []);
@@ -183,6 +253,7 @@ export function useSiteData() {
     setTestimonials(prev => {
       const updated = prev.map(t => t.id === id ? { ...t, ...changes } : t);
       safeSetItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      syncToServer('testimonials', updated);
       return updated;
     });
   }, []);
@@ -191,6 +262,7 @@ export function useSiteData() {
     setTestimonials(prev => {
       const updated = prev.filter(t => t.id !== id);
       safeSetItem(TESTIMONIALS_KEY, JSON.stringify(updated));
+      syncToServer('testimonials', updated);
       return updated;
     });
   }, []);
@@ -202,6 +274,7 @@ export function useSiteData() {
       const num = String(prev.length + 1).padStart(2, '0');
       const updated = [...prev, { ...service, id, num }];
       safeSetItem(SERVICES_KEY, JSON.stringify(updated));
+      syncToServer('services', updated);
       return updated;
     });
   }, []);
@@ -210,6 +283,7 @@ export function useSiteData() {
     setServices(prev => {
       const updated = prev.map(s => s.id === id ? { ...s, ...changes } : s);
       safeSetItem(SERVICES_KEY, JSON.stringify(updated));
+      syncToServer('services', updated);
       return updated;
     });
   }, []);
@@ -218,6 +292,7 @@ export function useSiteData() {
     setServices(prev => {
       const updated = prev.filter(s => s.id !== id);
       safeSetItem(SERVICES_KEY, JSON.stringify(updated));
+      syncToServer('services', updated);
       return updated;
     });
   }, []);
@@ -228,6 +303,7 @@ export function useSiteData() {
       const id = `aud-${Date.now()}`;
       const updated = [...prev, { ...audience, id }];
       safeSetItem(AUDIENCES_KEY, JSON.stringify(updated));
+      syncToServer('audiences', updated);
       return updated;
     });
   }, []);
@@ -236,6 +312,7 @@ export function useSiteData() {
     setAudiences(prev => {
       const updated = prev.map(a => a.id === id ? { ...a, ...changes } : a);
       safeSetItem(AUDIENCES_KEY, JSON.stringify(updated));
+      syncToServer('audiences', updated);
       return updated;
     });
   }, []);
@@ -244,6 +321,7 @@ export function useSiteData() {
     setAudiences(prev => {
       const updated = prev.filter(a => a.id !== id);
       safeSetItem(AUDIENCES_KEY, JSON.stringify(updated));
+      syncToServer('audiences', updated);
       return updated;
     });
   }, []);
@@ -255,6 +333,7 @@ export function useSiteData() {
       const num = String(prev.length + 1).padStart(2, '0');
       const updated = [...prev, { ...article, id, num }];
       safeSetItem(ARTICLES_KEY, JSON.stringify(updated));
+      syncToServer('articles', updated);
       return updated;
     });
   }, []);
@@ -263,6 +342,7 @@ export function useSiteData() {
     setArticles(prev => {
       const updated = prev.map(a => a.id === id ? { ...a, ...changes } : a);
       safeSetItem(ARTICLES_KEY, JSON.stringify(updated));
+      syncToServer('articles', updated);
       return updated;
     });
   }, []);
@@ -271,6 +351,7 @@ export function useSiteData() {
     setArticles(prev => {
       const updated = prev.filter(a => a.id !== id);
       safeSetItem(ARTICLES_KEY, JSON.stringify(updated));
+      syncToServer('articles', updated);
       return updated;
     });
   }, []);
@@ -281,6 +362,7 @@ export function useSiteData() {
       const id = String(prev.length + 1).padStart(2, '0');
       const updated = [...prev, { ...item, id }];
       safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      syncToServer('transformations', updated);
       return updated;
     });
   }, []);
@@ -289,6 +371,7 @@ export function useSiteData() {
     setTransformations(prev => {
       const updated = prev.map(t => t.id === id ? { ...t, ...changes } : t);
       safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      syncToServer('transformations', updated);
       return updated;
     });
   }, []);
@@ -297,6 +380,7 @@ export function useSiteData() {
     setTransformations(prev => {
       const updated = prev.filter(t => t.id !== id);
       safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(updated));
+      syncToServer('transformations', updated);
       return updated;
     });
   }, []);
@@ -326,6 +410,20 @@ export function useSiteData() {
     safeSetItem(TRANSFORMATIONS_KEY, JSON.stringify(seedTransformations));
     safeSetItem(CTA_BANNER_KEY, JSON.stringify(seedCtaBanner));
     safeSetItem(RESPONSIVE_KEY, JSON.stringify(seedResponsiveConfig));
+
+    syncToServer('all', {
+      hero: seedHeroContent,
+      about: seedAboutContent,
+      meet: seedMeetContent,
+      contact: seedContactContent,
+      testimonials: seedTestimonials,
+      services: seedServices,
+      audiences: seedAudiences,
+      articles: seedArticles,
+      transformations: seedTransformations,
+      ctaBanner: seedCtaBanner,
+      responsive: seedResponsiveConfig,
+    });
   }, []);
 
   return {
