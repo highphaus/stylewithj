@@ -204,7 +204,7 @@ export default function LookbookGrid() {
               ✦ THE STYLE EDIT
             </span>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A]">
-              Signature Silhouettes & Curated Categories
+              Find your style for every occasion
             </h2>
             <p className="font-sans text-xs sm:text-sm font-light text-black/70 leading-relaxed mt-3 max-w-xl">
               An editorial anthology of silhouette architecture, fluid draping, and bespoke styling categorized across everyday tailoring, destination escapes, and grand celebrations.
