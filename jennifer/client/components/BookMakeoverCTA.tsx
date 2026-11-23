@@ -381,7 +381,7 @@ export default function BookMakeoverCTA({
             </div>
             <div className="flex items-center gap-3 text-xs text-black/50 font-light font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] uppercase tracking-wider">Concierge Responds Within 4 Hours</span>
+              <span className="text-[10px] uppercase tracking-wider">Team Responds Within 4 Hours</span>
             </div>
           </div>
         )}
