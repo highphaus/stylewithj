@@ -201,7 +201,7 @@ export default function LookbookGrid() {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 pb-8 border-b border-black/15">
           <div className="max-w-2xl">
             <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
-              ✦ ATELIER ARCHIVE • SIGNATURE STYLE CATEGORIES
+              ✦ THE STYLE EDIT
             </span>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A]">
               Signature Silhouettes & Curated Categories
