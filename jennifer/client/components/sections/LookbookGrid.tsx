@@ -198,7 +198,7 @@ export default function LookbookGrid() {
       <div className="max-w-7xl mx-auto flex flex-col gap-10 sm:gap-14">
         
         {/* ── HEADER ── */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 pb-8 border-b border-black/15">
+        <div className="pb-8 border-b border-black/15">
           <div className="max-w-2xl">
             <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
               ✦ THE STYLE EDIT
@@ -209,12 +209,6 @@ export default function LookbookGrid() {
             <p className="font-sans text-xs sm:text-sm font-light text-black/70 leading-relaxed mt-3 max-w-xl">
               From everyday dressing and workwear to holidays and special occasions, discover styling that reflects your personality, complements your lifestyle, and makes you feel confident.
             </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-black/45 bg-[#EFECE6] px-3.5 py-2 rounded-xs border border-black/10 font-semibold">
-              {displayedLooks.length} Signature Looks • 5 Categories
-            </span>
           </div>
         </div>
 
