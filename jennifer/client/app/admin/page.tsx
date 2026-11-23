@@ -7,7 +7,7 @@ import { useLooks } from '@/lib/use-looks';
 import { useSiteData } from '@/lib/use-site-data';
 import { 
   ServiceItem, AudienceItem, JournalArticle, TestimonialItem, 
-  TransformationItem, ResponsiveConfig, CtaBannerContent 
+  TransformationItem, CtaBannerContent 
 } from '@/lib/site-data';
 
 type TabType = 
@@ -17,12 +17,11 @@ type TabType =
   | 'lookbook' 
   | 'about'
   | 'meet'
-  | 'audiences' 
-  | 'articles' 
   | 'testimonials'
+  | 'articles'
+  | 'audiences'
   | 'contact'
-  | 'cta'
-  | 'responsive';
+  | 'cta';
 
 const EMPTY_LOOK: Omit<Look, 'id' | 'num'> = {
   title: '',
@@ -103,7 +102,6 @@ export default function AdminPage() {
     articles, addArticle, updateArticle, deleteArticle,
     transformations, addTransformation, updateTransformation, deleteTransformation,
     ctaBanner, updateCtaBanner,
-    responsive, updateResponsive,
     resetAllSiteData
   } = useSiteData();
 
@@ -127,36 +125,6 @@ export default function AdminPage() {
   const [tempMeet, setTempMeet] = useState(meet);
   const [tempContact, setTempContact] = useState(contact);
   const [tempCta, setTempCta] = useState(ctaBanner);
-  const [tempResponsive, setTempResponsive] = useState<ResponsiveConfig>(responsive);
-  const [heroPreviewDevice, setHeroPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
-
-  // Live Interactive Device Simulator states
-  const [simulatorDevice, setSimulatorDevice] = useState<'mobile' | 'mobile-mini' | 'tablet' | 'desktop' | 'custom'>('mobile');
-  const [simulatorWidth, setSimulatorWidth] = useState<number>(390);
-  const [simulatorPage, setSimulatorPage] = useState<string>('/');
-  const [simulatorScale, setSimulatorScale] = useState<number>(1);
-  const [simulatorIframeKey, setSimulatorIframeKey] = useState<number>(1);
-  const [showDeviceSimulatorModal, setShowDeviceSimulatorModal] = useState<boolean>(false);
-
-  const targetWidth = simulatorDevice === 'mobile' 
-    ? 390 
-    : simulatorDevice === 'mobile-mini' 
-    ? 360 
-    : simulatorDevice === 'tablet' 
-    ? 768 
-    : simulatorDevice === 'desktop' 
-    ? 1240 
-    : simulatorWidth;
-
-  const targetHeight = simulatorDevice === 'mobile' 
-    ? 740 
-    : simulatorDevice === 'mobile-mini' 
-    ? 660 
-    : simulatorDevice === 'tablet' 
-    ? 840 
-    : simulatorDevice === 'desktop' 
-    ? 800 
-    : 740;
 
   useEffect(() => {
     const stored = sessionStorage.getItem('swj_admin');
@@ -168,7 +136,6 @@ export default function AdminPage() {
   useEffect(() => { setTempMeet(meet); }, [meet]);
   useEffect(() => { setTempContact(contact); }, [contact]);
   useEffect(() => { setTempCta(ctaBanner); }, [ctaBanner]);
-  useEffect(() => { setTempResponsive(responsive); }, [responsive]);
 
   const [dbStatus, setDbStatus] = useState<{ connected?: boolean; message?: string } | null>(null);
 
@@ -219,24 +186,22 @@ export default function AdminPage() {
 
   function showToast() {
     setSaved(true);
-    setSimulatorIframeKey(k => k + 1);
     setTimeout(() => setSaved(false), 2400);
   }
 
-  // Navigation tab list with item counts
+  // Clean, organized navigation tab list
   const tabList: { id: TabType; label: string; count?: number }[] = [
-    { id: 'hero', label: '🌟 Hero Section' },
+    { id: 'hero', label: '🌟 Hero & Intro' },
     { id: 'transformations', label: '🔄 Transformations', count: transformations.length },
     { id: 'services', label: '✦ Services', count: services.length },
-    { id: 'lookbook', label: '📸 Lookbook & Gallery', count: looks.length },
-    { id: 'about', label: '📖 About Section' },
+    { id: 'lookbook', label: '📸 Lookbook Gallery', count: looks.length },
+    { id: 'about', label: '📖 About Story' },
     { id: 'meet', label: '👤 Meet Jennifer' },
+    { id: 'testimonials', label: '💬 Client Reviews', count: testimonials.length },
+    { id: 'articles', label: '📰 Journal / Blog', count: articles.length },
     { id: 'audiences', label: '👥 Clientele', count: audiences.length },
-    { id: 'articles', label: '📰 Journal', count: articles.length },
-    { id: 'testimonials', label: '💬 Reviews', count: testimonials.length },
     { id: 'contact', label: '📍 Studio & Contact' },
-    { id: 'cta', label: '📣 Makeover CTA' },
-    { id: 'responsive', label: '📱 Responsive & Devices' },
+    { id: 'cta', label: '📣 Booking Banner' },
   ];
 
   // ── LOGIN GATE ──
@@ -662,66 +627,49 @@ export default function AdminPage() {
   // ── MAIN DASHBOARD (WITH ALL SECTION TABS) ──
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
-      {/* Header Bar - Fully Responsive for Mobile, Tablet & Desktop */}
-      <header className="border-b border-black/10 bg-white/95 backdrop-blur-xs sticky top-0 z-50 px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
-        <div className="flex items-center justify-between w-full sm:w-auto">
-          <div>
-            <span className="font-mono text-[8px] tracking-[0.35em] uppercase text-black/40 font-bold block">STYLE WITH J</span>
-            <h1 className="font-serif text-lg sm:text-xl font-light text-[#1A1A1A]">Site Management Portal</h1>
-          </div>
-          <div className="sm:hidden flex items-center gap-3">
-            <button 
-              type="button"
-              onClick={() => setShowDeviceSimulatorModal(true)} 
-              className="font-mono text-[8.5px] tracking-wider uppercase text-black font-semibold border-b border-black pb-0.5 cursor-pointer"
-            >
-              📱 Devices
-            </button>
-            <Link href="/" target="_blank" className="font-mono text-[8.5px] tracking-wider uppercase text-black/60 hover:text-black">
-              Live Site ↗
-            </Link>
-            <button onClick={handleLogout} className="font-mono text-[8.5px] tracking-wider uppercase text-red-600 font-semibold cursor-pointer">
-              Exit
-            </button>
-          </div>
+      {/* Header Bar - Clean, Modern & Intuitive */}
+      <header className="border-b border-black/10 bg-white/95 backdrop-blur-xs sticky top-0 z-50 px-4 sm:px-8 lg:px-12 py-3.5 flex items-center justify-between shadow-xs">
+        <div>
+          <span className="font-mono text-[8.5px] tracking-[0.3em] uppercase text-black/45 font-bold block">STYLE WITH J</span>
+          <h1 className="font-serif text-lg sm:text-xl font-light text-[#1A1A1A]">Admin Portal</h1>
         </div>
 
-        <div className="hidden sm:flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => setShowDeviceSimulatorModal(true)}
-            className="px-3 py-1.5 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9px] uppercase tracking-[0.2em] rounded-xs cursor-pointer flex items-center gap-1.5 shadow-xs transition-colors"
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Link 
+            href="/" 
+            target="_blank" 
+            className="px-3.5 py-1.5 bg-[#1A1A1A] hover:bg-black text-white font-mono text-[9px] uppercase tracking-[0.2em] rounded-xs shadow-xs transition-colors flex items-center gap-1.5"
           >
-            <span>📱 View On Devices</span>
-          </button>
-          <button onClick={() => setResetModal(true)} className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber-700 hover:text-amber-900 transition-colors cursor-pointer">
-            Reset Seeds
-          </button>
-          <Link href="/" target="_blank" className="font-mono text-[9px] tracking-[0.2em] uppercase text-black/60 hover:text-black transition-colors">
-            View Live Site →
+            <span>View Live Site</span>
+            <span>↗</span>
           </Link>
-          <button onClick={handleLogout} className="font-mono text-[9px] tracking-[0.2em] uppercase text-red-600 hover:text-red-800 transition-colors cursor-pointer">
+          <button 
+            onClick={() => setResetModal(true)} 
+            className="hidden sm:inline font-mono text-[9px] tracking-[0.15em] uppercase text-black/50 hover:text-black transition-colors cursor-pointer"
+          >
+            Reset Defaults
+          </button>
+          <button 
+            onClick={handleLogout} 
+            className="font-mono text-[9px] tracking-[0.15em] uppercase text-red-600 hover:text-red-800 transition-colors cursor-pointer"
+          >
             Sign Out
           </button>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-10 flex flex-col gap-6 sm:gap-8">
-        {/* Live Cloud Multi-Device Sync Status Banner */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 flex flex-col gap-6">
+        {/* Live Cloud Multi-Device Sync Status Pill */}
         {dbStatus && (
-          <div className={`p-3.5 sm:p-4 rounded-xs border font-mono flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 transition-all ${
-            dbStatus.connected
-              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-900'
-              : 'bg-amber-500/10 border-amber-500/40 text-amber-950'
-          }`}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-4 py-2.5 bg-white border border-black/10 rounded-xs shadow-2xs font-mono text-[10px]">
             <div className="flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full flex-shrink-0 ${dbStatus.connected ? 'bg-emerald-600 animate-pulse' : 'bg-amber-600'}`} />
-              <span className="font-bold uppercase tracking-wider text-[10px]">
-                {dbStatus.connected ? '✦ LIVE CLOUD SYNC: CONNECTED' : '⚠️ LIVE CLOUD SYNC: ACTION REQUIRED IN MONGODB ATLAS'}
+              <span className={`w-2 h-2 rounded-full ${dbStatus.connected ? 'bg-emerald-500 animate-pulse' : 'bg-neutral-400'}`} />
+              <span className="font-semibold text-black uppercase tracking-wider">
+                {dbStatus.connected ? 'Cloud Sync: Active Across All Devices' : 'Local Storage Mode'}
               </span>
             </div>
-            <span className="text-[10px] leading-relaxed font-sans sm:font-mono opacity-90">
-              {dbStatus.message}
+            <span className="text-black/55 font-sans sm:font-mono text-[10px]">
+              {dbStatus.connected ? 'All edits automatically update on phone, tablet & desktop' : 'Edits are saved locally in this browser'}
             </span>
           </div>
         )}
@@ -758,182 +706,6 @@ export default function AdminPage() {
                 >
                   Cancel
                 </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ── FULL SCREEN LIVE DEVICE SIMULATOR MODAL ── */}
-        {showDeviceSimulatorModal && (
-          <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex flex-col z-50 p-2 sm:p-5 overflow-y-auto">
-            <div className="max-w-6xl w-full mx-auto flex flex-col gap-3 my-auto">
-              {/* Modal Top Bar */}
-              <div className="bg-[#1C1C1C] text-white p-3 sm:p-4 rounded-t-xl border border-white/15 flex flex-wrap items-center justify-between gap-3 shadow-xl">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-white/50 font-bold">
-                    ✦ DEVICE SIMULATOR
-                  </span>
-                  <span className="font-serif text-base sm:text-lg font-light text-white">
-                    Live Viewport: {targetWidth}px × {targetHeight}px
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setShowDeviceSimulatorModal(false)}
-                  className="px-3 py-1 bg-white/10 hover:bg-white/25 text-white font-mono text-[9px] uppercase tracking-wider rounded-xs cursor-pointer flex items-center gap-1.5 transition-colors"
-                >
-                  <span>✕ Close Simulator</span>
-                </button>
-              </div>
-
-              {/* Controls bar inside modal */}
-              <div className="bg-[#242424] text-white p-3 border-x border-white/15 flex flex-wrap items-center justify-between gap-2.5">
-                <div className="flex flex-wrap items-center gap-1">
-                  <span className="font-mono text-[7.5px] uppercase tracking-wider text-white/40 font-bold mr-1">DEVICE:</span>
-                  {[
-                    { id: 'mobile', label: '📱 iPhone (390px)', w: 390, s: 1 },
-                    { id: 'mobile-mini', label: '📱 Compact (360px)', w: 360, s: 1 },
-                    { id: 'tablet', label: '📟 iPad (768px)', w: 768, s: 0.9 },
-                    { id: 'desktop', label: '💻 Desktop (1240px)', w: 1240, s: 0.72 },
-                    { id: 'custom', label: '📐 Custom', w: simulatorWidth, s: 1 },
-                  ].map(dev => (
-                    <button
-                      key={dev.id}
-                      type="button"
-                      onClick={() => {
-                        setSimulatorDevice(dev.id as any);
-                        if (dev.id !== 'custom') {
-                          setSimulatorWidth(dev.w);
-                          setSimulatorScale(dev.s);
-                        }
-                      }}
-                      className={`px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer transition-all ${
-                        simulatorDevice === dev.id
-                          ? 'bg-white text-black font-semibold shadow-xs'
-                          : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
-                      }`}
-                    >
-                      {dev.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-1">
-                  <span className="font-mono text-[7.5px] uppercase tracking-wider text-white/40 font-bold mr-1">ZOOM:</span>
-                  {[
-                    { scale: 1, label: '100%' },
-                    { scale: 0.85, label: '85%' },
-                    { scale: 0.72, label: '72%' },
-                    { scale: 0.55, label: '55%' },
-                  ].map(z => (
-                    <button
-                      key={z.scale}
-                      type="button"
-                      onClick={() => setSimulatorScale(z.scale)}
-                      className={`px-2 py-0.5 font-mono text-[8px] rounded-xs cursor-pointer transition-colors ${
-                        simulatorScale === z.scale
-                          ? 'bg-amber-400 text-black font-bold'
-                          : 'bg-white/10 text-white/60 hover:text-white'
-                      }`}
-                    >
-                      {z.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Page Selector bar */}
-              <div className="bg-[#1C1C1C] text-white px-3 py-2 border-x border-white/15 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex flex-wrap items-center gap-1">
-                  <span className="font-mono text-[7.5px] uppercase tracking-wider text-white/40 font-bold mr-1">PAGE:</span>
-                  {[
-                    { path: '/', label: '🏠 Home' },
-                    { path: '/#transformations', label: '🔄 Transformations' },
-                    { path: '/#services', label: '✦ Services' },
-                    { path: '/lookbook', label: '📸 Lookbook' },
-                    { path: '/about', label: '📖 About' },
-                    { path: '/connect', label: '📍 Connect' },
-                  ].map(pg => (
-                    <button
-                      key={pg.path}
-                      type="button"
-                      onClick={() => {
-                        setSimulatorPage(pg.path);
-                        setSimulatorIframeKey(k => k + 1);
-                      }}
-                      className={`px-2 py-0.5 font-mono text-[8px] uppercase tracking-wider rounded-xs cursor-pointer transition-colors ${
-                        simulatorPage === pg.path
-                          ? 'bg-amber-400 text-black font-semibold'
-                          : 'bg-white/10 text-white/70 hover:bg-white/20'
-                      }`}
-                    >
-                      {pg.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSimulatorIframeKey(k => k + 1)}
-                    className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer flex items-center gap-1"
-                  >
-                    ↻ Reload
-                  </button>
-                  <a
-                    href={simulatorPage}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs flex items-center gap-1"
-                  >
-                    ↗ New Tab
-                  </a>
-                </div>
-              </div>
-
-              {/* Viewport Frame in Modal */}
-              <div className="bg-[#0E0E0E] p-4 sm:p-6 rounded-b-xl border-x border-b border-white/15 flex justify-center overflow-x-auto min-h-[550px] shadow-2xl">
-                <div className="flex flex-col items-center my-auto">
-                  <div
-                    style={{ width: `${Math.round(targetWidth * simulatorScale)}px` }}
-                    className="bg-[#242424] text-white px-3 py-1.5 flex items-center justify-between border-t border-x border-white/15 rounded-t-xl"
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] inline-block" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] inline-block" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] inline-block" />
-                      <span className="ml-2 font-mono text-[8px] text-white/50 tracking-wider">
-                        {targetWidth}px ({Math.round(simulatorScale * 100)}%)
-                      </span>
-                    </div>
-                    <span className="font-mono text-[8px] text-white/40 truncate max-w-[200px]">
-                      stylewithj.in{simulatorPage}
-                    </span>
-                  </div>
-
-                  <div
-                    style={{
-                      width: `${Math.round(targetWidth * simulatorScale)}px`,
-                      height: `${Math.round(targetHeight * simulatorScale)}px`,
-                      overflow: 'hidden',
-                    }}
-                    className="bg-white rounded-b-xl shadow-2xl border-b border-x border-white/15 relative"
-                  >
-                    <iframe
-                      key={`modal-${simulatorIframeKey}`}
-                      src={simulatorPage}
-                      style={{
-                        width: `${targetWidth}px`,
-                        height: `${targetHeight}px`,
-                        transform: `scale(${simulatorScale})`,
-                        transformOrigin: 'top left',
-                      }}
-                      className="border-0 bg-[#FAF9F6] w-full h-full"
-                      title="Live Website Modal Responsive Simulator"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -1752,630 +1524,7 @@ export default function AdminPage() {
           </form>
         )}
 
-        {/* ── 12. RESPONSIVE & DEVICE CONTROLS TAB ── */}
-        {activeTab === 'responsive' && (
-          <div className="flex flex-col gap-8">
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              updateResponsive(tempResponsive);
-              showToast();
-            }} className="bg-white border border-black/10 p-5 sm:p-8 lg:p-10 rounded-xs flex flex-col gap-8 shadow-2xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-black/10 pb-6">
-                <div>
-                  <span className="font-mono text-[8px] tracking-[0.3em] uppercase text-black/40 font-bold block">
-                    DEVICE LAYOUT & RESPONSIVE CALIBRATION
-                  </span>
-                  <h2 className="font-serif text-2xl sm:text-3xl font-light mt-1">
-                    Responsive Device Engine
-                  </h2>
-                  <p className="font-sans text-xs text-black/60 mt-1 max-w-xl">
-                    Configure viewport heights, responsive columns, image framing, typography scaling, and auto-scroll speeds for phones, tablets, and desktop screens.
-                  </p>
-                </div>
 
-                <button
-                  type="button"
-                  onClick={() => setShowDeviceSimulatorModal(true)}
-                  className="self-start sm:self-auto px-4 py-2 bg-black text-white hover:bg-black/85 font-mono text-[9px] uppercase tracking-[0.2em] rounded-xs cursor-pointer flex items-center gap-1.5 shadow-xs transition-colors"
-                >
-                  <span>⛶ Open Fullscreen Simulator</span>
-                </button>
-              </div>
-
-              {/* CARD 1: HERO SECTION */}
-              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
-                <div className="flex items-center justify-between border-b border-black/10 pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">🌟</span>
-                    <h3 className="font-serif text-lg font-light">Hero Section Responsiveness</h3>
-                  </div>
-                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
-                    Desktop + Mobile Framing
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Desktop Image Vertical Lift (objectPosition)
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['center 45%', 'center 50%', 'center 55%', 'center 60%'].map(pos => (
-                        <button
-                          key={pos}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, heroDesktopImagePosition: pos }))}
-                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
-                            tempResponsive.heroDesktopImagePosition === pos
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          {pos}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      type="text"
-                      value={tempResponsive.heroDesktopImagePosition}
-                      onChange={e => setTempResponsive(p => ({ ...p, heroDesktopImagePosition: e.target.value }))}
-                      placeholder="e.g. center 50%"
-                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Mobile Image Vertical Focus (objectPosition)
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['center 10%', 'center 15%', 'center 25%', 'center 50%'].map(pos => (
-                        <button
-                          key={pos}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, heroMobileImagePosition: pos }))}
-                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
-                            tempResponsive.heroMobileImagePosition === pos
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          {pos}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      type="text"
-                      value={tempResponsive.heroMobileImagePosition}
-                      onChange={e => setTempResponsive(p => ({ ...p, heroMobileImagePosition: e.target.value }))}
-                      placeholder="e.g. center 15%"
-                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Desktop Hero Headline Scale
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { id: 'compact', label: 'Compact', detail: '38px' },
-                        { id: 'standard', label: 'Standard', detail: '44px' },
-                        { id: 'editorial', label: 'Editorial', detail: '52px' },
-                      ].map(item => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, heroDesktopTitleSize: item.id as any }))}
-                          className={`p-2.5 flex flex-col items-center justify-center rounded-xs border text-center cursor-pointer transition-colors ${
-                            tempResponsive.heroDesktopTitleSize === item.id
-                              ? 'bg-black text-white border-black'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          <span className="font-mono text-[9.5px] uppercase font-bold">{item.label}</span>
-                          <span className="text-[8px] opacity-60 font-mono">{item.detail}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Mobile Hero Headline Scale
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { id: 'compact', label: 'Compact', detail: '22px' },
-                        { id: 'standard', label: 'Standard', detail: '28px' },
-                        { id: 'prominent', label: 'Prominent', detail: '32px' },
-                      ].map(item => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, heroMobileTitleSize: item.id as any }))}
-                          className={`p-2.5 flex flex-col items-center justify-center rounded-xs border text-center cursor-pointer transition-colors ${
-                            tempResponsive.heroMobileTitleSize === item.id
-                              ? 'bg-black text-white border-black'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          <span className="font-mono text-[9.5px] uppercase font-bold">{item.label}</span>
-                          <span className="text-[8px] opacity-60 font-mono">{item.detail}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* CARD 2: TRANSFORMATIONS */}
-              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
-                <div className="flex items-center justify-between border-b border-black/10 pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">🔄</span>
-                    <h3 className="font-serif text-lg font-light">Transformations Section Responsiveness</h3>
-                  </div>
-                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
-                    Dual Stage & Auto-Cycle
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Desktop Dual-Image Height
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['580px', '640px', '700px'].map(h => (
-                        <button
-                          key={h}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, transformationsDesktopHeight: h }))}
-                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
-                            tempResponsive.transformationsDesktopHeight === h
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          {h}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      type="text"
-                      value={tempResponsive.transformationsDesktopHeight}
-                      onChange={e => setTempResponsive(p => ({ ...p, transformationsDesktopHeight: e.target.value }))}
-                      placeholder="e.g. 640px"
-                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Mobile Stage Height (Viewport %)
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['48vh', '55vh', '65vh'].map(h => (
-                        <button
-                          key={h}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, transformationsMobileHeight: h }))}
-                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
-                            tempResponsive.transformationsMobileHeight === h
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          {h}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      type="text"
-                      value={tempResponsive.transformationsMobileHeight}
-                      onChange={e => setTempResponsive(p => ({ ...p, transformationsMobileHeight: e.target.value }))}
-                      placeholder="e.g. 55vh"
-                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Auto-Cycle Timer (Seconds)
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[
-                        { sec: 0, label: '0s (Paused)' },
-                        { sec: 6, label: '6s' },
-                        { sec: 9, label: '9s' },
-                        { sec: 12, label: '12s' },
-                      ].map(item => (
-                        <button
-                          key={item.sec}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, transformationsCycleSpeed: item.sec }))}
-                          className={`px-2 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
-                            tempResponsive.transformationsCycleSpeed === item.sec
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          {item.label}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      type="number"
-                      min="0"
-                      max="30"
-                      value={tempResponsive.transformationsCycleSpeed}
-                      onChange={e => setTempResponsive(p => ({ ...p, transformationsCycleSpeed: Number(e.target.value) }))}
-                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
-                    />
-                    <span className="font-sans text-[10px] text-black/40">Set to 0 to disable auto-rotation and use manual navigation</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* CARD 3: SERVICES */}
-              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
-                <div className="flex items-center justify-between border-b border-black/10 pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">✦</span>
-                    <h3 className="font-serif text-lg font-light">Services Section Responsiveness</h3>
-                  </div>
-                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
-                    Mobile Auto-Scroll + Desktop Sticky
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Mobile Services Auto-Carousel Speed (Seconds)
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[
-                        { sec: 0, label: '0s (Manual Swipe)' },
-                        { sec: 5, label: '5s (Fast)' },
-                        { sec: 7, label: '7s (Standard)' },
-                        { sec: 10, label: '10s (Relaxed)' },
-                      ].map(item => (
-                        <button
-                          key={item.sec}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, servicesMobileCarouselSpeed: item.sec }))}
-                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
-                            tempResponsive.servicesMobileCarouselSpeed === item.sec
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          {item.label}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      type="number"
-                      min="0"
-                      max="30"
-                      value={tempResponsive.servicesMobileCarouselSpeed}
-                      onChange={e => setTempResponsive(p => ({ ...p, servicesMobileCarouselSpeed: Number(e.target.value) }))}
-                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
-                    />
-                    <span className="font-sans text-[10px] text-black/40">Set to 0 to disable auto-slide on touch screens</span>
-                  </div>
-
-                  <div className="p-4 bg-white border border-black/10 rounded-xs flex flex-col justify-center gap-1.5">
-                    <span className="font-mono text-[8.5px] uppercase tracking-wider text-black/40 font-bold">DESKTOP SCROLL BEHAVIOR</span>
-                    <p className="font-serif text-sm font-light text-black">
-                      Scroll-Linked Sticky Viewport (Fluid Spring Physics)
-                    </p>
-                    <p className="font-sans text-[11px] text-black/60 leading-relaxed">
-                      On desktop computers & laptops, Services automatically lock smoothly in viewport while scrolling down, cycling through all {services.length} services naturally.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* CARD 4: LOOKBOOK & GALLERY */}
-              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#FAF9F6] border border-black/10 rounded-xs">
-                <div className="flex items-center justify-between border-b border-black/10 pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">📸</span>
-                    <h3 className="font-serif text-lg font-light">Lookbook & Gallery Responsiveness</h3>
-                  </div>
-                  <span className="font-mono text-[8px] tracking-wider uppercase bg-black/5 text-black/60 px-2 py-0.5 rounded-xs">
-                    Grid Columns + Mobile Speed
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Desktop Grid Presentation Columns
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { cols: '2', label: '2 Columns', desc: 'Editorial Focus' },
-                        { cols: '3', label: '3 Columns', desc: 'Classic Standard' },
-                        { cols: '4', label: '4 Columns', desc: 'Catalog Dense' },
-                      ].map(item => (
-                        <button
-                          key={item.cols}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, lookbookDesktopColumns: Number(item.cols) }))}
-                          className={`p-3 flex flex-col items-center justify-center rounded-xs border text-center cursor-pointer transition-colors ${
-                            String(tempResponsive.lookbookDesktopColumns) === item.cols
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          <span className="font-mono text-[10px] uppercase font-bold">{item.label}</span>
-                          <span className="text-[8px] opacity-60 font-mono mt-0.5">{item.desc}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/60 font-bold">
-                      Mobile Lookbook Auto-Carousel Speed (Seconds)
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[
-                        { sec: 0, label: '0s (Manual)' },
-                        { sec: 3, label: '3s (Swift)' },
-                        { sec: 4, label: '4s (Default)' },
-                        { sec: 6, label: '6s (Slow)' },
-                      ].map(item => (
-                        <button
-                          key={item.sec}
-                          type="button"
-                          onClick={() => setTempResponsive(p => ({ ...p, lookbookMobileCarouselSpeed: item.sec }))}
-                          className={`px-2.5 py-1 text-[9px] font-mono rounded-xs border cursor-pointer transition-colors ${
-                            tempResponsive.lookbookMobileCarouselSpeed === item.sec
-                              ? 'bg-black text-white border-black font-semibold'
-                              : 'bg-white text-black/70 border-black/15 hover:border-black/40'
-                          }`}
-                        >
-                          {item.label}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      type="number"
-                      min="0"
-                      max="30"
-                      value={tempResponsive.lookbookMobileCarouselSpeed}
-                      onChange={e => setTempResponsive(p => ({ ...p, lookbookMobileCarouselSpeed: Number(e.target.value) }))}
-                      className="mt-1 px-3.5 py-2 border border-black/15 bg-white font-mono text-xs rounded-xs outline-none focus:border-black/40"
-                    />
-                    <span className="font-sans text-[10px] text-black/40">Set to 0 to disable auto-cycling on mobile touch devices</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* REAL-TIME INTERACTIVE LIVE WEBSITE DEVICE SIMULATOR */}
-              <div className="flex flex-col gap-5 p-5 sm:p-6 bg-[#181818] text-white rounded-xs border border-black/20 shadow-lg">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-4">
-                  <div>
-                    <span className="font-mono text-[8.5px] tracking-[0.3em] uppercase text-white/50 font-bold block">
-                      ✦ LIVE INTERACTIVE WEBSITE SIMULATOR
-                    </span>
-                    <h3 className="font-serif text-xl sm:text-2xl font-light text-white mt-0.5">
-                      How Pictures & Writings Look on Every Device
-                    </h3>
-                    <p className="font-sans text-[11px] text-white/60 mt-0.5 max-w-xl">
-                      Experience the live website exactly as your clients see it on iPhones, Android phones, iPads, and desktop monitors. Test font readability, image framing, and responsive breakpoints in real time.
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowDeviceSimulatorModal(true)}
-                    className="self-start lg:self-center px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-mono text-[9px] uppercase tracking-[0.2em] rounded-xs cursor-pointer flex items-center gap-1.5 transition-colors"
-                  >
-                    <span>⛶ Expand Simulator</span>
-                  </button>
-                </div>
-
-                {/* Device Selector & Zoom Toolbar */}
-                <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white/5 border border-white/10 rounded-xs">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-mono text-[8px] uppercase tracking-wider text-white/40 font-bold mr-1">DEVICE:</span>
-                    {[
-                      { id: 'mobile', label: '📱 iPhone (390px)', w: 390, s: 1 },
-                      { id: 'mobile-mini', label: '📱 Compact (360px)', w: 360, s: 1 },
-                      { id: 'tablet', label: '📟 iPad (768px)', w: 768, s: 0.9 },
-                      { id: 'desktop', label: '💻 Desktop (1240px)', w: 1240, s: 0.72 },
-                      { id: 'custom', label: '📐 Custom', w: simulatorWidth, s: 1 },
-                    ].map(dev => (
-                      <button
-                        key={dev.id}
-                        type="button"
-                        onClick={() => {
-                          setSimulatorDevice(dev.id as any);
-                          if (dev.id !== 'custom') {
-                            setSimulatorWidth(dev.w);
-                            setSimulatorScale(dev.s);
-                          }
-                        }}
-                        className={`px-3 py-1.5 font-mono text-[9px] uppercase tracking-wider rounded-xs cursor-pointer transition-all ${
-                          simulatorDevice === dev.id
-                            ? 'bg-white text-black font-semibold shadow-xs'
-                            : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
-                        }`}
-                      >
-                        {dev.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-mono text-[8px] uppercase tracking-wider text-white/40 font-bold mr-1">ZOOM:</span>
-                    {[
-                      { scale: 1, label: '100%' },
-                      { scale: 0.85, label: '85%' },
-                      { scale: 0.72, label: '72%' },
-                      { scale: 0.55, label: '55%' },
-                    ].map(z => (
-                      <button
-                        key={z.scale}
-                        type="button"
-                        onClick={() => setSimulatorScale(z.scale)}
-                        className={`px-2 py-1 font-mono text-[8.5px] rounded-xs cursor-pointer transition-colors ${
-                          simulatorScale === z.scale
-                            ? 'bg-amber-400 text-black font-bold'
-                            : 'bg-white/10 text-white/60 hover:text-white'
-                        }`}
-                      >
-                        {z.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {simulatorDevice === 'custom' && (
-                  <div className="flex items-center gap-4 px-3 py-2 bg-white/5 border border-white/10 rounded-xs">
-                    <span className="font-mono text-[8.5px] uppercase tracking-wider text-white/60 font-bold">
-                      CUSTOM VIEWPORT WIDTH: {simulatorWidth}px
-                    </span>
-                    <input
-                      type="range"
-                      min="320"
-                      max="1400"
-                      step="10"
-                      value={simulatorWidth}
-                      onChange={e => setSimulatorWidth(Number(e.target.value))}
-                      className="flex-1 accent-white cursor-pointer"
-                    />
-                    <div className="flex gap-1">
-                      {[375, 414, 768, 1024, 1280].map(px => (
-                        <button
-                          key={px}
-                          type="button"
-                          onClick={() => setSimulatorWidth(px)}
-                          className="px-2 py-0.5 bg-white/10 text-[8px] font-mono text-white/80 rounded-xs hover:bg-white/20 cursor-pointer"
-                        >
-                          {px}px
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Page Navigation Quick Switcher */}
-                <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xs">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-mono text-[8px] uppercase tracking-wider text-white/40 font-bold mr-1">PAGE:</span>
-                    {[
-                      { path: '/', label: '🏠 Home' },
-                      { path: '/#transformations', label: '🔄 Transformations' },
-                      { path: '/#services', label: '✦ Services' },
-                      { path: '/lookbook', label: '📸 Lookbook' },
-                      { path: '/about', label: '📖 About' },
-                      { path: '/connect', label: '📍 Connect' },
-                    ].map(pg => (
-                      <button
-                        key={pg.path}
-                        type="button"
-                        onClick={() => {
-                          setSimulatorPage(pg.path);
-                          setSimulatorIframeKey(k => k + 1);
-                        }}
-                        className={`px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer transition-colors ${
-                          simulatorPage === pg.path
-                            ? 'bg-amber-400 text-black font-semibold'
-                            : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
-                        }`}
-                      >
-                        {pg.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setSimulatorIframeKey(k => k + 1)}
-                      className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs cursor-pointer flex items-center gap-1 transition-colors"
-                      title="Reload website in device"
-                    >
-                      <span>↻ Refresh Preview</span>
-                    </button>
-                    <a
-                      href={simulatorPage}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-2.5 py-1 bg-white/15 hover:bg-white/25 text-white font-mono text-[8.5px] uppercase tracking-wider rounded-xs flex items-center gap-1 transition-colors"
-                      title="Open page in a real browser tab"
-                    >
-                      <span>↗ Open Full Site</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Device Frame Viewport Container */}
-                <div className="w-full flex justify-center py-6 bg-[#0E0E0E] rounded-xs border border-white/10 overflow-x-auto min-h-[500px]">
-                  <div className="flex flex-col items-center">
-                    <div 
-                      style={{ width: `${Math.round(targetWidth * simulatorScale)}px` }}
-                      className="bg-[#242424] text-white px-3 sm:px-4 py-2 flex items-center justify-between border-t border-x border-white/15 rounded-t-xl transition-all duration-200"
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] inline-block" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] inline-block" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] inline-block" />
-                        <span className="ml-2 font-mono text-[8.5px] text-white/50 tracking-wider">
-                          {targetWidth}px × {targetHeight}px ({Math.round(simulatorScale * 100)}% zoom)
-                        </span>
-                      </div>
-                      <div className="font-mono text-[8px] text-white/40 tracking-wider uppercase px-2 py-0.5 bg-black/40 rounded-xs truncate max-w-[220px]">
-                        stylewithj.in{simulatorPage}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        width: `${Math.round(targetWidth * simulatorScale)}px`,
-                        height: `${Math.round(targetHeight * simulatorScale)}px`,
-                        overflow: 'hidden',
-                      }}
-                      className="bg-white rounded-b-xl shadow-[0_25px_60px_rgba(0,0,0,0.6)] border-b border-x border-white/15 relative transition-all duration-200"
-                    >
-                      <iframe
-                        key={simulatorIframeKey}
-                        src={simulatorPage}
-                        style={{
-                          width: `${targetWidth}px`,
-                          height: `${targetHeight}px`,
-                          transform: `scale(${simulatorScale})`,
-                          transformOrigin: 'top left',
-                        }}
-                        className="border-0 bg-[#FAF9F6] w-full h-full"
-                        title="Live Website Device Responsive Simulator"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[9px] font-mono text-white/40 px-1">
-                  <span>✦ Interacting inside the simulator: You can scroll, click buttons, and browse pages just like a client on that device.</span>
-                  <span>Viewport Breakpoint: {targetWidth < 640 ? 'Mobile Screen (< 640px)' : targetWidth < 1024 ? 'Tablet Screen (640px - 1023px)' : 'Desktop Screen (≥ 1024px)'}</span>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="py-3.5 bg-black text-white font-mono text-[10px] uppercase tracking-[0.25em] rounded-xs shadow-md cursor-pointer hover:bg-black/90 transition-all"
-              >
-                Save Responsive & Device Changes →
-              </button>
-            </form>
-          </div>
-        )}
 
       </div>
     </div>
