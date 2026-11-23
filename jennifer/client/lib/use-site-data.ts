@@ -22,7 +22,7 @@ const ABOUT_KEY = 'swj_about';
 const MEET_KEY = 'swj_meet';
 const CONTACT_KEY = 'swj_contact';
 const TESTIMONIALS_KEY = 'swj_testimonials';
-const SERVICES_KEY = 'swj_services';
+const SERVICES_KEY = 'swj_services_v2';
 const AUDIENCES_KEY = 'swj_audiences';
 const ARTICLES_KEY = 'swj_articles';
 const TRANSFORMATIONS_KEY = 'swj_transformations';
@@ -87,7 +87,22 @@ export function useSiteData() {
       if (storedTestimonials) setTestimonials(JSON.parse(storedTestimonials));
 
       const storedServices = localStorage.getItem(SERVICES_KEY);
-      if (storedServices) setServices(JSON.parse(storedServices));
+      if (storedServices) {
+        try {
+          const parsed = JSON.parse(storedServices);
+          if (Array.isArray(parsed) && parsed.length >= seedServices.length) {
+            setServices(parsed);
+          } else {
+            setServices(seedServices);
+            safeSetItem(SERVICES_KEY, JSON.stringify(seedServices));
+          }
+        } catch {
+          setServices(seedServices);
+        }
+      } else {
+        setServices(seedServices);
+        safeSetItem(SERVICES_KEY, JSON.stringify(seedServices));
+      }
 
       const storedAudiences = localStorage.getItem(AUDIENCES_KEY);
       if (storedAudiences) setAudiences(JSON.parse(storedAudiences));
@@ -149,7 +164,7 @@ export function useSiteData() {
             setTestimonials(d.testimonials);
             safeSetItem(TESTIMONIALS_KEY, JSON.stringify(d.testimonials));
           }
-          if (d.services && Array.isArray(d.services)) {
+          if (d.services && Array.isArray(d.services) && d.services.length >= seedServices.length) {
             setServices(d.services);
             safeSetItem(SERVICES_KEY, JSON.stringify(d.services));
           }

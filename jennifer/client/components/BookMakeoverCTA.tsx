@@ -315,12 +315,13 @@ export default function BookMakeoverCTA({
                     className="w-full bg-transparent border-b border-black/30 pb-3 font-sans text-sm focus:border-black focus:outline-none transition-colors text-black/90 cursor-pointer"
                     required
                   >
+                    <option value="Personal Styling & Shopping" className="bg-[#FAF8F3] text-black">Personal Styling & Shopping</option>
+                    <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling</option>
+                    <option value="Workwear & Professional Styling" className="bg-[#FAF8F3] text-black">Workwear & Professional Styling</option>
+                    <option value="Occasion Styling" className="bg-[#FAF8F3] text-black">Occasion Styling</option>
+                    <option value="Wedding Styling" className="bg-[#FAF8F3] text-black">Wedding Styling</option>
+                    <option value="Travel & Resort Styling" className="bg-[#FAF8F3] text-black">Travel & Resort Styling</option>
                     <option value="Full Transformation" className="bg-[#FAF8F3] text-black">Complete Style Makeover / Full Transformation</option>
-                    <option value="Personal Styling" className="bg-[#FAF8F3] text-black">Personal Styling & Silhouette Discovery</option>
-                    <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling & Closet Audit</option>
-                    <option value="Personal Shopping" className="bg-[#FAF8F3] text-black">Personal Shopping (Curated Itineraries)</option>
-                    <option value="Occasion Styling" className="bg-[#FAF8F3] text-black">Occasion & Bridal Styling</option>
-                    <option value="Workwear Styling" className="bg-[#FAF8F3] text-black">Workwear & Leadership Presence</option>
                     <option value="Bespoke Consultation" className="bg-[#FAF8F3] text-black">Bespoke 1-on-1 Consultation</option>
                   </select>
                 </div>

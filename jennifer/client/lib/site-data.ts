@@ -244,42 +244,86 @@ export const seedServices: ServiceItem[] = [
   { 
     id: "service-01",
     num: "01",
-    category: "Style Discovery",
-    name: "Personal Styling", 
-    desc: "Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.",
-    image: "/images/includes/IMG_0271.JPG.jpeg"
+    category: "Style Discovery & Shopping",
+    name: "Personal Styling & Shopping", 
+    desc: "Discover your personal style and shop for pieces that work for you.",
+    image: "/images/includes/IMG_0271.JPG.jpeg",
+    points: [
+      "Discover your personal style & signature silhouette",
+      "Understand what silhouettes, colours, and fits work for you",
+      "Curated shopping recommendations tailored to your budget",
+      "Feel comfortable, confident, and authentically yourself"
+    ]
   },
   { 
     id: "service-02",
     num: "02",
     category: "Closet Evolution",
     name: "Wardrobe Styling", 
-    desc: "Make your existing wardrobe work harder. Rediscover forgotten pieces, create fresh outfit combinations, identify what's missing, and build a versatile closet.",
-    image: "/images/includes/DSC04682.jpg"
+    desc: "Refresh your existing wardrobe and create versatile outfit combinations.",
+    image: "/images/includes/DSC04682.jpg",
+    points: [
+      "Comprehensive wardrobe audit & assessment",
+      "Refresh your existing pieces in 5+ new ways",
+      "Create versatile, repeatable outfit combinations",
+      "Identify key wardrobe gaps to shop with intention"
+    ]
   },
   { 
     id: "service-03",
     num: "03",
-    category: "Intentional Shopping",
-    name: "Personal Shopping", 
-    desc: "Shop with intention through curated recommendations tailored to your style, lifestyle, and budget. Spend less time searching and more time finding what works.",
-    image: "/images/includes/IMG_9135.JPG.jpeg"
+    category: "Professional Identity",
+    name: "Workwear & Professional Styling", 
+    desc: "Build a polished wardrobe for your professional life.",
+    image: "/images/includes/IMG_8863.JPG.jpeg",
+    points: [
+      "Executive workwear & smart casual leadership dressing",
+      "Polished outfits for everyday office & boardroom meetings",
+      "Professional dressing for investor pitches & speaking engagements",
+      "Command respect, authority, and authentic comfort"
+    ]
   },
   { 
     id: "service-04",
     num: "04",
     category: "Event & Celebration",
     name: "Occasion Styling", 
-    desc: "Tell us where you're going, and we'll help you figure out what to wear. From weddings and parties to date nights and celebrations, curate the perfect look.",
-    image: "/images/includes/IMG_1754.JPG.jpeg"
+    desc: "Style for parties, date nights, celebrations and special moments.",
+    image: "/images/includes/IMG_1754.JPG.jpeg",
+    points: [
+      "Curated looks for evening parties & cocktail events",
+      "Effortless styling for date nights & celebrations",
+      "Distinctive silhouettes tailored to the event vibe",
+      "Accessorizing and footwear pairing guidance"
+    ]
   },
   { 
     id: "service-05",
     num: "05",
-    category: "Professional Identity",
-    name: "Workwear Styling", 
-    desc: "Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important executive presentations.",
-    image: "/images/includes/IMG_8863.JPG.jpeg"
+    category: "Bridal & Nuptials",
+    name: "Wedding Styling", 
+    desc: "Curated looks for weddings, bridal events, bridesmaids and wedding guests.",
+    image: "/images/includes/CIT09345.jpg",
+    points: [
+      "Bridal trousseau, lehengas & saree draping curation",
+      "Cohesive styling for pre-wedding events (sangeet, mehendi, reception)",
+      "Elegant curations for bridesmaids & family members",
+      "Showstopper guest styling for destination & traditional weddings"
+    ]
+  },
+  { 
+    id: "service-06",
+    num: "06",
+    category: "Resort & Getaways",
+    name: "Travel & Resort Styling", 
+    desc: "Create effortless holiday wardrobes and destination looks.",
+    image: "/images/includes/IMG_9135.JPG.jpeg",
+    points: [
+      "Capsule packing lists tailored to climate & itinerary",
+      "Breathable, versatile holiday wardrobes and resort wear",
+      "Day-to-night vacation transitions with minimal luggage",
+      "Effortless destination aesthetics for photography & travel comfort"
+    ]
   }
 ];
 

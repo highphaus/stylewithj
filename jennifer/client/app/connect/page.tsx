@@ -255,11 +255,12 @@ function ConnectContent() {
                 required
               >
                 <option value="" disabled className="bg-[#FAF8F3] text-black/45">Select Your Desired Styling Service *</option>
-                <option value="Personal Styling" className="bg-[#FAF8F3] text-black">Personal Styling</option>
-                <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling & Audit</option>
-                <option value="Personal Shopping" className="bg-[#FAF8F3] text-black">Personal Shopping</option>
-                <option value="Occasion Styling" className="bg-[#FAF8F3] text-black">Occasion & Bridal Styling</option>
-                <option value="Workwear Styling" className="bg-[#FAF8F3] text-black">Executive Workwear Styling</option>
+                <option value="Personal Styling & Shopping" className="bg-[#FAF8F3] text-black">Personal Styling & Shopping</option>
+                <option value="Wardrobe Styling" className="bg-[#FAF8F3] text-black">Wardrobe Styling</option>
+                <option value="Workwear & Professional Styling" className="bg-[#FAF8F3] text-black">Workwear & Professional Styling</option>
+                <option value="Occasion Styling" className="bg-[#FAF8F3] text-black">Occasion Styling</option>
+                <option value="Wedding Styling" className="bg-[#FAF8F3] text-black">Wedding Styling</option>
+                <option value="Travel & Resort Styling" className="bg-[#FAF8F3] text-black">Travel & Resort Styling</option>
                 <option value="Full Transformation" className="bg-[#FAF8F3] text-black">Full Style Transformation</option>
                 <option value="Bespoke Consultation" className="bg-[#FAF8F3] text-black">Bespoke Consultation</option>
               </select>

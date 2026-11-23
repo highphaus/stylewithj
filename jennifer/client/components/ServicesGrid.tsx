@@ -17,70 +17,80 @@ interface ServiceDefinition {
 const allServices: ServiceDefinition[] = [
   { 
     num: "01",
-    category: "Style Discovery",
-    name: "Personal Styling", 
-    desc: "Discover and define your personal style with looks tailored to your personality, lifestyle, comfort, preferences, and the way you want to show up in the world.",
+    category: "Style Discovery & Shopping",
+    name: "Personal Styling & Shopping", 
+    desc: "Discover your personal style and shop for pieces that work for you.",
     image: "/images/includes/IMG_0271.JPG.jpeg",
     points: [
       "Discover your personal style & signature silhouette",
       "Understand what silhouettes, colours, and fits work for you",
-      "Create outfits that suit your personality and lifestyle",
-      "Feel comfortable and confident in what you wear"
+      "Curated shopping recommendations tailored to your budget",
+      "Feel comfortable, confident, and authentically yourself"
     ]
   },
   { 
     num: "02",
     category: "Closet Evolution",
-    name: "Wardrobe Styling & Audit", 
-    desc: "Make your existing wardrobe work harder. Rediscover forgotten pieces, create fresh outfit combinations, identify what's missing, and build a versatile closet.",
+    name: "Wardrobe Styling", 
+    desc: "Refresh your existing wardrobe and create versatile outfit combinations.",
     image: "/images/includes/DSC04682.jpg",
     points: [
       "Comprehensive wardrobe audit & assessment",
-      "Identifying what works and what doesn't",
-      "Styling existing pieces in 5+ new ways",
-      "Creating multiple looks from the same wardrobe",
-      "Building an intentional, versatile capsule closet"
+      "Refresh your existing pieces in 5+ new ways",
+      "Create versatile, repeatable outfit combinations",
+      "Identify key wardrobe gaps to shop with intention"
     ]
   },
   { 
     num: "03",
-    category: "Intentional Shopping",
-    name: "Personal Shopping Bangalore", 
-    desc: "Shop with intention through curated recommendations tailored to your style, lifestyle, and budget. Spend less time searching and more time finding what works.",
-    image: "/images/includes/IMG_9135.JPG.jpeg",
+    category: "Professional Identity",
+    name: "Workwear & Professional Styling", 
+    desc: "Build a polished wardrobe for your professional life.",
+    image: "/images/includes/IMG_8863.JPG.jpeg",
     points: [
-      "Personalised shopping itineraries & recommendations",
-      "Curated pieces based on individual body proportions",
-      "Shopping according to exact budget parameters",
-      "Avoiding unnecessary impulse purchases",
-      "Finding handloom & modern pieces that complement your closet"
+      "Executive workwear & smart casual leadership dressing",
+      "Polished outfits for everyday office & boardroom meetings",
+      "Professional dressing for investor pitches & speaking engagements",
+      "Command respect, authority, and authentic comfort"
     ]
   },
   { 
     num: "04",
     category: "Event & Celebration",
-    name: "Occasion & Bridal Styling", 
-    desc: "Tell us where you're going, and we'll help you figure out what to wear. From weddings and parties to date nights and celebrations, curate the perfect look.",
+    name: "Occasion Styling", 
+    desc: "Style for parties, date nights, celebrations and special moments.",
     image: "/images/includes/IMG_1754.JPG.jpeg",
     points: [
-      "Weddings: Bridal trousseau & bridesmaid curations",
-      "Garden wedding guest & cocktail drape outfits",
-      "Date nights, galas & celebrations",
-      "Vacations & resort wardrobes",
-      "Special milestone events"
+      "Curated looks for evening parties & cocktail events",
+      "Effortless styling for date nights & celebrations",
+      "Distinctive silhouettes tailored to the event vibe",
+      "Accessorizing and footwear pairing guidance"
     ]
   },
   { 
     num: "05",
-    category: "Professional Identity",
-    name: "Workwear & Tech Leadership", 
-    desc: "Build a work wardrobe that feels polished, confident, comfortable, and authentically yours. From everyday office looks to important executive presentations.",
-    image: "/images/includes/IMG_8863.JPG.jpeg",
+    category: "Bridal & Nuptials",
+    name: "Wedding Styling", 
+    desc: "Curated looks for weddings, bridal events, bridesmaids and wedding guests.",
+    image: "/images/includes/CIT09345.jpg",
     points: [
-      "Executive workwear & smart casual leadership dressing",
-      "Business casual & elevated professional looks for tech hubs",
-      "Corporate dressing for key investor pitch meetings",
-      "Important meetings & first impressions"
+      "Bridal trousseau, lehengas & saree draping curation",
+      "Cohesive styling for pre-wedding events (sangeet, mehendi, reception)",
+      "Elegant curations for bridesmaids & family members",
+      "Showstopper guest styling for destination & traditional weddings"
+    ]
+  },
+  { 
+    num: "06",
+    category: "Resort & Getaways",
+    name: "Travel & Resort Styling", 
+    desc: "Create effortless holiday wardrobes and destination looks.",
+    image: "/images/includes/IMG_9135.JPG.jpeg",
+    points: [
+      "Capsule packing lists tailored to climate & itinerary",
+      "Breathable, versatile holiday wardrobes and resort wear",
+      "Day-to-night vacation transitions with minimal luggage",
+      "Effortless destination aesthetics for photography & travel comfort"
     ]
   }
 ];
