@@ -157,7 +157,7 @@ export const seedCtaBanner: CtaBannerContent = {
   kicker: "BESPOKE STYLING",
   title: "Ready for Your Complete Style Makeover?",
   subtitle: "Discover an intentional wardrobe designed around your silhouette and authentic presence.",
-  buttonText: "Book The Makeover",
+  buttonText: "Book a Consultation",
 };
 
 export const seedHeroContent: HeroContent = {

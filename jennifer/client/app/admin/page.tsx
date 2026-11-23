@@ -1729,7 +1729,7 @@ export default function AdminPage() {
               />
             </div>
 
-            <FormField label="Button Label Text" value={tempCta.buttonText} onChange={v => setTempCta(p => ({ ...p, buttonText: v }))} placeholder="e.g. Book The Makeover" required />
+            <FormField label="Button Label Text" value={tempCta.buttonText} onChange={v => setTempCta(p => ({ ...p, buttonText: v }))} placeholder="e.g. Book a Consultation" required />
 
             <div className="p-5 bg-[#1A1A1A] text-white rounded-xs flex flex-col gap-2">
               <span className="font-mono text-[8px] uppercase tracking-wider text-white/50">{tempCta.kicker || 'BESPOKE STYLING'}</span>
@@ -1741,7 +1741,7 @@ export default function AdminPage() {
               </p>
               <div className="pt-2">
                 <span className="inline-block px-5 py-2.5 bg-white text-black font-mono text-[9px] uppercase tracking-[0.2em] font-semibold rounded-xs">
-                  {tempCta.buttonText || 'Book The Makeover'} →
+                  {tempCta.buttonText || 'Book a Consultation'} →
                 </span>
               </div>
             </div>
