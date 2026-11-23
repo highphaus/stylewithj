@@ -57,7 +57,7 @@ const PAGE_CONFIGS: Record<string, PageCtaConfig> = {
   },
   '/categories': {
     kicker: 'CURATED OCCASIONS',
-    title: 'Find Your Signature Occasion Look',
+    title: 'Dress for the moment that matters',
     subtitle: 'Personalized styling for executive boardrooms, destination celebrations, and milestone events.',
     buttonText: 'Book The Makeover',
     service: 'Full Transformation',

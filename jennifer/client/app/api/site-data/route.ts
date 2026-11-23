@@ -21,7 +21,7 @@ export async function GET() {
       errorMsg = 'MongoDB Atlas IP Block: Please add 0.0.0.0/0 (Allow Access from Anywhere) in MongoDB Atlas -> Security -> Network Access so Vercel can connect.';
     }
     console.warn('[API /api/site-data GET] Database read error:', errorMsg);
-    return NextResponse.json({ success: false, error: errorMsg, connected: false }, { status: 500 });
+    return NextResponse.json({ success: false, error: errorMsg, connected: false }, { status: 200 });
   }
 }
 
@@ -66,6 +66,6 @@ export async function POST(req: NextRequest) {
       errorMsg = 'MongoDB Atlas IP Block: Please add 0.0.0.0/0 (Allow Access from Anywhere) in MongoDB Atlas -> Security -> Network Access so Vercel can save changes.';
     }
     console.error('[API /api/site-data POST] Database write error:', errorMsg);
-    return NextResponse.json({ success: false, error: errorMsg }, { status: 500 });
+    return NextResponse.json({ success: false, error: errorMsg, connected: false }, { status: 200 });
   }
 }
