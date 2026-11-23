@@ -200,9 +200,6 @@ export default function LookbookGrid() {
         {/* ── HEADER ── */}
         <div className="pb-8 border-b border-black/15">
           <div className="max-w-2xl">
-            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.4em] uppercase text-black/50 block mb-2 font-semibold">
-              ✦ THE STYLE EDIT
-            </span>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#1A1A1A]">
               Find your style for every occasion
             </h2>

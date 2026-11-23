@@ -30,8 +30,8 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
         
         {/* Top Branding Bar */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-10 pb-10 sm:pb-16 border-b border-white/10">
-          <Link href="/" className="w-full sm:w-auto flex items-center gap-1.5 sm:gap-2 hover:opacity-90 transition-opacity duration-300 group">
-            <span className="font-sans text-xs sm:text-sm md:text-base tracking-[0.28em] uppercase font-light text-white whitespace-nowrap select-none leading-none flex items-center">
+          <Link href="/" className="w-full sm:w-auto flex items-center gap-0 sm:gap-2 hover:opacity-90 transition-opacity duration-300 group">
+            <span className="font-sans text-xs sm:text-sm md:text-base tracking-[0.16em] sm:tracking-[0.28em] uppercase font-light text-white whitespace-nowrap select-none leading-none flex items-center">
               Style with
             </span>
             <Image
@@ -39,7 +39,7 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
               alt="J - Style With J"
               width={268}
               height={368}
-              className="h-8 sm:h-9 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-8 sm:h-9 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105 -ml-1 sm:ml-0"
               priority
               unoptimized
             />

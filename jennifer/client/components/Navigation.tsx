@@ -100,10 +100,10 @@ export default function Navigation() {
           {/* Logo & Brand Name: "Style with" followed by floral "J" logo */}
           <Link
             href="/"
-            className="flex-shrink-0 flex items-center gap-1 hover:opacity-85 transition-opacity duration-300 group"
+            className="flex-shrink-0 flex items-center gap-0 sm:gap-1 hover:opacity-85 transition-opacity duration-300 group"
           >
             <span
-              className={`font-sans text-[11px] sm:text-[12px] md:text-[13px] tracking-[0.28em] uppercase font-light whitespace-nowrap select-none transition-colors duration-300 flex items-center leading-none ${
+              className={`font-sans text-[11px] sm:text-[12px] md:text-[13px] tracking-[0.16em] sm:tracking-[0.28em] uppercase font-light whitespace-nowrap select-none transition-colors duration-300 flex items-center leading-none ${
                 isLight ? 'text-[#1A1A1A]' : 'text-white'
               }`}
             >
@@ -114,7 +114,7 @@ export default function Navigation() {
               alt="J - Style With J"
               width={268}
               height={368}
-              className="h-7 sm:h-8 md:h-9 w-auto object-contain transition-all duration-300"
+              className="h-7 sm:h-8 md:h-9 w-auto object-contain transition-all duration-300 -ml-1 sm:ml-0"
               priority
               unoptimized
             />
