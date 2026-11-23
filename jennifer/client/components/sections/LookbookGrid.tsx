@@ -207,7 +207,7 @@ export default function LookbookGrid() {
               Find your style for every occasion
             </h2>
             <p className="font-sans text-xs sm:text-sm font-light text-black/70 leading-relaxed mt-3 max-w-xl">
-              An editorial anthology of silhouette architecture, fluid draping, and bespoke styling categorized across everyday tailoring, destination escapes, and grand celebrations.
+              From everyday dressing and workwear to holidays and special occasions, discover styling that reflects your personality, complements your lifestyle, and makes you feel confident.
             </p>
           </div>
 
