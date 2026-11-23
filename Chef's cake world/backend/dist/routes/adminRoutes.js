@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_js_1 = require("../controllers/adminController.js");
+const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
+const rbacMiddleware_js_1 = require("../middleware/rbacMiddleware.js");
+const User_js_1 = require("../models/User.js");
+const router = (0, express_1.Router)();
+router.use(authMiddleware_js_1.authenticate);
+router.use((0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN, User_js_1.UserRole.BRANCH_MANAGER));
+router.get('/overview', adminController_js_1.getDashboardOverview);
+router.get('/customers', adminController_js_1.getCustomers);
+router.get('/settings', adminController_js_1.getStoreSettings);
+router.put('/settings', (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN), adminController_js_1.updateStoreSettings);
+router.get('/audit-logs', (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN), adminController_js_1.getAuditLogs);
+exports.default = router;

@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const customCakeController_js_1 = require("../controllers/customCakeController.js");
+const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
+const rbacMiddleware_js_1 = require("../middleware/rbacMiddleware.js");
+const User_js_1 = require("../models/User.js");
+const router = (0, express_1.Router)();
+router.post('/', customCakeController_js_1.submitCustomCakeRequest);
+router.get('/', authMiddleware_js_1.authenticate, (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN, User_js_1.UserRole.BRANCH_MANAGER), customCakeController_js_1.getCustomCakeRequests);
+router.post('/:id/quote', authMiddleware_js_1.authenticate, (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN, User_js_1.UserRole.BRANCH_MANAGER), customCakeController_js_1.provideQuotation);
+router.post('/:id/respond', customCakeController_js_1.respondToQuotation);
+exports.default = router;

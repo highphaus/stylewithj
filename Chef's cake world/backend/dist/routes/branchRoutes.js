@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const branchController_js_1 = require("../controllers/branchController.js");
+const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
+const rbacMiddleware_js_1 = require("../middleware/rbacMiddleware.js");
+const User_js_1 = require("../models/User.js");
+const router = (0, express_1.Router)();
+router.get('/', branchController_js_1.getBranches);
+router.post('/check-pincode', branchController_js_1.checkPincodeAvailability);
+router.get('/:id', branchController_js_1.getBranchById);
+router.post('/', authMiddleware_js_1.authenticate, (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN), branchController_js_1.createBranch);
+router.put('/:id', authMiddleware_js_1.authenticate, (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN, User_js_1.UserRole.BRANCH_MANAGER), branchController_js_1.updateBranch);
+exports.default = router;

@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const productController_js_1 = require("../controllers/productController.js");
+const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
+const rbacMiddleware_js_1 = require("../middleware/rbacMiddleware.js");
+const User_js_1 = require("../models/User.js");
+const router = (0, express_1.Router)();
+router.get('/', productController_js_1.getProducts);
+router.get('/:slug', productController_js_1.getProductBySlug);
+router.post('/', authMiddleware_js_1.authenticate, (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN), productController_js_1.createProduct);
+router.put('/:id', authMiddleware_js_1.authenticate, (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN, User_js_1.UserRole.BRANCH_MANAGER), productController_js_1.updateProduct);
+router.delete('/:id', authMiddleware_js_1.authenticate, (0, rbacMiddleware_js_1.authorizeRoles)(User_js_1.UserRole.SUPER_ADMIN, User_js_1.UserRole.ADMIN), productController_js_1.deleteProduct);
+exports.default = router;
