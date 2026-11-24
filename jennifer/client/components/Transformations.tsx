@@ -308,7 +308,7 @@ export default function Transformations({ hideButton = false, hideHeading = fals
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        {/* Top Header: Heading & Arrow Navigation (No 1, 2, 3 buttons) */}
+        {/* Top Header: Heading (No arrow navigation buttons) */}
         <div className="flex flex-col gap-2 pt-6 pb-2 px-4 sm:px-8">
           {!hideHeading && (
             <div className="flex items-center justify-between border-b border-black/10 pb-3">
@@ -316,63 +316,11 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                 Transformations
               </h2>
 
-              {/* Arrow navigation buttons only (no 1, 2, 3 numbers) */}
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/50">
-                  0{safeIndex + 1} / 0{data.length}
-                </span>
-                <button
-                  onClick={handlePrev}
-                  title="Previous"
-                  aria-label="Previous transformation"
-                  className="w-8 h-8 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white transition-all flex items-center justify-center text-xs font-mono shadow-xs active:scale-95 cursor-pointer"
-                >
-                  &larr;
-                </button>
-                <button
-                  onClick={handleNext}
-                  title="Next"
-                  aria-label="Next transformation"
-                  className="w-8 h-8 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white transition-all flex items-center justify-center text-xs font-mono shadow-xs active:scale-95 cursor-pointer"
-                >
-                  &rarr;
-                </button>
-              </div>
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/50">
+                0{safeIndex + 1} / 0{data.length}
+              </span>
             </div>
           )}
-
-          {/* Fully visible client dossier info and writings under heading (no truncation) */}
-          <div className="flex flex-col gap-1 pt-1">
-            {hideHeading && (
-              <div className="flex items-center justify-end gap-2 pb-1">
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/50">
-                  0{safeIndex + 1} / 0{data.length}
-                </span>
-                <button
-                  onClick={handlePrev}
-                  title="Previous"
-                  className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
-                >
-                  &larr;
-                </button>
-                <button
-                  onClick={handleNext}
-                  title="Next"
-                  className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
-                >
-                  &rarr;
-                </button>
-              </div>
-            )}
-            <h3 className="font-serif text-xl sm:text-2xl font-light text-[#1A1A1A] tracking-tight leading-snug">
-              {currentItem.client}
-            </h3>
-            {currentItem.concept && (
-              <p className="font-serif text-xs sm:text-sm italic text-black/60 font-light leading-relaxed">
-                {currentItem.concept}
-              </p>
-            )}
-          </div>
         </div>
 
         {/* Mobile Dual Canvas with gap on left, right, and center */}

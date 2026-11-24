@@ -459,24 +459,6 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                     priority
                     className="object-cover object-top"
                   />
-
-                  {/* Mobile Navigation Arrows (Centered middle on the image) */}
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); handleMobilePrev(); }}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
-                    aria-label="Previous Service"
-                  >
-                    ←
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); handleMobileNext(); }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
-                    aria-label="Next Service"
-                  >
-                    →
-                  </button>
                 </div>
 
                 {/* Service Name & Details */}
@@ -484,8 +466,8 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
 
                   <h3 
                     onClick={() => setSelectedService(currentMobileService)}
-                    className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-[#1A1A1A] uppercase leading-tight text-left cursor-pointer hover:opacity-75 transition-opacity"
-                    title="Click to view overview"
+                    className="font-serif text-lg sm:text-2xl font-bold tracking-tight sm:tracking-wide text-[#1A1A1A] uppercase leading-tight text-left cursor-pointer hover:opacity-75 transition-opacity truncate w-full whitespace-nowrap overflow-hidden text-ellipsis"
+                    title={currentMobileService.name}
                   >
                     {currentMobileService.name}
                   </h3>
