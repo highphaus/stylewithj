@@ -19,7 +19,7 @@ export default function AtelierFooter({ hideCta = false }: AtelierFooterProps) {
   const email = contact?.email || 'jennifer@stylewithj.in';
   const phone = contact?.phone || '+91 80783 41747';
   const cleanPhone = phone.replace(/\s+/g, '');
-  const address = contact?.address || 'DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070\nIndia';
+  const address = contact?.address || 'Sy 120, Whitefield Main Road\nSeegehalli, Kanamangala Post\nBangalore, Karnataka 560115';
   const instagram = contact?.instagramUrl || 'https://instagram.com/stylewithj';
 
   return (

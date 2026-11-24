@@ -106,9 +106,10 @@ const jsonLdSchema = {
       priceRange: '₹5,000 - ₹50,000',
       address: {
         '@type': 'PostalAddress',
+        streetAddress: 'Sy 120, Whitefield Main Road, Seegehalli, Kanamangala Post',
         addressLocality: 'Bangalore',
         addressRegion: 'Karnataka',
-        postalCode: '560038',
+        postalCode: '560115',
         addressCountry: 'IN',
       },
       geo: {

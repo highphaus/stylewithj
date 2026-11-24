@@ -23,7 +23,7 @@ export default function ContactSection() {
             <div className="flex flex-col gap-12 font-sans text-lg font-light">
               <div>
                 <h3 className="font-medium mb-4">Location</h3>
-                <p>DLF Emporio, Vasant Kunj<br />New Delhi, Delhi 110070</p>
+                <p>Sy 120, Whitefield Main Road<br />Seegehalli, Kanamangala Post<br />Bangalore, Karnataka 560115</p>
               </div>
               
               <div>

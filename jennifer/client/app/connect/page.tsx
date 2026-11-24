@@ -292,7 +292,7 @@ function ConnectContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-12 font-sans text-base font-light text-black/80">
           <div className="bg-[#FAF8F3] border border-black/10 p-6 sm:p-8 rounded-sm">
             <h3 className="font-serif text-lg font-normal mb-3 text-[#1A1A1A]">Location</h3>
-            <p className="leading-relaxed text-sm text-black/75 whitespace-pre-line">{contact?.address || "DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070"}</p>
+            <p className="leading-relaxed text-sm text-black/75 whitespace-pre-line">{contact?.address || "Sy 120, Whitefield Main Road\nSeegehalli, Kanamangala Post\nBangalore, Karnataka 560115"}</p>
           </div>
           
           <div className="bg-[#FAF8F3] border border-black/10 p-6 sm:p-8 rounded-sm">

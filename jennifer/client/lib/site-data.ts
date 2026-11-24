@@ -203,7 +203,7 @@ export const seedMeetContent: MeetContentData = {
 
 export const seedContactContent: ContactContentData = {
   heading: "Let's Connect",
-  address: "DLF Emporio, Vasant Kunj\nNew Delhi, Delhi 110070",
+  address: "Sy 120, Whitefield Main Road\nSeegehalli, Kanamangala Post\nBangalore, Karnataka 560115",
   email: "jennifer@stylewithj.in",
   phone: "+91 80783 41747",
   hours: "Mon - Fri: 9am - 6pm\nSat: 10am - 4pm\nSun: Closed",

@@ -14,8 +14,9 @@ export default function DiscoveryCall() {
           <div className="flex flex-col items-center md:items-start">
             <h3 className="font-sans text-lg uppercase tracking-widest font-bold mb-4">Visit Us</h3>
             <p className="font-sans text-gray-400 font-light leading-loose text-center md:text-left">
-              DLF Emporio, Vasant Kunj<br />
-              New Delhi, Delhi 110070<br />
+              Sy 120, Whitefield Main Road<br />
+              Seegehalli, Kanamangala Post<br />
+              Bangalore, Karnataka 560115<br />
               <a href="tel:+918078341747" className="hover:underline">+91 80783 41747</a><br />
               jennifer@stylewithj.in
             </p>
