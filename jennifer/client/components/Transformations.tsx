@@ -164,48 +164,16 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                 transition={{ duration: 0.35 }}
                 className="space-y-6"
               >
-                {/* Header: Dossier Tag & Client Title */}
+                {/* Header: Client Title & Concept */}
                 <div>
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-black/50 font-medium">
-                      DOSSIER 0{currentItem.id} // {currentItem.demographic}
-                    </span>
-                  </div>
-
                   <h3 className="font-serif text-2xl xl:text-3xl font-light text-[#1A1A1A] tracking-tight leading-snug">
                     {currentItem.client}
                   </h3>
-                </div>
-
-                {/* ── BEFORE & AFTER STORYTELLING SPACE ── */}
-                <div className="space-y-3 pt-1">
-                  <span className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/45 font-bold block">
-                    TRANSFORMATION STORY
-                  </span>
-
-                  {/* Story Card: Before */}
-                  <div className="bg-[#FAF8F3] border border-black/10 p-3.5 rounded-xs space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[7.5px] uppercase tracking-[0.2em] px-2 py-0.5 bg-black/10 text-black font-semibold rounded-xs">
-                        BEFORE &middot; THE CHALLENGE
-                      </span>
-                    </div>
-                    <p className="font-serif text-xs xl:text-[13px] italic font-light text-black/75 leading-relaxed">
-                      &ldquo;{currentItem.beforeStory}&rdquo;
+                  {currentItem.concept && (
+                    <p className="font-serif text-sm italic text-black/60 font-light leading-relaxed mt-1">
+                      {currentItem.concept}
                     </p>
-                  </div>
-
-                  {/* Story Card: After */}
-                  <div className="bg-[#FAF8F3] border border-black/10 p-3.5 rounded-xs space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[7.5px] uppercase tracking-[0.2em] px-2 py-0.5 bg-black text-white font-semibold rounded-xs">
-                        AFTER &middot; THE ARCHITECTURE
-                      </span>
-                    </div>
-                    <p className="font-serif text-xs xl:text-[13px] italic font-light text-black/85 leading-relaxed">
-                      &ldquo;{currentItem.afterStory}&rdquo;
-                    </p>
-                  </div>
+                  )}
                 </div>
 
                 {/* ── CLIENT REVIEW CARD (TEXT-ONLY, NO PHOTO) ── */}
@@ -343,32 +311,27 @@ export default function Transformations({ hideButton = false, hideHeading = fals
 
           {/* Fully visible client dossier info and writings under heading (no truncation) */}
           <div className="flex flex-col gap-1 pt-1">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[8.5px] uppercase tracking-[0.25em] text-black/50 font-semibold">
-                DOSSIER 0{currentItem.id} // {currentItem.demographic}
-              </span>
-              {hideHeading && (
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/50">
-                    0{safeIndex + 1} / 0{data.length}
-                  </span>
-                  <button
-                    onClick={handlePrev}
-                    title="Previous"
-                    className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
-                  >
-                    &larr;
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    title="Next"
-                    className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
-                  >
-                    &rarr;
-                  </button>
-                </div>
-              )}
-            </div>
+            {hideHeading && (
+              <div className="flex items-center justify-end gap-2 pb-1">
+                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-black/50">
+                  0{safeIndex + 1} / 0{data.length}
+                </span>
+                <button
+                  onClick={handlePrev}
+                  title="Previous"
+                  className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
+                >
+                  &larr;
+                </button>
+                <button
+                  onClick={handleNext}
+                  title="Next"
+                  className="w-7 h-7 rounded-full border border-black/20 bg-white hover:bg-black hover:text-white flex items-center justify-center text-xs font-mono cursor-pointer"
+                >
+                  &rarr;
+                </button>
+              </div>
+            )}
             <h3 className="font-serif text-xl sm:text-2xl font-light text-[#1A1A1A] tracking-tight leading-snug">
               {currentItem.client}
             </h3>
@@ -432,28 +395,8 @@ export default function Transformations({ hideButton = false, hideHeading = fals
               </div>
             </div>
 
-            {/* Mobile Storytelling, Review Card & Explore Action */}
+            {/* Mobile Review Card & Explore Action */}
             <div className="px-4 sm:px-8 space-y-3">
-              {/* Transformation Story writings fully viewable */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                <div className="bg-[#FAF8F3] border border-black/10 p-3 rounded-xs space-y-1">
-                  <span className="font-mono text-[7px] uppercase tracking-[0.2em] px-1.5 py-0.5 bg-black/10 text-black font-semibold rounded-xs">
-                    BEFORE &middot; THE CHALLENGE
-                  </span>
-                  <p className="font-serif text-xs italic text-black/75 leading-relaxed">
-                    &ldquo;{currentItem.beforeStory}&rdquo;
-                  </p>
-                </div>
-                <div className="bg-[#FAF8F3] border border-black/10 p-3 rounded-xs space-y-1">
-                  <span className="font-mono text-[7px] uppercase tracking-[0.2em] px-1.5 py-0.5 bg-black text-white font-semibold rounded-xs">
-                    AFTER &middot; THE ARCHITECTURE
-                  </span>
-                  <p className="font-serif text-xs italic text-black/85 leading-relaxed">
-                    &ldquo;{currentItem.afterStory}&rdquo;
-                  </p>
-                </div>
-              </div>
-
               {/* Text Review Card */}
               <div className="bg-[#EFECE6] border border-black/10 p-3.5 rounded-xs space-y-1.5">
                 <div className="flex items-center justify-between text-xs text-black/75">

@@ -375,6 +375,24 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                   />
                 ))}
 
+                {/* Desktop Center Middle Arrows */}
+                <button
+                  type="button"
+                  onClick={handleDesktopPrev}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
+                  aria-label="Previous Service"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDesktopNext}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
+                  aria-label="Next Service"
+                >
+                  →
+                </button>
+
                 {!hideButton && (
                   <div className="absolute top-4 right-4 z-30">
                     <button
@@ -416,30 +434,12 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
               </div>
             </div>
 
-            {/* Mobile / Tablet Controls: Index & Nav Arrows */}
+            {/* Mobile / Tablet Controls: Index */}
             <div className="flex items-center gap-2.5 flex-shrink-0">
               <div className="flex items-center font-mono text-[11px] text-black/50">
                 <span className="text-[#1A1A1A] font-bold">{String(mobileIndex + 1).padStart(2, '0')}</span>
                 <span className="mx-1">/</span>
                 <span>{String(total).padStart(2, '0')}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={handleMobilePrev}
-                  className="w-8 h-8 rounded-full border border-black/20 bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs active:scale-95"
-                  aria-label="Previous Service"
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  onClick={handleMobileNext}
-                  className="w-8 h-8 rounded-full border border-black/20 bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] flex items-center justify-center text-xs transition-all cursor-pointer shadow-xs active:scale-95"
-                  aria-label="Next Service"
-                >
-                  →
-                </button>
               </div>
             </div>
           </div>
@@ -477,6 +477,24 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                     priority
                     className="object-cover object-top"
                   />
+
+                  {/* Mobile Navigation Arrows (Centered middle on the image) */}
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); handleMobilePrev(); }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
+                    aria-label="Previous Service"
+                  >
+                    ←
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); handleMobileNext(); }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
+                    aria-label="Next Service"
+                  >
+                    →
+                  </button>
                 </div>
 
                 {/* Service Name & Details */}
