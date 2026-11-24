@@ -42,7 +42,7 @@ export const servicesList = [
       'Curated shopping recommendations tailored to your budget',
       'Feel comfortable, confident, and authentically yourself',
     ],
-    image: '/images/Our Service/personal stylist and shopping.jpg',
+    image: '/images/Our Service/personal stylist.jpg',
   },
   {
     num: '02',

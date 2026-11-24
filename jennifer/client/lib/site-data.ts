@@ -247,7 +247,7 @@ export const seedServices: ServiceItem[] = [
     category: "Style Discovery & Shopping",
     name: "Personal Styling & Shopping", 
     desc: "Discover your personal style and shop for pieces that work for you.",
-    image: "/images/Our Service/personal stylist and shopping.jpg",
+    image: "/images/Our Service/personal stylist.jpg",
     points: [
       "Discover your personal style & signature silhouette",
       "Understand what silhouettes, colours, and fits work for you",
