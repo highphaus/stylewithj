@@ -13,13 +13,20 @@ export default function TransformationsFeed() {
   const data: TransformationItem[] = (transformations && transformations.length > 0) ? transformations : seedTransformations;
 
   const handleOpenLightbox = (imgSrc: string, clientName: string, label: string, item: TransformationItem) => {
+    const pairIndex = data.findIndex(d => d.id === item.id);
     openLightbox(imgSrc, `${clientName} — ${label}`, {
       id: `trans-${item.id}-${label.toLowerCase()}`,
       num: item.id,
       category: item.demographic,
       concept: item.concept,
       story: label === 'BEFORE' ? item.beforeStory : item.afterStory,
-      tag: label
+      tag: label,
+      isTransformation: true,
+      pairIndex: pairIndex !== -1 ? pairIndex : 0,
+      totalPairs: data.length,
+      transformationPair: item,
+      allPairs: data,
+      activeView: label === 'BEFORE' ? 'BEFORE' : 'AFTER',
     });
   };
 

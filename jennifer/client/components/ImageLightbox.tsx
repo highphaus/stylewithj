@@ -9,6 +9,17 @@ import { Look, seedLooks } from '@/lib/looks-data';
 
 const STORAGE_KEY = 'swj_looks_v3';
 
+export interface TransformationPair {
+  id: string;
+  client: string;
+  demographic: string;
+  concept: string;
+  beforeImg: string;
+  afterImg: string;
+  beforeStory: string;
+  afterStory: string;
+}
+
 export interface StoryDetails {
   id?: string;
   num?: string;
@@ -18,6 +29,13 @@ export interface StoryDetails {
   story?: string;
   occasion?: string;
   tag?: string;
+  // Transformation pair metadata
+  isTransformation?: boolean;
+  pairIndex?: number;
+  totalPairs?: number;
+  transformationPair?: TransformationPair;
+  allPairs?: TransformationPair[];
+  activeView?: 'BEFORE' | 'AFTER';
 }
 
 export interface ActiveImageItem {
@@ -63,8 +81,11 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const openLightbox = (src: string, title?: string, details?: StoryDetails) => {
-    // Only match look in allGalleryLooks if the exact image matches
-    const foundIndex = allGalleryLooks.findIndex(l => l.image === src);
+    // If it's explicitly marked as a transformation or has transformationPair
+    const isTrans = !!details?.isTransformation;
+
+    // Only match look in allGalleryLooks if it is NOT a transformation and the exact image matches
+    const foundIndex = !isTrans ? allGalleryLooks.findIndex(l => l.image === src) : -1;
 
     let foundLook: Look | undefined;
     if (foundIndex !== -1) {
@@ -83,6 +104,12 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
         story: details?.story || foundLook?.story,
         occasion: details?.occasion || foundLook?.occasion,
         tag: details?.tag || foundLook?.tag,
+        isTransformation: isTrans,
+        pairIndex: details?.pairIndex,
+        totalPairs: details?.totalPairs,
+        transformationPair: details?.transformationPair,
+        allPairs: details?.allPairs,
+        activeView: details?.activeView || (details?.tag === 'BEFORE' ? 'BEFORE' : 'AFTER'),
       },
     });
   };
@@ -93,7 +120,7 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
 
   // Find index of the currently active look in allGalleryLooks (only if it is a gallery look)
   const currentLookIndex = useMemo(() => {
-    if (!activeItem) return -1;
+    if (!activeItem || activeItem.details?.isTransformation) return -1;
     return allGalleryLooks.findIndex(l => l.image === activeItem.src);
   }, [activeItem, allGalleryLooks]);
 
@@ -116,13 +143,95 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Transformation Pair Navigation (Prev/Next pair)
+  const handleTransformationPrev = () => {
+    if (!activeItem?.details?.allPairs || !activeItem.details.transformationPair) return;
+    const pairs = activeItem.details.allPairs;
+    const currentIndex = activeItem.details.pairIndex !== undefined ? activeItem.details.pairIndex : 0;
+    const prevIndex = (currentIndex - 1 + pairs.length) % pairs.length;
+    const prevPair = pairs[prevIndex];
+    const currentView = activeItem.details.activeView || 'BEFORE';
+    const newSrc = currentView === 'BEFORE' ? prevPair.beforeImg : prevPair.afterImg;
+
+    setActiveItem({
+      src: newSrc,
+      title: `${prevPair.client} — ${currentView}`,
+      details: {
+        ...activeItem.details,
+        id: `trans-${prevPair.id}-${currentView.toLowerCase()}`,
+        num: prevPair.id,
+        category: prevPair.demographic,
+        concept: prevPair.concept,
+        story: currentView === 'BEFORE' ? prevPair.beforeStory : prevPair.afterStory,
+        tag: currentView,
+        pairIndex: prevIndex,
+        transformationPair: prevPair,
+        activeView: currentView,
+      }
+    });
+  };
+
+  const handleTransformationNext = () => {
+    if (!activeItem?.details?.allPairs || !activeItem.details.transformationPair) return;
+    const pairs = activeItem.details.allPairs;
+    const currentIndex = activeItem.details.pairIndex !== undefined ? activeItem.details.pairIndex : 0;
+    const nextIndex = (currentIndex + 1) % pairs.length;
+    const nextPair = pairs[nextIndex];
+    const currentView = activeItem.details.activeView || 'BEFORE';
+    const newSrc = currentView === 'BEFORE' ? nextPair.beforeImg : nextPair.afterImg;
+
+    setActiveItem({
+      src: newSrc,
+      title: `${nextPair.client} — ${currentView}`,
+      details: {
+        ...activeItem.details,
+        id: `trans-${nextPair.id}-${currentView.toLowerCase()}`,
+        num: nextPair.id,
+        category: nextPair.demographic,
+        concept: nextPair.concept,
+        story: currentView === 'BEFORE' ? nextPair.beforeStory : nextPair.afterStory,
+        tag: currentView,
+        pairIndex: nextIndex,
+        transformationPair: nextPair,
+        activeView: currentView,
+      }
+    });
+  };
+
+  // Toggle Between BEFORE and AFTER for the currently viewed pair
+  const handleToggleBeforeAfter = (view: 'BEFORE' | 'AFTER') => {
+    if (!activeItem?.details?.transformationPair) return;
+    const pair = activeItem.details.transformationPair;
+    const newSrc = view === 'BEFORE' ? pair.beforeImg : pair.afterImg;
+    const newStory = view === 'BEFORE' ? pair.beforeStory : pair.afterStory;
+
+    setActiveItem({
+      src: newSrc,
+      title: `${pair.client} — ${view}`,
+      details: {
+        ...activeItem.details,
+        story: newStory,
+        tag: view,
+        activeView: view,
+      }
+    });
+  };
+
   // Clean Look-to-Look navigation (1 photo per look, no 3-photo concept)
   const handlePrev = () => {
+    if (activeItem?.details?.isTransformation) {
+      handleTransformationPrev();
+      return;
+    }
     const prevIdx = currentLookIndex > 0 ? currentLookIndex - 1 : allGalleryLooks.length - 1;
     selectLookByIndex(prevIdx);
   };
 
   const handleNext = () => {
+    if (activeItem?.details?.isTransformation) {
+      handleTransformationNext();
+      return;
+    }
     const nextIdx = currentLookIndex < allGalleryLooks.length - 1 ? currentLookIndex + 1 : 0;
     selectLookByIndex(nextIdx);
   };
@@ -202,7 +311,59 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                   {/* Top Bar inside Viewport: Look Counter & Quick Prev/Next controls */}
                   <div className="w-full flex items-center justify-between z-30 pb-2">
                     <div className="flex items-center gap-1.5">
-                      {currentLookIndex !== -1 ? (
+                      {activeItem.details?.isTransformation && activeItem.details?.transformationPair ? (
+                        <>
+                          <div className="flex items-center bg-black/90 p-0.5 rounded-xs border border-white/20 mr-2 shadow-sm">
+                            <button
+                              type="button"
+                              onClick={() => handleToggleBeforeAfter('BEFORE')}
+                              className={`px-3 py-1 font-mono text-[9px] uppercase tracking-wider rounded-xs font-bold transition-all cursor-pointer ${
+                                (activeItem.details.activeView || activeItem.details.tag) === 'BEFORE'
+                                  ? 'bg-[#FAF9F6] text-black shadow-xs'
+                                  : 'text-white/70 hover:text-white'
+                              }`}
+                            >
+                              BEFORE
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleBeforeAfter('AFTER')}
+                              className={`px-3 py-1 font-mono text-[9px] uppercase tracking-wider rounded-xs font-bold transition-all cursor-pointer ${
+                                (activeItem.details.activeView || activeItem.details.tag) === 'AFTER'
+                                  ? 'bg-white text-black shadow-xs'
+                                  : 'text-white/70 hover:text-white'
+                              }`}
+                            >
+                              AFTER
+                            </button>
+                          </div>
+
+                          {/* Pair navigator when multiple pairs exist */}
+                          {activeItem.details.totalPairs && activeItem.details.totalPairs > 1 && (
+                            <div className="flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={handleTransformationPrev}
+                                className="px-2 py-1 bg-black/80 hover:bg-white hover:text-black text-white text-[9px] font-mono rounded-xs border border-white/20 cursor-pointer transition-all"
+                                title="Previous Transformation Pair"
+                              >
+                                ‹
+                              </button>
+                              <span className="px-2 py-1 bg-black/80 text-white text-[8.5px] font-mono tracking-widest uppercase border border-white/15 rounded-xs">
+                                PAIR {(activeItem.details.pairIndex !== undefined ? activeItem.details.pairIndex + 1 : 1)} OF {activeItem.details.totalPairs}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={handleTransformationNext}
+                                className="px-2 py-1 bg-black/80 hover:bg-white hover:text-black text-white text-[9px] font-mono rounded-xs border border-white/20 cursor-pointer transition-all"
+                                title="Next Transformation Pair"
+                              >
+                                ›
+                              </button>
+                            </div>
+                          )}
+                        </>
+                      ) : currentLookIndex !== -1 ? (
                         <>
                           <button
                             type="button"
@@ -258,15 +419,15 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                       </motion.div>
                     </AnimatePresence>
 
-                    {/* Prev & Next Look Navigation Arrows */}
-                    {currentLookIndex !== -1 && (
+                    {/* Prev & Next Navigation Arrows (for gallery look or transformation pair) */}
+                    {(currentLookIndex !== -1 || (activeItem.details?.isTransformation && (activeItem.details?.totalPairs || 0) > 1)) && (
                       <>
                         <button
                           type="button"
                           onClick={(e) => { e.stopPropagation(); handlePrev(); }}
                           className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 hover:bg-black text-white flex items-center justify-center text-xl font-mono border border-white/20 shadow-lg cursor-pointer transition-all z-30 active:scale-95"
-                          title="Previous Look (Swipe Right)"
-                          aria-label="Previous look"
+                          title="Previous (Swipe Right)"
+                          aria-label="Previous"
                         >
                           ‹
                         </button>
@@ -274,8 +435,8 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                           type="button"
                           onClick={(e) => { e.stopPropagation(); handleNext(); }}
                           className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/75 hover:bg-black text-white flex items-center justify-center text-xl font-mono border border-white/20 shadow-lg cursor-pointer transition-all z-30 active:scale-95"
-                          title="Next Look (Swipe Left)"
-                          aria-label="Next look"
+                          title="Next (Swipe Left)"
+                          aria-label="Next"
                         >
                           ›
                         </button>
@@ -285,8 +446,20 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
 
                   {/* Bottom Counter Bar */}
                   <div className="w-full pt-2 z-30 flex items-center justify-between text-white/50 text-[8.5px] font-mono tracking-widest uppercase border-t border-white/10">
-                    <span>{currentLookIndex !== -1 ? 'SWIPE OR USE ARROWS TO BROWSE' : 'STYLE WITH J · TRANSFORMATION'}</span>
-                    <span>{currentLookIndex !== -1 ? `${currentLookIndex + 1} / ${allGalleryLooks.length}` : activeItem.details?.tag || ''}</span>
+                    <span>
+                      {activeItem.details?.isTransformation
+                        ? 'TOGGLE BEFORE/AFTER · USE ARROWS FOR NEXT PAIR'
+                        : currentLookIndex !== -1
+                        ? 'SWIPE OR USE ARROWS TO BROWSE'
+                        : 'STYLE WITH J · EDITORIAL'}
+                    </span>
+                    <span>
+                      {activeItem.details?.isTransformation && activeItem.details.totalPairs
+                        ? `PAIR ${(activeItem.details.pairIndex !== undefined ? activeItem.details.pairIndex + 1 : 1)} / ${activeItem.details.totalPairs} · ${activeItem.details.activeView || activeItem.details.tag || ''}`
+                        : currentLookIndex !== -1
+                        ? `${currentLookIndex + 1} / ${allGalleryLooks.length}`
+                        : activeItem.details?.tag || ''}
+                    </span>
                   </div>
                 </div>
 

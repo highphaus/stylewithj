@@ -39,13 +39,20 @@ export default function Transformations({ hideButton = false, hideHeading = fals
   }, [isHovering, data.length, cycleSpeedSeconds]);
 
   const handleOpenLightbox = (imgSrc: string, clientName: string, label: string, item: TransformationItem) => {
+    const pairIndex = data.findIndex(d => d.id === item.id);
     openLightbox(imgSrc, `${clientName} — ${label}`, {
       id: `trans-${item.id}-${label.toLowerCase()}`,
       num: item.id,
       category: item.demographic,
       concept: item.concept,
       story: label === 'BEFORE' ? item.beforeStory : item.afterStory,
-      tag: label
+      tag: label,
+      isTransformation: true,
+      pairIndex: pairIndex !== -1 ? pairIndex : safeIndex,
+      totalPairs: data.length,
+      transformationPair: item,
+      allPairs: data,
+      activeView: label === 'BEFORE' ? 'BEFORE' : 'AFTER',
     });
   };
 
