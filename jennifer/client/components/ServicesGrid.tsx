@@ -33,7 +33,7 @@ const allServices: ServiceDefinition[] = [
     category: "Closet Evolution",
     name: "Wardrobe Styling", 
     desc: "Refresh your existing wardrobe and create versatile outfit combinations.",
-    image: "/images/includes/DSC04682.jpg",
+    image: "/images/Our Service/Wardrobe.jpg",
     points: [
       "Comprehensive wardrobe audit & assessment",
       "Refresh your existing pieces in 5+ new ways",
@@ -59,7 +59,7 @@ const allServices: ServiceDefinition[] = [
     category: "Event & Celebration",
     name: "Occasion Styling", 
     desc: "Style for parties, date nights, celebrations and special moments.",
-    image: "/images/includes/IMG_1754.JPG.jpeg",
+    image: "/images/Our Service/occasion styling.png",
     points: [
       "Curated looks for evening parties & cocktail events",
       "Effortless styling for date nights & celebrations",
@@ -72,7 +72,7 @@ const allServices: ServiceDefinition[] = [
     category: "Bridal & Nuptials",
     name: "Wedding Styling", 
     desc: "Curated looks for weddings, bridal events, bridesmaids and wedding guests.",
-    image: "/images/includes/CIT09345.jpg",
+    image: "/images/Our Service/Wedding.jpg",
     points: [
       "Bridal trousseau, lehengas & saree draping curation",
       "Cohesive styling for pre-wedding events (sangeet, mehendi, reception)",
@@ -85,7 +85,7 @@ const allServices: ServiceDefinition[] = [
     category: "Resort & Getaways",
     name: "Travel & Resort Styling", 
     desc: "Create effortless holiday wardrobes and destination looks.",
-    image: "/images/includes/IMG_9135.JPG.jpeg",
+    image: "/images/Our Service/travel and resort styling.png",
     points: [
       "Capsule packing lists tailored to climate & itinerary",
       "Breathable, versatile holiday wardrobes and resort wear",
