@@ -317,7 +317,7 @@ export const seedServices: ServiceItem[] = [
     category: "Resort & Getaways",
     name: "Travel & Resort Styling", 
     desc: "Create effortless holiday wardrobes and destination looks.",
-    image: "/images/Our Service/travel and resort styling.png",
+    image: "/images/Our Service/travel & resort styling.jpg",
     points: [
       "Capsule packing lists tailored to climate & itinerary",
       "Breathable, versatile holiday wardrobes and resort wear",

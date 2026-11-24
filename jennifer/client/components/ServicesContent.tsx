@@ -107,7 +107,7 @@ export const servicesList = [
       'Day-to-night vacation transitions with minimal luggage',
       'Effortless destination aesthetics for photography & travel comfort',
     ],
-    image: '/images/Our Service/travel and resort styling.png',
+    image: '/images/Our Service/travel & resort styling.jpg',
   },
 ];
 
