@@ -164,16 +164,48 @@ export default function Transformations({ hideButton = false, hideHeading = fals
                 transition={{ duration: 0.35 }}
                 className="space-y-6"
               >
-                {/* Header: Client Title & Concept */}
+                {/* Header: Dossier Tag & Client Title */}
                 <div>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-black/50 font-medium">
+                      DOSSIER 0{currentItem.id} // {currentItem.demographic}
+                    </span>
+                  </div>
+
                   <h3 className="font-serif text-2xl xl:text-3xl font-light text-[#1A1A1A] tracking-tight leading-snug">
                     {currentItem.client}
                   </h3>
-                  {currentItem.concept && (
-                    <p className="font-serif text-sm italic text-black/60 font-light leading-relaxed mt-1">
-                      {currentItem.concept}
+                </div>
+
+                {/* ── BEFORE & AFTER STORYTELLING SPACE ── */}
+                <div className="space-y-3 pt-1">
+                  <span className="font-mono text-[8.5px] tracking-[0.25em] uppercase text-black/45 font-bold block">
+                    TRANSFORMATION STORY
+                  </span>
+
+                  {/* Story Card: Before */}
+                  <div className="bg-[#FAF8F3] border border-black/10 p-3.5 rounded-xs space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[7.5px] uppercase tracking-[0.2em] px-2 py-0.5 bg-black/10 text-black font-semibold rounded-xs">
+                        BEFORE &middot; THE CHALLENGE
+                      </span>
+                    </div>
+                    <p className="font-serif text-xs xl:text-[13px] italic font-light text-black/75 leading-relaxed">
+                      &ldquo;{currentItem.beforeStory}&rdquo;
                     </p>
-                  )}
+                  </div>
+
+                  {/* Story Card: After */}
+                  <div className="bg-[#FAF8F3] border border-black/10 p-3.5 rounded-xs space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[7.5px] uppercase tracking-[0.2em] px-2 py-0.5 bg-black text-white font-semibold rounded-xs">
+                        AFTER &middot; THE ARCHITECTURE
+                      </span>
+                    </div>
+                    <p className="font-serif text-xs xl:text-[13px] italic font-light text-black/85 leading-relaxed">
+                      &ldquo;{currentItem.afterStory}&rdquo;
+                    </p>
+                  </div>
                 </div>
 
                 {/* ── CLIENT REVIEW CARD (TEXT-ONLY, NO PHOTO) ── */}

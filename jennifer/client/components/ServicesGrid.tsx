@@ -375,24 +375,6 @@ export default function ServicesGrid({ hideButton = false }: ServicesGridProps) 
                   />
                 ))}
 
-                {/* Desktop Center Middle Arrows */}
-                <button
-                  type="button"
-                  onClick={handleDesktopPrev}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
-                  aria-label="Previous Service"
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDesktopNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/90 hover:bg-black hover:text-white text-[#1A1A1A] border border-black/15 shadow-md flex items-center justify-center text-sm transition-all active:scale-90 cursor-pointer backdrop-blur-xs"
-                  aria-label="Next Service"
-                >
-                  →
-                </button>
-
                 {!hideButton && (
                   <div className="absolute top-4 right-4 z-30">
                     <button
