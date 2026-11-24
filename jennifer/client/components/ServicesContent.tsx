@@ -55,7 +55,7 @@ export const servicesList = [
       'Create versatile, repeatable outfit combinations',
       'Identify key wardrobe gaps to shop with intention',
     ],
-    image: '/images/includes/DSC04682.jpg',
+    image: '/images/Our Service/Wardrobe.jpg',
   },
   {
     num: '03',
@@ -81,7 +81,7 @@ export const servicesList = [
       'Distinctive silhouettes tailored to the event vibe',
       'Accessorizing and footwear pairing guidance',
     ],
-    image: '/images/includes/IMG_1754.JPG.jpeg',
+    image: '/images/Our Service/occasion styling.png',
   },
   {
     num: '05',
@@ -94,7 +94,7 @@ export const servicesList = [
       'Elegant curations for bridesmaids & family members',
       'Showstopper guest styling for destination & traditional weddings',
     ],
-    image: '/images/includes/CIT09345.jpg',
+    image: '/images/Our Service/Wedding.jpg',
   },
   {
     num: '06',
@@ -107,7 +107,7 @@ export const servicesList = [
       'Day-to-night vacation transitions with minimal luggage',
       'Effortless destination aesthetics for photography & travel comfort',
     ],
-    image: '/images/includes/IMG_9135.JPG.jpeg',
+    image: '/images/Our Service/travel and resort styling.png',
   },
 ];
 
