@@ -20,7 +20,7 @@ const allServices: ServiceDefinition[] = [
     category: "Style Discovery & Shopping",
     name: "Personal Styling & Shopping", 
     desc: "Discover your personal style and shop for pieces that work for you.",
-    image: "/images/includes/IMG_0271.JPG.jpeg",
+    image: "/images/Our Service/personal stylist and shopping.jpg",
     points: [
       "Discover your personal style & signature silhouette",
       "Understand what silhouettes, colours, and fits work for you",
@@ -46,7 +46,7 @@ const allServices: ServiceDefinition[] = [
     category: "Professional Identity",
     name: "Workwear & Professional Styling", 
     desc: "Build a polished wardrobe for your professional life.",
-    image: "/images/includes/IMG_8863.JPG.jpeg",
+    image: "/images/Our Service/Workwear & Professional Styling.jpg",
     points: [
       "Executive workwear & smart casual leadership dressing",
       "Polished outfits for everyday office & boardroom meetings",

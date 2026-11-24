@@ -42,7 +42,7 @@ export const servicesList = [
       'Curated shopping recommendations tailored to your budget',
       'Feel comfortable, confident, and authentically yourself',
     ],
-    image: '/images/includes/IMG_0271.JPG.jpeg',
+    image: '/images/Our Service/personal stylist and shopping.jpg',
   },
   {
     num: '02',
@@ -68,7 +68,7 @@ export const servicesList = [
       'Professional dressing for investor pitches & speaking engagements',
       'Command respect, authority, and authentic comfort',
     ],
-    image: '/images/includes/IMG_8863.JPG.jpeg',
+    image: '/images/Our Service/Workwear & Professional Styling.jpg',
   },
   {
     num: '04',
